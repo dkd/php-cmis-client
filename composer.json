@@ -1,5 +1,5 @@
 {
-    "name": "dkd/php-cmis-client",
+    "name": "dkd/php-cmis",
     "type": "library",
     "description": "PHP CMIS client library based on CMIS 1.1",
     "keywords": ["cmis"],
@@ -14,11 +14,11 @@
     ],
     "require-dev": {
         "squizlabs/php_codesniffer": "1.*",
-        "phpunit/phpunit": "3.7.*"
+        "phpunit/phpunit": "4.1.*"
     },
     "autoload": {
         "psr-0": {
-            "Dkd\\": "Classes/"
+            "Dkd\\PhpCmis\\Client\\": "src/"
         }
     }
 }
