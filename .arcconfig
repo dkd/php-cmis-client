@@ -1,4 +1,7 @@
 {
   "project_id" : "PHPCMIS",
-  "phabricator.uri" : "https://phabricator.dkd.de"
+  "phabricator.uri" : "https://phabricator.dkd.de",
+  "unit.engine": "PhpunitTestEngine",
+  "unit.phpunit.binary" : "vendor/bin/phpunit",
+  "phpunit_config" : "phpunit.xml"
 }
