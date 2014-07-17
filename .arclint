@@ -1,0 +1,23 @@
+{
+  "linters": {
+    "JavaScript Linter": {
+      "type": "jshint",
+      "include": "(\\.js$)"
+    },
+    "Merge Conflict detection": {
+      "type": "merge-conflict"
+    },
+    "PHP Codesniffer": {
+      "type": "phpcs",
+      "bin": "vendor/bin/phpcs",
+      "flags": ["--standard=PSR0", "--standard=PSR1", "--standard=PSR2"],
+      "include": "(\\.php$)"
+    },
+    "English spelling": {
+      "type": "spelling"
+    },
+    "Basic text linter for line length, encoding, trailing whitespace ...": {
+      "type": "text"
+    }
+  }
+}
