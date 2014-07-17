@@ -17,7 +17,8 @@
       "type": "spelling"
     },
     "Basic text linter for line length, encoding, trailing whitespace ...": {
-      "type": "text"
+      "type": "text",
+      "exclude": "(^composer.lock$)"
     }
   }
 }
