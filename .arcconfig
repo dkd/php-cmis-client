@@ -1,4 +1,4 @@
 {
   "project_id" : "PHPCMIS",
-  "conduit_uri" : "https://phabricator.dkd.de"
+  "phabricator.uri" : "https://phabricator.dkd.de"
 }
