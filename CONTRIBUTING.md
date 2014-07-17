@@ -27,6 +27,10 @@ Now clone this repository, if not already done, and call the command
 `arc list` that should  give you a list of open Differential 
 Revisions (code reviews).
 
+To install the required dependencies you have to run `composer install`.
+If you have not installed composer yet, please check the [documentation]
+(https://getcomposer.org/doc/00-intro.md).
+
 ## Review Code
 
 The easiest way to review code is to use the web interface of Phabricator 
