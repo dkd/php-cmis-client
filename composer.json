@@ -17,8 +17,8 @@
         "phpunit/phpunit": "4.1.*"
     },
     "autoload": {
-        "psr-0": {
-            "Dkd\\PhpCmis\\Client\\": "src/"
+        "psr-4": {
+            "Dkd\\PhpCmis\\": "src/"
         }
     }
 }

@@ -10,7 +10,7 @@
     "PHP Codesniffer": {
       "type": "phpcs",
       "bin": "vendor/bin/phpcs",
-      "flags": ["--standard=PSR0", "--standard=PSR1", "--standard=PSR2"],
+      "flags": ["--standard=PSR2"],
       "include": "(\\.php$)"
     },
     "English spelling": {
