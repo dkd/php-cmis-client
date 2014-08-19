@@ -1,0 +1,65 @@
+<?php
+namespace Dkd\PhpCmis;
+
+use Dkd\PhpCmis\Data\ExtensionsDataInterface;
+use Dkd\PhpCmis\Data\ObjectListInterface;
+use Dkd\PhpCmis\Enum\IncludeRelationships;
+
+/**
+ * Discovery Service interface.
+ *
+ * See the CMIS 1.0 and CMIS 1.1 specifications for details on the operations,
+ * parameters, exceptions and the domain model.
+ */
+interface DiscoveryServiceInterface
+{
+    /**
+     * Gets a list of content changes.
+     *
+     * @param string $repositoryId
+     * @param string $changeLogToken
+     * @param boolean $includeProperties
+     * @param string $filter
+     * @param boolean $includePolicyIds
+     * @param boolean $includeAcl
+     * @param int $maxItems
+     * @param ExtensionsDataInterface $extension
+     * @return ObjectListInterface
+     */
+    public function getContentChanges(
+        $repositoryId,
+        $changeLogToken,
+        $includeProperties,
+        $filter,
+        $includePolicyIds,
+        $includeAcl,
+        $maxItems,
+        Data\ExtensionsDataInterface $extension
+    );
+
+    /**
+     * Executes a CMIS query statement against the contents of the repository.
+     *
+     * @param string $repositoryId
+     * @param string $statement
+     * @param boolean $searchAllVersions
+     * @param boolean $includeAllowableActions
+     * @param IncludeRelationships $includeRelationships
+     * @param string $renditionFilter
+     * @param int $maxItems
+     * @param int $skipCount
+     * @param ExtensionsDataInterface $extension
+     * @return ObjectListInterface
+     */
+    public function query(
+        $repositoryId,
+        $statement,
+        $searchAllVersions,
+        $includeAllowableActions,
+        Enum\IncludeRelationships $includeRelationships,
+        $renditionFilter,
+        $maxItems,
+        $skipCount,
+        Data\ExtensionsDataInterface $extension
+    );
+}

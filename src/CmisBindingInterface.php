@@ -1,0 +1,130 @@
+<?php
+namespace Dkd\PhpCmis;
+
+use Dkd\PhpCmis\Enum\BindingType;
+
+/**
+ * Entry point for all CMIS binding related operations.
+ * It provides access to the service interface objects which are very similar to the CMIS 1.0 domain model.
+ *
+ * Each instance of this class represents a session.
+ * A session comprises of a connection to one CMIS endpoint over one binding for one particular user and a
+ * set of caches. All repositories that are exposed by this CMIS endpoint are accessible in this session.
+ * All CMIS operations and extension points are provided if they are supported by the underlying binding.
+ */
+interface CmisBindingInterface
+{
+
+    /**
+     * Clears all caches of the current CMIS binding session.
+     *
+     * @return void
+     */
+    public function clearAllCaches();
+
+    /**
+     * Clears all caches of the current CMIS binding session that are related to the given repository.
+     *
+     * @param string $repositoryId
+     * @return void
+     */
+    public function clearRepositoryCache($repositoryId);
+
+    /**
+     * Releases all resources assigned to this binding instance.
+     *
+     * @return void
+     */
+    public function close();
+
+    /**
+     * Gets an ACL Service interface object.
+     *
+     * @return AclServiceInterface
+     */
+    public function getAclService();
+
+    /**
+     * Gets the authentication provider.
+     *
+     * @return AuthenticationProviderInterface
+     */
+    public function getAuthenticationProvider();
+
+    /**
+     * Returns the binding type.
+     *
+     * @return BindingType
+     */
+    public function getBindingType();
+
+    /**
+     * Gets a Discovery Service interface object.
+     *
+     * @return DiscoveryServiceInterface
+     */
+    public function getDiscoveryService();
+
+    /**
+     * Gets a Multifiling Service interface object.
+     *
+     * @return MultiFilingServiceInterface
+     */
+    public function getMultiFilingService();
+
+    /**
+     * Gets a Navigation Service interface object.
+     *
+     * @return NavigationServiceInterface
+     */
+    public function getNavigationService();
+
+    /**
+     * Gets a factory for CMIS binding specific objects.
+     * @TODO do we need a factory class here?
+     * @return BindingsObjectFactoryInterface
+     */
+    public function getObjectFactory();
+
+    /**
+     * Gets an Object Service interface object.
+     *
+     * @return ObjectServiceInterface
+     */
+    public function getObjectService();
+
+    /**
+     * Gets a Policy Service interface object.
+     *
+     * @return PolicyServiceInterface
+     */
+    public function getPolicyService();
+
+    /**
+     * Gets a Relationship Service interface object.
+     *
+     * @return RelationshipServiceInterface
+     */
+    public function getRelationshipService();
+
+    /**
+     * Gets a Repository Service interface object.
+     *
+     * @return RepositoryServiceInterface
+     */
+    public function getRepositoryService();
+
+    /**
+     * Returns the client session id.
+     *
+     * @return string
+     */
+    public function getSessionId();
+
+    /**
+     * Gets a Versioning Service interface object.
+     *
+     * @return VersioningServiceInterface
+     */
+    public function getVersioningService();
+}

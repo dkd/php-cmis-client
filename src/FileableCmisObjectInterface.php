@@ -1,0 +1,60 @@
+<?php
+namespace Dkd\PhpCmis;
+
+use Dkd\PhpCmis\CmisObject\CmisObjectInterface;
+use Dkd\PhpCmis\CmisObject\CmisObjectPropertiesInterface;
+
+/**
+ * Fileable CMIS object. A fileable object is an object that can reside in a folder.
+ */
+interface FileableCmisObjectInterface extends CmisObjectInterface, CmisObjectPropertiesInterface, ObjectIdInterface
+{
+    /**
+     * Adds this object to a folder.
+     *
+     * @param ObjectIdInterface $folderId
+     * @param boolean $allVersions
+     * @return void
+     */
+    public function addToFolder(ObjectIdInterface $folderId, $allVersions);
+
+    /**
+     * Returns the parents of this object.
+     *
+     * @param OperationContextInterface $context the OperationContext to use to fetch the parent folder objects
+     * @return FolderInterface[] the list of parent folders of this object or an
+     * empty list if this object is unfiled or if this object is the root folder
+     */
+    public function getParents(OperationContextInterface $context = null);
+
+    /**
+     * Returns the paths of this object.
+     *
+     * @return string[] the list of paths of this object or an empty list if this object is
+     * unfiled or if this object is the root folder
+     */
+    public function getPaths();
+
+    /**
+     * Moves this object.
+     *
+     * @param ObjectIdInterface $sourceFolderId the object ID of the source folder
+     * @param ObjectIdInterface $targetFolderId the object ID of the target folder
+     * @param OperationContextInterface $context the OperationContext to use to fetch the moved object
+     *
+     * @return FileableCmisObjectInterface the moved object
+     */
+    public function move(
+        ObjectIdInterface $sourceFolderId,
+        ObjectIdInterface $targetFolderId,
+        OperationContextInterface $context = null
+    );
+
+    /**
+     * Removes this object from a folder.
+     *
+     * @param ObjectIdInterface $folderId the object ID of the folder from which this object should be removed
+     * @return void
+     */
+    public function removeFromFolder(ObjectIdInterface $folderId);
+}

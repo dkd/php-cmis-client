@@ -18,7 +18,7 @@
     },
     "Basic text linter for line length, encoding, trailing whitespace ...": {
       "type": "text",
-      "exclude": "(^composer.lock$)"
+      "exclude": "(^composer.lock$|.php$)"
     }
   }
 }
