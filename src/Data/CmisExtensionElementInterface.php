@@ -15,7 +15,7 @@ namespace Dkd\PhpCmis\Data;
  *
  * An extension element can have a value or children, but not both.
  */
-interface CmisExtensionElementInterface extends \Serializable
+interface CmisExtensionElementInterface
 {
     /**
      * Returns the attributes of the extension.

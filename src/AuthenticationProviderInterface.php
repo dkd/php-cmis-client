@@ -17,7 +17,7 @@ namespace Dkd\PhpCmis;
  * http://chemistry.apache.org/java/0.11.0/maven/apidocs/org/apache/
  * chemistry/opencmis/commons/spi/AuthenticationProvider.html
  */
-interface AuthenticationProviderInterface extends \Serializable
+interface AuthenticationProviderInterface
 {
 
 }

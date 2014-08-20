@@ -38,7 +38,7 @@ use Dkd\PhpCmis\Exception\CmisObjectNotFoundException;
  * Refer to the CMIS 1.0 specification or the CMIS 1.1 specification for details about the domain model,
  * terms, concepts, base types, properties, IDs and query names, query language, etc.
  */
-interface SessionInterface extends \Serializable
+interface SessionInterface
 {
     /**
      * Applies ACL changes to an object and dependent objects. Only direct ACEs can be added and removed.
@@ -56,7 +56,7 @@ interface SessionInterface extends \Serializable
         ObjectIdInterface $objectId,
         $addAces = array(),
         $removeAces = array(),
-        AclPropagation $aclPropagation = AclPropagation::REPOSITORYDETERMINED
+        AclPropagation $aclPropagation = null
     );
 
     /**
@@ -197,7 +197,7 @@ interface SessionInterface extends \Serializable
         $includeAcls = false,
         $includeAllowableActions = true,
         $includePolicies = false,
-        IncludeRelationships $includeRelationships = IncludeRelationships::NONE,
+        IncludeRelationships $includeRelationships = null,
         array $renditionFilter = array(),
         $includePathSegments = true,
         $orderBy = null,

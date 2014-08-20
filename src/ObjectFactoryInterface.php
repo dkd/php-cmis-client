@@ -157,5 +157,5 @@ interface ObjectFactoryInterface
      * @param string[] $parameters
      * @return void
      */
-    public function initialize(SessionInterface $session, $parameters);
+    public function initialize(SessionInterface $session, $parameters = array());
 }
