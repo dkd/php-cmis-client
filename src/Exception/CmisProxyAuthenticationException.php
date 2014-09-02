@@ -11,12 +11,12 @@ namespace Dkd\PhpCmis\Exception;
  */
 
 /**
- * CMIS ObjectNotFound Exception.
+ * Proxy authentication exception.
  *
- * Cause: The service call has specified an object, an object-type or a
- * repository that does not exist.
+ * (This is exception is not defined in the CMIS specification and is therefore
+ * derived from {@link CmisRuntimeException}.)
  */
-class CmisObjectNotFoundException extends CmisBaseException
+class CmisProxyAuthenticationException extends CmisRuntimeException
 {
-    const EXCEPTION_NAME = "objectNotFound";
+    const EXCEPTION_NAME = "notSupported";
 }

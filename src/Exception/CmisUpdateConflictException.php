@@ -11,12 +11,12 @@ namespace Dkd\PhpCmis\Exception;
  */
 
 /**
- * CMIS ObjectNotFound Exception.
+ * CMIS UpdateConflict Exception.
  *
- * Cause: The service call has specified an object, an object-type or a
- * repository that does not exist.
+ * Intent: The operation is attempting to update an object that is no longer
+ * current (as determined by the repository).
  */
-class CmisObjectNotFoundException extends CmisBaseException
+class CmisUpdateConflictException extends CmisBaseException
 {
-    const EXCEPTION_NAME = "objectNotFound";
+    const EXCEPTION_NAME = "updateConflict";
 }

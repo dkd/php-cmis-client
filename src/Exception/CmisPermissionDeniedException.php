@@ -11,12 +11,12 @@ namespace Dkd\PhpCmis\Exception;
  */
 
 /**
- * CMIS ObjectNotFound Exception.
+ * CMIS PermissionDenied Exception.
  *
- * Cause: The service call has specified an object, an object-type or a
- * repository that does not exist.
+ * Cause: The caller of the service method does not have sufficient permissions
+ * to perform the operation.
  */
-class CmisObjectNotFoundException extends CmisBaseException
+class CmisPermissionDeniedException extends CmisBaseException
 {
-    const EXCEPTION_NAME = "objectNotFound";
+    const EXCEPTION_NAME = "permissionDenied";
 }

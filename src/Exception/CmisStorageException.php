@@ -11,12 +11,12 @@ namespace Dkd\PhpCmis\Exception;
  */
 
 /**
- * CMIS ObjectNotFound Exception.
+ * CMIS Storage Exception.
  *
- * Cause: The service call has specified an object, an object-type or a
- * repository that does not exist.
+ * Intent: The repository is not able to store the object that the user is
+ * creating/updating due to an internal storage problem.
  */
-class CmisObjectNotFoundException extends CmisBaseException
+class CmisStorageException extends CmisBaseException
 {
-    const EXCEPTION_NAME = "objectNotFound";
+    const EXCEPTION_NAME = "storage";
 }

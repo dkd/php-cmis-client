@@ -11,12 +11,11 @@ namespace Dkd\PhpCmis\Exception;
  */
 
 /**
- * CMIS ObjectNotFound Exception.
+ * CMIS Base Exception.
  *
- * Cause: The service call has specified an object, an object-type or a
- * repository that does not exist.
+ * Base exception class for all CMIS exceptions.
  */
-class CmisObjectNotFoundException extends CmisBaseException
+abstract class CmisBaseException extends \RuntimeException
 {
-    const EXCEPTION_NAME = "objectNotFound";
+
 }

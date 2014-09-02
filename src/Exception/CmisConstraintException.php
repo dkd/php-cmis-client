@@ -11,12 +11,12 @@ namespace Dkd\PhpCmis\Exception;
  */
 
 /**
- * CMIS ObjectNotFound Exception.
+ * CMIS Constraint Exception.
  *
- * Cause: The service call has specified an object, an object-type or a
- * repository that does not exist.
+ * Intent: The operation violates a repository- or object-level constraint
+ * defined in the CMIS domain model.
  */
-class CmisObjectNotFoundException extends CmisBaseException
+class CmisConstraintException extends CmisBaseException
 {
-    const EXCEPTION_NAME = "objectNotFound";
+    const EXCEPTION_NAME = "constraint";
 }

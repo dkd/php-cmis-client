@@ -11,12 +11,11 @@ namespace Dkd\PhpCmis\Exception;
  */
 
 /**
- * CMIS ObjectNotFound Exception.
+ * CMIS InvalidArgument Exception.
  *
- * Cause: The service call has specified an object, an object-type or a
- * repository that does not exist.
+ * Cause: One or more of the input parameters to the service method is missing or invalid.
  */
-class CmisObjectNotFoundException extends CmisBaseException
+class CmisInvalidArgumentException extends CmisBaseException
 {
-    const EXCEPTION_NAME = "objectNotFound";
+    const EXCEPTION_NAME = "invalidArgument";
 }

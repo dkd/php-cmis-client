@@ -11,12 +11,11 @@ namespace Dkd\PhpCmis\Exception;
  */
 
 /**
- * CMIS ObjectNotFound Exception.
+ * IllegalState Exception.
  *
- * Cause: The service call has specified an object, an object-type or a
- * repository that does not exist.
+ * Indicates that the state of the session is not valid.
  */
-class CmisObjectNotFoundException extends CmisBaseException
+class IllegalStateException extends \RuntimeException
 {
-    const EXCEPTION_NAME = "objectNotFound";
+
 }
