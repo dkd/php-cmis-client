@@ -10,12 +10,12 @@ namespace Dkd\PhpCmis\Enum;
  * file that was distributed with this source code.
  */
 
-use Eloquent\Enumeration\AbstractEnumeration;
+use Dkd\Enumeration\Enumeration;
 
 /**
  * ACL Propagation Enum.
  */
-final class AclPropagation extends AbstractEnumeration
+final class AclPropagation extends Enumeration
 {
     const OBJECTONLY = 'objectonly';
     const REPOSITORYDETERMINED = 'repositorydetermined';

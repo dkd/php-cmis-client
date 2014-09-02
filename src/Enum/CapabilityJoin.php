@@ -10,12 +10,12 @@ namespace Dkd\PhpCmis\Enum;
  * file that was distributed with this source code.
  */
 
-use Eloquent\Enumeration\AbstractEnumeration;
+use Dkd\Enumeration\Enumeration;
 
 /**
  * Capability Enum: Join.
  */
-final class CapabilityJoin extends AbstractEnumeration
+final class CapabilityJoin extends Enumeration
 {
     const INNERANDOUTER = 'innerandouter';
     const INNERONLY = 'inneronly';

@@ -10,12 +10,12 @@ namespace Dkd\PhpCmis\Enum;
  * file that was distributed with this source code.
  */
 
-use Eloquent\Enumeration\AbstractEnumeration;
+use Dkd\Enumeration\Enumeration;
 
 /**
  * CMIS Version enum
  */
-final class CmisVersion extends AbstractEnumeration
+final class CmisVersion extends Enumeration
 {
     const CMIS_1_0 = '1.0';
     const CMIS_1_1 = '1.1';

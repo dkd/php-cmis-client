@@ -10,12 +10,12 @@ namespace Dkd\PhpCmis\Enum;
  * file that was distributed with this source code.
  */
 
-use Eloquent\Enumeration\AbstractEnumeration;
+use Dkd\Enumeration\Enumeration;
 
 /**
  * Relationship Direction Enum.
  */
-final class RelationshipDirection extends AbstractEnumeration
+final class RelationshipDirection extends Enumeration
 {
     const EITHER = 'either';
     const SOURCE = 'source';

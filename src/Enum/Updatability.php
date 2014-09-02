@@ -10,12 +10,12 @@ namespace Dkd\PhpCmis\Enum;
  * file that was distributed with this source code.
  */
 
-use Eloquent\Enumeration\AbstractEnumeration;
+use Dkd\Enumeration\Enumeration;
 
 /**
  * Updatability Enum.
  */
-final class Updatability extends AbstractEnumeration
+final class Updatability extends Enumeration
 {
     const ONCREATE = 'oncreate';
     const READONLY = 'readonly';

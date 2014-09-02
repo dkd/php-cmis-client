@@ -10,12 +10,12 @@ namespace Dkd\PhpCmis\Enum;
  * file that was distributed with this source code.
  */
 
-use Eloquent\Enumeration\AbstractEnumeration;
+use Dkd\Enumeration\Enumeration;
 
 /**
  * Capability Enum: Content Stream Updates.
  */
-final class CapabilityContentStreamUpdates extends AbstractEnumeration
+final class CapabilityContentStreamUpdates extends Enumeration
 {
     const ANYTIME = 'anytime';
     const NONE = 'none';

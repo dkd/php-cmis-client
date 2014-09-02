@@ -10,12 +10,12 @@ namespace Dkd\PhpCmis\Enum;
  * file that was distributed with this source code.
  */
 
-use Eloquent\Enumeration\AbstractEnumeration;
+use Dkd\Enumeration\Enumeration;
 
 /**
  * Capability Enum: Rendition.
  */
-final class CapabilityRenditions extends AbstractEnumeration
+final class CapabilityRenditions extends Enumeration
 {
     const NONE = 'none';
     const READ = 'read';

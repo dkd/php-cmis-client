@@ -10,12 +10,12 @@ namespace Dkd\PhpCmis\Enum;
  * file that was distributed with this source code.
  */
 
-use Eloquent\Enumeration\AbstractEnumeration;
+use Dkd\Enumeration\Enumeration;
 
 /**
  * Change type Enum.
  */
-final class ChangeType extends AbstractEnumeration
+final class ChangeType extends Enumeration
 {
     const CREATED = 'created';
     const DELETED = 'deleted';

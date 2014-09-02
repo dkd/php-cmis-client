@@ -10,12 +10,12 @@ namespace Dkd\PhpCmis\Enum;
  * file that was distributed with this source code.
  */
 
-use Eloquent\Enumeration\AbstractEnumeration;
+use Dkd\Enumeration\Enumeration;
 
 /**
  * Base Object Type IDs Enum.
  */
-final class BaseTypeId extends AbstractEnumeration
+final class BaseTypeId extends Enumeration
 {
     const CMIS_DOCUMENT = 'cmis:document';
     const CMIS_FOLDER = 'cmis:folder';

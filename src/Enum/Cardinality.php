@@ -10,12 +10,12 @@ namespace Dkd\PhpCmis\Enum;
  * file that was distributed with this source code.
  */
 
-use Eloquent\Enumeration\AbstractEnumeration;
+use Dkd\Enumeration\Enumeration;
 
 /**
  * Cardinality Enum
  */
-final class Cardinality extends AbstractEnumeration
+final class Cardinality extends Enumeration
 {
     const MULTI  = 'multi';
     const SINGLE = 'single';

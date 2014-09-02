@@ -10,12 +10,12 @@ namespace Dkd\PhpCmis\Enum;
  * file that was distributed with this source code.
  */
 
-use Eloquent\Enumeration\AbstractEnumeration;
+use Dkd\Enumeration\Enumeration;
 
 /**
  * Extension Level Enum
  */
-final class ExtensionLevel extends AbstractEnumeration
+final class ExtensionLevel extends Enumeration
 {
     const ACL = 'acl';
     const ALLOWABLE_ACTIONS = 'allowableActions';

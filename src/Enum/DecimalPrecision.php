@@ -10,12 +10,12 @@ namespace Dkd\PhpCmis\Enum;
  * file that was distributed with this source code.
  */
 
-use Eloquent\Enumeration\AbstractEnumeration;
+use Dkd\Enumeration\Enumeration;
 
 /**
  * Decimal Precision Enum.
  */
-final class DecimalPrecision extends AbstractEnumeration
+final class DecimalPrecision extends Enumeration
 {
     const BITS32 = '32';
     const BITS64 = '64';

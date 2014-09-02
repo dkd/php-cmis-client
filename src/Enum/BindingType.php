@@ -10,12 +10,12 @@ namespace Dkd\PhpCmis\Enum;
  * file that was distributed with this source code.
  */
 
-use Eloquent\Enumeration\AbstractEnumeration;
+use Dkd\Enumeration\Enumeration;
 
 /**
  * Binding Type Enum.
  */
-final class BindingType extends AbstractEnumeration
+final class BindingType extends Enumeration
 {
     const ATOMPUB = 'atompub';
     const BROWSER = 'browser';

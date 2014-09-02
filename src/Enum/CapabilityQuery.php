@@ -10,12 +10,12 @@ namespace Dkd\PhpCmis\Enum;
  * file that was distributed with this source code.
  */
 
-use Eloquent\Enumeration\AbstractEnumeration;
+use Dkd\Enumeration\Enumeration;
 
 /**
  * Capability Enum: Query.
  */
-final class CapabilityQuery extends AbstractEnumeration
+final class CapabilityQuery extends Enumeration
 {
     const BOTHCOMBINED = 'bothcombined';
     const BOTHSEPARATE = 'bothseparate';

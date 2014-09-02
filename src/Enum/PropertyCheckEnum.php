@@ -10,12 +10,12 @@ namespace Dkd\PhpCmis\Enum;
  * file that was distributed with this source code.
  */
 
-use Eloquent\Enumeration\AbstractEnumeration;
+use Dkd\Enumeration\Enumeration;
 
 /**
  * Property Check Enum.
  */
-final class PropertyCheckEnum extends AbstractEnumeration
+final class PropertyCheckEnum extends Enumeration
 {
     const MUST_BE_SET = 'MUST_BE_SET';
     const MUST_NOT_BE_SET = 'MUST_NOT_BE_SET';

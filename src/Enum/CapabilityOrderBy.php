@@ -10,12 +10,12 @@ namespace Dkd\PhpCmis\Enum;
  * file that was distributed with this source code.
  */
 
-use Eloquent\Enumeration\AbstractEnumeration;
+use Dkd\Enumeration\Enumeration;
 
 /**
  * Capability Order by enum
  */
-final class CapabilityOrderBy extends AbstractEnumeration
+final class CapabilityOrderBy extends Enumeration
 {
     const COMMON = 'common';
     const CUSTOM = 'custom';

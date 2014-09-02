@@ -10,12 +10,12 @@ namespace Dkd\PhpCmis\Enum;
  * file that was distributed with this source code.
  */
 
-use Eloquent\Enumeration\AbstractEnumeration;
+use Dkd\Enumeration\Enumeration;
 
 /**
  * Property Type Enum.
  */
-final class PropertyType extends AbstractEnumeration
+final class PropertyType extends Enumeration
 {
     const BOOLEAN = 'boolean';
     const DATETIME = 'datetime';

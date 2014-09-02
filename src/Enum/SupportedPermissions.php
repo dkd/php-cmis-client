@@ -10,12 +10,12 @@ namespace Dkd\PhpCmis\Enum;
  * file that was distributed with this source code.
  */
 
-use Eloquent\Enumeration\AbstractEnumeration;
+use Dkd\Enumeration\Enumeration;
 
 /**
  * ACL Capability Enum: Supported Permissions.
  */
-final class SupportedPermissions extends AbstractEnumeration
+final class SupportedPermissions extends Enumeration
 {
     const BASIC = 'basic';
     const BOTH = 'both';

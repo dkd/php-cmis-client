@@ -10,12 +10,12 @@ namespace Dkd\PhpCmis\Enum;
  * file that was distributed with this source code.
  */
 
-use Eloquent\Enumeration\AbstractEnumeration;
+use Dkd\Enumeration\Enumeration;
 
 /**
  * Capability Enum: ACL.
  */
-final class CapabilityAcl extends AbstractEnumeration
+final class CapabilityAcl extends Enumeration
 {
     const DISCOVER = 'discover';
     const MANAGE = 'manage';

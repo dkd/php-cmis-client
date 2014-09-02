@@ -10,12 +10,12 @@ namespace Dkd\PhpCmis\Enum;
  * file that was distributed with this source code.
  */
 
-use Eloquent\Enumeration\AbstractEnumeration;
+use Dkd\Enumeration\Enumeration;
 
 /**
  * Include Relationships Enum.
  */
-final class IncludeRelationships extends AbstractEnumeration
+final class IncludeRelationships extends Enumeration
 {
     const NONE = 'none';
     const SOURCE = 'source';

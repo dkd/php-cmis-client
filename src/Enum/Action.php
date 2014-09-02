@@ -10,12 +10,12 @@ namespace Dkd\PhpCmis\Enum;
  * file that was distributed with this source code.
  */
 
-use Eloquent\Enumeration\AbstractEnumeration;
+use Dkd\Enumeration\Enumeration;
 
 /**
  * Action Enum.
  */
-final class Action extends AbstractEnumeration
+final class Action extends Enumeration
 {
     const CAN_DELETE_OBJECT = 'canDeleteObject';
     const CAN_UPDATE_PROPERTIES = 'canUpdateProperties';

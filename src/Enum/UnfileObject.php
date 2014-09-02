@@ -10,12 +10,12 @@ namespace Dkd\PhpCmis\Enum;
  * file that was distributed with this source code.
  */
 
-use Eloquent\Enumeration\AbstractEnumeration;
+use Dkd\Enumeration\Enumeration;
 
 /**
  * Unfile Object Enum.
  */
-final class UnfileObject extends AbstractEnumeration
+final class UnfileObject extends Enumeration
 {
     const DELETE = 'delete';
     const DELETESINGLEFILED = 'deletesinglefiled';
