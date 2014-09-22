@@ -13,7 +13,7 @@ namespace Dkd\PhpCmis\Data;
 /**
  * Holds extension data either set by the CMIS repository or the client.
  */
-interface ExtensionsDataInterface
+interface ExtensionDataInterface
 {
     /**
      * Returns the list of top-level extension elements.
