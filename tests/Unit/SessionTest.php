@@ -1,5 +1,5 @@
 <?php
-namespace Dkd\PhpCmis\Test;
+namespace Dkd\PhpCmis\Test\Unit;
 
 /**
  * This file is part of php-cmis-client
@@ -10,8 +10,8 @@ namespace Dkd\PhpCmis\Test;
  * file that was distributed with this source code.
  */
 
-use \Dkd\PhpCmis;
-use \Dkd\PhpCmis\ObjectFactoryInterface;
+use Dkd\PhpCmis;
+use Dkd\PhpCmis\ObjectFactoryInterface;
 
 class SessionTest extends \PHPUnit_Framework_TestCase
 {
@@ -92,7 +92,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 
     public function testCacheIsSetToCacheInstanceGivenAsMethodParameter()
     {
-        /** @var CacheInterface $dummyCache */
+        /** @var \Dkd\PhpCmis\CacheInterface $dummyCache */
         $dummyCache = $this->getMock('\\Dkd\\PhpCmis\\Cache');
         $session = new PhpCmis\Session(array('foo'), null, null, $dummyCache);
         $this->assertSame($dummyCache, $session->getCache());
