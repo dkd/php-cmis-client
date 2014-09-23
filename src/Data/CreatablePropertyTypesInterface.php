@@ -15,7 +15,7 @@ use Dkd\PhpCmis\Enum\PropertyType;
 /**
  * Holds the set of property data types for type creation and update.
  */
-interface CreatablePropertyTypes extends ExtensionsDataInterface
+interface CreatablePropertyTypesInterface extends ExtensionDataInterface
 {
     /**
      * Returns the set of property data types that can used to create or update a type definition.
