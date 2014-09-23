@@ -20,6 +20,5 @@ final class BindingType extends Enumeration
     const ATOMPUB = 'atompub';
     const BROWSER = 'browser';
     const CUSTOM = 'custom';
-    const LOCAL = 'local';
     const WEBSERVICES = 'webservices';
 }
