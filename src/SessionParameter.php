@@ -536,8 +536,8 @@ class SessionParameter
     /** Predefined binding types (see {@code BindingType}). */
     const BINDING_TYPE = "dkd.phpcmis.binding.type";
 
-//    /** Class name of the binding class. */
-//    const BINDING_SPI_CLASS = "dkd.phpcmis.binding.classname";
+    /** Class name of the binding class. */
+    const BINDING_CLASS = "dkd.phpcmis.binding.classname";
 //
 //    /**
 //     * Forces OpenCMIS to use the specified CMIS version and ignore the CMIS
@@ -578,6 +578,9 @@ class SessionParameter
     const BROWSER_URL = "dkd.phpcmis.binding.browser.url";
     const BROWSER_SUCCINCT = "dkd.phpcmis.binding.browser.succinct";
     const BROWSER_DATETIME_FORMAT = "dkd.phpcmis.binding.browser.datetimeformat";
+
+    const JSON_CONVERTER = "dkd.phpcmis.converter.jsonconverter";
+    const JSON_CONVERTER_CLASS = "dkd.phpcmis.converter.jsonconverter.classname";
 //
 //    /** Factory class name for the local binding. */
 //    const LOCAL_FACTORY = "dkd.phpcmis.binding.local.classname";
@@ -621,7 +624,7 @@ class SessionParameter
 //
 //    // --- connection ---
 //
-//    const HTTP_INVOKER_CLASS = "dkd.phpcmis.binding.httpinvoker.classname";
+    const HTTP_INVOKER_CLASS = "dkd.phpcmis.binding.httpinvoker.classname";
 //
 //    const COMPRESSION = "dkd.phpcmis.binding.compression";
 //    const CLIENT_COMPRESSION = "dkd.phpcmis.binding.clientcompression";
@@ -644,9 +647,9 @@ class SessionParameter
 //    const CACHE_TTL_PATHTOID = "dkd.phpcmis.cache.pathtoid.ttl";
 //    const CACHE_PATH_OMIT = "dkd.phpcmis.cache.path.omit";
 //
-//    const CACHE_SIZE_REPOSITORIES = "dkd.phpcmis.binding.cache.repositories.size";
-//    const CACHE_SIZE_TYPES = "dkd.phpcmis.binding.cache.types.size";
-//    const CACHE_SIZE_LINKS = "dkd.phpcmis.binding.cache.links.size";
+    const CACHE_SIZE_REPOSITORIES = "dkd.phpcmis.binding.cache.repositories.size";
+    const CACHE_SIZE_TYPES = "dkd.phpcmis.binding.cache.types.size";
+    const CACHE_SIZE_LINKS = "dkd.phpcmis.binding.cache.links.size";
 //
     // --- session control ---
 //
@@ -656,9 +659,10 @@ class SessionParameter
 //
     const OBJECT_FACTORY_CLASS = "dkd.phpcmis.objectfactory.classname";
     const CACHE_CLASS = "dkd.phpcmis.cache.classname";
-//    const TYPE_DEFINITION_CACHE_CLASS = "dkd.phpcmis.cache.types.classname";
+    const TYPE_DEFINITION_CACHE_CLASS = "dkd.phpcmis.cache.types.classname";
 //
     const REPOSITORY_ID = "dkd.phpcmis.session.repository.id";
+    const REPOSITORY_URL_CACHE = "dkd.phpcmis.binding.browser.repositoryurls";
 //
 //    // --- workarounds ---
 //

@@ -21,5 +21,6 @@ if (!file_exists(__DIR__.'/../vendor/autoload.php')) {
 }
 
 // Include the composer autoloader
+/** @var \Composer\Autoload\ClassLoader $loader */
 $loader = require dirname(__DIR__) . '/vendor/autoload.php';
-$loader->add('Dkd\\PhpCmis\\Test\\Unit', __DIR__ . '/Unit');
+$loader->addPsr4('Dkd\\PhpCmis\\Test\\Fixtures\\', __DIR__ . '/Fixtures');

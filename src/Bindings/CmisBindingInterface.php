@@ -1,5 +1,5 @@
 <?php
-namespace Dkd\PhpCmis;
+namespace Dkd\PhpCmis\Bindings;
 
 /**
  * This file is part of php-cmis-lib.
@@ -10,7 +10,18 @@ namespace Dkd\PhpCmis;
  * file that was distributed with this source code.
  */
 
+use Dkd\PhpCmis\AclServiceInterface;
+use Dkd\PhpCmis\AuthenticationProviderInterface;
+use Dkd\PhpCmis\BindingsObjectFactoryInterface;
+use Dkd\PhpCmis\DiscoveryServiceInterface;
 use Dkd\PhpCmis\Enum\BindingType;
+use Dkd\PhpCmis\MultiFilingServiceInterface;
+use Dkd\PhpCmis\NavigationServiceInterface;
+use Dkd\PhpCmis\ObjectServiceInterface;
+use Dkd\PhpCmis\PolicyServiceInterface;
+use Dkd\PhpCmis\RelationshipServiceInterface;
+use Dkd\PhpCmis\RepositoryServiceInterface;
+use Dkd\PhpCmis\VersioningServiceInterface;
 
 /**
  * Entry point for all CMIS binding related operations.
@@ -90,7 +101,6 @@ interface CmisBindingInterface
 
     /**
      * Gets a factory for CMIS binding specific objects.
-     * @TODO do we need a factory class here?
      * @return BindingsObjectFactoryInterface
      */
     public function getObjectFactory();

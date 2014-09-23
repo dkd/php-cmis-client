@@ -10,10 +10,11 @@ namespace Dkd\PhpCmis;
  * file that was distributed with this source code.
  */
 
+use Dkd\PhpCmis\Data\AclInterface;
 use Dkd\PhpCmis\Data\AllowableActionsInterface;
 use Dkd\PhpCmis\Data\BulkUpdateObjectIdAndChangeTokenInterface;
 use Dkd\PhpCmis\Data\ContentStreamInterface;
-use Dkd\PhpCmis\Data\ExtensionsDataInterface;
+use Dkd\PhpCmis\Data\ExtensionDataInterface;
 use Dkd\PhpCmis\Data\ObjectDataInterface;
 use Dkd\PhpCmis\Data\PropertiesInterface;
 use Dkd\PhpCmis\Data\RenditionDataInterface;
@@ -41,7 +42,7 @@ interface ObjectServiceInterface
      * The repository might return a new change token (default is null)
      * @param ContentStreamInterface $contentStream the content stream to append
      * @param boolean $isLastChunk indicates if this content stream is the last chunk
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return void
      */
     public function appendContentStream(
@@ -50,7 +51,7 @@ interface ObjectServiceInterface
         $changeToken,
         ContentStreamInterface $contentStream,
         $isLastChunk,
-        ExtensionsDataInterface $extension
+        ExtensionDataInterface $extension
     );
 
     /**
@@ -61,7 +62,7 @@ interface ObjectServiceInterface
      * @param PropertiesInterface $properties
      * @param string[] $addSecondaryTypeIds the secondary types to apply
      * @param string[] $removeSecondaryTypeIds the secondary types to remove
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return BulkUpdateObjectIdAndChangeTokenInterface[]
      */
     public function bulkUpdateProperties(
@@ -70,7 +71,7 @@ interface ObjectServiceInterface
         PropertiesInterface $properties,
         array $addSecondaryTypeIds,
         array $removeSecondaryTypeIds,
-        ExtensionsDataInterface $extension
+        ExtensionDataInterface $extension
     );
 
     /**
@@ -91,7 +92,7 @@ interface ObjectServiceInterface
      * either using the ACL from folderId if specified, or being applied if no folderId is specified
      * @param AclInterface $removeAces a list of ACEs that must be removed from the newly created document object,
      * either using the ACL from folderId if specified, or being ignored if no folderId is specified
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return string
      */
     public function createDocument(
@@ -99,15 +100,16 @@ interface ObjectServiceInterface
         PropertiesInterface $properties,
         $folderId = null,
         ContentStreamInterface $contentStream = null,
-        VersioningState $versioningState = VersioningState::MAJOR,
+        VersioningState $versioningState = null,
         array $policies = array(),
         AclInterface $addAces = null,
         AclInterface $removeAces = null,
-        ExtensionsDataInterface $extension = null
+        ExtensionDataInterface $extension = null
     );
 
     /**
      * Creates a document object as a copy of the given source document in the (optionally) specified location.
+     *
      * @param string $repositoryId the identifier for the repository
      * @param string $sourceId the identifier for the source document
      * @param PropertiesInterface $properties the property values that must be applied to the newly
@@ -121,7 +123,7 @@ interface ObjectServiceInterface
      * either using the ACL from folderId if specified, or being applied if no folderId is specified
      * @param AclInterface $removeAces a list of ACEs that must be removed from the newly created document object,
      * either using the ACL from folderId if specified, or being ignored if no folderId is specified
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return string
      */
     public function createDocumentFromSource(
@@ -129,11 +131,11 @@ interface ObjectServiceInterface
         $sourceId,
         PropertiesInterface $properties,
         $folderId = null,
-        VersioningState $versioningState = VersioningState::MAJOR,
+        VersioningState $versioningState = null,
         array $policies = array(),
         AclInterface $addAces = null,
         AclInterface $removeAces = null,
-        ExtensionsDataInterface $extension = null
+        ExtensionDataInterface $extension = null
     );
 
     /**
@@ -150,7 +152,7 @@ interface ObjectServiceInterface
      * either using the ACL from folderId if specified, or being applied if no folderId is specified
      * @param AclInterface $removeAces a list of ACEs that must be removed from the newly created document object,
      * either using the ACL from folderId if specified, or being ignored if no folderId is specified
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return string
      */
     public function createFolder(
@@ -160,7 +162,7 @@ interface ObjectServiceInterface
         array $policies = array(),
         AclInterface $addAces = null,
         AclInterface $removeAces = null,
-        ExtensionsDataInterface $extension = null
+        ExtensionDataInterface $extension = null
     );
 
     /**
@@ -176,7 +178,7 @@ interface ObjectServiceInterface
      * either using the ACL from folderId if specified, or being applied if no folderId is specified
      * @param AclInterface $removeAces a list of ACEs that must be removed from the newly created document object,
      * either using the ACL from folderId if specified, or being ignored if no folderId is specified
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return string
      */
     public function createItem(
@@ -186,7 +188,7 @@ interface ObjectServiceInterface
         array $policies = array(),
         AclInterface $addAces = null,
         AclInterface $removeAces = null,
-        ExtensionsDataInterface $extension = null
+        ExtensionDataInterface $extension = null
     );
 
     /**
@@ -202,7 +204,7 @@ interface ObjectServiceInterface
      * either using the ACL from folderId if specified, or being applied if no folderId is specified
      * @param AclInterface $removeAces a list of ACEs that must be removed from the newly created document object,
      * either using the ACL from folderId if specified, or being ignored if no folderId is specified
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return string
      */
     public function createPolicy(
@@ -212,7 +214,7 @@ interface ObjectServiceInterface
         array $policies = array(),
         AclInterface $addAces = null,
         AclInterface $removeAces = null,
-        ExtensionsDataInterface $extension = null
+        ExtensionDataInterface $extension = null
     );
 
     /**
@@ -226,7 +228,7 @@ interface ObjectServiceInterface
      * either using the ACL from folderId if specified, or being applied if no folderId is specified
      * @param AclInterface $removeAces a list of ACEs that must be removed from the newly created document object,
      * either using the ACL from folderId if specified, or being ignored if no folderId is specified
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return string
      */
     public function createRelationship(
@@ -235,7 +237,7 @@ interface ObjectServiceInterface
         array $policies = array(),
         AclInterface $addAces = null,
         AclInterface $removeAces = null,
-        ExtensionsDataInterface $extension = null
+        ExtensionDataInterface $extension = null
     );
 
     /**
@@ -245,14 +247,14 @@ interface ObjectServiceInterface
      * @param string $objectId the identifier for the object. The repository might return a different/new object id
      * @param string $changeToken the last change token of this object that the client received. The repository might
      * return a new change token (default is null)
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return void
      */
     public function deleteContentStream(
         $repositoryId,
         $objectId,
         $changeToken = null,
-        ExtensionsDataInterface $extension = null
+        ExtensionDataInterface $extension = null
     );
 
     /**
@@ -262,14 +264,14 @@ interface ObjectServiceInterface
      * @param string $objectId the identifier for the object
      * @param boolean $allVersions If true then delete all versions of the document, otherwise delete only the document
      * object specified (default is true)
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return void
      */
     public function deleteObject(
         $repositoryId,
         $objectId,
         $allVersions = true,
-        ExtensionsDataInterface $extension = null
+        ExtensionDataInterface $extension = null
     );
 
     /**
@@ -283,16 +285,16 @@ interface ObjectServiceInterface
      * descendant-objects (default is UnfileObject.DELETE)
      * @param boolean $continueOnFailure If true, then the repository should continue attempting to perform this
      * operation even if deletion of a child- or descendant-object in the specified folder cannot be deleted
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return array Returns a list of object ids that could not be deleted
      */
     public function deleteTree(
         $repositoryId,
         $folderId,
         $allVersions = true,
-        UnfileObject $unfileObjects = UnfileObject::DELETE,
+        UnfileObject $unfileObjects = null,
         $continueOnFailure = false,
-        ExtensionsDataInterface $extension = null
+        ExtensionDataInterface $extension = null
     );
 
     /**
@@ -300,10 +302,10 @@ interface ObjectServiceInterface
      *
      * @param string $repositoryId the identifier for the repository
      * @param string $objectId the identifier for the object
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return AllowableActionsInterface
      */
-    public function getAllowableActions($repositoryId, $objectId, ExtensionsDataInterface $extension = null);
+    public function getAllowableActions($repositoryId, $objectId, ExtensionDataInterface $extension = null);
 
     /**
      * Gets the content stream for the specified document object, or gets a rendition stream for
@@ -314,7 +316,7 @@ interface ObjectServiceInterface
      * @param string $streamId
      * @param int $offset
      * @param int $length
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return ContentStreamInterface
      */
     public function getContentStream(
@@ -323,7 +325,7 @@ interface ObjectServiceInterface
         $streamId,
         $offset,
         $length,
-        ExtensionsDataInterface $extension = null
+        ExtensionDataInterface $extension = null
     );
 
     /**
@@ -342,7 +344,7 @@ interface ObjectServiceInterface
      * @param boolean $includePolicyIds if true, then the repository must return the policy ids for
      * the object (default is false)
      * @param boolean $includeAcl if true, then the repository must return the ACL for the object (default is false)
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return ObjectDataInterface
      */
     public function getObject(
@@ -350,11 +352,11 @@ interface ObjectServiceInterface
         $objectId,
         $filter = null,
         $includeAllowableActions = false,
-        IncludeRelationships $includeRelationships = IncludeRelationships::NONE,
+        IncludeRelationships $includeRelationships = null,
         $renditionFilter = 'cmis:none',
         $includePolicyIds = false,
         $includeAcl = false,
-        ExtensionsDataInterface $extension = null
+        ExtensionDataInterface $extension = null
     );
 
     /**
@@ -373,7 +375,7 @@ interface ObjectServiceInterface
      * @param boolean $includePolicyIds if true, then the repository must return the policy ids for
      * the object (default is false)
      * @param boolean $includeAcl if true, then the repository must return the ACL for the object (default is false)
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return ObjectDataInterface
      */
     public function getObjectByPath(
@@ -385,7 +387,7 @@ interface ObjectServiceInterface
         $renditionFilter,
         $includePolicyIds,
         $includeAcl,
-        ExtensionsDataInterface $extension = null
+        ExtensionDataInterface $extension = null
     );
 
     /**
@@ -395,14 +397,14 @@ interface ObjectServiceInterface
      * @param string $objectId the identifier for the object
      * @param string $filter a comma-separated list of query names that defines which properties
      * must be returned by the repository (default is repository specific)
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return PropertiesInterface
      */
     public function getProperties(
         $repositoryId,
         $objectId,
         $filter = null,
-        ExtensionsDataInterface $extension = null
+        ExtensionDataInterface $extension = null
     );
 
     /**
@@ -415,7 +417,7 @@ interface ObjectServiceInterface
      * matches this filter (default is "cmis:none")
      * @param int $maxItems
      * @param int $skipCount
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return RenditionDataInterface[]
      */
     public function getRenditions(
@@ -424,7 +426,7 @@ interface ObjectServiceInterface
         $renditionFilter = 'cmis:none',
         $maxItems = null,
         $skipCount = null,
-        ExtensionsDataInterface $extension = null
+        ExtensionDataInterface $extension = null
     );
 
     /**
@@ -434,7 +436,7 @@ interface ObjectServiceInterface
      * @param string $objectId the identifier for the object. The repository might return a different/new object id
      * @param string $targetFolderId the identifier for the target folder
      * @param string $sourceFolderId the identifier for the source folder
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return void
      */
     public function moveObject(
@@ -442,7 +444,7 @@ interface ObjectServiceInterface
         $objectId,
         $targetFolderId,
         $sourceFolderId,
-        ExtensionsDataInterface $extension = null
+        ExtensionDataInterface $extension = null
     );
 
     /**
@@ -456,7 +458,7 @@ interface ObjectServiceInterface
      * the input content stream for the object if the object currently does not have a content stream (default is true)
      * @param string $changeToken the last change token of this object that the client received.
      * The repository might return a new change token (default is null)
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return void
      */
     public function setContentStream(
@@ -465,7 +467,7 @@ interface ObjectServiceInterface
         ContentStreamInterface $contentStream,
         $overwriteFlag = true,
         $changeToken = null,
-        ExtensionsDataInterface $extension = null
+        ExtensionDataInterface $extension = null
     );
 
     /**
@@ -476,7 +478,7 @@ interface ObjectServiceInterface
      * @param PropertiesInterface $properties the updated property values that must be applied to the object
      * @param string $changeToken (optional) the last change token of this object that the client received.
      * The repository might return a new change token (default is null)
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return void
      */
     public function updateProperties(
@@ -484,6 +486,6 @@ interface ObjectServiceInterface
         $objectId,
         PropertiesInterface $properties,
         $changeToken = null,
-        ExtensionsDataInterface $extension = null
+        ExtensionDataInterface $extension = null
     );
 }

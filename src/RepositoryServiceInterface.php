@@ -10,7 +10,7 @@ namespace Dkd\PhpCmis;
  * file that was distributed with this source code.
  */
 
-use Dkd\PhpCmis\Data\ExtensionsDataInterface;
+use Dkd\PhpCmis\Data\ExtensionDataInterface;
 use Dkd\PhpCmis\Data\RepositoryInfoInterface;
 use Dkd\PhpCmis\Definitions\TypeDefinitionContainerInterface;
 use Dkd\PhpCmis\Definitions\TypeDefinitionListInterface;
@@ -28,39 +28,39 @@ interface RepositoryServiceInterface
      *
      * @param string $repositoryId
      * @param TypeDefinitionInterface $type
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return TypeDefinitionInterface
      */
-    public function createType($repositoryId, TypeDefinitionInterface $type, ExtensionsDataInterface $extension = null);
+    public function createType($repositoryId, TypeDefinitionInterface $type, ExtensionDataInterface $extension = null);
 
     /**
      * Deletes a type.
      *
      * @param string $repositoryId
      * @param string $typeId
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return void
      */
-    public function deleteType($repositoryId, $typeId, ExtensionsDataInterface $extension = null);
+    public function deleteType($repositoryId, $typeId, ExtensionDataInterface $extension = null);
 
     /**
      * Returns information about the CMIS repository, the optional capabilities it
      * supports and its access control information if applicable.
      *
      * @param string $repositoryId
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return RepositoryInfoInterface
      */
-    public function getRepositoryInfo($repositoryId, ExtensionsDataInterface $extension = null);
+    public function getRepositoryInfo($repositoryId, ExtensionDataInterface $extension = null);
 
     /**
      * Returns a list of CMIS repository information available from this CMIS service endpoint.
      * In contrast to the CMIS specification this method returns repository infos not only repository ids.
      *
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return RepositoryInfoInterface[]
      */
-    public function getRepositoryInfos(ExtensionsDataInterface $extension = null);
+    public function getRepositoryInfos(ExtensionDataInterface $extension = null);
 
     /**
      * Returns the list of object types defined for the repository that are children of the specified type.
@@ -73,7 +73,7 @@ interface RepositoryServiceInterface
      * @param int $maxItems the maximum number of items to return in a response (default is repository specific)
      * @param int $skipCount number of potential results that the repository MUST skip/page over
      * before returning any results (default is 0)
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return TypeDefinitionListInterface
      */
     public function getTypeChildren(
@@ -82,7 +82,7 @@ interface RepositoryServiceInterface
         $includePropertyDefinitions = false,
         $maxItems = null,
         $skipCount = 0,
-        ExtensionsDataInterface $extension = null
+        ExtensionDataInterface $extension = null
     );
 
     /**
@@ -90,10 +90,10 @@ interface RepositoryServiceInterface
      *
      * @param string $repositoryId the identifier for the repository
      * @param string $typeId he type definition
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return TypeDefinitionInterface the newly created type
      */
-    public function getTypeDefinition($repositoryId, $typeId, ExtensionsDataInterface $extension = null);
+    public function getTypeDefinition($repositoryId, $typeId, ExtensionDataInterface $extension = null);
 
     /**
      * Returns the set of descendant object type defined for the repository under the specified type.
@@ -105,7 +105,7 @@ interface RepositoryServiceInterface
      * to return results (default is repository specific)
      * @param boolean $includePropertyDefinitions if true the repository MUST return the property
      * definitions for each object type returned (default is false)
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return TypeDefinitionContainerInterface[]
      */
     public function getTypeDescendants(
@@ -113,7 +113,7 @@ interface RepositoryServiceInterface
         $typeId = null,
         $depth = null,
         $includePropertyDefinitions = false,
-        ExtensionsDataInterface $extension = null
+        ExtensionDataInterface $extension = null
     );
 
     /**
@@ -121,8 +121,8 @@ interface RepositoryServiceInterface
      *
      * @param string $repositoryId the identifier for the repository
      * @param TypeDefinitionInterface $type the type definition
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return TypeDefinitionInterface the updated type
      */
-    public function updateType($repositoryId, TypeDefinitionInterface $type, ExtensionsDataInterface $extension = null);
+    public function updateType($repositoryId, TypeDefinitionInterface $type, ExtensionDataInterface $extension = null);
 }
