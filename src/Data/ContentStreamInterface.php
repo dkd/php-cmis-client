@@ -13,7 +13,7 @@ namespace Dkd\PhpCmis\Data;
 /**
  * Content stream
  */
-interface ContentStreamInterface extends ExtensionsDataInterface
+interface ContentStreamInterface extends ExtensionDataInterface
 {
     /**
      * Returns the length of stream.

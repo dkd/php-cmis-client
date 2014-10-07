@@ -10,7 +10,7 @@ namespace Dkd\PhpCmis;
  * file that was distributed with this source code.
  */
 
-use Dkd\PhpCmis\Data\ExtensionsDataInterface;
+use Dkd\PhpCmis\Data\ExtensionDataInterface;
 
 /**
  * Policy Service interface.
@@ -26,10 +26,10 @@ interface PolicyServiceInterface
      * @param string $repositoryId
      * @param string $policyId
      * @param string $objectId
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return mixed
      */
-    public function applyPolicy($repositoryId, $policyId, $objectId, ExtensionsDataInterface $extension);
+    public function applyPolicy($repositoryId, $policyId, $objectId, ExtensionDataInterface $extension);
 
     /**
      * Gets the list of policies currently applied to the specified object.
@@ -37,10 +37,10 @@ interface PolicyServiceInterface
      * @param string $repositoryId
      * @param string $objectId
      * @param string $filter
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return mixed
      */
-    public function getAppliedPolicies($repositoryId, $objectId, $filter, ExtensionsDataInterface $extension);
+    public function getAppliedPolicies($repositoryId, $objectId, $filter, ExtensionDataInterface $extension);
 
     /**
      * Removes a specified policy from an object.
@@ -48,8 +48,8 @@ interface PolicyServiceInterface
      * @param string $repositoryId
      * @param string $policyId
      * @param string $objectId
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return mixed
      */
-    public function removePolicy($repositoryId, $policyId, $objectId, ExtensionsDataInterface $extension);
+    public function removePolicy($repositoryId, $policyId, $objectId, ExtensionDataInterface $extension);
 }

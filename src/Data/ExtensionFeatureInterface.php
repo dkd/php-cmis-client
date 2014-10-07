@@ -13,7 +13,7 @@ namespace Dkd\PhpCmis\Data;
 /**
  * Representation of an extension feature.
  */
-interface ExtensionFeatureInterface extends ExtensionsDataInterface
+interface ExtensionFeatureInterface extends ExtensionDataInterface
 {
 
     /**

@@ -13,7 +13,7 @@ namespace Dkd\PhpCmis\Data;
 /**
  * Represents a parent of object of a child object.
  */
-interface ObjectParentDataInterface extends ExtensionsDataInterface
+interface ObjectParentDataInterface extends ExtensionDataInterface
 {
     /**
      * Returns the parent object.

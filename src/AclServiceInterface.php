@@ -10,7 +10,8 @@ namespace Dkd\PhpCmis;
  * file that was distributed with this source code.
  */
 
-use Dkd\PhpCmis\Data\ExtensionsDataInterface;
+use Dkd\PhpCmis\Data\AclInterface;
+use Dkd\PhpCmis\Data\ExtensionDataInterface;
 use Dkd\PhpCmis\Enum\AclPropagation;
 
 interface AclServiceInterface
@@ -23,7 +24,7 @@ interface AclServiceInterface
      * @param AclInterface $addAces
      * @param AclInterface $removeAces
      * @param AclPropagation $aclPropagation
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return AclInterface the ACL of the object
      */
     public function applyAcl(
@@ -32,7 +33,7 @@ interface AclServiceInterface
         AclInterface $addAces,
         AclInterface $removeAces,
         AclPropagation $aclPropagation,
-        ExtensionsDataInterface $extension
+        ExtensionDataInterface $extension
     );
 
     /**
@@ -41,8 +42,8 @@ interface AclServiceInterface
      * @param string $repositoryId
      * @param string $objectId
      * @param boolean $onlyBasicPermissions
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return AclInterface the ACL of the object
      */
-    public function getAcl($repositoryId, $objectId, $onlyBasicPermissions, ExtensionsDataInterface $extension);
+    public function getAcl($repositoryId, $objectId, $onlyBasicPermissions, ExtensionDataInterface $extension);
 }

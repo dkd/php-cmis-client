@@ -10,7 +10,7 @@ namespace Dkd\PhpCmis;
  * file that was distributed with this source code.
  */
 
-use Dkd\PhpCmis\Data\ExtensionsDataInterface;
+use Dkd\PhpCmis\Data\ExtensionDataInterface;
 use Dkd\PhpCmis\Definitions\PropertyDefinitionInterface;
 use Dkd\PhpCmis\Definitions\TypeMutabilityInterface;
 use Dkd\PhpCmis\Enum\BaseTypeId;
@@ -18,7 +18,7 @@ use Dkd\PhpCmis\Enum\BaseTypeId;
 /**
  * Base type definition interface.
  */
-interface TypeDefinitionInterface extends ExtensionsDataInterface, \Serializable
+interface TypeDefinitionInterface extends ExtensionDataInterface, \Serializable
 {
     /**
      * Returns the base object type ID.

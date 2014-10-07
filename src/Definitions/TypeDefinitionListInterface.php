@@ -10,13 +10,13 @@ namespace Dkd\PhpCmis\Definitions;
  * file that was distributed with this source code.
  */
 
-use Dkd\PhpCmis\Data\ExtensionsDataInterface;
+use Dkd\PhpCmis\Data\ExtensionDataInterface;
 use Dkd\PhpCmis\TypeDefinitionInterface;
 
 /**
  * List of type definitions.
  */
-interface TypeDefinitionListInterface extends ExtensionsDataInterface
+interface TypeDefinitionListInterface extends ExtensionDataInterface
 {
     /**
      * Returns the list of type definitions.

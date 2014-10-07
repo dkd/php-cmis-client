@@ -13,7 +13,7 @@ namespace Dkd\PhpCmis\Data;
 /**
  * Represents a list of objects.
  */
-interface ObjectListInterface extends ExtensionsDataInterface
+interface ObjectListInterface extends ExtensionDataInterface
 {
     /**
      * Returns the total number of the objects.

@@ -13,7 +13,7 @@ namespace Dkd\PhpCmis\Data;
 /**
  * Base property interface.
  */
-interface PropertyDataInterface extends ExtensionsDataInterface
+interface PropertyDataInterface extends ExtensionDataInterface
 {
     /**
      * Returns the display name.
@@ -25,7 +25,7 @@ interface PropertyDataInterface extends ExtensionsDataInterface
     /**
      * Returns the first entry of the list of values.
      *
-     * @return mixed first entry in the list of values or null if the list of values is empty
+     * @return mixed|null first entry in the list of values or null if the list of values is empty
      */
     public function getFirstValue();
 

@@ -10,7 +10,7 @@ namespace Dkd\PhpCmis;
  * file that was distributed with this source code.
  */
 
-use Dkd\PhpCmis\Data\ExtensionsDataInterface;
+use Dkd\PhpCmis\Data\ExtensionDataInterface;
 use Dkd\PhpCmis\Data\ObjectListInterface;
 use Dkd\PhpCmis\Enum\IncludeRelationships;
 
@@ -32,7 +32,7 @@ interface DiscoveryServiceInterface
      * @param boolean $includePolicyIds
      * @param boolean $includeAcl
      * @param int $maxItems
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return ObjectListInterface
      */
     public function getContentChanges(
@@ -43,7 +43,7 @@ interface DiscoveryServiceInterface
         $includePolicyIds,
         $includeAcl,
         $maxItems,
-        Data\ExtensionsDataInterface $extension
+        Data\ExtensionDataInterface $extension
     );
 
     /**
@@ -57,7 +57,7 @@ interface DiscoveryServiceInterface
      * @param string $renditionFilter
      * @param int $maxItems
      * @param int $skipCount
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return ObjectListInterface
      */
     public function query(
@@ -69,6 +69,6 @@ interface DiscoveryServiceInterface
         $renditionFilter,
         $maxItems,
         $skipCount,
-        Data\ExtensionsDataInterface $extension
+        Data\ExtensionDataInterface $extension
     );
 }

@@ -23,17 +23,17 @@ interface SessionFactoryInterface
      * @param ObjectFactoryInterface $objectFactory
      * @param AuthenticationProviderInterface $authenticationProvider
      * @param CacheInterface $cache
-     * @param TypeDefinitionCacheInterface $typeDefCache
+     * @param \Doctrine\Common\Cache\Cache $typeDefinitionCache
      * @return SessionInterface a {@link SessionInterface} connected to the CMIS repository
      *
      * @see SessionParameter
      */
     public function createSession(
         array $parameters,
-        ObjectFactoryInterface $objectFactory,
-        AuthenticationProviderInterface $authenticationProvider,
-        CacheInterface $cache,
-        TypeDefinitionCacheInterface $typeDefCache
+        ObjectFactoryInterface $objectFactory = null,
+        AuthenticationProviderInterface $authenticationProvider = null,
+        CacheInterface $cache = null,
+        \Doctrine\Common\Cache\Cache $typeDefinitionCache = null
     );
 
     /**
@@ -43,9 +43,19 @@ interface SessionFactoryInterface
      *            {@link SessionParameter} for parameters supported by php cmis lib, the parameter
      *            {@link SessionParameter::REPOSITORY_ID} should not be set
      *
+     * @param ObjectFactoryInterface $objectFactory
+     * @param AuthenticationProviderInterface $authenticationProvider
+     * @param CacheInterface $cache
+     * @param \Doctrine\Common\Cache\Cache $typeDefinitionCache
      * @return Repository[] a list of all available repositories
      *
      * @see org.apache.chemistry.opencmis.commons.SessionParameter
      */
-    public function getRepositories($parameters);
+    public function getRepositories(
+        array $parameters,
+        ObjectFactoryInterface $objectFactory = null,
+        AuthenticationProviderInterface $authenticationProvider = null,
+        CacheInterface $cache = null,
+        \Doctrine\Common\Cache\Cache $typeDefinitionCache = null
+    );
 }

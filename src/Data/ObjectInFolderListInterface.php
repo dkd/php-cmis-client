@@ -13,7 +13,7 @@ namespace Dkd\PhpCmis\Data;
 /**
  * Represents the objects in a folder.
  */
-interface ObjectInFolderListInterface extends ExtensionsDataInterface
+interface ObjectInFolderListInterface extends ExtensionDataInterface
 {
     /**
      * Returns the total number of the objects in the folder.

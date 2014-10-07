@@ -13,28 +13,28 @@ namespace Dkd\PhpCmis\Data;
 /**
  * Represents a rendition.
  */
-interface RenditionDataInterface extends ExtensionsDataInterface
+interface RenditionDataInterface extends ExtensionDataInterface
 {
     /**
      * Returns the height in pixels, if the rendition is an image.
      *
      * @return int|null
      */
-    public function getBigHeight();
+    public function getHeight();
 
     /**
      * Returns the size of the rendition in bytes, if available.
      *
      * @return int|null the size of the rendition in bytes, may be null
      */
-    public function getBigLength();
+    public function getLength();
 
     /**
      * Returns the width in pixels, if the rendition is an image.
      *
      * @return int|null
      */
-    public function getBigWidth();
+    public function getWidth();
 
     /**
      * Returns the kind of the rendition.

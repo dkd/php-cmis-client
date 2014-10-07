@@ -13,7 +13,7 @@ namespace Dkd\PhpCmis\Data;
 /**
  * Represents a set of properties.
  */
-interface PropertiesInterface extends ExtensionsDataInterface
+interface PropertiesInterface extends ExtensionDataInterface
 {
     /**
      * Returns a map of properties (property ID => property).

@@ -13,7 +13,7 @@ namespace Dkd\PhpCmis\Data;
 /**
  * Boolean property.
  */
-interface PropertyBooleanInterface extends ExtensionsDataInterface
+interface PropertyBooleanInterface extends ExtensionDataInterface
 {
 
 }

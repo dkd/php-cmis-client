@@ -1,5 +1,5 @@
 <?php
-namespace Dkd\PhpCmis;
+namespace Dkd\PhpCmis\Data;
 
 /**
  * This file is part of php-cmis-lib.
@@ -10,12 +10,12 @@ namespace Dkd\PhpCmis;
  * file that was distributed with this source code.
  */
 
-use Dkd\PhpCmis\Data\ExtensionsDataInterface;
+use Dkd\PhpCmis\Data\ExtensionDataInterface;
 
 /**
  * Access Control Entry (ACE)
  */
-interface AceInterface extends ExtensionsDataInterface
+interface AceInterface extends ExtensionDataInterface
 {
     /**
      * Returns the permissions granted to the principal.

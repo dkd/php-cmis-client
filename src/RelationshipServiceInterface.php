@@ -10,7 +10,7 @@ namespace Dkd\PhpCmis;
  * file that was distributed with this source code.
  */
 
-use Dkd\PhpCmis\Data\ExtensionsDataInterface;
+use Dkd\PhpCmis\Data\ExtensionDataInterface;
 use Dkd\PhpCmis\Data\ObjectListInterface;
 use Dkd\PhpCmis\Enum\RelationshipDirection;
 
@@ -34,7 +34,7 @@ interface RelationshipServiceInterface
      * @param boolean $includeAllowableActions
      * @param int $maxItems
      * @param int $skipCount
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @internal param $String $
      * @return ObjectListInterface
      */
@@ -48,6 +48,6 @@ interface RelationshipServiceInterface
         $includeAllowableActions,
         $maxItems,
         $skipCount,
-        ExtensionsDataInterface $extension
+        ExtensionDataInterface $extension
     );
 }

@@ -13,7 +13,7 @@ namespace Dkd\PhpCmis\Data;
 /**
  * Represents an object in a folder.
  */
-interface ObjectInFolderDataInterface extends ExtensionsDataInterface
+interface ObjectInFolderDataInterface extends ExtensionDataInterface
 {
     /**
      * Returns the object at this level.

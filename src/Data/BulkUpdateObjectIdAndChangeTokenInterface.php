@@ -13,7 +13,7 @@ namespace Dkd\PhpCmis\Data;
 /**
  * Holder for bulkUpdateObject data.
  */
-interface BulkUpdateObjectIdAndChangeTokenInterface extends ExtensionsDataInterface
+interface BulkUpdateObjectIdAndChangeTokenInterface extends ExtensionDataInterface
 {
     /**
      * Returns the change token of the object.

@@ -13,7 +13,7 @@ namespace Dkd\PhpCmis\Data;
 /**
  * A collection of flags that indicate which type attributes can be set at type creation.
  */
-interface NewTypeSettableAttributesInterface extends ExtensionsDataInterface
+interface NewTypeSettableAttributesInterface extends ExtensionDataInterface
 {
     /**
      * Indicates if the "controllableACL" attribute can be set.

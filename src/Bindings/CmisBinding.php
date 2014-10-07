@@ -5,7 +5,7 @@ use Dkd\PhpCmis\AclServiceInterface;
 use Dkd\PhpCmis\AuthenticationProviderInterface;
 use Dkd\PhpCmis\Bindings\Browser\RepositoryService;
 use Dkd\PhpCmis\BindingsObjectFactoryInterface;
-use Dkd\PhpCmis\Data\VersioningServiceInterface;
+use Dkd\PhpCmis\VersioningServiceInterface;
 use Dkd\PhpCmis\DiscoveryServiceInterface;
 use Dkd\PhpCmis\Enum\BindingType;
 use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;

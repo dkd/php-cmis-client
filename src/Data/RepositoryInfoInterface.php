@@ -16,7 +16,7 @@ use Dkd\PhpCmis\Enum\CmisVersion;
 /**
  * Repository Info.
  */
-interface RepositoryInfoInterface extends ExtensionsDataInterface
+interface RepositoryInfoInterface extends ExtensionDataInterface
 {
     /**
      * Returns the ACL capabilities.

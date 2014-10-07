@@ -10,13 +10,12 @@ namespace Dkd\PhpCmis\Data;
  * file that was distributed with this source code.
  */
 
-use Dkd\PhpCmis\AclInterface;
 use Dkd\PhpCmis\Enum\BaseTypeId;
 
 /**
  * Base object for CMIS documents, folders, relationships, policies, and items.
  */
-interface ObjectDataInterface extends ExtensionsDataInterface
+interface ObjectDataInterface extends ExtensionDataInterface
 {
 
     /**

@@ -15,7 +15,7 @@ use Dkd\PhpCmis\Enum\Action;
 /**
  * Allowable Actions.
  */
-interface AllowableActionsInterface extends ExtensionsDataInterface
+interface AllowableActionsInterface extends ExtensionDataInterface
 {
     /**
      * Returns the Allowable Actions that are set.

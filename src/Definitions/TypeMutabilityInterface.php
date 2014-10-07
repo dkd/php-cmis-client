@@ -10,12 +10,12 @@ namespace Dkd\PhpCmis\Definitions;
  * file that was distributed with this source code.
  */
 
-use Dkd\PhpCmis\Data\ExtensionsDataInterface;
+use Dkd\PhpCmis\Data\ExtensionDataInterface;
 
 /**
  * Type mutability flags.
  */
-interface TypeMutabilityInterface extends ExtensionsDataInterface
+interface TypeMutabilityInterface extends ExtensionDataInterface
 {
     /**
      * Indicates if a sub type of this type can be created.

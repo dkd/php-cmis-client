@@ -10,12 +10,12 @@ namespace Dkd\PhpCmis\Definitions;
  * file that was distributed with this source code.
  */
 
-use Dkd\PhpCmis\Data\ExtensionsDataInterface;
+use Dkd\PhpCmis\Data\ExtensionDataInterface;
 
 /**
  * Permission definition.
  */
-interface PermissionDefinitionInterface extends ExtensionsDataInterface
+interface PermissionDefinitionInterface extends ExtensionDataInterface
 {
     /**
      * Returns a human readable description of the permission.

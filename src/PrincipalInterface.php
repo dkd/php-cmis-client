@@ -10,12 +10,12 @@ namespace Dkd\PhpCmis;
  * file that was distributed with this source code.
  */
 
-use Dkd\PhpCmis\Data\ExtensionsDataInterface;
+use Dkd\PhpCmis\Data\ExtensionDataInterface;
 
 /**
  * ACE Principal
  */
-interface PrincipalInterface extends ExtensionsDataInterface
+interface PrincipalInterface extends ExtensionDataInterface
 {
     /**
      * Returns the principal ID.

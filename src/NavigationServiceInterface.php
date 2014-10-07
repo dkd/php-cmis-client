@@ -10,7 +10,7 @@ namespace Dkd\PhpCmis;
  * file that was distributed with this source code.
  */
 
-use Dkd\PhpCmis\Data\ExtensionsDataInterface;
+use Dkd\PhpCmis\Data\ExtensionDataInterface;
 use Dkd\PhpCmis\Data\ObjectDataInterface;
 use Dkd\PhpCmis\Data\ObjectInFolderContainerInterface;
 use Dkd\PhpCmis\Data\ObjectInFolderListInterface;
@@ -45,7 +45,7 @@ interface NavigationServiceInterface
      * @param int $maxItems the maximum number of items to return in a response (default is repository specific)
      * @param int $skipCount number of potential results that the repository MUST skip/page over before returning
      * any results (default is 0)
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return ObjectListInterface
      */
     public function getCheckedOutDocs(
@@ -54,11 +54,11 @@ interface NavigationServiceInterface
         $filter = null,
         $orderBy = null,
         $includeAllowableActions = false,
-        IncludeRelationships $includeRelationships = IncludeRelationships::NONE,
+        IncludeRelationships $includeRelationships = null,
         $renditionFilter = 'cmis:none',
         $maxItems = null,
         $skipCount = 0,
-        ExtensionsDataInterface $extension = null
+        ExtensionDataInterface $extension = null
     );
 
     /**
@@ -82,7 +82,7 @@ interface NavigationServiceInterface
      * @param int $maxItems the maximum number of items to return in a response (default is repository specific)
      * @param int $skipCount number of potential results that the repository MUST skip/page over before
      * returning any results (default is 0)
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return ObjectInFolderListInterface
      */
     public function getChildren(
@@ -91,12 +91,12 @@ interface NavigationServiceInterface
         $filter = null,
         $orderBy = null,
         $includeAllowableActions = false,
-        IncludeRelationships $includeRelationships = IncludeRelationships::NONE,
+        IncludeRelationships $includeRelationships = null,
         $renditionFilter = 'cmis:none',
         $includePathSegment = false,
         $maxItems = null,
         $skipCount = 0,
-        ExtensionsDataInterface $extension = null
+        ExtensionDataInterface $extension = null
     );
 
     /**
@@ -115,7 +115,7 @@ interface NavigationServiceInterface
      * matches this filter (default is "cmis:none")
      * @param boolean $includePathSegment if true, returns a path segment for each child object for use in
      * constructing that object's path (default is false)
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return ObjectInFolderContainerInterface[]
      */
     public function getDescendants(
@@ -124,10 +124,10 @@ interface NavigationServiceInterface
         $depth,
         $filter = null,
         $includeAllowableActions = false,
-        IncludeRelationships $includeRelationships = IncludeRelationships::NONE,
+        IncludeRelationships $includeRelationships = null,
         $renditionFilter = 'cmis:none',
         $includePathSegment = false,
-        ExtensionsDataInterface $extension = null
+        ExtensionDataInterface $extension = null
     );
 
     /**
@@ -137,14 +137,14 @@ interface NavigationServiceInterface
      * @param string $folderId the identifier for the folder
      * @param string $filter a comma-separated list of query names that defines which properties must be
      * returned by the repository (default is repository specific)
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return ObjectDataInterface
      */
     public function getFolderParent(
         $repositoryId,
         $folderId,
         $filter = null,
-        ExtensionsDataInterface $extension = null
+        ExtensionDataInterface $extension = null
     );
 
     /**
@@ -163,7 +163,7 @@ interface NavigationServiceInterface
      * matches this filter (default is "cmis:none")
      * @param boolean $includePathSegment if true, returns a path segment for each child object for use in
      * constructing that object's path (default is false)
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return ObjectInFolderContainerInterface[]
      */
     public function getFolderTree(
@@ -172,10 +172,10 @@ interface NavigationServiceInterface
         $depth,
         $filter = null,
         $includeAllowableActions = false,
-        IncludeRelationships $includeRelationships = IncludeRelationships::NONE,
+        IncludeRelationships $includeRelationships = null,
         $renditionFilter = 'cmis:none',
         $includePathSegment = false,
-        ExtensionsDataInterface $extension = null
+        ExtensionDataInterface $extension = null
     );
 
     /**
@@ -193,7 +193,7 @@ interface NavigationServiceInterface
      * matches this filter (default is "cmis:none")
      * @param boolean $includeRelativePathSegment if true, returns a relative path segment for each parent
      * object for use in constructing that object's path (default is false)
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return ObjectParentDataInterface[]
      */
     public function getObjectParents(
@@ -201,9 +201,9 @@ interface NavigationServiceInterface
         $objectId,
         $filter = null,
         $includeAllowableActions = false,
-        IncludeRelationships $includeRelationships = IncludeRelationships::NONE,
+        IncludeRelationships $includeRelationships = null,
         $renditionFilter = 'cmis:none',
         $includeRelativePathSegment = false,
-        ExtensionsDataInterface $extension = null
+        ExtensionDataInterface $extension = null
     );
 }

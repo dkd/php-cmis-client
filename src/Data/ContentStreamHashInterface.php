@@ -13,7 +13,7 @@ namespace Dkd\PhpCmis\Data;
 /**
  * Content hash.
  */
-interface ContentStreamHashInterface extends ExtensionsDataInterface
+interface ContentStreamHashInterface extends ExtensionDataInterface
 {
     /**
      * Returns the hash algorithm.

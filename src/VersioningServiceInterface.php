@@ -10,8 +10,9 @@ namespace Dkd\PhpCmis;
  * file that was distributed with this source code.
  */
 
+use Dkd\PhpCmis\Data\AclInterface;
 use Dkd\PhpCmis\Data\ContentStreamInterface;
-use Dkd\PhpCmis\Data\ExtensionsDataInterface;
+use Dkd\PhpCmis\Data\ExtensionDataInterface;
 use Dkd\PhpCmis\Data\ObjectDataInterface;
 use Dkd\PhpCmis\Data\PropertiesInterface;
 use Dkd\PhpCmis\Enum\IncludeRelationships;
@@ -29,10 +30,10 @@ interface VersioningServiceInterface
      *
      * @param string $repositoryId the identifier for the repository
      * @param string $objectId the identifier for the PWC
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return void
      */
-    public function cancelCheckOut($repositoryId, $objectId, ExtensionsDataInterface $extension = null);
+    public function cancelCheckOut($repositoryId, $objectId, ExtensionDataInterface $extension = null);
 
     /**
      * Checks-in the private working copy (PWC) document.
@@ -49,7 +50,7 @@ interface VersioningServiceInterface
      * @param string[] $policies a list of policy IDs that must be applied to the newly created document object
      * @param AclInterface $addAces a list of ACEs that must be added to the newly created document object
      * @param AclInterface $removeAces a list of ACEs that must be removed from the newly created document object
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return void
      */
     public function checkIn(
@@ -62,7 +63,7 @@ interface VersioningServiceInterface
         array $policies = array(),
         AclInterface $addAces = null,
         AclInterface $removeAces = null,
-        ExtensionsDataInterface $extension = null
+        ExtensionDataInterface $extension = null
     );
 
     /**
@@ -71,12 +72,12 @@ interface VersioningServiceInterface
      * @param string $repositoryId the identifier for the repository
      * @param string $objectId input: the identifier for the document that should be checked out,
      * output: the identifier for the newly created PWC
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @param boolean $contentCopied output: indicator if the content of the original
      * document has been copied to the PWC
      * @return void
      */
-    public function checkOut($repositoryId, $objectId, ExtensionsDataInterface $extension, $contentCopied);
+    public function checkOut($repositoryId, $objectId, ExtensionDataInterface $extension, $contentCopied);
 
     /**
      * Returns the list of all document objects in the specified version series,
@@ -89,7 +90,7 @@ interface VersioningServiceInterface
      * returned by the repository (default is repository specific)
      * @param boolean $includeAllowableActions if true, then the repository must return the allowable
      * actions for the objects (default is false)
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return ObjectDataInterface[] the complete version history of the version series
      */
     public function getAllVersions(
@@ -98,7 +99,7 @@ interface VersioningServiceInterface
         $versionSeriesId,
         $filter,
         $includeAllowableActions,
-        ExtensionsDataInterface $extension
+        ExtensionDataInterface $extension
     );
 
     /**
@@ -114,7 +115,7 @@ interface VersioningServiceInterface
      * @param string $renditionFilter
      * @param boolean $includePolicyIds
      * @param boolean $includeAcl
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return ObjectDataInterface
      */
     public function getObjectOfLatestVersion(
@@ -128,7 +129,7 @@ interface VersioningServiceInterface
         $renditionFilter,
         $includePolicyIds,
         $includeAcl,
-        ExtensionsDataInterface $extension = null
+        ExtensionDataInterface $extension = null
     );
 
     /**
@@ -139,7 +140,7 @@ interface VersioningServiceInterface
      * @param string $versionSeriesId
      * @param boolean $major
      * @param string $filter
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return PropertiesInterface
      */
     public function getPropertiesOfLatestVersion(
@@ -148,6 +149,6 @@ interface VersioningServiceInterface
         $versionSeriesId,
         $major,
         $filter = null,
-        ExtensionsDataInterface $extension = null
+        ExtensionDataInterface $extension = null
     );
 }

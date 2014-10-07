@@ -120,7 +120,6 @@ interface OperationContextInterface
      * Enables or disables the cache.
      *
      * @param boolean $cacheEnabled
-     * @return mixed
      */
     public function setCacheEnabled($cacheEnabled);
 
@@ -128,7 +127,6 @@ interface OperationContextInterface
      * Sets the current filter.
      *
      * @param array $propertyFilter a set of query names
-     * @return void
      */
     public function setFilter(array $propertyFilter);
 
@@ -137,7 +135,6 @@ interface OperationContextInterface
      *
      * @param string $propertyFilter a comma separated string of query names or "*" for all properties or null
      * to let the repository determine a set of properties
-     * @return void
      */
     public function setFilterString($propertyFilter);
 
@@ -145,7 +142,6 @@ interface OperationContextInterface
      * Sets if ACLs should returned.
      *
      * @param boolean $include
-     * @return void
      */
     public function setIncludeAcls($include);
 
@@ -153,7 +149,6 @@ interface OperationContextInterface
      * Sets if allowable actions should returned.
      *
      * @param boolean $include
-     * @return void
      */
     public function setIncludeAllowableActions($include);
 
@@ -161,7 +156,6 @@ interface OperationContextInterface
      * Sets if path segments should returned.
      *
      * @param boolean $include
-     * @return mixed
      */
     public function setIncludePathSegments($include);
 
@@ -169,7 +163,6 @@ interface OperationContextInterface
      * Sets if policies should returned.
      *
      * @param boolean $include
-     * @return mixed
      */
     public function setIncludePolicies($include);
 
@@ -177,7 +170,6 @@ interface OperationContextInterface
      * Sets which relationships should be returned.
      *
      * @param IncludeRelationships $include
-     * @return void
      */
     public function setIncludeRelationships(IncludeRelationships $include);
 
@@ -185,7 +177,6 @@ interface OperationContextInterface
      * Sets if secondary type properties should be loaded.
      *
      * @param boolean $load
-     * @return void
      */
     public function setLoadSecondaryTypeProperties($load);
 
@@ -193,7 +184,6 @@ interface OperationContextInterface
      * Set the max number of items per batch for operations that return lists.
      *
      * @param int $maxItemsPerPage max number of items (must be >0)
-     * @return void
      */
     public function setMaxItemsPerPage($maxItemsPerPage);
 
@@ -202,7 +192,6 @@ interface OperationContextInterface
      *
      * @param string $orderBy a comma-separated list of query names and the ascending modifier "ASC" or
      * the descending modifier "DESC" for each query name
-     * @return void
      */
     public function setOrderBy($orderBy);
 
@@ -210,15 +199,13 @@ interface OperationContextInterface
      * Sets the current rendition filter.
      *
      * @param string[] $renditionFilter
-     * @return void
      */
-    public function setRenditionFilter($renditionFilter);
+    public function setRenditionFilter(array $renditionFilter);
 
     /**
      * Sets the current rendition filter.
      *
      * @param string $renditionFilter a comma separated list of rendition filter terms
-     * @return void
      */
     public function setRenditionFilterString($renditionFilter);
 }

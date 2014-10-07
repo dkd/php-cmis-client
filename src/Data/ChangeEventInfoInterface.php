@@ -15,7 +15,7 @@ use Dkd\PhpCmis\Enum\ChangeType;
 /**
  * Basic change event.
  */
-interface ChangeEventInfoInterface extends ExtensionsDataInterface
+interface ChangeEventInfoInterface extends ExtensionDataInterface
 {
     /**
      * Returns when the change took place.

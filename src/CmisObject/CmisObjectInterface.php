@@ -10,8 +10,8 @@ namespace Dkd\PhpCmis\CmisObject;
  * file that was distributed with this source code.
  */
 
-use Dkd\PhpCmis\AceInterface;
-use Dkd\PhpCmis\AclInterface;
+use Dkd\PhpCmis\Data\AceInterface;
+use Dkd\PhpCmis\Data\AclInterface;
 use Dkd\PhpCmis\Data\AllowableActionsInterface;
 use Dkd\PhpCmis\Data\CmisExtensionElementInterface;
 use Dkd\PhpCmis\Enum\AclPropagation;

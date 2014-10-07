@@ -10,12 +10,12 @@ namespace Dkd\PhpCmis\Definitions;
  * file that was distributed with this source code.
  */
 
-use Dkd\PhpCmis\Data\ExtensionsDataInterface;
+use Dkd\PhpCmis\Data\ExtensionDataInterface;
 
 /**
  * Permission Mapping.
  */
-interface PermissionMappingInterface extends ExtensionsDataInterface
+interface PermissionMappingInterface extends ExtensionDataInterface
 {
     const CAN_GET_DESCENDENTS_FOLDER = "canGetDescendents.Folder";
     const CAN_GET_CHILDREN_FOLDER = "canGetChildren.Folder";

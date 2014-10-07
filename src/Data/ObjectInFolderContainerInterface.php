@@ -13,7 +13,7 @@ namespace Dkd\PhpCmis\Data;
 /**
  * Container used for trees that represent objects in a folder hierarchy.
  */
-interface ObjectInFolderContainerInterface extends ExtensionsDataInterface
+interface ObjectInFolderContainerInterface extends ExtensionDataInterface
 {
     /**
      * Returns the object containers of the next level.

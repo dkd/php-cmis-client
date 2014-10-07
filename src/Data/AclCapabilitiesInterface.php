@@ -17,7 +17,7 @@ use Dkd\PhpCmis\Enum\SupportedPermissions;
 /**
  * Acl Capabilities.
  */
-interface AclCapabilitiesInterface extends ExtensionsDataInterface
+interface AclCapabilitiesInterface extends ExtensionDataInterface
 {
     /**
      * @return AclPropagation

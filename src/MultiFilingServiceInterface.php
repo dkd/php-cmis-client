@@ -10,7 +10,7 @@ namespace Dkd\PhpCmis;
  * file that was distributed with this source code.
  */
 
-use Dkd\PhpCmis\Data\ExtensionsDataInterface;
+use Dkd\PhpCmis\Data\ExtensionDataInterface;
 
 /**
  * MultiFiling Service interface.
@@ -27,7 +27,7 @@ interface MultiFilingServiceInterface
      * @param String $objectId
      * @param String $folderId
      * @param boolean $allVersions
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return void
      */
     public function addObjectToFolder(
@@ -35,7 +35,7 @@ interface MultiFilingServiceInterface
         $objectId,
         $folderId,
         $allVersions,
-        ExtensionsDataInterface $extension
+        ExtensionDataInterface $extension
     );
 
     /**
@@ -44,13 +44,13 @@ interface MultiFilingServiceInterface
      * @param string $repositoryId
      * @param string $objectId
      * @param string $folderId
-     * @param ExtensionsDataInterface $extension
+     * @param ExtensionDataInterface $extension
      * @return void
      */
     public function removeObjectFromFolder(
         $repositoryId,
         $objectId,
         $folderId,
-        ExtensionsDataInterface $extension
+        ExtensionDataInterface $extension
     );
 }

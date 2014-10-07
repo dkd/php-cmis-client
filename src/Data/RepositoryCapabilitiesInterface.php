@@ -21,14 +21,14 @@ use Dkd\PhpCmis\Enum\CapabilityRenditions;
 /**
  * Repository Capabilities.
  */
-interface RepositoryCapabilitiesInterface extends ExtensionsDataInterface
+interface RepositoryCapabilitiesInterface extends ExtensionDataInterface
 {
     /**
      * Returns the ACL capabilities.
      *
      * @return CapabilityAcl
      */
-    public function getAclCapabilities();
+    public function getAclCapability();
 
     /**
      * @return CapabilityChanges
