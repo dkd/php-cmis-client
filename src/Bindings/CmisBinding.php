@@ -2,7 +2,8 @@
 namespace Dkd\PhpCmis\Bindings;
 
 use Dkd\PhpCmis\AclServiceInterface;
-use Dkd\PhpCmis\AuthenticationProviderInterface;
+use Dkd\PhpCmis\Bindings\Authentication\AuthenticationProviderInterface;
+use Dkd\PhpCmis\Bindings\Authentication\NullAuthenticationProvider;
 use Dkd\PhpCmis\Bindings\Browser\RepositoryService;
 use Dkd\PhpCmis\BindingsObjectFactoryInterface;
 use Dkd\PhpCmis\VersioningServiceInterface;
@@ -17,7 +18,6 @@ use Dkd\PhpCmis\PolicyServiceInterface;
 use Dkd\PhpCmis\RelationshipServiceInterface;
 use Dkd\PhpCmis\RepositoryServiceInterface;
 use Dkd\PhpCmis\SessionParameter;
-use SebastianBergmann\Exporter\Exception;
 
 /**
  * This file is part of php-cmis-lib.
@@ -59,7 +59,54 @@ class CmisBinding implements CmisBindingInterface
             $this->session->put($key, $value);
         }
 
+        $this->addAuthenticationProviderToSession($authenticationProvider, $sessionParameters);
+
         $this->repositoryService = new RepositoryService($this->session);
+    }
+
+    /**
+     * Adds the given authentication provider to the session. If no authentication provider is given
+     * a new instance is created based on the class name defined in the session parameters. If both
+     * is not defined, the authentication provider will not be set.
+     *
+     * @param $authenticationProvider
+     * @param $sessionParameters
+     */
+    protected function addAuthenticationProviderToSession($authenticationProvider, $sessionParameters)
+    {
+        if (
+            $authenticationProvider === null
+            && !empty($sessionParameters[SessionParameter::AUTHENTICATION_PROVIDER_CLASS])
+        ) {
+            $authenticationProviderClassName = $sessionParameters[SessionParameter::AUTHENTICATION_PROVIDER_CLASS];
+            $authenticationProviderObject = null;
+
+            try {
+                $authenticationProviderObject = new $authenticationProviderClassName;
+            } catch (\Exception $exception) {
+                throw new \InvalidArgumentException(
+                    sprintf('Could not load authentication provider: %s', $authenticationProviderClassName),
+                    1412787752,
+                    $exception
+                );
+            }
+
+            if (!$authenticationProviderObject instanceof AuthenticationProviderInterface) {
+                throw new \InvalidArgumentException(
+                    'Authentication provider does not implement AuthenticationProviderInterface!',
+                    1412787758
+                );
+            }
+
+            $authenticationProvider = $authenticationProviderObject;
+        }
+
+        if ($authenticationProvider === null) {
+            $authenticationProvider = new NullAuthenticationProvider();
+        }
+
+        // add authentication provider to session
+        $this->session->put(SessionParameter::AUTHENTICATION_PROVIDER_OBJECT, $authenticationProvider);
     }
 
     /**
@@ -69,7 +116,7 @@ class CmisBinding implements CmisBindingInterface
      */
     public function clearAllCaches()
     {
-        throw new Exception('Not yet implemented!');
+        throw new \Exception('Not yet implemented!');
         // TODO: Implement clearAllCaches() method.
     }
 
@@ -81,7 +128,7 @@ class CmisBinding implements CmisBindingInterface
      */
     public function clearRepositoryCache($repositoryId)
     {
-        throw new Exception('Not yet implemented!');
+        throw new \Exception('Not yet implemented!');
         // TODO: Implement clearRepositoryCache() method.
     }
 
@@ -92,7 +139,7 @@ class CmisBinding implements CmisBindingInterface
      */
     public function close()
     {
-        throw new Exception('Not yet implemented!');
+        throw new \Exception('Not yet implemented!');
         // TODO: Implement close() method.
     }
 
@@ -103,19 +150,18 @@ class CmisBinding implements CmisBindingInterface
      */
     public function getAclService()
     {
-        throw new Exception('Not yet implemented!');
+        throw new \Exception('Not yet implemented!');
         // TODO: Implement getAclService() method.
     }
 
     /**
      * Gets the authentication provider.
      *
-     * @return AuthenticationProviderInterface
+     * @return AuthenticationProviderInterface|null
      */
     public function getAuthenticationProvider()
     {
-        throw new Exception('Not yet implemented!');
-        // TODO: Implement getAuthenticationProvider() method.
+        return $this->session->get(SessionParameter::AUTHENTICATION_PROVIDER_OBJECT);
     }
 
     /**
@@ -125,7 +171,7 @@ class CmisBinding implements CmisBindingInterface
      */
     public function getBindingType()
     {
-        throw new Exception('Not yet implemented!');
+        throw new \Exception('Not yet implemented!');
         // TODO: Implement getBindingType() method.
     }
 
@@ -136,7 +182,7 @@ class CmisBinding implements CmisBindingInterface
      */
     public function getDiscoveryService()
     {
-        throw new Exception('Not yet implemented!');
+        throw new \Exception('Not yet implemented!');
         // TODO: Implement getDiscoveryService() method.
     }
 
@@ -147,7 +193,7 @@ class CmisBinding implements CmisBindingInterface
      */
     public function getMultiFilingService()
     {
-        throw new Exception('Not yet implemented!');
+        throw new \Exception('Not yet implemented!');
         // TODO: Implement getMultiFilingService() method.
     }
 
@@ -158,7 +204,7 @@ class CmisBinding implements CmisBindingInterface
      */
     public function getNavigationService()
     {
-        throw new Exception('Not yet implemented!');
+        throw new \Exception('Not yet implemented!');
         // TODO: Implement getNavigationService() method.
     }
 
@@ -169,7 +215,7 @@ class CmisBinding implements CmisBindingInterface
      */
     public function getObjectFactory()
     {
-        throw new Exception('Not yet implemented!');
+        throw new \Exception('Not yet implemented!');
         // TODO: Implement getObjectFactory() method.
     }
 
@@ -190,7 +236,7 @@ class CmisBinding implements CmisBindingInterface
      */
     public function getPolicyService()
     {
-        throw new Exception('Not yet implemented!');
+        throw new \Exception('Not yet implemented!');
         // TODO: Implement getPolicyService() method.
     }
 
@@ -201,7 +247,7 @@ class CmisBinding implements CmisBindingInterface
      */
     public function getRelationshipService()
     {
-        throw new Exception('Not yet implemented!');
+        throw new \Exception('Not yet implemented!');
         // TODO: Implement getRelationshipService() method.
     }
 
@@ -222,7 +268,7 @@ class CmisBinding implements CmisBindingInterface
      */
     public function getSessionId()
     {
-        throw new Exception('Not yet implemented!');
+        throw new \Exception('Not yet implemented!');
         // TODO: Implement getSessionId() method.
     }
 
@@ -233,7 +279,7 @@ class CmisBinding implements CmisBindingInterface
      */
     public function getVersioningService()
     {
-        throw new Exception('Not yet implemented!');
+        throw new \Exception('Not yet implemented!');
         // TODO: Implement getVersioningService() method.
     }
 

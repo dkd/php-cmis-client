@@ -10,6 +10,7 @@ namespace Dkd\PhpCmis;
  * file that was distributed with this source code.
  */
 
+use Dkd\PhpCmis\Bindings\Authentication\AuthenticationProviderInterface;
 use Dkd\PhpCmis\CmisObject\CmisObjectInterface;
 use Dkd\PhpCmis\Data\BulkUpdateObjectIdAndChangeTokenInterface;
 use Dkd\PhpCmis\Data\ContentStreamInterface;
@@ -58,7 +59,7 @@ class Session implements SessionInterface
      * @param AuthenticationProviderInterface $authenticationProvider
      * @param CacheInterface $cache
      * @param TypeDefinitionCacheInterface $typeDefinitionCache
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function __construct(
         array $parameters,

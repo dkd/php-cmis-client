@@ -11,6 +11,9 @@ namespace Dkd\PhpCmis;
  */
 use Dkd\PhpCmis\DataObjects\Repository;
 
+use Dkd\PhpCmis\Bindings\Authentication\AuthenticationProviderInterface;
+use Dkd\PhpCmis\DataObjects\Repository;
+
 /**
  * Entry point into the php cmis lib Client API.
  */

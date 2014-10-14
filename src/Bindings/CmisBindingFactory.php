@@ -9,7 +9,7 @@ namespace Dkd\PhpCmis\Bindings;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Dkd\PhpCmis\AuthenticationProviderInterface;
+use Dkd\PhpCmis\Bindings\Authentication\AuthenticationProviderInterface;
 use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
 use Dkd\PhpCmis\SessionParameter;
 

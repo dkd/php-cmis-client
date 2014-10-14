@@ -581,15 +581,16 @@ class SessionParameter
 
     const JSON_CONVERTER = "dkd.phpcmis.converter.jsonconverter";
     const JSON_CONVERTER_CLASS = "dkd.phpcmis.converter.jsonconverter.classname";
-//
+
 //    /** Factory class name for the local binding. */
 //    const LOCAL_FACTORY = "dkd.phpcmis.binding.local.classname";
-//
-//    // --- authentication ---
-//
-//    /** Class name of the authentication provider. */
-//    const AUTHENTICATION_PROVIDER_CLASS = "dkd.phpcmis.binding.auth.classname";
-//
+
+    // --- authentication ---
+
+    /** Class name of the authentication provider. */
+    const AUTHENTICATION_PROVIDER_CLASS = "dkd.phpcmis.binding.auth.classname";
+    const AUTHENTICATION_PROVIDER_OBJECT = "dkd.phpcmis.binding.auth.object";
+
 //    /**
 //     * Toggle for HTTP basic authentication. Evaluated by the standard
 //     * authentication provider.

@@ -10,6 +10,8 @@ namespace Dkd\PhpCmis;
  * file that was distributed with this source code.
  */
 
+use Dkd\PhpCmis\Bindings\Authentication\AuthenticationProviderInterface;
+
 /**
  * Class SessionFactory
  *

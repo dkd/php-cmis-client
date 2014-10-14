@@ -1,5 +1,5 @@
 <?php
-namespace Dkd\PhpCmis;
+namespace Dkd\PhpCmis\Bindings\Authentication;
 
 /**
  * This file is part of php-cmis-lib.
