@@ -42,17 +42,33 @@ abstract class AbstractExtensionData implements ExtensionDataInterface
     public function setExtensions(array $extensions)
     {
         foreach ($extensions as $extension) {
-            if (!$extension instanceof CmisExtensionElementInterface) {
-                throw new \InvalidArgumentException(
-                    sprintf(
-                        'A given extension is of type "%s" which does not '
-                        . 'implement required CmisExtensionElementInterface.',
-                        get_class($extension)
-                    )
-                );
-            }
+            $this->checkObjectType('\\Dkd\\PhpCmis\\Data\\CmisExtensionElementInterface', $extension);
         }
 
         $this->extensions = $extensions;
+    }
+
+    /**
+     * Check if the given value is the expected object type
+     *
+     * @param string $expectedType the expected object type (class name)
+     * @param mixed $value The value that has to be checked
+     */
+    protected function checkObjectType($expectedType, $value)
+    {
+        $type = null;
+        if (is_object($value)) {
+            if (!is_a($value, $expectedType)) {
+                $type = get_class($value);
+            }
+        } else {
+            $type = gettype($value);
+        }
+
+        if ($type !== null) {
+            throw new \InvalidArgumentException(
+                sprintf('Argument of type "%s" given but argument of type "%s" was expected.', $type, $expectedType)
+            );
+        }
     }
 }
