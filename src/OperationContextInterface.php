@@ -32,11 +32,12 @@ interface OperationContextInterface
     public function getFilter();
 
     /**
-     * Returns the filter extended by cmis:objectId, cmis:objectTypeId and cmis:baseTypeId.
+     * Returns the filter extended by cmis:objectId, cmis:objectTypeId and cmis:baseTypeId
+     * as a string.
      *
      * @return string
      */
-    public function getFilterString();
+    public function getQueryFilterString();
 
     /**
      * Returns which relationships should be returned.
