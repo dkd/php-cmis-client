@@ -11,9 +11,12 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  */
 
 use Dkd\PhpCmis\DataObjects\NewTypeSettableAttributes;
+use Dkd\PhpCmis\Test\Unit\DataProviderCollectionTrait;
 
 class NewTypeSettableAttributesTest extends \PHPUnit_Framework_TestCase
 {
+    use DataProviderCollectionTrait;
+
     /**
      * @var NewTypeSettableAttributes
      */
@@ -282,19 +285,5 @@ class NewTypeSettableAttributesTest extends \PHPUnit_Framework_TestCase
     {
         $this->newTypeSettableAttributes->setControllableACL(true);
         $this->assertSame(true, $this->newTypeSettableAttributes->canSetControllableACL());
-    }
-
-    public function booleanCastDataProvider()
-    {
-        return array(
-            array(true, true),
-            array(true, 1),
-            array(true, '1'),
-            array(true, 'string'),
-            array(false, false),
-            array(false, 0),
-            array(false, '0'),
-            array(false, null),
-        );
     }
 }

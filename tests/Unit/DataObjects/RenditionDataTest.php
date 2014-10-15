@@ -11,9 +11,11 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  */
 
 use Dkd\PhpCmis\DataObjects\RenditionData;
+use Dkd\PhpCmis\Test\Unit\DataProviderCollectionTrait;
 
 class RenditionDataTest extends \PHPUnit_Framework_TestCase
 {
+    use DataProviderCollectionTrait;
 
     /**
      * @var RenditionData
@@ -164,37 +166,5 @@ class RenditionDataTest extends \PHPUnit_Framework_TestCase
     {
         $this->renditionData->setRenditionDocumentId('foo');
         $this->assertSame('foo', $this->renditionData->getRenditionDocumentId());
-    }
-
-    /**
-     * Data Provider that provides an expected integer representation and a value
-     *
-     * @return array
-     */
-    public function integerCastDataProvider()
-    {
-        return array(
-            array(0, ''),
-            array(2, '2'),
-            array(0, null),
-            array(3, 3),
-            array(3, 3.2),
-        );
-    }
-
-    /**
-     * Data Provider that provides an expected string representation and a value
-     *
-     * @return array
-     */
-    public function stringCastDataProvider()
-    {
-        return array(
-            array('', ''),
-            array('foo', 'foo'),
-            array('', null),
-            array('3', 3),
-            array('3.2', 3.2),
-        );
     }
 }
