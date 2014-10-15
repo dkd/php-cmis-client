@@ -1,5 +1,4 @@
 <?php
-
 namespace Dkd\PhpCmis\Test\Unit\DataObjects;
 
 /**
