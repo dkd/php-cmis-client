@@ -29,7 +29,9 @@ class AclCapabilitiesTest extends \PHPUnit_Framework_TestCase
 
     public function testSetAclPropagationSetsProperty()
     {
-        $this->aclCapabilities->setAclPropagation(AclPropagation::cast(AclPropagation::OBJECTONLY));
+        $aclPropagation = AclPropagation::cast(AclPropagation::OBJECTONLY);
+        $this->aclCapabilities->setAclPropagation($aclPropagation);
+        $this->assertAttributeSame($aclPropagation, 'aclPropagation', $this->aclCapabilities);
     }
 
     /**
@@ -44,10 +46,11 @@ class AclCapabilitiesTest extends \PHPUnit_Framework_TestCase
 
     public function testSetPermissionsSetsProperty()
     {
-        $permissionDefinition = $this->getMockForAbstractClass(
+        $permissionDefinitions = array($this->getMockForAbstractClass(
             '\\Dkd\\PhpCmis\\Definitions\\PermissionDefinitionInterface'
-        );
-        $this->aclCapabilities->setPermissions(array($permissionDefinition));
+        ));
+        $this->aclCapabilities->setPermissions($permissionDefinitions);
+        $this->assertAttributeSame($permissionDefinitions, 'permissions', $this->aclCapabilities);
     }
 
     /**
@@ -103,10 +106,11 @@ class AclCapabilitiesTest extends \PHPUnit_Framework_TestCase
 
     public function testSetPermissionMappingSetsProperty()
     {
-        $permissionMapping = $this->getMockForAbstractClass(
+        $permissionMapping = array($this->getMockForAbstractClass(
             '\\Dkd\\PhpCmis\\Definitions\\PermissionMappingInterface'
-        );
-        $this->aclCapabilities->setPermissionMapping(array($permissionMapping));
+        ));
+        $this->aclCapabilities->setPermissionMapping($permissionMapping);
+        $this->assertAttributeSame($permissionMapping, 'permissionMapping', $this->aclCapabilities);
     }
 
     /**
@@ -162,7 +166,9 @@ class AclCapabilitiesTest extends \PHPUnit_Framework_TestCase
 
     public function testSetSupportedPermissionsSetsProperty()
     {
-        $this->aclCapabilities->setSupportedPermissions(SupportedPermissions::cast(SupportedPermissions::BOTH));
+        $supportedPermissions = SupportedPermissions::cast(SupportedPermissions::BOTH);
+        $this->aclCapabilities->setSupportedPermissions($supportedPermissions);
+        $this->assertAttributeSame($supportedPermissions, 'supportedPermissions', $this->aclCapabilities);
     }
 
     /**
