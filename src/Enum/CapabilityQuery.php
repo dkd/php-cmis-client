@@ -17,6 +17,7 @@ use Dkd\Enumeration\Enumeration;
  */
 final class CapabilityQuery extends Enumeration
 {
+    const __DEFAULT = self::NONE;
     const BOTHCOMBINED = 'bothcombined';
     const BOTHSEPARATE = 'bothseparate';
     const FULLTEXTONLY = 'fulltextonly';

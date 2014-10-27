@@ -17,6 +17,7 @@ use Dkd\Enumeration\Enumeration;
  */
 final class CapabilityRenditions extends Enumeration
 {
+    const __DEFAULT = self::NONE;
     const NONE = 'none';
     const READ = 'read';
 }

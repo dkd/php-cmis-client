@@ -17,6 +17,7 @@ use Dkd\Enumeration\Enumeration;
  */
 final class CapabilityJoin extends Enumeration
 {
+    const __DEFAULT = self::NONE;
     const INNERANDOUTER = 'innerandouter';
     const INNERONLY = 'inneronly';
     const NONE = 'none';

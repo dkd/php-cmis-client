@@ -17,6 +17,7 @@ use Dkd\Enumeration\Enumeration;
  */
 final class CapabilityContentStreamUpdates extends Enumeration
 {
+    const __DEFAULT = self::NONE;
     const ANYTIME = 'anytime';
     const NONE = 'none';
     const PWCONLY = 'pwconly';

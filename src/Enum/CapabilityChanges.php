@@ -17,6 +17,7 @@ use Dkd\Enumeration\Enumeration;
  */
 final class CapabilityChanges extends Enumeration
 {
+    const __DEFAULT = self::NONE;
     const ALL = 'all';
     const NONE = 'none';
     const OBJECTIDSONLY = 'objectidsonly';

@@ -17,6 +17,7 @@ use Dkd\Enumeration\Enumeration;
  */
 final class CapabilityAcl extends Enumeration
 {
+    const __DEFAULT = self::NONE;
     const DISCOVER = 'discover';
     const MANAGE = 'manage';
     const NONE = 'none';

@@ -17,6 +17,7 @@ use Dkd\Enumeration\Enumeration;
  */
 final class CapabilityOrderBy extends Enumeration
 {
+    const __DEFAULT = self::NONE;
     const COMMON = 'common';
     const CUSTOM = 'custom';
     const NONE = 'none';
