@@ -11,10 +11,13 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  */
 
 use Dkd\PhpCmis\DataObjects\AbstractPropertyData;
+use Dkd\PhpCmis\Test\Unit\DataProviderCollectionTrait;
 use PHPUnit_Framework_MockObject_MockObject;
 
 class AbstractPropertyDataTest extends \PHPUnit_Framework_TestCase
 {
+    use DataProviderCollectionTrait;
+
     /**
      * @var PHPUnit_Framework_MockObject_MockObject|AbstractPropertyData
      */
@@ -41,10 +44,15 @@ class AbstractPropertyDataTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeSame(array('bar', 'value'), 'values', $propertyData);
     }
 
-    public function testSetDisplayNameSetsProperty()
+    /**
+     * @dataProvider stringCastDataProvider
+     * @param $expected
+     * @param $value
+     */
+    public function testSetDisplayNameSetsProperty($expected, $value)
     {
-        $this->propertyDataMock->setDisplayName('displayName');
-        $this->assertAttributeSame('displayName', 'displayName', $this->propertyDataMock);
+        $this->propertyDataMock->setDisplayName($value);
+        $this->assertAttributeSame($expected, 'displayName', $this->propertyDataMock);
     }
 
     /**
@@ -56,10 +64,15 @@ class AbstractPropertyDataTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('displayName', $this->propertyDataMock->getDisplayName());
     }
 
-    public function testSetIdSetsProperty()
+    /**
+     * @dataProvider stringCastDataProvider
+     * @param $expected
+     * @param $value
+     */
+    public function testSetIdSetsProperty($expected, $value)
     {
-        $this->propertyDataMock->setId('id');
-        $this->assertAttributeSame('id', 'id', $this->propertyDataMock);
+        $this->propertyDataMock->setId($value);
+        $this->assertAttributeSame($expected, 'id', $this->propertyDataMock);
     }
 
     /**
@@ -71,10 +84,15 @@ class AbstractPropertyDataTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('id', $this->propertyDataMock->getId());
     }
 
-    public function testSetLocalNameSetsProperty()
+    /**
+     * @dataProvider stringCastDataProvider
+     * @param $expected
+     * @param $value
+     */
+    public function testSetLocalNameSetsProperty($expected, $value)
     {
-        $this->propertyDataMock->setLocalName('localName');
-        $this->assertAttributeSame('localName', 'localName', $this->propertyDataMock);
+        $this->propertyDataMock->setLocalName($value);
+        $this->assertAttributeSame($expected, 'localName', $this->propertyDataMock);
     }
 
     /**
@@ -86,10 +104,15 @@ class AbstractPropertyDataTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('localName', $this->propertyDataMock->getLocalName());
     }
 
-    public function testSetQueryNameSetsProperty()
+    /**
+     * @dataProvider stringCastDataProvider
+     * @param $expected
+     * @param $value
+     */
+    public function testSetQueryNameSetsProperty($expected, $value)
     {
-        $this->propertyDataMock->setQueryName('queryName');
-        $this->assertAttributeSame('queryName', 'queryName', $this->propertyDataMock);
+        $this->propertyDataMock->setQueryName($value);
+        $this->assertAttributeSame($expected, 'queryName', $this->propertyDataMock);
     }
 
     /**

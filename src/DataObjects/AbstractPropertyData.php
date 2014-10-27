@@ -70,7 +70,7 @@ abstract class AbstractPropertyData extends AbstractExtensionData implements Mut
      */
     public function setDisplayName($displayName)
     {
-        $this->displayName = $displayName;
+        $this->displayName = (string) $displayName;
     }
 
     /**
@@ -86,7 +86,7 @@ abstract class AbstractPropertyData extends AbstractExtensionData implements Mut
      */
     public function setId($id)
     {
-        $this->id = $id;
+        $this->id = (string) $id;
     }
 
     /**
@@ -102,7 +102,7 @@ abstract class AbstractPropertyData extends AbstractExtensionData implements Mut
      */
     public function setLocalName($localName)
     {
-        $this->localName = $localName;
+        $this->localName = (string) $localName;
     }
 
     /**
@@ -118,7 +118,7 @@ abstract class AbstractPropertyData extends AbstractExtensionData implements Mut
      */
     public function setQueryName($queryName)
     {
-        $this->queryName = $queryName;
+        $this->queryName = (string) $queryName;
     }
 
     /**
@@ -132,7 +132,7 @@ abstract class AbstractPropertyData extends AbstractExtensionData implements Mut
     /**
      * {@inheritdoc}
      */
-    public function setValues($values)
+    public function setValues(array $values)
     {
         $this->values = array();
         if (is_array($values)) {

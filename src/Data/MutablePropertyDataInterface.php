@@ -51,7 +51,7 @@ interface MutablePropertyDataInterface extends PropertyDataInterface
      *
      * @param array $values the property value or {@code null} to unset the property
      */
-    public function setValues($values);
+    public function setValues(array $values);
 
     /**
      * Sets a property value.
