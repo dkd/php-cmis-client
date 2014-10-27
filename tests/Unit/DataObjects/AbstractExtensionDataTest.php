@@ -11,6 +11,7 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  */
 
 use Dkd\PhpCmis\DataObjects\AbstractExtensionData;
+use Dkd\PhpCmis\Test\Unit\ReflectionHelperTrait;
 use PHPUnit_Framework_MockObject_MockObject;
 use PHPUnit_Framework_TestCase;
 
@@ -19,36 +20,115 @@ use PHPUnit_Framework_TestCase;
  */
 class AbstractExtensionDataTest extends PHPUnit_Framework_TestCase
 {
+    use ReflectionHelperTrait;
+
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject|AbstractExtensionData
+     */
+    protected $abstractExtensionData;
+
+    const CLASS_TO_TEST = '\\Dkd\\PhpCmis\\DataObjects\\AbstractExtensionData';
+
+    public function setUp()
+    {
+        $this->abstractExtensionData = $this->getMockBuilder(self::CLASS_TO_TEST)->enableProxyingToOriginalMethods(
+        )->getMockForAbstractClass();
+    }
+
     public function testSetExtensionsSetsAttributeAndGetExtensionReturnsAttribute()
     {
-        /** @var PHPUnit_Framework_MockObject_MockObject|AbstractExtensionData $abstractExtensionData */
-        $abstractExtensionData = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\DataObjects\\AbstractExtensionData'
-        )->setMethods(array('dummy'))->getMockForAbstractClass();
-
         $extensions = array(
             $this->getMockBuilder(
                 '\\Dkd\\PhpCmis\\Data\\CmisExtensionElementInterface'
             )->getMockForAbstractClass()
         );
 
-        $abstractExtensionData->setExtensions($extensions);
-        $this->assertAttributeSame($extensions, 'extensions', $abstractExtensionData);
-        $this->assertSame($extensions, $abstractExtensionData->getExtensions());
+        $this->abstractExtensionData->setExtensions($extensions);
+        $this->assertAttributeSame($extensions, 'extensions', $this->abstractExtensionData);
+        $this->assertSame($extensions, $this->abstractExtensionData->getExtensions());
     }
 
     public function testSetExtensionsWithInvalidDataThrowsException()
     {
-        /** @var PHPUnit_Framework_MockObject_MockObject|AbstractExtensionData $abstractExtensionData */
-        $abstractExtensionData = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\DataObjects\\AbstractExtensionData'
-        )->setMethods(array('dummy'))->getMockForAbstractClass();
-
         $this->setExpectedException(
             'InvalidArgumentException',
             'Argument of type "stdClass" given but argument of type '
             . '"\\Dkd\\PhpCmis\\Data\\CmisExtensionElementInterface" was expected.'
         );
-        $abstractExtensionData->setExtensions(array(new \stdClass()));
+        $this->abstractExtensionData->setExtensions(array(new \stdClass()));
+    }
+
+    /**
+     * @dataProvider checkTypeDataProvider
+     * @param string $expectedType
+     * @param string $value
+     * @param boolean $isExceptionExpected
+     */
+    public function testCheckTypeThrowsExceptionIfGivenValueIsNotOfExpectedType(
+        $expectedType,
+        $value,
+        $isExceptionExpected
+    ) {
+        if ($isExceptionExpected === true) {
+            $this->setExpectedException('\InvalidArgumentException', 1413440336);
+        }
+
+        $method = $this->getMethod(self::CLASS_TO_TEST, 'checkType');
+        $result = $method->invokeArgs($this->abstractExtensionData, array($expectedType, $value));
+
+        if ($isExceptionExpected === false) {
+            $this->assertTrue($result);
+        }
+    }
+
+    public function checkTypeDataProvider()
+    {
+        return array(
+            array(
+                'string',
+                'foo',
+                false
+            ),
+            array(
+                'integer',
+                2,
+                false
+            ),
+            array(
+                'double',
+                2.3,
+                false
+            ),
+            array(
+                'boolean',
+                true,
+                false
+            ),
+            array(
+                'string',
+                1,
+                true
+            ),
+            array(
+                'integer',
+                '1',
+                true
+            ),
+            array(
+                'double',
+                1,
+                true
+            ),
+            array(
+                '\DateTime',
+                new \DateTime(),
+                false
+            ),
+            array(
+                '\DateTime',
+                'now',
+                true
+            )
+        );
     }
 }

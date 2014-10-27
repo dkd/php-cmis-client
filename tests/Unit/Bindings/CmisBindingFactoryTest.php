@@ -12,17 +12,26 @@ namespace Dkd\PhpCmis\Test\Unit\Bindings;
 
 use Dkd\PhpCmis\Bindings\CmisBindingFactory;
 use Dkd\PhpCmis\SessionParameter;
+use Dkd\PhpCmis\Test\Unit\ReflectionHelperTrait;
 
 class CmisBindingFactoryTest extends \PHPUnit_Framework_TestCase
 {
+    use ReflectionHelperTrait;
+
     /**
      * @var CmisBindingFactory
      */
     protected $cmisBindingFactory;
 
+    /**
+     * @var string
+     */
+    const CLASS_TO_TEST = '\\Dkd\\PhpCmis\\Bindings\\CmisBindingFactory';
+
     public function setUp()
     {
-        $this->cmisBindingFactory = new CmisBindingFactory();
+        $className = self::CLASS_TO_TEST;
+        $this->cmisBindingFactory = new $className();
     }
 
     public function testCreateCmisBrowserBindingThrowsExceptionIfBrowserUrlIsNotConfigured()
@@ -36,7 +45,7 @@ class CmisBindingFactoryTest extends \PHPUnit_Framework_TestCase
         $sessionParameters = array();
 
         $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException');
-        $validateMethod = self::getMethod('validateCmisBrowserBindingParameters');
+        $validateMethod = $this->getMethod(self::CLASS_TO_TEST, 'validateCmisBrowserBindingParameters');
         $validateMethod->invokeArgs($this->cmisBindingFactory, array(&$sessionParameters));
     }
 
@@ -44,7 +53,7 @@ class CmisBindingFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $sessionParameters = array(SessionParameter::BROWSER_URL => 'foo');
 
-        $validateMethod = self::getMethod('validateCmisBrowserBindingParameters');
+        $validateMethod = $this->getMethod(self::CLASS_TO_TEST, 'validateCmisBrowserBindingParameters');
         $validateMethod->invokeArgs($this->cmisBindingFactory, array(&$sessionParameters));
 
         $this->assertArrayHasKey(SessionParameter::BINDING_CLASS, $sessionParameters);
@@ -54,7 +63,7 @@ class CmisBindingFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $sessionParameters = array(SessionParameter::BROWSER_URL => 'foo');
 
-        $validateMethod = self::getMethod('validateCmisBrowserBindingParameters');
+        $validateMethod = $this->getMethod(self::CLASS_TO_TEST, 'validateCmisBrowserBindingParameters');
         $validateMethod->invokeArgs($this->cmisBindingFactory, array(&$sessionParameters));
 
         $this->assertArrayHasKey(SessionParameter::BROWSER_SUCCINCT, $sessionParameters);
@@ -71,14 +80,5 @@ class CmisBindingFactoryTest extends \PHPUnit_Framework_TestCase
         $sessionParameters = array(SessionParameter::BROWSER_URL => 'foo');
         $browserBinding = $this->cmisBindingFactory->createCmisBrowserBinding($sessionParameters);
         $this->assertInstanceOf('\\Dkd\\PhpCmis\\Bindings\\CmisBinding', $browserBinding);
-    }
-
-    protected static function getMethod($name)
-    {
-        $class = new \ReflectionClass('\\Dkd\\PhpCmis\\Bindings\\CmisBindingFactory');
-        $method = $class->getMethod($name);
-        $method->setAccessible(true);
-
-        return $method;
     }
 }

@@ -52,7 +52,7 @@ abstract class AbstractPropertyData extends AbstractExtensionData implements Mut
 
         if (is_array($value)) {
             $this->setValues($value);
-        } else {
+        } elseif ($value !== null) {
             $this->setValue($value);
         }
     }
@@ -143,9 +143,9 @@ abstract class AbstractPropertyData extends AbstractExtensionData implements Mut
     /**
      * {@inheritdoc}
      */
-    public function setValue($value)
+    final public function setValue($value)
     {
-        $this->values = array($value);
+        $this->setValues(array($value));
     }
 
     /**

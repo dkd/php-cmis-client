@@ -42,7 +42,7 @@ abstract class AbstractExtensionData implements ExtensionDataInterface
     public function setExtensions(array $extensions)
     {
         foreach ($extensions as $extension) {
-            $this->checkObjectType('\\Dkd\\PhpCmis\\Data\\CmisExtensionElementInterface', $extension);
+            $this->checkType('\\Dkd\\PhpCmis\\Data\\CmisExtensionElementInterface', $extension);
         }
 
         $this->extensions = $extensions;
@@ -53,22 +53,33 @@ abstract class AbstractExtensionData implements ExtensionDataInterface
      *
      * @param string $expectedType the expected object type (class name)
      * @param mixed $value The value that has to be checked
+     * @return boolean
      */
-    protected function checkObjectType($expectedType, $value)
+    protected function checkType($expectedType, $value)
     {
-        $type = null;
+        $invalidType = null;
         if (is_object($value)) {
             if (!is_a($value, $expectedType)) {
-                $type = get_class($value);
+                $invalidType = get_class($value);
             }
         } else {
-            $type = gettype($value);
+            $valueType = gettype($value);
+            if ($expectedType !== $valueType) {
+                $invalidType = $valueType;
+            }
         }
 
-        if ($type !== null) {
+        if ($invalidType !== null) {
             throw new \InvalidArgumentException(
-                sprintf('Argument of type "%s" given but argument of type "%s" was expected.', $type, $expectedType)
+                sprintf(
+                    'Argument of type "%s" given but argument of type "%s" was expected.',
+                    $invalidType,
+                    $expectedType
+                ),
+                1413440336
             );
         }
+
+        return true;
     }
 }
