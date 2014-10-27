@@ -20,14 +20,17 @@ interface CmisExtensionElementInterface
     /**
      * Returns the attributes of the extension.
      *
-     * @return array
+     * The attributes must follow the XML rules for attributes.
+     * Don't rely on attributes because the Browser binding does not support attributes!
+     *
+     * @return array the extension attributes or null if the attributes are not set or not supported by the binding
      */
     public function getAttributes();
 
     /**
      * Returns the children of this extension.
      *
-     * @return CmisExtensionElementInterface
+     * @return CmisExtensionElementInterface[]
      */
     public function getChildren();
 
@@ -41,14 +44,17 @@ interface CmisExtensionElementInterface
     /**
      * Returns the namespace of the extension.
      *
-     * @return string
+     * The namespace must follow the XML rules for namespaces.
+     * Don't rely on namespaces because the Browser binding does not support namespaces!
+     *
+     * @return string the extension namespace or null if the namespace is not set or not supported by the binding
      */
     public function getNameSpace();
 
     /**
      * Returns the value of the extension as a String.
      *
-     * @return string
+     * @return string|null
      */
     public function getValue();
 }
