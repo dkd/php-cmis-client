@@ -19,21 +19,21 @@ interface ExtensionFeatureInterface extends ExtensionDataInterface
     /**
      * Returns a human-readable name for the feature.
      *
-     * @return string|null the feature name, may be null
+     * @return string the feature name, may be empty
      */
     public function getCommonName();
 
     /**
      * Returns a human-readable description of the feature.
      *
-     * @return string|null the feature description, may be null
+     * @return string the feature description, may be empty
      */
     public function getDescription();
 
     /**
      * Returns extra feature data.
      *
-     * @return string[] the key-value pairs of extra data, may be null
+     * @return string[] the key-value pairs of extra data, may be empty
      */
     public function getFeatureData();
 
@@ -47,14 +47,14 @@ interface ExtensionFeatureInterface extends ExtensionDataInterface
     /**
      * Returns a URL that provides more information about the feature.
      *
-     * @return string|null the feature URL, may be null
+     * @return string the feature URL, may be empty
      */
     public function getUrl();
 
     /**
      * Returns a feature version label.
      *
-     * @return string|null the feature version label, may be null
+     * @return string the feature version label, may be empty
      */
     public function getVersionLabel();
 }
