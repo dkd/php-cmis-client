@@ -11,8 +11,8 @@ namespace Dkd\PhpCmis\DataObjects;
  */
 
 use Dkd\PhpCmis\Data\AclCapabilitiesInterface;
+use Dkd\PhpCmis\Data\PermissionMappingInterface;
 use Dkd\PhpCmis\Definitions\PermissionDefinitionInterface;
-use Dkd\PhpCmis\Definitions\PermissionMappingInterface;
 use Dkd\PhpCmis\Enum\AclPropagation;
 use Dkd\PhpCmis\Enum\SupportedPermissions;
 
@@ -90,7 +90,7 @@ class AclCapabilities extends AbstractExtensionData implements AclCapabilitiesIn
     public function setPermissionMapping(array $permissionMapping)
     {
         foreach ($permissionMapping as $permissionMappingItem) {
-            $this->checkType('\\Dkd\\PhpCmis\\Definitions\\PermissionMappingInterface', $permissionMappingItem);
+            $this->checkType('\\Dkd\\PhpCmis\\Data\\PermissionMappingInterface', $permissionMappingItem);
         }
         $this->permissionMapping = $permissionMapping;
     }
