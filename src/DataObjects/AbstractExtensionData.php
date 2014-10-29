@@ -53,9 +53,10 @@ abstract class AbstractExtensionData implements ExtensionDataInterface
      *
      * @param string $expectedType the expected object type (class name)
      * @param mixed $value The value that has to be checked
+     * @param boolean $nullAllowed Is null allowed as value?
      * @return boolean
      */
-    protected function checkType($expectedType, $value)
+    protected function checkType($expectedType, $value, $nullAllowed = false)
     {
         $invalidType = null;
         if (is_object($value)) {
@@ -69,7 +70,7 @@ abstract class AbstractExtensionData implements ExtensionDataInterface
             }
         }
 
-        if ($invalidType !== null) {
+        if ($invalidType !== null && ($nullAllowed === false || ($nullAllowed === true && $value !== null))) {
             throw new \InvalidArgumentException(
                 sprintf(
                     'Argument of type "%s" given but argument of type "%s" was expected.',

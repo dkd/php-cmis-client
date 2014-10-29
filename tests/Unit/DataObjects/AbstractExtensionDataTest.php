@@ -63,18 +63,20 @@ class AbstractExtensionDataTest extends PHPUnit_Framework_TestCase
      * @param string $expectedType
      * @param string $value
      * @param boolean $isExceptionExpected
+     * @param boolean $nullAllowed
      */
     public function testCheckTypeThrowsExceptionIfGivenValueIsNotOfExpectedType(
         $expectedType,
         $value,
-        $isExceptionExpected
+        $isExceptionExpected,
+        $nullAllowed = false
     ) {
         if ($isExceptionExpected === true) {
             $this->setExpectedException('\\InvalidArgumentException', 1413440336);
         }
 
         $method = $this->getMethod(self::CLASS_TO_TEST, 'checkType');
-        $result = $method->invokeArgs($this->abstractExtensionData, array($expectedType, $value));
+        $result = $method->invokeArgs($this->abstractExtensionData, array($expectedType, $value, $nullAllowed));
 
         if ($isExceptionExpected === false) {
             $this->assertTrue($result);
@@ -93,6 +95,12 @@ class AbstractExtensionDataTest extends PHPUnit_Framework_TestCase
                 'integer',
                 2,
                 false
+            ),
+            array(
+                'integer',
+                null,
+                false,
+                true
             ),
             array(
                 'double',
@@ -123,6 +131,12 @@ class AbstractExtensionDataTest extends PHPUnit_Framework_TestCase
                 '\\DateTime',
                 new \DateTime(),
                 false
+            ),
+            array(
+                '\\DateTime',
+                null,
+                false,
+                true
             ),
             array(
                 '\\DateTime',
