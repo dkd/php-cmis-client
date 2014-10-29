@@ -27,7 +27,7 @@ trait DataProviderCollectionTrait
             array(false, false),
             array(false, 0),
             array(false, '0'),
-            array(false, null),
+            array(false, null)
         );
     }
 
@@ -43,7 +43,7 @@ trait DataProviderCollectionTrait
             array(2, '2'),
             array(0, null),
             array(3, 3),
-            array(3, 3.2),
+            array(3, 3.2)
         );
     }
 
@@ -60,6 +60,8 @@ trait DataProviderCollectionTrait
             array('', null),
             array('3', 3),
             array('3.2', 3.2),
+            array('1', true),
+            array('', false)
         );
     }
 }

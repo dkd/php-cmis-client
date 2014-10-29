@@ -70,7 +70,7 @@ class AbstractExtensionDataTest extends PHPUnit_Framework_TestCase
         $isExceptionExpected
     ) {
         if ($isExceptionExpected === true) {
-            $this->setExpectedException('\InvalidArgumentException', 1413440336);
+            $this->setExpectedException('\\InvalidArgumentException', 1413440336);
         }
 
         $method = $this->getMethod(self::CLASS_TO_TEST, 'checkType');
@@ -120,12 +120,12 @@ class AbstractExtensionDataTest extends PHPUnit_Framework_TestCase
                 true
             ),
             array(
-                '\DateTime',
+                '\\DateTime',
                 new \DateTime(),
                 false
             ),
             array(
-                '\DateTime',
+                '\\DateTime',
                 'now',
                 true
             )

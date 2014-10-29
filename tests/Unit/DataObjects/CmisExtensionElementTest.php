@@ -19,14 +19,14 @@ class CmisExtensionElementTest extends \PHPUnit_Framework_TestCase
 
     public function testConstructorThrowsExceptionIfNameIsEmpty()
     {
-        $this->setExpectedException('\InvalidArgumentException', 'Name must be given!');
+        $this->setExpectedException('\\InvalidArgumentException', 'Name must be given!');
         new CmisExtensionElement('namespace', '');
     }
 
     public function testConstructorThrowsExceptionIfValueAndChildrenIsGiven()
     {
         $this->setExpectedException(
-            '\InvalidArgumentException',
+            '\\InvalidArgumentException',
             'Value and children given! Only one of them is allowed.'
         );
         new CmisExtensionElement('namespace', 'name', null, 'value', array('children'));
@@ -35,7 +35,7 @@ class CmisExtensionElementTest extends \PHPUnit_Framework_TestCase
     public function testConstructorThrowsExceptionIfNoValueAndChildrenGiven()
     {
         $this->setExpectedException(
-            '\InvalidArgumentException',
+            '\\InvalidArgumentException',
             'Value and children are empty! One of them is required.'
         );
         new CmisExtensionElement('namespace', 'name', null, null, null);
