@@ -51,7 +51,7 @@ class AbstractExtensionDataTest extends PHPUnit_Framework_TestCase
     public function testSetExtensionsWithInvalidDataThrowsException()
     {
         $this->setExpectedException(
-            'InvalidArgumentException',
+            '\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException',
             'Argument of type "stdClass" given but argument of type '
             . '"\\Dkd\\PhpCmis\\Data\\CmisExtensionElementInterface" was expected.'
         );
@@ -72,7 +72,7 @@ class AbstractExtensionDataTest extends PHPUnit_Framework_TestCase
         $nullAllowed = false
     ) {
         if ($isExceptionExpected === true) {
-            $this->setExpectedException('\\InvalidArgumentException', 1413440336);
+            $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', 1413440336);
         }
 
         $method = $this->getMethod(self::CLASS_TO_TEST, 'checkType');
@@ -94,6 +94,11 @@ class AbstractExtensionDataTest extends PHPUnit_Framework_TestCase
             array(
                 'integer',
                 2,
+                false
+            ),
+            array(
+                'integer',
+                0,
                 false
             ),
             array(
@@ -141,6 +146,86 @@ class AbstractExtensionDataTest extends PHPUnit_Framework_TestCase
             array(
                 '\\DateTime',
                 'now',
+                true
+            )
+        );
+    }
+
+    /**
+     * @dataProvider castValueToSimpleTypeDataProvider
+     * @param $expectedType
+     * @param $expectedValue
+     * @param $value
+     * @param $errorNoticeMessageExpected
+     */
+    public function testCastValueToSimpleTypeCastsValueToExpectedType(
+        $expectedType,
+        $expectedValue,
+        $value
+    ) {
+        $method = $this->getMethod(self::CLASS_TO_TEST, 'castValueToSimpleType');
+        $result = @$method->invokeArgs($this->abstractExtensionData, array($expectedType, $value));
+        $this->assertSame($expectedValue, $result);
+    }
+
+    /**
+     * @dataProvider castValueToSimpleTypeDataProvider
+     * @param $expectedType
+     * @param $expectedValue
+     * @param $value
+     * @param $errorNoticeMessageExpected
+     */
+    public function testCastValueToSimpleTypeTriggersErrorNoticeIfValueIsCasted(
+        $expectedType,
+        $expectedValue,
+        $value,
+        $errorNoticeMessageExpected
+    ) {
+        if ($errorNoticeMessageExpected) {
+            $this->setExpectedException('\\PHPUnit_Framework_Error_Notice');
+        }
+        $method = $this->getMethod(self::CLASS_TO_TEST, 'castValueToSimpleType');
+        $result = $method->invokeArgs($this->abstractExtensionData, array($expectedType, $value));
+        $this->assertSame($expectedValue, $result);
+    }
+
+    public function castValueToSimpleTypeDataProvider()
+    {
+        return array(
+            array(
+                'integer',
+                2,
+                2,
+                false
+            ),
+            array(
+                'integer',
+                2,
+                '2',
+                true
+            ),
+            array(
+                'integer',
+                2,
+                2.2,
+                true
+            ),
+            array(
+                'string',
+                '2',
+                2,
+                true
+            ),
+            array(
+                'string',
+                '2',
+                '2',
+                false
+            ),
+            array(
+                'boolean',
+                true,
+                1,
                 true
             )
         );

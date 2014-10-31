@@ -17,6 +17,7 @@ use Dkd\Enumeration\Enumeration;
  */
 final class CmisVersion extends Enumeration
 {
+    const __DEFAULT = self::CMIS_1_0;
     const CMIS_1_0 = '1.0';
     const CMIS_1_1 = '1.1';
 }

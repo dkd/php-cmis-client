@@ -55,13 +55,6 @@ interface RepositoryInfoInterface extends ExtensionDataInterface
     public function getCmisVersion();
 
     /**
-     * Returns the CMIS version supported by this repository as a string.
-     *
-     * @return string the supported CMIS version, not null
-     */
-    public function getCmisVersionSupported();
-
-    /**
      * Returns the repository description.
      *
      * @return string|null the repository description, may be null
