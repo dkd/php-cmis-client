@@ -18,5 +18,5 @@ namespace Dkd\PhpCmis\Exception;
  */
 class CmisProxyAuthenticationException extends CmisRuntimeException
 {
-    const EXCEPTION_NAME = "notSupported";
+
 }
