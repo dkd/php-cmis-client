@@ -2,8 +2,6 @@
 namespace Dkd\PhpCmis\Bindings;
 
 use Dkd\PhpCmis\AclServiceInterface;
-use Dkd\PhpCmis\Bindings\Authentication\AuthenticationProviderInterface;
-use Dkd\PhpCmis\Bindings\Authentication\NullAuthenticationProvider;
 use Dkd\PhpCmis\Bindings\Browser\RepositoryService;
 use Dkd\PhpCmis\BindingsObjectFactoryInterface;
 use Dkd\PhpCmis\VersioningServiceInterface;
@@ -42,7 +40,6 @@ class CmisBinding implements CmisBindingInterface
     public function __construct(
         BindingSessionInterface $session,
         array $sessionParameters,
-        AuthenticationProviderInterface $authenticationProvider = null,
         \Doctrine\Common\Cache\Cache $typeDefinitionCache = null
     ) {
         if (count($sessionParameters) === 0) {
@@ -59,54 +56,7 @@ class CmisBinding implements CmisBindingInterface
             $this->session->put($key, $value);
         }
 
-        $this->addAuthenticationProviderToSession($authenticationProvider, $sessionParameters);
-
         $this->repositoryService = new RepositoryService($this->session);
-    }
-
-    /**
-     * Adds the given authentication provider to the session. If no authentication provider is given
-     * a new instance is created based on the class name defined in the session parameters. If both
-     * is not defined, the authentication provider will not be set.
-     *
-     * @param $authenticationProvider
-     * @param $sessionParameters
-     */
-    protected function addAuthenticationProviderToSession($authenticationProvider, $sessionParameters)
-    {
-        if (
-            $authenticationProvider === null
-            && !empty($sessionParameters[SessionParameter::AUTHENTICATION_PROVIDER_CLASS])
-        ) {
-            $authenticationProviderClassName = $sessionParameters[SessionParameter::AUTHENTICATION_PROVIDER_CLASS];
-            $authenticationProviderObject = null;
-
-            try {
-                $authenticationProviderObject = new $authenticationProviderClassName;
-            } catch (\Exception $exception) {
-                throw new \InvalidArgumentException(
-                    sprintf('Could not load authentication provider: %s', $authenticationProviderClassName),
-                    1412787752,
-                    $exception
-                );
-            }
-
-            if (!$authenticationProviderObject instanceof AuthenticationProviderInterface) {
-                throw new \InvalidArgumentException(
-                    'Authentication provider does not implement AuthenticationProviderInterface!',
-                    1412787758
-                );
-            }
-
-            $authenticationProvider = $authenticationProviderObject;
-        }
-
-        if ($authenticationProvider === null) {
-            $authenticationProvider = new NullAuthenticationProvider();
-        }
-
-        // add authentication provider to session
-        $this->session->put(SessionParameter::AUTHENTICATION_PROVIDER_OBJECT, $authenticationProvider);
     }
 
     /**
@@ -152,16 +102,6 @@ class CmisBinding implements CmisBindingInterface
     {
         throw new \Exception('Not yet implemented!');
         // TODO: Implement getAclService() method.
-    }
-
-    /**
-     * Gets the authentication provider.
-     *
-     * @return AuthenticationProviderInterface|null
-     */
-    public function getAuthenticationProvider()
-    {
-        return $this->session->get(SessionParameter::AUTHENTICATION_PROVIDER_OBJECT);
     }
 
     /**

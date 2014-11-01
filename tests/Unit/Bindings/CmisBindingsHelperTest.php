@@ -78,9 +78,7 @@ class CmisBindingsHelperTest extends \PHPUnit_Framework_TestCase
         )->getMock();
 
         $cmisBindingFactoryMock->expects($this->once())->method('createCmisBrowserBinding')->with(
-            $parameters,
-            null,
-            null
+            $parameters
         )->willReturn(
             $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBinding')
                 ->disableOriginalConstructor()

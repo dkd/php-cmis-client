@@ -11,7 +11,6 @@ namespace Dkd\PhpCmis\Bindings;
  */
 
 use Dkd\Enumeration\Exception\InvalidEnumerationValueException;
-use Dkd\PhpCmis\Bindings\Authentication\AuthenticationProviderInterface;
 use Dkd\PhpCmis\Enum\BindingType;
 use Dkd\PhpCmis\Exception\CmisRuntimeException;
 use Dkd\PhpCmis\SessionParameter;
@@ -28,13 +27,11 @@ class CmisBindingsHelper
 
     /**
      * @param array $parameters
-     * @param AuthenticationProviderInterface $authenticationProvider
      * @param \Doctrine\Common\Cache\Cache $typeDefinitionCache
      * @return CmisBindingInterface
      */
     public function createBinding(
         array $parameters,
-        AuthenticationProviderInterface $authenticationProvider = null,
         \Doctrine\Common\Cache\Cache $typeDefinitionCache = null
     ) {
         if (count($parameters) === 0) {
@@ -54,7 +51,6 @@ class CmisBindingsHelper
                 case $bindingType->equals(BindingType::BROWSER):
                     $binding = $bindingFactory->createCmisBrowserBinding(
                         $parameters,
-                        $authenticationProvider,
                         $typeDefinitionCache
                     );
                     break;

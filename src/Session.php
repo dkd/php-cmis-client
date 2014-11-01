@@ -10,7 +10,6 @@ namespace Dkd\PhpCmis;
  * file that was distributed with this source code.
  */
 
-use Dkd\PhpCmis\Bindings\Authentication\AuthenticationProviderInterface;
 use Dkd\PhpCmis\CmisObject\CmisObjectInterface;
 use Dkd\PhpCmis\Data\BulkUpdateObjectIdAndChangeTokenInterface;
 use Dkd\PhpCmis\Data\ContentStreamInterface;
@@ -29,11 +28,6 @@ use Dkd\PhpCmis\Exception\CmisObjectNotFoundException;
 class Session implements SessionInterface
 {
     /**
-     * @var AuthenticationProviderInterface
-     */
-    protected $authenticationProvider;
-
-    /**
      * @var CacheInterface
      */
     protected $cache;
@@ -49,24 +43,22 @@ class Session implements SessionInterface
     protected $parameters = array();
 
     /**
-     * @var TypeDefinitionCacheInterface
+     * @var Cache
      */
     protected $typeDefinitionCache;
 
     /**
      * @param array $parameters
      * @param ObjectFactoryInterface $objectFactory
-     * @param AuthenticationProviderInterface $authenticationProvider
      * @param CacheInterface $cache
-     * @param TypeDefinitionCacheInterface $typeDefinitionCache
+     * @param Cache $typeDefinitionCache
      * @throws \InvalidArgumentException
      */
     public function __construct(
         array $parameters,
         ObjectFactoryInterface $objectFactory = null,
-        AuthenticationProviderInterface $authenticationProvider = null,
         CacheInterface $cache = null,
-        TypeDefinitionCacheInterface $typeDefinitionCache = null
+        Cache $typeDefinitionCache = null
     ) {
         if (!count($parameters)) {
             throw new \InvalidArgumentException('No parameters provided!', 1408115280);
@@ -74,7 +66,6 @@ class Session implements SessionInterface
 
         $this->parameters = $parameters;
         $this->objectFactory = $objectFactory === null ? $this->createObjectFactory() : $objectFactory;
-        $this->authenticationProvider = $authenticationProvider;
         $this->cache = $cache === null ? $this->createCache() : $cache;
         $this->typeDefinitionCache = $typeDefinitionCache;
     }
@@ -155,7 +146,7 @@ class Session implements SessionInterface
     }
 
     /**
-     * Returns an instance of the ObjectFactory.
+     * Returns an instance of the Cache.
      * This methods is primarily required for unit testing.
      *
      * @return Cache

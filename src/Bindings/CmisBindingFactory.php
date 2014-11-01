@@ -9,7 +9,6 @@ namespace Dkd\PhpCmis\Bindings;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Dkd\PhpCmis\Bindings\Authentication\AuthenticationProviderInterface;
 use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
 use Dkd\PhpCmis\SessionParameter;
 
@@ -22,18 +21,16 @@ class CmisBindingFactory
      * Create a browser binding
      *
      * @param array $sessionParameters
-     * @param AuthenticationProviderInterface $authenticationProvider
      * @param \Doctrine\Common\Cache\Cache $typeDefinitionCache
      * @return CmisBinding
      */
     public function createCmisBrowserBinding(
         array $sessionParameters,
-        AuthenticationProviderInterface $authenticationProvider = null,
         \Doctrine\Common\Cache\Cache $typeDefinitionCache = null
     ) {
         $this->validateCmisBrowserBindingParameters($sessionParameters);
 
-        return new CmisBinding(new Session(), $sessionParameters, $authenticationProvider, $typeDefinitionCache);
+        return new CmisBinding(new Session(), $sessionParameters, $typeDefinitionCache);
     }
 
     protected function validateCmisBrowserBindingParameters(array &$sessionParameters)

@@ -11,7 +11,6 @@ namespace Dkd\PhpCmis\Bindings;
  */
 
 use Dkd\PhpCmis\AclServiceInterface;
-use Dkd\PhpCmis\Bindings\Authentication\AuthenticationProviderInterface;
 use Dkd\PhpCmis\BindingsObjectFactoryInterface;
 use Dkd\PhpCmis\DiscoveryServiceInterface;
 use Dkd\PhpCmis\Enum\BindingType;
@@ -63,13 +62,6 @@ interface CmisBindingInterface
      * @return AclServiceInterface
      */
     public function getAclService();
-
-    /**
-     * Gets the authentication provider.
-     *
-     * @return AuthenticationProviderInterface
-     */
-    public function getAuthenticationProvider();
 
     /**
      * Returns the binding type.

@@ -10,7 +10,7 @@ namespace Dkd\PhpCmis;
  * file that was distributed with this source code.
  */
 
-use Dkd\PhpCmis\Bindings\Authentication\AuthenticationProviderInterface;
+use Doctrine\Common\Cache\Cache;
 
 /**
  * Class SessionFactory
@@ -25,21 +25,19 @@ class SessionFactory implements SessionFactoryInterface
      * @param string[] $parameters a array of name/value pairs with parameters for the session, see
      * {@link SessionParameter} for parameters supported by php cmis lib
      * @param ObjectFactoryInterface $objectFactory
-     * @param AuthenticationProviderInterface $authenticationProvider
      * @param CacheInterface $cache
-     * @param TypeDefinitionCacheInterface $typeDefCache
+     * @param Cache $typeDefinitionCache
      * @return SessionInterface a {@link SessionInterface} connected to the CMIS repository
      *
      * @see SessionParameter
      */
     public function createSession(
         array $parameters,
-        ObjectFactoryInterface $objectFactory,
-        AuthenticationProviderInterface $authenticationProvider,
-        CacheInterface $cache,
-        TypeDefinitionCacheInterface $typeDefCache
+        ObjectFactoryInterface $objectFactory = null,
+        CacheInterface $cache = null,
+        Cache $typeDefinitionCache = null
     ) {
-        return new Session($parameters, $objectFactory, $authenticationProvider, $cache, $typeDefCache);
+        return new Session($parameters, $objectFactory, $cache, $typeDefinitionCache);
     }
 
     /**

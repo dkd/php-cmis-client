@@ -94,7 +94,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Dkd\PhpCmis\CacheInterface $dummyCache */
         $dummyCache = $this->getMock('\\Dkd\\PhpCmis\\Cache');
-        $session = new PhpCmis\Session(array('foo'), null, null, $dummyCache);
+        $session = new PhpCmis\Session(array('foo'), null, $dummyCache);
         $this->assertSame($dummyCache, $session->getCache());
     }
 

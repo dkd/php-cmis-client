@@ -42,13 +42,13 @@ class CmisBindingTest extends \PHPUnit_Framework_TestCase
         $session = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\BindingSessionInterface')->setMethods(
             array('put')
         )->getMockForAbstractClass();
-        $session->expects($this->exactly(2))->method('put');
+        $session->expects($this->once())->method('put');
         new CmisBinding($session, array(SessionParameter::BINDING_CLASS => 'foo'));
 
         $session = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\BindingSessionInterface')->setMethods(
             array('put')
         )->getMockForAbstractClass();
-        $session->expects($this->exactly(4))->method('put');
+        $session->expects($this->exactly(3))->method('put');
         new CmisBinding($session, array(SessionParameter::BINDING_CLASS => 'foo', 1, 2));
     }
 
@@ -66,88 +66,6 @@ class CmisBindingTest extends \PHPUnit_Framework_TestCase
     {
         $binding = new CmisBinding(new Session(), array(SessionParameter::BINDING_CLASS => 'foo'));
         $this->assertInstanceOf('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper', $binding->getCmisBindingsHelper());
-    }
-
-    public function testGetAuthenticationProviderReturnsNullAuthenticationProviderIfNoneIsDefined()
-    {
-        $cmisBinding = new CmisBinding(new Session(), array(SessionParameter::BINDING_CLASS => 'foo'));
-
-        $this->assertInstanceOf(
-            '\\Dkd\\PhpCmis\\Bindings\\Authentication\\NullAuthenticationProvider',
-            $cmisBinding->getAuthenticationProvider()
-        );
-    }
-
-    public function testGetAuthenticationProviderReturnsAuthenticationProviderGivenInConstructor()
-    {
-        $authenticationProvider = $this->getMockForAbstractClass(
-            '\\Dkd\\PhpCmis\\Bindings\\Authentication\\AuthenticationProviderInterface'
-        );
-        $cmisBinding = new CmisBinding(
-            new Session(),
-            array(SessionParameter::BINDING_CLASS => 'foo'),
-            $authenticationProvider
-        );
-
-        $this->assertSame($authenticationProvider, $cmisBinding->getAuthenticationProvider());
-    }
-
-    public function testGetAuthenticationProviderReturnsCreatedAuthenticationProviderBasedOnSessionParameter()
-    {
-        // just create a mock to create a dummy class
-        $this->getMockForAbstractClass(
-            '\\Dkd\\PhpCmis\\Bindings\\Authentication\\AuthenticationProviderInterface',
-            array(),
-            'FakeAuthProvider'
-        );
-
-        $cmisBinding = new CmisBinding(
-            new Session(),
-            array(
-                SessionParameter::BINDING_CLASS => 'foo',
-                SessionParameter::AUTHENTICATION_PROVIDER_CLASS => 'FakeAuthProvider'
-            )
-        );
-
-        $this->assertInstanceOf(
-            'FakeAuthProvider',
-            $cmisBinding->getAuthenticationProvider()
-        );
-    }
-
-    public function testConstructorThrowsExceptionIfGivenAuthenticationProviderClassNameDoesNotImplementExpectedInterface()
-    {
-        $this->setExpectedException(
-            '\\InvalidArgumentException',
-            'Authentication provider does not implement AuthenticationProviderInterface!',
-            1412787758
-        );
-
-        new CmisBinding(
-            new Session(),
-            array(
-                SessionParameter::BINDING_CLASS => 'foo',
-                SessionParameter::AUTHENTICATION_PROVIDER_CLASS => '\\DateTime'
-            )
-        );
-    }
-
-    public function testConstructorThrowsExceptionIfGivenAuthenticationProviderClassCouldNotBeInstantiated()
-    {
-        $this->setExpectedException(
-            '\\InvalidArgumentException',
-            'Could not load authentication provider: \\Dkd\\PhpCmis\\Test\\Fixtures\\ConstructorThrowsException',
-            1412787752
-        );
-
-        new CmisBinding(
-            new Session(),
-            array(
-                SessionParameter::BINDING_CLASS => 'foo',
-                SessionParameter::AUTHENTICATION_PROVIDER_CLASS
-                => '\\Dkd\\PhpCmis\\Test\\Fixtures\\ConstructorThrowsException'
-            )
-        );
     }
 
     public function testGetObjectServiceReturnsObjectService()
