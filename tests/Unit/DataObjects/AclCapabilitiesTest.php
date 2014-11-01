@@ -62,7 +62,7 @@ class AclCapabilitiesTest extends \PHPUnit_Framework_TestCase
         $permissionDefinition,
         $expectedExceptionText
     ) {
-        $this->setExpectedException('\\InvalidArgumentException', $expectedExceptionText);
+        $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', $expectedExceptionText);
         $this->aclCapabilities->setPermissions(array($permissionDefinition));
     }
 
@@ -107,7 +107,7 @@ class AclCapabilitiesTest extends \PHPUnit_Framework_TestCase
     public function testSetPermissionMappingSetsProperty()
     {
         $permissionMapping = array($this->getMockForAbstractClass(
-            '\\Dkd\\PhpCmis\\Definitions\\PermissionMappingInterface'
+            '\\Dkd\\PhpCmis\\Data\\PermissionMappingInterface'
         ));
         $this->aclCapabilities->setPermissionMapping($permissionMapping);
         $this->assertAttributeSame($permissionMapping, 'permissionMapping', $this->aclCapabilities);
@@ -122,7 +122,7 @@ class AclCapabilitiesTest extends \PHPUnit_Framework_TestCase
         $permissionDefinition,
         $expectedExceptionText
     ) {
-        $this->setExpectedException('\\InvalidArgumentException', $expectedExceptionText);
+        $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', $expectedExceptionText);
         $this->aclCapabilities->setPermissions(array($permissionDefinition));
     }
 
@@ -158,7 +158,7 @@ class AclCapabilitiesTest extends \PHPUnit_Framework_TestCase
     public function testGetPermissionMappingReturnsPropertyValue()
     {
         $permissionMapping = $this->getMockForAbstractClass(
-            '\\Dkd\\PhpCmis\\Definitions\\PermissionMappingInterface'
+            '\\Dkd\\PhpCmis\\Data\\PermissionMappingInterface'
         );
         $this->aclCapabilities->setPermissionMapping(array($permissionMapping));
         $this->assertSame(array($permissionMapping), $this->aclCapabilities->getPermissionMapping());

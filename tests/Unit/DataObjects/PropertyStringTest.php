@@ -41,7 +41,7 @@ class PropertyStringTest extends \PHPUnit_Framework_TestCase
     {
         // use all non string values
         if (!is_string($value)) {
-            $this->setExpectedException('\\InvalidArgumentException', null, 1413440336);
+            $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', null, 1413440336);
             $this->propertyString->setValues(array($value));
         }
     }
@@ -59,7 +59,7 @@ class PropertyStringTest extends \PHPUnit_Framework_TestCase
     {
         // use all non string values
         if (!is_string($value)) {
-            $this->setExpectedException('\\InvalidArgumentException', null, 1413440336);
+            $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', null, 1413440336);
             $this->propertyString->setValue(array($value));
         }
     }

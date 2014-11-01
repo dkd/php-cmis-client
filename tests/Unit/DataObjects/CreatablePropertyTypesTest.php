@@ -42,7 +42,7 @@ class CreatablePropertyTypesTest extends \PHPUnit_Framework_TestCase
         $propertyTypes,
         $expectedExceptionText
     ) {
-        $this->setExpectedException('\\InvalidArgumentException', $expectedExceptionText);
+        $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', $expectedExceptionText);
         $this->creatablePropertyTypes->setCanCreate(array($propertyTypes));
     }
 

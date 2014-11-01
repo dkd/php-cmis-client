@@ -41,7 +41,7 @@ class PropertyBooleanTest extends \PHPUnit_Framework_TestCase
     {
         // use all non boolean values
         if (!is_bool($value)) {
-            $this->setExpectedException('\\InvalidArgumentException', null, 1413440336);
+            $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', null, 1413440336);
             $this->propertyBoolean->setValues(array($value));
         }
     }
@@ -59,7 +59,7 @@ class PropertyBooleanTest extends \PHPUnit_Framework_TestCase
     {
         // use all non boolean values
         if (!is_bool($value)) {
-            $this->setExpectedException('\\InvalidArgumentException', null, 1413440336);
+            $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', null, 1413440336);
             $this->propertyBoolean->setValue(array($value));
         }
     }

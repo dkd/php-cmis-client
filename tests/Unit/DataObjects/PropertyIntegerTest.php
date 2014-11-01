@@ -41,7 +41,7 @@ class PropertyIntegerTest extends \PHPUnit_Framework_TestCase
     {
         // use all non integer values
         if (!is_integer($value)) {
-            $this->setExpectedException('\\InvalidArgumentException', null, 1413440336);
+            $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', null, 1413440336);
             $this->propertyInteger->setValues(array($value));
         }
     }
@@ -59,7 +59,7 @@ class PropertyIntegerTest extends \PHPUnit_Framework_TestCase
     {
         // use all non integer values
         if (!is_integer($value)) {
-            $this->setExpectedException('\\InvalidArgumentException', null, 1413440336);
+            $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', null, 1413440336);
             $this->propertyInteger->setValue(array($value));
         }
     }
