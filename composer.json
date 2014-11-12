@@ -4,10 +4,11 @@
     "description": "PHP CMIS client library based on CMIS 1.1",
     "keywords": ["cmis"],
     "homepage": "https://phabricator.dkd.de/diffusion/PHPCMIS/",
-    "license": "Apache License, Version 2.0",
+    "license": "Apache-2.0",
     "authors": [
         {
             "name": "Sascha Egerer",
+            "email": "sascha.egerer@dkd.de",
             "homepage": "http://www.dkd.de",
             "role": "Developer"
         }
