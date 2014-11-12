@@ -9,8 +9,10 @@ namespace Dkd\PhpCmis\Bindings;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
 use Dkd\PhpCmis\SessionParameter;
+use Doctrine\Common\Cache\Cache;
 
 /**
  * Default factory for a CMIS binding instance.
@@ -21,12 +23,12 @@ class CmisBindingFactory
      * Create a browser binding
      *
      * @param array $sessionParameters
-     * @param \Doctrine\Common\Cache\Cache $typeDefinitionCache
+     * @param Cache $typeDefinitionCache
      * @return CmisBinding
      */
     public function createCmisBrowserBinding(
         array $sessionParameters,
-        \Doctrine\Common\Cache\Cache $typeDefinitionCache = null
+        Cache $typeDefinitionCache = null
     ) {
         $this->validateCmisBrowserBindingParameters($sessionParameters);
 

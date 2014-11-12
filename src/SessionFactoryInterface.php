@@ -11,6 +11,7 @@ namespace Dkd\PhpCmis;
  */
 
 use Dkd\PhpCmis\DataObjects\Repository;
+use Doctrine\Common\Cache\Cache;
 
 /**
  * Entry point into the php cmis lib Client API.
@@ -23,8 +24,8 @@ interface SessionFactoryInterface
      * @param string[] $parameters a array of name/value pairs with parameters for the session, see
      *            {@link SessionParameter} for parameters supported by php cmis lib
      * @param ObjectFactoryInterface $objectFactory
-     * @param CacheInterface $cache
-     * @param \Doctrine\Common\Cache\Cache $typeDefinitionCache
+     * @param Cache $cache
+     * @param Cache $typeDefinitionCache
      * @return SessionInterface a {@link SessionInterface} connected to the CMIS repository
      *
      * @see SessionParameter
@@ -32,8 +33,8 @@ interface SessionFactoryInterface
     public function createSession(
         array $parameters,
         ObjectFactoryInterface $objectFactory = null,
-        CacheInterface $cache = null,
-        \Doctrine\Common\Cache\Cache $typeDefinitionCache = null
+        Cache $cache = null,
+        Cache $typeDefinitionCache = null
     );
 
     /**
@@ -44,8 +45,8 @@ interface SessionFactoryInterface
      *            {@link SessionParameter::REPOSITORY_ID} should not be set
      *
      * @param ObjectFactoryInterface $objectFactory
-     * @param CacheInterface $cache
-     * @param \Doctrine\Common\Cache\Cache $typeDefinitionCache
+     * @param Cache $cache
+     * @param Cache $typeDefinitionCache
      * @return Repository[] a list of all available repositories
      *
      * @see org.apache.chemistry.opencmis.commons.SessionParameter
@@ -53,7 +54,7 @@ interface SessionFactoryInterface
     public function getRepositories(
         array $parameters,
         ObjectFactoryInterface $objectFactory = null,
-        CacheInterface $cache = null,
-        \Doctrine\Common\Cache\Cache $typeDefinitionCache = null
+        Cache $cache = null,
+        Cache $typeDefinitionCache = null
     );
 }

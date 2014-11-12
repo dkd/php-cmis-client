@@ -20,21 +20,12 @@ use Doctrine\Common\Cache\Cache;
 class SessionFactory implements SessionFactoryInterface
 {
     /**
-     * Creates a new session.
-     *
-     * @param string[] $parameters a array of name/value pairs with parameters for the session, see
-     * {@link SessionParameter} for parameters supported by php cmis lib
-     * @param ObjectFactoryInterface $objectFactory
-     * @param CacheInterface $cache
-     * @param Cache $typeDefinitionCache
-     * @return SessionInterface a {@link SessionInterface} connected to the CMIS repository
-     *
-     * @see SessionParameter
+     * {@inheritdoc}
      */
     public function createSession(
         array $parameters,
         ObjectFactoryInterface $objectFactory = null,
-        CacheInterface $cache = null,
+        Cache $cache = null,
         Cache $typeDefinitionCache = null
     ) {
         return new Session($parameters, $objectFactory, $cache, $typeDefinitionCache);

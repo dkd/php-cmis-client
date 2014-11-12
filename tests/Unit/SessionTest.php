@@ -87,20 +87,21 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     public function testCacheIsSetToDefaultCacheWhenNoCacheIsGivenOrDefined()
     {
         $session = new PhpCmis\Session(array('foo'));
-        $this->assertInstanceOf('\\Dkd\\PhpCmis\\Cache', $session->getCache());
+        $this->assertInstanceOf('\\Doctrine\\Common\\Cache\\Cache', $session->getCache());
     }
 
     public function testCacheIsSetToCacheInstanceGivenAsMethodParameter()
     {
-        /** @var \Dkd\PhpCmis\CacheInterface $dummyCache */
-        $dummyCache = $this->getMock('\\Dkd\\PhpCmis\\Cache');
+        /** @var \Doctrine\Common\Cache\Cache $dummyCache */
+        $dummyCache = $this->getMockForAbstractClass('\\Doctrine\\Common\\Cache\\Cache');
         $session = new PhpCmis\Session(array('foo'), null, $dummyCache);
         $this->assertSame($dummyCache, $session->getCache());
     }
 
     public function testCacheIsSetToCacheDefinedInParametersArray()
     {
-        $cache = $this->getMock('\\Dkd\\PhpCmis\\Cache');
+        /** @var \Doctrine\Common\Cache\Cache $dummyCache */
+        $cache = $this->getMockForAbstractClass('\\Doctrine\\Common\\Cache\\Cache');
         $session = new PhpCmis\Session(
             array(PhpCmis\SessionParameter::CACHE_CLASS => get_class($cache))
         );
@@ -119,30 +120,5 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         new PhpCmis\Session(
             array(PhpCmis\SessionParameter::CACHE_CLASS => get_class($object))
         );
-    }
-
-    public function testCreatedCacheInstanceWillBeInitialized()
-    {
-        // dummy cache with a spy on initialize
-        $cache = $this->getMock('\\Dkd\\PhpCmis\\Cache');
-        $cache->expects($this->once())->method('initialize');
-
-        $sessionClassName = '\\Dkd\\PhpCmis\\Session';
-
-        // Get mock, without the constructor being called
-        $mock = $this->getMockBuilder($sessionClassName)
-            ->disableOriginalConstructor()
-            ->setMethods(array('createDefaultCacheInstance'))
-            ->getMock();
-
-        // set createDefaultCacheInstance to return our cache spy
-        $mock->expects($this->once())
-            ->method('createDefaultCacheInstance')
-            ->willReturn($cache);
-
-        // now call the constructor
-        $reflectedClass = new \ReflectionClass(get_class($mock));
-        $constructor = $reflectedClass->getConstructor();
-        $constructor->invoke($mock, array('foo'));
     }
 }

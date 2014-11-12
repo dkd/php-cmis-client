@@ -19,6 +19,8 @@ use Dkd\PhpCmis\Enum\IncludeRelationships;
 use Dkd\PhpCmis\Enum\RelationshipDirection;
 use Dkd\PhpCmis\Enum\VersioningState;
 use Dkd\PhpCmis\Exception\CmisObjectNotFoundException;
+use Doctrine\Common\Cache\ArrayCache;
+use Doctrine\Common\Cache\Cache;
 
 /**
  * Class Session
@@ -50,14 +52,14 @@ class Session implements SessionInterface
     /**
      * @param array $parameters
      * @param ObjectFactoryInterface $objectFactory
-     * @param CacheInterface $cache
+     * @param Cache $cache
      * @param Cache $typeDefinitionCache
      * @throws \InvalidArgumentException
      */
     public function __construct(
         array $parameters,
         ObjectFactoryInterface $objectFactory = null,
-        CacheInterface $cache = null,
+        Cache $cache = null,
         Cache $typeDefinitionCache = null
     ) {
         if (!count($parameters)) {
@@ -117,7 +119,7 @@ class Session implements SessionInterface
      * Create a cache instance based on the given session parameter SessionParameter::CACHE_CLASS.
      * If no session parameter SessionParameter::CACHE_CLASS is defined, the default Cache implementation will be used.
      *
-     * @return CacheInterface
+     * @return Cache
      *
      * @throws \InvalidArgumentException
      */
@@ -130,11 +132,9 @@ class Session implements SessionInterface
                 $cache = $this->createDefaultCacheInstance();
             }
 
-            if (!($cache instanceof CacheInterface)) {
-                throw new \RuntimeException('Class does not implement CacheInterface!', 1408354124);
+            if (!($cache instanceof Cache)) {
+                throw new \RuntimeException('Class does not implement \Doctrine\Common\Cache\Cache!', 1408354124);
             }
-
-            $cache->initialize($this, $this->parameters);
 
             return $cache;
         } catch (\Exception $exception) {
@@ -146,18 +146,18 @@ class Session implements SessionInterface
     }
 
     /**
-     * Returns an instance of the Cache.
+     * Returns an instance of the Doctrine ArrayCache.
      * This methods is primarily required for unit testing.
      *
-     * @return Cache
+     * @return ArrayCache
      */
     protected function createDefaultCacheInstance()
     {
-        return new Cache();
+        return new ArrayCache();
     }
 
     /**
-     * @return CacheInterface
+     * @return Cache
      */
     public function getCache()
     {
