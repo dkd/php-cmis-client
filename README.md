@@ -1,3 +1,14 @@
+PHP CMIS Client
+===============
+
+[![Build Status](https://api.travis-ci.org/dkd/php-cmis-client.svg)](https://travis-ci.org/dkd/php-cmis-client)
+[![Latest Stable Version](https://poser.pugx.org/dkd/php-cmis/v/stable.svg)](https://packagist.org/packages/dkd/php-cmis)
+[![Total Downloads](https://poser.pugx.org/dkd/php-cmis/downloads.svg)](https://packagist.org/packages/dkd/php-cmis)
+[![Latest Unstable Version](https://poser.pugx.org/dkd/php-cmis/v/unstable.svg)](https://packagist.org/packages/dkd/php-cmis)
+[![License](https://poser.pugx.org/dkd/php-cmis/license.svg)](https://packagist.org/packages/dkd/php-cmis)
+
+   **THIS LIBRARY IS STILL UNDER HEAVY DEVELOPMENT AND CAN'T BE USED YET!**
+
 LICENSE
 =======
    Copyright 2014 Sascha Egerer
