@@ -142,7 +142,7 @@ class RepositoryInfoTest extends \PHPUnit_Framework_TestCase
      * @param $propertyName
      * @param $validValue
      */
-    public function testSetPropertySetsProperty($propertyName, $validValue)
+    public function testPropertySetterSetsProperty($propertyName, $validValue)
     {
         $setterName = 'set' . ucfirst($propertyName);
         $this->repositoryInfo->$setterName($validValue);
@@ -157,7 +157,7 @@ class RepositoryInfoTest extends \PHPUnit_Framework_TestCase
      * @param $validValue
      * @param $invalidValue
      */
-    public function testSetterCastsValueToExpectedType($propertyName, $validValue, $invalidValue)
+    public function testPropertySetterCastsValueToExpectedType($propertyName, $validValue, $invalidValue)
     {
         if ($invalidValue !== self::DO_NOT_TEST_INVALID_TYPE_VALUE) {
             $setterName = 'set' . ucfirst($propertyName);
@@ -182,7 +182,7 @@ class RepositoryInfoTest extends \PHPUnit_Framework_TestCase
      * @dataProvider propertiesOfSutDataProvider
      * @param $propertyName
      */
-    public function testGetIdReturnsPropertyValue($propertyName, $validValue)
+    public function testPropertyGetterReturnsPropertyValue($propertyName, $validValue)
     {
         $setterName = 'set' . ucfirst($propertyName);
         $getterName = 'get' . ucfirst($propertyName);
