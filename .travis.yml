@@ -21,4 +21,8 @@ script:
   - >
     echo;
     echo "Running unit tests";
-    ./vendor/bin/phpunit --colors -c tests/phpunit.xml
+    mkdir -p build/logs
+    php vendor/bin/phpunit --colors -c tests/phpunit.xml --coverage-clover build/logs/clover.xml
+
+after_script:
+  - php vendor/bin/coveralls -v
