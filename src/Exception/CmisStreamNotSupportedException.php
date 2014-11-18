@@ -19,5 +19,4 @@ namespace Dkd\PhpCmis\Exception;
  */
 class CmisStreamNotSupportedException extends CmisBaseException
 {
-    const EXCEPTION_NAME = "streamNotSupported";
 }

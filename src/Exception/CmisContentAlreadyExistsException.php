@@ -19,5 +19,4 @@ namespace Dkd\PhpCmis\Exception;
  */
 class CmisContentAlreadyExistsException extends CmisBaseException
 {
-    const EXCEPTION_NAME = "contentAlreadyExists";
 }

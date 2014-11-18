@@ -18,5 +18,4 @@ namespace Dkd\PhpCmis\Exception;
  */
 class CmisVersioningException extends CmisBaseException
 {
-    const EXCEPTION_NAME = "versioning";
 }

@@ -17,5 +17,4 @@ namespace Dkd\PhpCmis\Exception;
  */
 class CmisInvalidArgumentException extends CmisBaseException
 {
-    const EXCEPTION_NAME = "invalidArgument";
 }

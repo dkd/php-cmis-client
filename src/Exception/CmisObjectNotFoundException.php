@@ -18,5 +18,4 @@ namespace Dkd\PhpCmis\Exception;
  */
 class CmisObjectNotFoundException extends CmisBaseException
 {
-    const EXCEPTION_NAME = "objectNotFound";
 }

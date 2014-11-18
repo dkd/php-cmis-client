@@ -20,5 +20,4 @@ namespace Dkd\PhpCmis\Exception;
  */
 class CmisFilterNotValidException extends CmisBaseException
 {
-    const EXCEPTION_NAME = "filterNotValid";
 }

@@ -18,5 +18,4 @@ namespace Dkd\PhpCmis\Exception;
  */
 class CmisUpdateConflictException extends CmisBaseException
 {
-    const EXCEPTION_NAME = "updateConflict";
 }

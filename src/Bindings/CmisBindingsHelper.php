@@ -12,6 +12,7 @@ namespace Dkd\PhpCmis\Bindings;
 
 use Dkd\Enumeration\Exception\InvalidEnumerationValueException;
 use Dkd\PhpCmis\Enum\BindingType;
+use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
 use Dkd\PhpCmis\Exception\CmisRuntimeException;
 use Dkd\PhpCmis\SessionParameter;
 
@@ -21,7 +22,6 @@ use Dkd\PhpCmis\SessionParameter;
  */
 class CmisBindingsHelper
 {
-    const HTTP_INVOKER_OBJECT = 'dkd.phpcmis.binding.httpinvoker.object';
     const SPI_OBJECT = 'dkd.phpcmis.binding.spi.object';
     const TYPE_DEFINITION_CACHE = 'dkd.phpcmis.binding.typeDefinitionCache';
 
@@ -130,10 +130,19 @@ class CmisBindingsHelper
      */
     public function getHttpInvoker(BindingSessionInterface $session)
     {
-        $invoker = $session->get(self::HTTP_INVOKER_OBJECT);
+        $invoker = $session->get(SessionParameter::HTTP_INVOKER_OBJECT);
 
-        if ($invoker !== null) {
+        if (is_object($invoker) && is_a($invoker, '\\GuzzleHttp\\ClientInterface')) {
             return $invoker;
+        } elseif (is_object($invoker) && !is_a($invoker, '\\GuzzleHttp\\ClientInterface')) {
+            throw new CmisInvalidArgumentException(
+                sprintf(
+                    'Invalid HTTP invoker given. The given instance "%s" does not implement'
+                    . ' \\GuzzleHttp\\ClientInterface!',
+                    get_class($invoker)
+                ),
+                1415281262
+            );
         }
 
         $invokerClass = $session->get(SessionParameter::HTTP_INVOKER_CLASS);
@@ -153,7 +162,7 @@ class CmisBindingsHelper
             );
         }
 
-        $session->put(self::HTTP_INVOKER_OBJECT, $invoker);
+        $session->put(SessionParameter::HTTP_INVOKER_OBJECT, $invoker);
 
         return $invoker;
     }

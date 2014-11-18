@@ -15,5 +15,4 @@ namespace Dkd\PhpCmis\Exception;
  */
 class CmisConnectionException extends CmisBaseException
 {
-    const EXCEPTION_NAME = "connection";
 }

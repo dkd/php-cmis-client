@@ -18,5 +18,4 @@ namespace Dkd\PhpCmis\Exception;
  */
 class CmisConstraintException extends CmisBaseException
 {
-    const EXCEPTION_NAME = "constraint";
 }

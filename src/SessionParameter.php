@@ -80,6 +80,8 @@ class SessionParameter
 //    // --- connection ---
 //
     const HTTP_INVOKER_CLASS = "dkd.phpcmis.binding.httpinvoker.classname";
+    const HTTP_INVOKER_OBJECT = "dkd.phpcmis.binding.httpinvoker.object";
+
 //
 //    const COMPRESSION = "dkd.phpcmis.binding.compression";
 //    const CLIENT_COMPRESSION = "dkd.phpcmis.binding.clientcompression";

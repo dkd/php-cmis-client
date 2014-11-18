@@ -18,5 +18,4 @@ namespace Dkd\PhpCmis\Exception;
  */
 class CmisNotSupportedException extends CmisBaseException
 {
-    const EXCEPTION_NAME = "notSupported";
 }

@@ -238,7 +238,7 @@ class CmisBindingsHelperTest extends \PHPUnit_Framework_TestCase
         $sessionMock->expects($this->exactly(2))->method('get')->will(
             $this->returnValueMap(
                 array(
-                    array(CmisBindingsHelper::HTTP_INVOKER_OBJECT, null, null),
+                    array(SessionParameter::HTTP_INVOKER_OBJECT, null, null),
                     array(SessionParameter::HTTP_INVOKER_CLASS, null, '\\GuzzleHttp\\Client')
                 )
             )
@@ -246,7 +246,7 @@ class CmisBindingsHelperTest extends \PHPUnit_Framework_TestCase
 
         // check if the binding is put into the session
         $sessionMock->expects($this->once())->method('put')->with(
-            CmisBindingsHelper::HTTP_INVOKER_OBJECT,
+            SessionParameter::HTTP_INVOKER_OBJECT,
             $this->isInstanceOf('\\GuzzleHttp\\Client')
         );
 
@@ -261,12 +261,32 @@ class CmisBindingsHelperTest extends \PHPUnit_Framework_TestCase
             array('get')
         )->getMockForAbstractClass();
 
-        $httpInvokerFixture = $this->getMock('\\stdClass');
+        $httpInvokerFixture = $this->getMock('\\GuzzleHttp\\ClientInterface');
 
-        $sessionMock->expects($this->once())->method('get')->with(CmisBindingsHelper::HTTP_INVOKER_OBJECT)->willReturn(
+        $sessionMock->expects($this->once())->method('get')->with(SessionParameter::HTTP_INVOKER_OBJECT)->willReturn(
             $httpInvokerFixture
         );
 
+        $this->assertSame($httpInvokerFixture, $this->cmisBindingsHelper->getHttpInvoker($sessionMock));
+    }
+
+    public function testGetHttpInvokerThrowsExceptionIfInvokerDoesNotImplementExpectedInterface()
+    {
+        $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\BindingSessionInterface')->setMethods(
+            array('get')
+        )->getMockForAbstractClass();
+
+        $httpInvokerFixture = $this->getMock('\\stdClass');
+
+        $sessionMock->expects($this->once())->method('get')->with(SessionParameter::HTTP_INVOKER_OBJECT)->willReturn(
+            $httpInvokerFixture
+        );
+
+        $this->setExpectedException(
+            '\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException',
+            null,
+            1415281262
+        );
         $this->assertSame($httpInvokerFixture, $this->cmisBindingsHelper->getHttpInvoker($sessionMock));
     }
 
@@ -279,7 +299,7 @@ class CmisBindingsHelperTest extends \PHPUnit_Framework_TestCase
         $sessionMock->expects($this->exactly(2))->method('get')->will(
             $this->returnValueMap(
                 array(
-                    array(CmisBindingsHelper::HTTP_INVOKER_OBJECT, null, null),
+                    array(SessionParameter::HTTP_INVOKER_OBJECT, null, null),
                     array(SessionParameter::HTTP_INVOKER_CLASS, null, null)
                 )
             )
@@ -301,7 +321,7 @@ class CmisBindingsHelperTest extends \PHPUnit_Framework_TestCase
         $sessionMock->expects($this->exactly(2))->method('get')->will(
             $this->returnValueMap(
                 array(
-                    array(CmisBindingsHelper::HTTP_INVOKER_OBJECT, null, null),
+                    array(SessionParameter::HTTP_INVOKER_OBJECT, null, null),
                     array(SessionParameter::HTTP_INVOKER_CLASS, null, 'ThisClassDoesNotExist')
                 )
             )
@@ -325,7 +345,7 @@ class CmisBindingsHelperTest extends \PHPUnit_Framework_TestCase
         $sessionMock->expects($this->exactly(2))->method('get')->will(
             $this->returnValueMap(
                 array(
-                    array(CmisBindingsHelper::HTTP_INVOKER_OBJECT, null, null),
+                    array(SessionParameter::HTTP_INVOKER_OBJECT, null, null),
                     array(SessionParameter::HTTP_INVOKER_CLASS, null, $httpInvokerClassName)
                 )
             )

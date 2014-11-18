@@ -18,5 +18,4 @@ namespace Dkd\PhpCmis\Exception;
  */
 class CmisStorageException extends CmisBaseException
 {
-    const EXCEPTION_NAME = "storage";
 }

@@ -18,5 +18,4 @@ namespace Dkd\PhpCmis\Exception;
  */
 class CmisPermissionDeniedException extends CmisBaseException
 {
-    const EXCEPTION_NAME = "permissionDenied";
 }

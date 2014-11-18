@@ -82,7 +82,7 @@ class CmisBindingFactory
      */
     protected function check(array $sessionParameters, $parameter)
     {
-        if (!isset($sessionParameters[$parameter])) {
+        if (empty($sessionParameters[$parameter])) {
             throw new CmisInvalidArgumentException(sprintf('Parameter "%s" is missing!', $parameter));
         }
 

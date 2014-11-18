@@ -17,5 +17,4 @@ namespace Dkd\PhpCmis\Exception;
  */
 class CmisRuntimeException extends CmisBaseException
 {
-    const EXCEPTION_NAME = "runtime";
 }
