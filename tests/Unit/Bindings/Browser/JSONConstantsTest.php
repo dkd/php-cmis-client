@@ -114,4 +114,44 @@ class JSONConstantsTest extends \PHPUnit_Framework_TestCase
             JSONConstants::getRenditionKeys()
         );
     }
+
+    public function testGetFeatureKeysReturnsContentOfStaticArray()
+    {
+        $this->assertSame(
+            $this->getStaticAttribute('\\Dkd\\PhpCmis\\Bindings\\Browser\\JSONConstants', 'FEATURE_KEYS'),
+            JSONConstants::getFeatureKeys()
+        );
+    }
+
+    public function testGetPolicyIdsKeysReturnsContentOfStaticArray()
+    {
+        $this->assertSame(
+            $this->getStaticAttribute('\\Dkd\\PhpCmis\\Bindings\\Browser\\JSONConstants', 'POLICY_IDS_KEYS'),
+            JSONConstants::getPolicyIdsKeys()
+        );
+    }
+
+    public function testGetAclKeysReturnsContentOfStaticArray()
+    {
+        $this->assertSame(
+            $this->getStaticAttribute('\\Dkd\\PhpCmis\\Bindings\\Browser\\JSONConstants', 'ACL_KEYS'),
+            JSONConstants::getAclKeys()
+        );
+    }
+
+    public function testGetPrincipalKeysReturnsContentOfStaticArray()
+    {
+        $this->assertSame(
+            $this->getStaticAttribute('\\Dkd\\PhpCmis\\Bindings\\Browser\\JSONConstants', 'ACE_PRINCIPAL_KEYS'),
+            JSONConstants::getAcePrincipalKeys()
+        );
+    }
+
+    public function testGetAceKeysReturnsContentOfStaticArray()
+    {
+        $this->assertSame(
+            $this->getStaticAttribute('\\Dkd\\PhpCmis\\Bindings\\Browser\\JSONConstants', 'ACE_KEYS'),
+            JSONConstants::getAceKeys()
+        );
+    }
 }

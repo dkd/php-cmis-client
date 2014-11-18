@@ -240,6 +240,20 @@ class JSONConstants
     const JSON_FEATURE_DESCRIPTION = "description";
     const JSON_FEATURE_DATA = "featureData";
 
+    protected static $FEATURE_KEYS = array(
+        self::JSON_FEATURE_ID,
+        self::JSON_FEATURE_URL,
+        self::JSON_FEATURE_COMMON_NAME,
+        self::JSON_FEATURE_VERSION_LABEL,
+        self::JSON_FEATURE_DESCRIPTION,
+        self::JSON_FEATURE_DATA
+    );
+
+    public static function getFeatureKeys()
+    {
+        return self::$FEATURE_KEYS;
+    }
+
     const JSON_OBJECT_PROPERTIES = "properties";
     const JSON_OBJECT_SUCCINCT_PROPERTIES = "succinctProperties";
     const JSON_OBJECT_PROPERTIES_EXTENSION = "propertiesExtension";
@@ -262,7 +276,6 @@ class JSONConstants
         self::JSON_OBJECT_ACL,
         self::JSON_OBJECT_EXACT_ACL,
         self::JSON_OBJECT_POLICY_IDS,
-        self::JSON_OBJECT_POLICY_IDS_IDS,
         self::JSON_OBJECT_RENDITIONS
     );
 
@@ -274,6 +287,15 @@ class JSONConstants
     public static function getObjectKeys()
     {
         return self::$OBJECT_KEYS;
+    }
+
+    protected static $POLICY_IDS_KEYS = array(
+        self::JSON_OBJECT_POLICY_IDS_IDS
+    );
+
+    public static function getPolicyIdsKeys()
+    {
+        return self::$POLICY_IDS_KEYS;
     }
 
     const JSON_OBJECTINFOLDER_OBJECT = "object";
@@ -331,10 +353,56 @@ class JSONConstants
     const JSON_ACL_ACES = "aces";
     const JSON_ACL_IS_EXACT = "isExact";
 
+    protected static $ACL_KEYS = array(
+        self::JSON_ACL_ACES,
+        self::JSON_ACL_IS_EXACT
+    );
+
+    /**
+     * Returns an array of all acl keys
+     *
+     * @return array
+     */
+    public static function getAclKeys()
+    {
+        return self::$ACL_KEYS;
+    }
+
     const JSON_ACE_PRINCIPAL = "principal";
     const JSON_ACE_PRINCIPAL_ID = "principalId";
+
+    protected static $ACE_PRINCIPAL_KEYS = array(
+        self::JSON_ACE_PRINCIPAL_ID
+    );
+
+    /**
+     * Returns an array of all ace principal keys
+     *
+     * @return array
+     */
+    public static function getAcePrincipalKeys()
+    {
+        return self::$ACE_PRINCIPAL_KEYS;
+    }
+
     const JSON_ACE_PERMISSIONS = "permissions";
     const JSON_ACE_IS_DIRECT = "isDirect";
+
+    protected static $ACE_KEYS = array(
+        self::JSON_ACE_PRINCIPAL,
+        self::JSON_ACE_PERMISSIONS,
+        self::JSON_ACE_IS_DIRECT
+    );
+
+    /**
+     * Returns an array of all ace keys
+     *
+     * @return array
+     */
+    public static function getAceKeys()
+    {
+        return self::$ACE_KEYS;
+    }
 
     const JSON_RENDITION_STREAM_ID = "streamId";
     const JSON_RENDITION_MIMETYPE = "mimeType";
