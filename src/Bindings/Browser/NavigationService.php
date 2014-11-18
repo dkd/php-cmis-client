@@ -1,5 +1,5 @@
 <?php
-namespace Dkd\PhpCmis;
+namespace Dkd\PhpCmis\Bindings\Browser;
 
 /**
  * This file is part of php-cmis-lib.
@@ -17,14 +17,12 @@ use Dkd\PhpCmis\Data\ObjectInFolderListInterface;
 use Dkd\PhpCmis\Data\ObjectListInterface;
 use Dkd\PhpCmis\Data\ObjectParentDataInterface;
 use Dkd\PhpCmis\Enum\IncludeRelationships;
+use Dkd\PhpCmis\NavigationServiceInterface;
 
 /**
- * Navigation Service interface.
- *
- * See the CMIS 1.0 and CMIS 1.1 specifications for details on the operations,
- * parameters, exceptions and the domain model.
+ * Navigation Service Browser Binding client.
  */
-interface NavigationServiceInterface
+class NavigationService extends AbstractBrowserBindingService implements NavigationServiceInterface
 {
     /**
      * Gets the list of documents that are checked out that the user has access to.
@@ -42,8 +40,8 @@ interface NavigationServiceInterface
      * participate must be returned (default is IncludeRelationships::NONE)
      * @param string $renditionFilter indicates what set of renditions the repository must return whose kind
      * matches this filter (default is "cmis:none")
-     * @param int $maxItems the maximum number of items to return in a response (default is repository specific)
-     * @param int $skipCount number of potential results that the repository MUST skip/page over before returning
+     * @param integer $maxItems the maximum number of items to return in a response (default is repository specific)
+     * @param integer $skipCount number of potential results that the repository MUST skip/page over before returning
      * any results (default is 0)
      * @param ExtensionDataInterface $extension
      * @return ObjectListInterface
@@ -59,7 +57,9 @@ interface NavigationServiceInterface
         $maxItems = null,
         $skipCount = 0,
         ExtensionDataInterface $extension = null
-    );
+    ) {
+        // TODO: Implement getCheckedOutDocs() method.
+    }
 
     /**
      * Gets the list of child objects contained in the specified folder.
@@ -79,8 +79,8 @@ interface NavigationServiceInterface
      * matches this filter (default is "cmis:none")
      * @param boolean $includePathSegment if true, returns a path segment for each child object for use in
      * constructing that object's path (default is false)
-     * @param int $maxItems the maximum number of items to return in a response (default is repository specific)
-     * @param int $skipCount number of potential results that the repository MUST skip/page over before
+     * @param integer $maxItems the maximum number of items to return in a response (default is repository specific)
+     * @param integer $skipCount number of potential results that the repository MUST skip/page over before
      * returning any results (default is 0)
      * @param ExtensionDataInterface $extension
      * @return ObjectInFolderListInterface
@@ -97,14 +97,16 @@ interface NavigationServiceInterface
         $maxItems = null,
         $skipCount = 0,
         ExtensionDataInterface $extension = null
-    );
+    ) {
+        // TODO: Implement getChildren() method.
+    }
 
     /**
      * Gets the set of descendant objects contained in the specified folder or any of its child folders.
      *
      * @param string $repositoryId the identifier for the repository
      * @param string $folderId the identifier for the folder
-     * @param int $depth the number of levels of depth in the folder hierarchy from which to return results
+     * @param integer $depth the number of levels of depth in the folder hierarchy from which to return results
      * @param string $filter a comma-separated list of query names that defines which properties must be
      * returned by the repository (default is repository specific)
      * @param boolean $includeAllowableActions if true, then the repository must return the available actions for each
@@ -128,7 +130,9 @@ interface NavigationServiceInterface
         $renditionFilter = Constants::RENDITION_NONE,
         $includePathSegment = false,
         ExtensionDataInterface $extension = null
-    );
+    ) {
+        // TODO: Implement getDescendants() method.
+    }
 
     /**
      * Gets the parent folder object for the specified folder object.
@@ -145,14 +149,16 @@ interface NavigationServiceInterface
         $folderId,
         $filter = null,
         ExtensionDataInterface $extension = null
-    );
+    ) {
+        // TODO: Implement getFolderParent() method.
+    }
 
     /**
      * Gets the set of descendant folder objects contained in the specified folder.
      *
      * @param string $repositoryId the identifier for the repository
      * @param string $folderId the identifier for the folder
-     * @param int $depth the number of levels of depth in the folder hierarchy from which to return results
+     * @param integer $depth the number of levels of depth in the folder hierarchy from which to return results
      * @param string $filter a comma-separated list of query names that defines which properties must be
      * returned by the repository (default is repository specific)
      * @param boolean $includeAllowableActions if true, then the repository must return the available actions for each
@@ -176,7 +182,9 @@ interface NavigationServiceInterface
         $renditionFilter = Constants::RENDITION_NONE,
         $includePathSegment = false,
         ExtensionDataInterface $extension = null
-    );
+    ) {
+        // TODO: Implement getFolderTree() method.
+    }
 
     /**
      * Gets the parent folder(s) for the specified non-folder, fileable object
@@ -205,5 +213,7 @@ interface NavigationServiceInterface
         $renditionFilter = Constants::RENDITION_NONE,
         $includeRelativePathSegment = false,
         ExtensionDataInterface $extension = null
-    );
+    ) {
+        // TODO: Implement getObjectParents() method.
+    }
 }

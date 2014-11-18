@@ -1,5 +1,5 @@
 <?php
-namespace Dkd\PhpCmis;
+namespace Dkd\PhpCmis\Bindings\Browser;
 
 /**
  * This file is part of php-cmis-lib.
@@ -10,7 +10,9 @@ namespace Dkd\PhpCmis;
  * file that was distributed with this source code.
  */
 
+use Dkd\PhpCmis\Converter\JsonConverter;
 use Dkd\PhpCmis\Data\AclInterface;
+use Dkd\PhpCmis\Constants;
 use Dkd\PhpCmis\Data\AllowableActionsInterface;
 use Dkd\PhpCmis\Data\BulkUpdateObjectIdAndChangeTokenInterface;
 use Dkd\PhpCmis\Data\ContentStreamInterface;
@@ -21,16 +23,13 @@ use Dkd\PhpCmis\Data\RenditionDataInterface;
 use Dkd\PhpCmis\Enum\IncludeRelationships;
 use Dkd\PhpCmis\Enum\UnfileObject;
 use Dkd\PhpCmis\Enum\VersioningState;
+use Dkd\PhpCmis\ObjectServiceInterface;
 
 /**
- * Object Service interface.
- *
- * See the CMIS 1.0 and CMIS 1.1 specifications for details on the operations,
- * parameters, exceptions and the domain model.
+ * Object Service Browser Binding client.
  */
-interface ObjectServiceInterface
+class ObjectService extends AbstractBrowserBindingService implements ObjectServiceInterface
 {
-
     /**
      * Appends the content stream to the content of the document.
      *
@@ -52,7 +51,9 @@ interface ObjectServiceInterface
         ContentStreamInterface $contentStream,
         $isLastChunk,
         ExtensionDataInterface $extension
-    );
+    ) {
+        // TODO: Implement appendContentStream() method.
+    }
 
     /**
      * Updates properties and secondary types of one or more objects.
@@ -72,7 +73,9 @@ interface ObjectServiceInterface
         array $addSecondaryTypeIds,
         array $removeSecondaryTypeIds,
         ExtensionDataInterface $extension
-    );
+    ) {
+        // TODO: Implement bulkUpdateProperties() method.
+    }
 
     /**
      * Creates a document object of the specified type (given by the cmis:objectTypeId property)
@@ -105,7 +108,9 @@ interface ObjectServiceInterface
         AclInterface $addAces = null,
         AclInterface $removeAces = null,
         ExtensionDataInterface $extension = null
-    );
+    ) {
+        // TODO: Implement createDocument() method.
+    }
 
     /**
      * Creates a document object as a copy of the given source document in the (optionally) specified location.
@@ -136,7 +141,9 @@ interface ObjectServiceInterface
         AclInterface $addAces = null,
         AclInterface $removeAces = null,
         ExtensionDataInterface $extension = null
-    );
+    ) {
+        // TODO: Implement createDocumentFromSource() method.
+    }
 
     /**
      * Creates a folder object of the specified type (given by the cmis:objectTypeId property) in
@@ -163,7 +170,9 @@ interface ObjectServiceInterface
         AclInterface $addAces = null,
         AclInterface $removeAces = null,
         ExtensionDataInterface $extension = null
-    );
+    ) {
+        // TODO: Implement createFolder() method.
+    }
 
     /**
      * Creates an item object of the specified type (given by the cmis:objectTypeId property).
@@ -189,7 +198,9 @@ interface ObjectServiceInterface
         AclInterface $addAces = null,
         AclInterface $removeAces = null,
         ExtensionDataInterface $extension = null
-    );
+    ) {
+        // TODO: Implement createItem() method.
+    }
 
     /**
      * Creates a policy object of the specified type (given by the cmis:objectTypeId property).
@@ -215,7 +226,9 @@ interface ObjectServiceInterface
         AclInterface $addAces = null,
         AclInterface $removeAces = null,
         ExtensionDataInterface $extension = null
-    );
+    ) {
+        // TODO: Implement createPolicy() method.
+    }
 
     /**
      * Creates a relationship object of the specified type (given by the cmis:objectTypeId property).
@@ -238,7 +251,9 @@ interface ObjectServiceInterface
         AclInterface $addAces = null,
         AclInterface $removeAces = null,
         ExtensionDataInterface $extension = null
-    );
+    ) {
+        // TODO: Implement createRelationship() method.
+    }
 
     /**
      * Deletes the content stream for the specified document object.
@@ -255,7 +270,9 @@ interface ObjectServiceInterface
         $objectId,
         $changeToken = null,
         ExtensionDataInterface $extension = null
-    );
+    ) {
+        // TODO: Implement deleteContentStream() method.
+    }
 
     /**
      * Deletes the specified object.
@@ -272,7 +289,9 @@ interface ObjectServiceInterface
         $objectId,
         $allVersions = true,
         ExtensionDataInterface $extension = null
-    );
+    ) {
+        // TODO: Implement deleteObject() method.
+    }
 
     /**
      * Deletes the specified folder object and all of its child- and descendant-objects.
@@ -295,7 +314,9 @@ interface ObjectServiceInterface
         UnfileObject $unfileObjects = null,
         $continueOnFailure = false,
         ExtensionDataInterface $extension = null
-    );
+    ) {
+        // TODO: Implement deleteTree() method.
+    }
 
     /**
      * Gets the list of allowable actions for an object.
@@ -305,7 +326,10 @@ interface ObjectServiceInterface
      * @param ExtensionDataInterface $extension
      * @return AllowableActionsInterface
      */
-    public function getAllowableActions($repositoryId, $objectId, ExtensionDataInterface $extension = null);
+    public function getAllowableActions($repositoryId, $objectId, ExtensionDataInterface $extension = null)
+    {
+        // TODO: Implement getAllowableActions() method.
+    }
 
     /**
      * Gets the content stream for the specified document object, or gets a rendition stream for
@@ -314,8 +338,8 @@ interface ObjectServiceInterface
      * @param string $repositoryId the identifier for the repository
      * @param string $objectId the identifier for the object
      * @param string $streamId
-     * @param int $offset
-     * @param int $length
+     * @param integer $offset
+     * @param integer $length
      * @param ExtensionDataInterface $extension
      * @return ContentStreamInterface
      */
@@ -326,7 +350,9 @@ interface ObjectServiceInterface
         $offset,
         $length,
         ExtensionDataInterface $extension = null
-    );
+    ) {
+        // TODO: Implement getContentStream() method.
+    }
 
     /**
      * Gets the specified information for the object specified by id.
@@ -353,11 +379,13 @@ interface ObjectServiceInterface
         $filter = null,
         $includeAllowableActions = false,
         IncludeRelationships $includeRelationships = null,
-        $renditionFilter = Constants::RENDITION_NONE,
+        $renditionFilter = null,
         $includePolicyIds = false,
         $includeAcl = false,
         ExtensionDataInterface $extension = null
-    );
+    ) {
+        // TODO: Implement getObject() method.
+    }
 
     /**
      * Gets the specified information for the object specified by path.
@@ -388,7 +416,9 @@ interface ObjectServiceInterface
         $includePolicyIds,
         $includeAcl,
         ExtensionDataInterface $extension = null
-    );
+    ) {
+        // TODO: Implement getObjectByPath() method.
+    }
 
     /**
      * Gets the list of properties for an object.
@@ -405,7 +435,9 @@ interface ObjectServiceInterface
         $objectId,
         $filter = null,
         ExtensionDataInterface $extension = null
-    );
+    ) {
+        // TODO: Implement getProperties() method.
+    }
 
     /**
      * Gets the list of associated renditions for the specified object.
@@ -415,8 +447,8 @@ interface ObjectServiceInterface
      * @param string $objectId the identifier for the object
      * @param string $renditionFilter indicates what set of renditions the repository must return whose kind
      * matches this filter (default is "cmis:none")
-     * @param int $maxItems
-     * @param int $skipCount
+     * @param integer $maxItems
+     * @param integer $skipCount
      * @param ExtensionDataInterface $extension
      * @return RenditionDataInterface[]
      */
@@ -427,7 +459,9 @@ interface ObjectServiceInterface
         $maxItems = null,
         $skipCount = null,
         ExtensionDataInterface $extension = null
-    );
+    ) {
+        // TODO: Implement getRenditions() method.
+    }
 
     /**
      * Moves the specified file-able object from one folder to another.
@@ -445,7 +479,9 @@ interface ObjectServiceInterface
         $targetFolderId,
         $sourceFolderId,
         ExtensionDataInterface $extension = null
-    );
+    ) {
+        // TODO: Implement moveObject() method.
+    }
 
     /**
      * Sets the content stream for the specified document object.
@@ -468,7 +504,9 @@ interface ObjectServiceInterface
         $overwriteFlag = true,
         $changeToken = null,
         ExtensionDataInterface $extension = null
-    );
+    ) {
+        // TODO: Implement setContentStream() method.
+    }
 
     /**
      * Updates properties of the specified object.
@@ -487,5 +525,7 @@ interface ObjectServiceInterface
         PropertiesInterface $properties,
         $changeToken = null,
         ExtensionDataInterface $extension = null
-    );
+    ) {
+        // TODO: Implement updateProperties() method.
+    }
 }

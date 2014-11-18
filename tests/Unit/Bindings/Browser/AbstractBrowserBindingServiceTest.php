@@ -14,19 +14,15 @@ use Dkd\PhpCmis\Bindings\Browser\AbstractBrowserBindingService;
 use Dkd\PhpCmis\Bindings\Browser\RepositoryUrlCache;
 use Dkd\PhpCmis\DataObjects\RepositoryInfoBrowserBinding;
 use Dkd\PhpCmis\SessionParameter;
-use Dkd\PhpCmis\Test\Unit\ReflectionHelperTrait;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Message\Response;
 use League\Url\Url;
 use PHPUnit_Framework_MockObject_MockObject;
 
-class AbstractBrowserBindingServiceTest extends \PHPUnit_Framework_TestCase
+class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTestCase
 {
-    use ReflectionHelperTrait;
-
     const CLASS_TO_TEST = '\\Dkd\\PhpCmis\\Bindings\\Browser\\AbstractBrowserBindingService';
-    const BROWSER_URL_TEST = 'http://foo.bar.baz';
 
     public function testConstructorSetsSessionAndBindingsHelper()
     {
@@ -872,29 +868,5 @@ class AbstractBrowserBindingServiceTest extends \PHPUnit_Framework_TestCase
                 $repositoryUrlCacheMockWithRepositoryUrlEntry
             )
         );
-    }
-
-    /**
-     * Returns a mock of a BindingSessionInterface
-     *
-     * @param array $sessionParameterMap
-     * @return PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getSessionMock($sessionParameterMap = array())
-    {
-        $map = array(
-            array(SessionParameter::BROWSER_SUCCINCT, null, false),
-            array(SessionParameter::BROWSER_URL, null, self::BROWSER_URL_TEST)
-        );
-
-        $map = array_merge($sessionParameterMap, $map);
-
-        $sessionMock = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\Bindings\\BindingSessionInterface'
-        )->setMethods(array('get'))->getMockForAbstractClass();
-
-        $sessionMock->expects($this->any())->method('get')->will($this->returnValueMap($map));
-
-        return $sessionMock;
     }
 }
