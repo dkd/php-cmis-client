@@ -11,12 +11,9 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  */
 
 use Dkd\PhpCmis\DataObjects\NewTypeSettableAttributes;
-use Dkd\PhpCmis\Test\Unit\DataProviderCollectionTrait;
 
 class NewTypeSettableAttributesTest extends \PHPUnit_Framework_TestCase
 {
-    use DataProviderCollectionTrait;
-
     /**
      * @var NewTypeSettableAttributes
      */
@@ -28,262 +25,98 @@ class NewTypeSettableAttributesTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider booleanCastDataProvider
-     * @param $expected
-     * @param $value
+     * DataProvider for all properties with a valid value and an invalid value
+     *
+     * @return array
      */
-    public function testSetIdSetsPropertyAsBoolean($expected, $value)
+    public function propertiesOfSutDataProvider()
     {
-        $this->newTypeSettableAttributes->setId($value);
-        $this->assertAttributeSame($expected, 'id', $this->newTypeSettableAttributes);
+        return array(
+            array(
+                'propertyName' => 'canSetControllableAcl'
+            ),
+            array(
+                'propertyName' => 'canSetControllablePolicy'
+            ),
+            array(
+                'propertyName' => 'canSetCreatable'
+            ),
+            array(
+                'propertyName' => 'canSetDescription'
+            ),
+            array(
+                'propertyName' => 'canSetDisplayName'
+            ),
+            array(
+                'propertyName' => 'canSetFileable'
+            ),
+            array(
+                'propertyName' => 'canSetFulltextIndexed'
+            ),
+            array(
+                'propertyName' => 'canSetId'
+            ),
+            array(
+                'propertyName' => 'canSetIncludedInSupertypeQuery'
+            ),
+            array(
+                'propertyName' => 'canSetLocalName'
+            ),
+            array(
+                'propertyName' => 'canSetLocalNamespace'
+            ),
+            array(
+                'propertyName' => 'canSetQueryable'
+            ),
+            array(
+                'propertyName' => 'canSetQueryName'
+            )
+        );
     }
 
     /**
-     * @depends testSetIdSetsPropertyAsBoolean
+     * Test setter for a property
+     *
+     * @dataProvider propertiesOfSutDataProvider
+     * @param string $propertyName Name of the class property
      */
-    public function testCanSetIdReturnsPropertyValue()
+    public function testPropertySetterSetsProperty($propertyName)
     {
-        $this->newTypeSettableAttributes->setId(true);
-        $this->assertSame(true, $this->newTypeSettableAttributes->canSetId());
+        $setterName = 'set' . ucfirst($propertyName);
+        $this->newTypeSettableAttributes->$setterName(true);
+        $this->assertAttributeSame(true, $propertyName, $this->newTypeSettableAttributes);
+        $this->newTypeSettableAttributes->$setterName(false);
+        $this->assertAttributeSame(false, $propertyName, $this->newTypeSettableAttributes);
     }
 
     /**
-     * @dataProvider booleanCastDataProvider
-     * @param $expected
-     * @param $value
+     * Test setter for a property - should cast value to expected type
+     *
+     * @dataProvider propertiesOfSutDataProvider
+     * @param string $propertyName Name of the class property
      */
-    public function testSetLocalNameSetsPropertyAsBoolean($expected, $value)
+    public function testPropertySetterCastsValueToBoolean($propertyName)
     {
-        $this->newTypeSettableAttributes->setLocalName($value);
-        $this->assertAttributeSame($expected, 'localName', $this->newTypeSettableAttributes);
+        $setterName = 'set' . ucfirst($propertyName);
+        try {
+            $this->newTypeSettableAttributes->$setterName(1);
+        } catch (\PHPUnit_Framework_Error_Notice $exception) {
+        }
+        $this->assertAttributeInternalType('boolean', $propertyName, $this->newTypeSettableAttributes);
     }
 
     /**
-     * @depends testSetLocalNameSetsPropertyAsBoolean
+     * Test getter for a property
+     *
+     * @dataProvider propertiesOfSutDataProvider
+     * @param string $propertyName Name of the class property
      */
-    public function testCanSetLocalNameReturnsPropertyValue()
+    public function testPropertyGetterReturnsPropertyValue($propertyName)
     {
-        $this->newTypeSettableAttributes->setLocalName(true);
-        $this->assertSame(true, $this->newTypeSettableAttributes->canSetLocalName());
-    }
-
-    /**
-     * @dataProvider booleanCastDataProvider
-     * @param $expected
-     * @param $value
-     */
-    public function testSetLocalNamespaceSetsPropertyAsBoolean($expected, $value)
-    {
-        $this->newTypeSettableAttributes->setLocalNamespace($value);
-        $this->assertAttributeSame($expected, 'localNamespace', $this->newTypeSettableAttributes);
-    }
-
-    /**
-     * @depends testSetLocalNamespaceSetsPropertyAsBoolean
-     */
-    public function testCanSetLocalNamespaceReturnsPropertyValue()
-    {
-        $this->newTypeSettableAttributes->setLocalNamespace(true);
-        $this->assertSame(true, $this->newTypeSettableAttributes->canSetLocalNamespace());
-    }
-
-    /**
-     * @dataProvider booleanCastDataProvider
-     * @param $expected
-     * @param $value
-     */
-    public function testSetDisplayNameSetsPropertyAsBoolean($expected, $value)
-    {
-        $this->newTypeSettableAttributes->setDisplayName($value);
-        $this->assertAttributeSame($expected, 'displayName', $this->newTypeSettableAttributes);
-    }
-
-    /**
-     * @depends testSetDisplayNameSetsPropertyAsBoolean
-     */
-    public function testCanSetDisplayNameReturnsPropertyValue()
-    {
-        $this->newTypeSettableAttributes->setDisplayName(true);
-        $this->assertSame(true, $this->newTypeSettableAttributes->canSetDisplayName());
-    }
-
-    /**
-     * @dataProvider booleanCastDataProvider
-     * @param $expected
-     * @param $value
-     */
-    public function testSetQueryNameSetsPropertyAsBoolean($expected, $value)
-    {
-        $this->newTypeSettableAttributes->setQueryName($value);
-        $this->assertAttributeSame($expected, 'queryName', $this->newTypeSettableAttributes);
-    }
-
-    /**
-     * @depends testSetQueryNameSetsPropertyAsBoolean
-     */
-    public function testCanSetQueryNameReturnsPropertyValue()
-    {
-        $this->newTypeSettableAttributes->setQueryName(true);
-        $this->assertSame(true, $this->newTypeSettableAttributes->canSetQueryName());
-    }
-
-    /**
-     * @dataProvider booleanCastDataProvider
-     * @param $expected
-     * @param $value
-     */
-    public function testSetDescriptionSetsPropertyAsBoolean($expected, $value)
-    {
-        $this->newTypeSettableAttributes->setDescription($value);
-        $this->assertAttributeSame($expected, 'description', $this->newTypeSettableAttributes);
-    }
-
-    /**
-     * @depends testSetDescriptionSetsPropertyAsBoolean
-     */
-    public function testCanSetDescriptionReturnsPropertyValue()
-    {
-        $this->newTypeSettableAttributes->setDescription(true);
-        $this->assertSame(true, $this->newTypeSettableAttributes->canSetDescription());
-    }
-
-    /**
-     * @dataProvider booleanCastDataProvider
-     * @param $expected
-     * @param $value
-     */
-    public function testSetCreatableSetsPropertyAsBoolean($expected, $value)
-    {
-        $this->newTypeSettableAttributes->setCreatable($value);
-        $this->assertAttributeSame($expected, 'creatable', $this->newTypeSettableAttributes);
-    }
-
-    /**
-     * @depends testSetCreatableSetsPropertyAsBoolean
-     */
-    public function testCanSetCreatableReturnsPropertyValue()
-    {
-        $this->newTypeSettableAttributes->setCreatable(true);
-        $this->assertSame(true, $this->newTypeSettableAttributes->canSetCreatable());
-    }
-
-    /**
-     * @dataProvider booleanCastDataProvider
-     * @param $expected
-     * @param $value
-     */
-    public function testSetFileableSetsPropertyAsBoolean($expected, $value)
-    {
-        $this->newTypeSettableAttributes->setFileable($value);
-        $this->assertAttributeSame($expected, 'fileable', $this->newTypeSettableAttributes);
-    }
-
-    /**
-     * @depends testSetFileableSetsPropertyAsBoolean
-     */
-    public function testCanSetFileableReturnsPropertyValue()
-    {
-        $this->newTypeSettableAttributes->setFileable(true);
-        $this->assertSame(true, $this->newTypeSettableAttributes->canSetFileable());
-    }
-
-    /**
-     * @dataProvider booleanCastDataProvider
-     * @param $expected
-     * @param $value
-     */
-    public function testSetQueryableSetsPropertyAsBoolean($expected, $value)
-    {
-        $this->newTypeSettableAttributes->setQueryable($value);
-        $this->assertAttributeSame($expected, 'queryable', $this->newTypeSettableAttributes);
-    }
-
-    /**
-     * @depends testSetQueryableSetsPropertyAsBoolean
-     */
-    public function testCanSetQueryableReturnsPropertyValue()
-    {
-        $this->newTypeSettableAttributes->setQueryable(true);
-        $this->assertSame(true, $this->newTypeSettableAttributes->canSetQueryable());
-    }
-
-    /**
-     * @dataProvider booleanCastDataProvider
-     * @param $expected
-     * @param $value
-     */
-    public function testSetFulltextIndexedSetsPropertyAsBoolean($expected, $value)
-    {
-        $this->newTypeSettableAttributes->setFulltextIndexed($value);
-        $this->assertAttributeSame($expected, 'fulltextIndexed', $this->newTypeSettableAttributes);
-    }
-
-    /**
-     * @depends testSetFulltextIndexedSetsPropertyAsBoolean
-     */
-    public function testCanSetFulltextIndexedReturnsPropertyValue()
-    {
-        $this->newTypeSettableAttributes->setFulltextIndexed(true);
-        $this->assertSame(true, $this->newTypeSettableAttributes->canSetFulltextIndexed());
-    }
-
-    /**
-     * @dataProvider booleanCastDataProvider
-     * @param $expected
-     * @param $value
-     */
-    public function testSetIncludedInSupertypeQuerySetsPropertyAsBoolean($expected, $value)
-    {
-        $this->newTypeSettableAttributes->setIncludedInSupertypeQuery($value);
-        $this->assertAttributeSame($expected, 'includedInSupertypeQuery', $this->newTypeSettableAttributes);
-    }
-
-    /**
-     * @depends testSetIncludedInSupertypeQuerySetsPropertyAsBoolean
-     */
-    public function testCanSetIncludedInSupertypeQueryReturnsPropertyValue()
-    {
-        $this->newTypeSettableAttributes->setIncludedInSupertypeQuery(true);
-        $this->assertSame(true, $this->newTypeSettableAttributes->canSetIncludedInSupertypeQuery());
-    }
-
-    /**
-     * @dataProvider booleanCastDataProvider
-     * @param $expected
-     * @param $value
-     */
-    public function testSetControllablePolicySetsPropertyAsBoolean($expected, $value)
-    {
-        $this->newTypeSettableAttributes->setControllablePolicy($value);
-        $this->assertAttributeSame($expected, 'controllablePolicy', $this->newTypeSettableAttributes);
-    }
-
-    /**
-     * @depends testSetControllablePolicySetsPropertyAsBoolean
-     */
-    public function testCanSetControllablePolicyReturnsPropertyValue()
-    {
-        $this->newTypeSettableAttributes->setControllablePolicy(true);
-        $this->assertSame(true, $this->newTypeSettableAttributes->canSetControllablePolicy());
-    }
-
-    /**
-     * @dataProvider booleanCastDataProvider
-     * @param $expected
-     * @param $value
-     */
-    public function testSetControllableACLSetsPropertyAsBoolean($expected, $value)
-    {
-        $this->newTypeSettableAttributes->setControllableACL($value);
-        $this->assertAttributeSame($expected, 'controllableACL', $this->newTypeSettableAttributes);
-    }
-
-    /**
-     * @depends testSetControllableACLSetsPropertyAsBoolean
-     */
-    public function testCanSetControllableACLReturnsPropertyValue()
-    {
-        $this->newTypeSettableAttributes->setControllableACL(true);
-        $this->assertSame(true, $this->newTypeSettableAttributes->canSetControllableACL());
+        $setterName = 'set' . ucfirst($propertyName);
+        $getterName = $propertyName;
+        $this->setDependencies(array('testSetPropertySetsProperty'));
+        $this->newTypeSettableAttributes->$setterName(true);
+        $this->assertSame(true, $this->newTypeSettableAttributes->$getterName());
     }
 }

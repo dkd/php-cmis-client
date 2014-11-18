@@ -13,280 +13,309 @@ namespace Dkd\PhpCmis\DataObjects;
 use Dkd\PhpCmis\Data\NewTypeSettableAttributesInterface;
 
 /**
- * Repository info data implementation including browser binding specific data.
+ * A collection of flags that indicate which type attributes can be set at type creation.
  */
 class NewTypeSettableAttributes extends AbstractExtensionData implements NewTypeSettableAttributesInterface
 {
     /**
      * @var boolean
      */
-    protected $id = false;
+    protected $canSetControllableAcl = false;
 
     /**
      * @var boolean
      */
-    protected $localName = false;
+    protected $canSetControllablePolicy = false;
 
     /**
      * @var boolean
      */
-    protected $localNamespace = false;
+    protected $canSetCreatable = false;
 
     /**
      * @var boolean
      */
-    protected $displayName = false;
+    protected $canSetDescription = false;
 
     /**
      * @var boolean
      */
-    protected $queryName = false;
+    protected $canSetDisplayName = false;
 
     /**
      * @var boolean
      */
-    protected $description = false;
+    protected $canSetFileable = false;
 
     /**
      * @var boolean
      */
-    protected $creatable = false;
+    protected $canSetFulltextIndexed = false;
 
     /**
      * @var boolean
      */
-    protected $fileable = false;
+    protected $canSetId = false;
 
     /**
      * @var boolean
      */
-    protected $queryable = false;
+    protected $canSetIncludedInSupertypeQuery = false;
 
     /**
      * @var boolean
      */
-    protected $fulltextIndexed = false;
+    protected $canSetLocalName = false;
 
     /**
      * @var boolean
      */
-    protected $includedInSupertypeQuery = false;
+    protected $canSetLocalNamespace = false;
 
     /**
      * @var boolean
      */
-    protected $controllablePolicy = false;
+    protected $canSetQueryable = false;
 
     /**
      * @var boolean
      */
-    protected $controllableACL = false;
+    protected $canSetQueryName = false;
 
     /**
+     * Indicates if the "controllableACL" attribute can be set.
+     *
      * @return boolean
      */
-    public function canSetControllableACL()
+    public function canSetControllableAcl()
     {
-        return $this->controllableACL;
+        return $this->canSetControllableAcl;
     }
 
     /**
-     * @param boolean $controllableACL
+     * @param boolean $canSetControllableAcl
      */
-    public function setControllableACL($controllableACL)
+    public function setCanSetControllableAcl($canSetControllableAcl)
     {
-        $this->controllableACL = (boolean) $controllableACL;
+        $this->canSetControllableAcl = $this->castValueToSimpleType('boolean', $canSetControllableAcl);
     }
 
     /**
+     * Indicates if the "controllablePolicy" attribute can be set.
+     *
      * @return boolean
      */
     public function canSetControllablePolicy()
     {
-        return $this->controllablePolicy;
+        return $this->canSetControllablePolicy;
     }
 
     /**
-     * @param boolean $controllablePolicy
+     * @param boolean $canSetControllablePolicy
      */
-    public function setControllablePolicy($controllablePolicy)
+    public function setCanSetControllablePolicy($canSetControllablePolicy)
     {
-        $this->controllablePolicy = (boolean) $controllablePolicy;
+        $this->canSetControllablePolicy = $this->castValueToSimpleType('boolean', $canSetControllablePolicy);
     }
 
     /**
+     * Indicates if the "creatable" attribute can be set.
+     *
      * @return boolean
      */
     public function canSetCreatable()
     {
-        return $this->creatable;
+        return $this->canSetCreatable;
     }
 
     /**
-     * @param boolean $creatable
+     * @param boolean $canSetCreatable
      */
-    public function setCreatable($creatable)
+    public function setCanSetCreatable($canSetCreatable)
     {
-        $this->creatable = (boolean) $creatable;
+        $this->canSetCreatable = $this->castValueToSimpleType('boolean', $canSetCreatable);
     }
 
     /**
+     * Indicates if the "description" attribute can be set.
+     *
      * @return boolean
      */
     public function canSetDescription()
     {
-        return $this->description;
+        return $this->canSetDescription;
     }
 
     /**
-     * @param boolean $description
+     * @param boolean $canSetDescription
      */
-    public function setDescription($description)
+    public function setCanSetDescription($canSetDescription)
     {
-        $this->description = (boolean) $description;
+        $this->canSetDescription = $this->castValueToSimpleType('boolean', $canSetDescription);
     }
 
     /**
+     * Indicates if the "displayName" attribute can be set.
+     *
      * @return boolean
      */
     public function canSetDisplayName()
     {
-        return $this->displayName;
+        return $this->canSetDisplayName;
     }
 
     /**
-     * @param boolean $displayName
+     * @param boolean $canSetDisplayName
      */
-    public function setDisplayName($displayName)
+    public function setCanSetDisplayName($canSetDisplayName)
     {
-        $this->displayName = (boolean) $displayName;
+        $this->canSetDisplayName = $this->castValueToSimpleType('boolean', $canSetDisplayName);
     }
 
     /**
+     * Indicates if the "fileable" attribute can be set.
+     *
      * @return boolean
      */
     public function canSetFileable()
     {
-        return $this->fileable;
+        return $this->canSetFileable;
     }
 
     /**
-     * @param boolean $fileable
+     * @param boolean $canSetFileable
      */
-    public function setFileable($fileable)
+    public function setCanSetFileable($canSetFileable)
     {
-        $this->fileable = (boolean) $fileable;
+        $this->canSetFileable = $this->castValueToSimpleType('boolean', $canSetFileable);
     }
 
     /**
+     * Indicates if the "fulltextIndexed" attribute can be set.
+     *
      * @return boolean
      */
     public function canSetFulltextIndexed()
     {
-        return $this->fulltextIndexed;
+        return $this->canSetFulltextIndexed;
     }
 
     /**
-     * @param boolean $fulltextIndexed
+     * @param boolean $canSetFulltextIndexed
      */
-    public function setFulltextIndexed($fulltextIndexed)
+    public function setCanSetFulltextIndexed($canSetFulltextIndexed)
     {
-        $this->fulltextIndexed = (boolean) $fulltextIndexed;
+        $this->canSetFulltextIndexed = $this->castValueToSimpleType('boolean', $canSetFulltextIndexed);
     }
 
     /**
+     * Indicates if the "id" attribute can be set.
+     *
      * @return boolean
      */
     public function canSetId()
     {
-        return $this->id;
+        return $this->canSetId;
     }
 
     /**
-     * @param boolean $id
+     * @param boolean $canSetId
      */
-    public function setId($id)
+    public function setCanSetId($canSetId)
     {
-        $this->id = (boolean) $id;
+        $this->canSetId = $this->castValueToSimpleType('boolean', $canSetId);
     }
 
     /**
+     * Indicates if the "includedInSupertypeQuery" attribute can be set.
+     *
      * @return boolean
      */
     public function canSetIncludedInSupertypeQuery()
     {
-        return $this->includedInSupertypeQuery;
+        return $this->canSetIncludedInSupertypeQuery;
     }
 
     /**
-     * @param boolean $includedInSupertypeQuery
+     * @param boolean $canSetIncludedInSupertypeQuery
      */
-    public function setIncludedInSupertypeQuery($includedInSupertypeQuery)
+    public function setCanSetIncludedInSupertypeQuery($canSetIncludedInSupertypeQuery)
     {
-        $this->includedInSupertypeQuery = (boolean) $includedInSupertypeQuery;
+        $this->canSetIncludedInSupertypeQuery = $this->castValueToSimpleType(
+            'boolean',
+            $canSetIncludedInSupertypeQuery
+        );
     }
 
     /**
+     * Indicates if the "localName" attribute can be set.
+     *
      * @return boolean
      */
     public function canSetLocalName()
     {
-        return $this->localName;
+        return $this->canSetLocalName;
     }
 
     /**
-     * @param boolean $localName
+     * @param boolean $canSetLocalName
      */
-    public function setLocalName($localName)
+    public function setCanSetLocalName($canSetLocalName)
     {
-        $this->localName = (boolean) $localName;
+        $this->canSetLocalName = $this->castValueToSimpleType('boolean', $canSetLocalName);
     }
 
     /**
+     * Indicates if the "localNamespace" attribute can be set.
+     *
      * @return boolean
      */
     public function canSetLocalNamespace()
     {
-        return $this->localNamespace;
+        return $this->canSetLocalNamespace;
     }
 
     /**
-     * @param boolean $localNamespace
+     * @param boolean $canSetLocalNamespace
      */
-    public function setLocalNamespace($localNamespace)
+    public function setCanSetLocalNamespace($canSetLocalNamespace)
     {
-        $this->localNamespace = (boolean) $localNamespace;
+        $this->canSetLocalNamespace = $this->castValueToSimpleType('boolean', $canSetLocalNamespace);
     }
 
     /**
-     * @return boolean
-     */
-    public function canSetQueryName()
-    {
-        return $this->queryName;
-    }
-
-    /**
-     * @param boolean $queryName
-     */
-    public function setQueryName($queryName)
-    {
-        $this->queryName = (boolean) $queryName;
-    }
-
-    /**
+     * Indicates if the "queryable" attribute can be set.
+     *
      * @return boolean
      */
     public function canSetQueryable()
     {
-        return $this->queryable;
+        return $this->canSetQueryable;
     }
 
     /**
-     * @param boolean $queryable
+     * @param boolean $canSetQueryable
      */
-    public function setQueryable($queryable)
+    public function setCanSetQueryable($canSetQueryable)
     {
-        $this->queryable = (boolean) $queryable;
+        $this->canSetQueryable = $this->castValueToSimpleType('boolean', $canSetQueryable);
+    }
+
+    /**
+     * Indicates if the "queryName" attribute can be set.
+     *
+     * @return boolean
+     */
+    public function canSetQueryName()
+    {
+        return $this->canSetQueryName;
+    }
+
+    /**
+     * @param boolean $canSetQueryName
+     */
+    public function setCanSetQueryName($canSetQueryName)
+    {
+        $this->canSetQueryName = $this->castValueToSimpleType('boolean', $canSetQueryName);
     }
 }
