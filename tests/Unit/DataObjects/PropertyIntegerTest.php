@@ -27,40 +27,37 @@ class PropertyIntegerTest extends \PHPUnit_Framework_TestCase
         $this->propertyInteger = new PropertyInteger();
     }
 
-    public function testSetValuesSetsProperty()
+    /**
+     * @dataProvider integerCastDataProvider
+     */
+    public function testSetValuesSetsProperty($expected, $value)
     {
-        $values = array(2, 5);
-        $this->propertyInteger->setValues($values);
-        $this->assertAttributeSame($values, 'values', $this->propertyInteger);
+        if ($value === null) {
+            $expected = $value;
+        }
+
+        if (!is_integer($value) && $value !== null) {
+            $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', null, 1413440336);
+        }
+
+        $this->propertyInteger->setValues(array($value));
+        $this->assertAttributeSame(array($expected), 'values', $this->propertyInteger);
     }
 
     /**
-     * @dataProvider IntegerCastDataProvider
+     * @dataProvider integerCastDataProvider
      */
-    public function testSetValuesThrowsExceptionIfInvalidValuesGiven($expected, $value)
+    public function testSetValueSetsValuesProperty($expected, $value)
     {
-        // use all non integer values
-        if (!is_integer($value)) {
-            $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', null, 1413440336);
-            $this->propertyInteger->setValues(array($value));
+        if ($value === null) {
+            $expected = $value;
         }
-    }
 
-    public function testSetValueSetsValuesProperty()
-    {
-        $this->propertyInteger->setValue(2);
-        $this->assertAttributeSame(array(2), 'values', $this->propertyInteger);
-    }
-
-    /**
-     * @dataProvider IntegerCastDataProvider
-     */
-    public function testSetValueThrowsExceptionIfInvalidValueGiven($expected, $value)
-    {
-        // use all non integer values
-        if (!is_integer($value)) {
+        if (!is_integer($value) && $value !== null) {
             $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', null, 1413440336);
-            $this->propertyInteger->setValue(array($value));
         }
+
+        $this->propertyInteger->setValue($value);
+        $this->assertAttributeSame(array($expected), 'values', $this->propertyInteger);
     }
 }

@@ -13,54 +13,17 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
 use Dkd\PhpCmis\DataObjects\PropertyId;
 use Dkd\PhpCmis\Test\Unit\DataProviderCollectionTrait;
 
-class PropertyIdTest extends \PHPUnit_Framework_TestCase
+class PropertyIdTest extends PropertyStringTest
 {
     use DataProviderCollectionTrait;
 
     /**
      * @var PropertyId
      */
-    protected $propertyId;
+    protected $subjectUnderTest;
 
     public function setUp()
     {
-        $this->propertyId = new PropertyId();
-    }
-
-    public function testSetValuesSetsProperty()
-    {
-        $values = array('foo', 'bar');
-        $this->propertyId->setValues($values);
-        $this->assertAttributeSame($values, 'values', $this->propertyId);
-    }
-
-    /**
-     * @dataProvider StringCastDataProvider
-     */
-    public function testSetValuesThrowsExceptionIfInvalidValuesGiven($expected, $value)
-    {
-        // use all non string values
-        if (!is_string($value)) {
-            $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', null, 1413440336);
-            $this->propertyId->setValues(array($value));
-        }
-    }
-
-    public function testSetValueSetsValuesProperty()
-    {
-        $this->propertyId->setValue('foo');
-        $this->assertAttributeSame(array('foo'), 'values', $this->propertyId);
-    }
-
-    /**
-     * @dataProvider StringCastDataProvider
-     */
-    public function testSetValueThrowsExceptionIfInvalidValueGiven($expected, $value)
-    {
-        // use all non string values
-        if (!is_string($value)) {
-            $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', null, 1413440336);
-            $this->propertyId->setValue(array($value));
-        }
+        $this->subjectUnderTest = new PropertyId();
     }
 }

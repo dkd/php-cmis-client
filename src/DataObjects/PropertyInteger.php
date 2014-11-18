@@ -25,7 +25,7 @@ class PropertyInteger extends AbstractPropertyData implements MutablePropertyInt
     public function setValues(array $values)
     {
         foreach ($values as $value) {
-            $this->checkType('integer', $value);
+            $this->checkType('integer', $value, true);
         }
         parent::setValues($values);
     }

@@ -15,8 +15,6 @@ use Dkd\PhpCmis\Test\Unit\DataProviderCollectionTrait;
 
 class PropertyDecimalTest extends \PHPUnit_Framework_TestCase
 {
-    use DataProviderCollectionTrait;
-
     /**
      * @var PropertyDecimal
      */
@@ -29,7 +27,7 @@ class PropertyDecimalTest extends \PHPUnit_Framework_TestCase
 
     public function testSetValuesSetsProperty()
     {
-        $values = array(2.3, 5.0);
+        $values = array(2.3, 5.0, null);
         $this->propertyDecimal->setValues($values);
         $this->assertAttributeSame($values, 'values', $this->propertyDecimal);
     }

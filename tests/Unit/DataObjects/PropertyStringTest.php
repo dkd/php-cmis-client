@@ -20,47 +20,43 @@ class PropertyStringTest extends \PHPUnit_Framework_TestCase
     /**
      * @var PropertyString
      */
-    protected $propertyString;
+    protected $subjectUnderTest;
 
     public function setUp()
     {
-        $this->propertyString = new PropertyString();
-    }
-
-    public function testSetValuesSetsProperty()
-    {
-        $values = array('foo', 'bar');
-        $this->propertyString->setValues($values);
-        $this->assertAttributeSame($values, 'values', $this->propertyString);
+        $this->subjectUnderTest = new PropertyString();
     }
 
     /**
      * @dataProvider StringCastDataProvider
      */
-    public function testSetValuesThrowsExceptionIfInvalidValuesGiven($expected, $value)
+    public function testSetValuesSetsProperty($expected, $value)
     {
-        // use all non string values
-        if (!is_string($value)) {
-            $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', null, 1413440336);
-            $this->propertyString->setValues(array($value));
+        if ($value === null) {
+            $expected = null;
         }
-    }
 
-    public function testSetValueSetsValuesProperty()
-    {
-        $this->propertyString->setValue('foo');
-        $this->assertAttributeSame(array('foo'), 'values', $this->propertyString);
+        $values = array('foo', $value, null);
+        if (!is_string($value) && $value !== null) {
+            $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', null, 1413440336);
+        }
+        $this->subjectUnderTest->setValues($values);
+        $this->assertAttributeSame(array('foo', $expected, null), 'values', $this->subjectUnderTest);
     }
 
     /**
      * @dataProvider StringCastDataProvider
      */
-    public function testSetValueThrowsExceptionIfInvalidValueGiven($expected, $value)
+    public function testSetValueSetsValuesProperty($expected, $value)
     {
-        // use all non string values
-        if (!is_string($value)) {
-            $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', null, 1413440336);
-            $this->propertyString->setValue(array($value));
+        if ($value === null) {
+            $expected = null;
         }
+
+        if (!is_string($value) && $value !== null) {
+            $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', null, 1413440336);
+        }
+        $this->subjectUnderTest->setValue($value);
+        $this->assertAttributeSame(array($expected), 'values', $this->subjectUnderTest);
     }
 }

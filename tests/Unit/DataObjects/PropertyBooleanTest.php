@@ -27,40 +27,34 @@ class PropertyBooleanTest extends \PHPUnit_Framework_TestCase
         $this->propertyBoolean = new PropertyBoolean();
     }
 
-    public function testSetValuesSetsProperty()
+    /**
+     * @dataProvider booleanCastDataProvider
+     */
+    public function testSetValuesSetsProperty($expected, $value)
     {
-        $values = array(true, false);
+        if ($value === null) {
+            $expected = $value;
+        }
+        if (!is_bool($value) && $value !== null) {
+            $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', null, 1413440336);
+        }
+        $values = array(true, $value);
         $this->propertyBoolean->setValues($values);
-        $this->assertAttributeSame($values, 'values', $this->propertyBoolean);
+        $this->assertAttributeSame(array(true, $expected), 'values', $this->propertyBoolean);
     }
 
     /**
      * @dataProvider booleanCastDataProvider
      */
-    public function testSetValuesThrowsExceptionIfInvalidValuesGiven($expected, $value)
+    public function testSetValueSetsValuesProperty($expected, $value)
     {
-        // use all non boolean values
-        if (!is_bool($value)) {
-            $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', null, 1413440336);
-            $this->propertyBoolean->setValues(array($value));
+        if ($value === null) {
+            $expected = $value;
         }
-    }
-
-    public function testSetValueSetsValuesProperty()
-    {
-        $this->propertyBoolean->setValue(true);
-        $this->assertAttributeSame(array(true), 'values', $this->propertyBoolean);
-    }
-
-    /**
-     * @dataProvider booleanCastDataProvider
-     */
-    public function testSetValueThrowsExceptionIfInvalidValueGiven($expected, $value)
-    {
-        // use all non boolean values
-        if (!is_bool($value)) {
+        if (!is_bool($value) && $value !== null) {
             $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', null, 1413440336);
-            $this->propertyBoolean->setValue(array($value));
         }
+        $this->propertyBoolean->setValue($value);
+        $this->assertAttributeSame(array($expected), 'values', $this->propertyBoolean);
     }
 }

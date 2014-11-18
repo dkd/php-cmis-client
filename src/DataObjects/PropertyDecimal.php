@@ -29,7 +29,7 @@ class PropertyDecimal extends AbstractPropertyData implements MutablePropertyDec
                 // cast integer values silenty to a double value.
                 $values[$key] = $value = (double) $value;
             }
-            $this->checkType('double', $value);
+            $this->checkType('double', $value, true);
         }
         parent::setValues($values);
     }

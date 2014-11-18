@@ -25,7 +25,7 @@ class PropertyString extends AbstractPropertyData implements PropertyStringInter
     public function setValues(array $values)
     {
         foreach ($values as $value) {
-            $this->checkType('string', $value);
+            $this->checkType('string', $value, true);
         }
         parent::setValues($values);
     }
