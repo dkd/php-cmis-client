@@ -29,6 +29,17 @@ class AccessControlList extends AbstractExtensionData implements AclInterface
     protected $isExact;
 
     /**
+     * @param AceInterface[] $aces
+     */
+    public function __construct(array $aces = array())
+    {
+        if (!empty($aces)) {
+            $this->setAces($aces);
+
+        }
+    }
+
+    /**
      * @return AceInterface[]
      */
     public function getAces()

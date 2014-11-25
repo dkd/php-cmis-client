@@ -48,6 +48,13 @@ class AccessControlListTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($aces, $this->acl->getAces());
     }
 
+    public function testConstructorSetsAces()
+    {
+        $aces = array(new AccessControlEntry());
+        $acl = new AccessControlList($aces);
+        $this->assertAttributeSame($aces, 'aces', $acl);
+    }
+
     public function testSetIsExactSetsIsExact()
     {
         $this->acl->setIsExact(true);
