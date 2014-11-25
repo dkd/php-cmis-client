@@ -1,5 +1,5 @@
 <?php
-namespace Dkd\PhpCmis\Test\Fixtures\Bindings;
+namespace Dkd\PhpCmis\Test\Fixtures\Php\Bindings;
 
 /**
  * This file is part of php-cmis-lib.
@@ -19,7 +19,7 @@ use Dkd\PhpCmis\ObjectServiceInterface;
 use Dkd\PhpCmis\PolicyServiceInterface;
 use Dkd\PhpCmis\RelationshipServiceInterface;
 use Dkd\PhpCmis\RepositoryServiceInterface;
-use Dkd\PhpCmis\Test\Fixtures\ConstructorThrowsException;
+use Dkd\PhpCmis\Test\Fixtures\Php\ConstructorThrowsException;
 
 /**
  * This class simply throws an exception when initiated

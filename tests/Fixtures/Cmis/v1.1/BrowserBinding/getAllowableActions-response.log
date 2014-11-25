@@ -1,0 +1,36 @@
+HTTP/1.1 200
+Content-Type: application/json;charset=UTF-8
+Server: Apache-Chemistry-OpenCMIS/?
+Cache-Control: private, max-age=0
+
+{
+    "canGetACL":false,
+    "canGetObjectRelationships":false,
+    "canGetContentStream":true,
+    "canCheckIn":false,
+    "canApplyACL":false,
+    "canRemoveObjectFromFolder":true,
+    "canMoveObject":true,
+    "canDeleteContentStream":true,
+    "canGetProperties":true,
+    "canGetAllVersions":false,
+    "canApplyPolicy":false,
+    "canGetObjectParents":true,
+    "canSetContentStream":true,
+    "canCreateRelationship":false,
+    "canGetFolderTree":false,
+    "canCheckOut":false,
+    "canCreateDocument":false,
+    "canCancelCheckOut":false,
+    "canAddObjectToFolder":true,
+    "canRemovePolicy":false,
+    "canDeleteObject":true,
+    "canGetDescendants":false,
+    "canGetFolderParent":false,
+    "canGetAppliedPolicies":false,
+    "canDeleteTree":false,
+    "canUpdateProperties":true,
+    "canGetRenditions":false,
+    "canCreateFolder":false,
+    "canGetChildren":false
+}

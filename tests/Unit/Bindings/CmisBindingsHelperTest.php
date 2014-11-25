@@ -188,7 +188,7 @@ class CmisBindingsHelperTest extends \PHPUnit_Framework_TestCase
             array('get')
         )->getMockForAbstractClass();
 
-        $spiClassName = '\\Dkd\\PhpCmis\\Test\\Fixtures\\Bindings\\CmisBindingConstructorThrowsException';
+        $spiClassName = '\\Dkd\\PhpCmis\\Test\\Fixtures\\Php\\Bindings\\CmisBindingConstructorThrowsException';
         $sessionMock->expects($this->exactly(2))->method('get')->will(
             $this->returnValueMap(
                 array(
@@ -341,7 +341,7 @@ class CmisBindingsHelperTest extends \PHPUnit_Framework_TestCase
             array('get')
         )->getMockForAbstractClass();
 
-        $httpInvokerClassName = '\\Dkd\\PhpCmis\\Test\\Fixtures\\HttpInvokerConstructorThrowsException';
+        $httpInvokerClassName = '\\Dkd\\PhpCmis\\Test\\Fixtures\\Php\\HttpInvokerConstructorThrowsException';
         $sessionMock->expects($this->exactly(2))->method('get')->will(
             $this->returnValueMap(
                 array(
@@ -452,7 +452,7 @@ class CmisBindingsHelperTest extends \PHPUnit_Framework_TestCase
             array('get')
         )->getMockForAbstractClass();
 
-        $jsonConverterClassName = '\\Dkd\\PhpCmis\\Test\\Fixtures\\ConstructorThrowsException';
+        $jsonConverterClassName = '\\Dkd\\PhpCmis\\Test\\Fixtures\\Php\\ConstructorThrowsException';
         $sessionMock->expects($this->exactly(2))->method('get')->will(
             $this->returnValueMap(
                 array(

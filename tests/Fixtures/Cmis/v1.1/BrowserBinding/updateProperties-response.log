@@ -1,0 +1,229 @@
+HTTP/1.1 200
+Content-Type: application/json;charset=UTF-8
+Server: Apache-Chemistry-OpenCMIS/?
+Cache-Control: private, max-age=0
+
+{
+    "exampleExtension":{
+        "objectId":"156",
+        "name":"RenamedDocument"
+    },
+    "properties":{
+        "cmis:isLatestMajorVersion":{
+            "id":"cmis:isLatestMajorVersion",
+            "localName":"cmis:isLatestMajorVersion",
+            "queryName":"cmis:isLatestMajorVersion",
+            "value":true,
+            "type":"boolean",
+            "displayName":"Is Latest Major Version",
+            "cardinality":"single"
+        },
+        "cmis:contentStreamId":{
+            "id":"cmis:contentStreamId",
+            "localName":"cmis:contentStreamId",
+            "queryName":"cmis:contentStreamId",
+            "value":null,
+            "type":"id",
+            "displayName":"Stream Id",
+            "cardinality":"single"
+        },
+        "cmis:contentStreamLength":{
+            "id":"cmis:contentStreamLength",
+            "localName":"cmis:contentStreamLength",
+            "queryName":"cmis:contentStreamLength",
+            "value":32768,
+            "type":"integer",
+            "displayName":"Content Length",
+            "cardinality":"single"
+        },
+        "cmis:versionSeriesCheckedOutBy":{
+            "id":"cmis:versionSeriesCheckedOutBy",
+            "localName":"cmis:versionSeriesCheckedOutBy",
+            "queryName":"cmis:versionSeriesCheckedOutBy",
+            "value":null,
+            "type":"string",
+            "displayName":"Checked Out By",
+            "cardinality":"single"
+        },
+        "cmis:objectTypeId":{
+            "id":"cmis:objectTypeId",
+            "localName":"cmis:objectTypeId",
+            "queryName":"cmis:objectTypeId",
+            "value":"DocumentTopLevel",
+            "type":"id",
+            "displayName":"Type-Id",
+            "cardinality":"single"
+        },
+        "cmis:versionSeriesCheckedOutId":{
+            "id":"cmis:versionSeriesCheckedOutId",
+            "localName":"cmis:versionSeriesCheckedOutId",
+            "queryName":"cmis:versionSeriesCheckedOutId",
+            "value":null,
+            "type":"id",
+            "displayName":"Checked Out Id",
+            "cardinality":"single"
+        },
+        "cmis:name":{
+            "id":"cmis:name",
+            "localName":"cmis:name",
+            "queryName":"cmis:name",
+            "value":"RenamedDocument",
+            "type":"string",
+            "displayName":"Name",
+            "cardinality":"single"
+        },
+        "cmis:contentStreamMimeType":{
+            "id":"cmis:contentStreamMimeType",
+            "localName":"cmis:contentStreamMimeType",
+            "queryName":"cmis:contentStreamMimeType",
+            "value":"text\/plain",
+            "type":"string",
+            "displayName":"Mime Type",
+            "cardinality":"single"
+        },
+        "cmis:versionSeriesId":{
+            "id":"cmis:versionSeriesId",
+            "localName":"cmis:versionSeriesId",
+            "queryName":"cmis:versionSeriesId",
+            "value":null,
+            "type":"id",
+            "displayName":"Version Series Id",
+            "cardinality":"single"
+        },
+        "cmis:creationDate":{
+            "id":"cmis:creationDate",
+            "localName":"cmis:creationDate",
+            "queryName":"cmis:creationDate",
+            "value":1342160128403,
+            "type":"datetime",
+            "displayName":"Creation Date",
+            "cardinality":"single"
+        },
+        "StringPropTopLevel":{
+            "id":"StringPropTopLevel",
+            "localName":"StringPropTopLevel",
+            "queryName":"StringPropTopLevel",
+            "value":null,
+            "type":"string",
+            "displayName":"Sample String Property",
+            "cardinality":"single"
+        },
+        "cmis:changeToken":{
+            "id":"cmis:changeToken",
+            "localName":"cmis:changeToken",
+            "queryName":"cmis:changeToken",
+            "value":"1342160128403",
+            "type":"string",
+            "displayName":"Change Token",
+            "cardinality":"single"
+        },
+        "cmis:isLatestVersion":{
+            "id":"cmis:isLatestVersion",
+            "localName":"cmis:isLatestVersion",
+            "queryName":"cmis:isLatestVersion",
+            "value":true,
+            "type":"boolean",
+            "displayName":"Is Latest Version",
+            "cardinality":"single"
+        },
+        "cmis:versionLabel":{
+            "id":"cmis:versionLabel",
+            "localName":"cmis:versionLabel",
+            "queryName":"cmis:versionLabel",
+            "value":null,
+            "type":"string",
+            "displayName":"Version Label",
+            "cardinality":"single"
+        },
+        "cmis:isVersionSeriesCheckedOut":{
+            "id":"cmis:isVersionSeriesCheckedOut",
+            "localName":"cmis:isVersionSeriesCheckedOut",
+            "queryName":"cmis:isVersionSeriesCheckedOut",
+            "value":false,
+            "type":"boolean",
+            "displayName":"Checked Out",
+            "cardinality":"single"
+        },
+        "cmis:lastModifiedBy":{
+            "id":"cmis:lastModifiedBy",
+            "localName":"cmis:lastModifiedBy",
+            "queryName":"cmis:lastModifiedBy",
+            "value":"admin",
+            "type":"string",
+            "displayName":"Modified By",
+            "cardinality":"single"
+        },
+        "cmis:createdBy":{
+            "id":"cmis:createdBy",
+            "localName":"cmis:createdBy",
+            "queryName":"cmis:createdBy",
+            "value":"admin",
+            "type":"string",
+            "displayName":"Created By",
+            "cardinality":"single"
+        },
+        "cmis:checkinComment":{
+            "id":"cmis:checkinComment",
+            "localName":"cmis:checkinComment",
+            "queryName":"cmis:checkinComment",
+            "value":null,
+            "type":"string",
+            "displayName":"Checkin Comment",
+            "cardinality":"single"
+        },
+        "cmis:objectId":{
+            "id":"cmis:objectId",
+            "localName":"cmis:objectId",
+            "queryName":"cmis:objectId",
+            "value":"156",
+            "type":"id",
+            "displayName":"Object Id",
+            "cardinality":"single"
+        },
+        "cmis:isImmutable":{
+            "id":"cmis:isImmutable",
+            "localName":"cmis:isImmutable",
+            "queryName":"cmis:isImmutable",
+            "value":false,
+            "type":"boolean",
+            "displayName":"Immutable",
+            "cardinality":"single"
+        },
+        "cmis:isMajorVersion":{
+            "id":"cmis:isMajorVersion",
+            "localName":"cmis:isMajorVersion",
+            "queryName":"cmis:isMajorVersion",
+            "value":true,
+            "type":"boolean",
+            "displayName":"Is Major Version",
+            "cardinality":"single"
+        },
+        "cmis:baseTypeId":{
+            "id":"cmis:baseTypeId",
+            "localName":"cmis:baseTypeId",
+            "queryName":"cmis:baseTypeId",
+            "value":"cmis:document",
+            "type":"id",
+            "displayName":"Base-Type-Id",
+            "cardinality":"single"
+        },
+        "cmis:contentStreamFileName":{
+            "id":"cmis:contentStreamFileName",
+            "localName":"cmis:contentStreamFileName",
+            "queryName":"cmis:contentStreamFileName",
+            "value":"data.txt",
+            "type":"string",
+            "displayName":"File Name",
+            "cardinality":"single"
+        },
+        "cmis:lastModificationDate":{
+            "id":"cmis:lastModificationDate",
+            "localName":"cmis:lastModificationDate",
+            "queryName":"cmis:lastModificationDate",
+            "value":1342160128403,
+            "type":"datetime",
+            "displayName":"Modification Date",
+            "cardinality":"single"
+        }
+    }
+}

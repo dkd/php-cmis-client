@@ -1,0 +1,6 @@
+HTTP/1.1 200
+Content-Length: 0
+Content-Type: text/plain
+Server: Apache-Chemistry-OpenCMIS/?
+Cache-Control: private, max-age=0
+

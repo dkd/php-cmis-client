@@ -1,0 +1,36 @@
+HTTP/1.1 200
+Content-Type: application/json;charset=UTF-8
+Server: Apache-Chemistry-OpenCMIS/?
+Cache-Control: private, max-age=0
+
+{
+    "aces":[
+        {
+            "isDirect":true,
+            "principal":{
+                "principalId":"Alice"
+            },
+            "permissions":[
+                "cmis:read"
+            ]
+        },
+        {
+            "isDirect":true,
+            "principal":{
+                "principalId":"Bob"
+            },
+            "permissions":[
+                "cmis:write"
+            ]
+        },
+        {
+            "isDirect":true,
+            "principal":{
+                "principalId":"admin"
+            },
+            "permissions":[
+                "cmis:all"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,9 @@
+GET /inmemory/browser/A1/root?objectId=155&cmisselector=parents&filter=*&includeAllowableActions=false&includeRelationships=none&includeRelativePathSegment=true HTTP/1.1
+User-agent: Apache Chemistry OpenCMIS/?
+Authorization: Basic YWRtaW46YWRtaW4=
+Cache-control: no-cache
+Pragma: no-cache
+Host: www.example.com:8080
+Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2
+Connection: keep-alive
+

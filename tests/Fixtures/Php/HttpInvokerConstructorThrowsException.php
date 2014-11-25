@@ -1,5 +1,5 @@
 <?php
-namespace Dkd\PhpCmis\Test\Fixtures;
+namespace Dkd\PhpCmis\Test\Fixtures\Php;
 
 /**
  * This file is part of php-cmis-lib.

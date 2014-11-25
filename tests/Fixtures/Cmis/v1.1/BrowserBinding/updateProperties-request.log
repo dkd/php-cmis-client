@@ -1,0 +1,12 @@
+POST /inmemory/browser/A1/root?objectId=156 HTTP/1.1
+User-agent: Apache Chemistry OpenCMIS/?
+Content-type: application/x-www-form-urlencoded;charset=utf-8
+Authorization: Basic YWRtaW46YWRtaW4=
+Cache-control: no-cache
+Pragma: no-cache
+Host: www.example.com:8080
+Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2
+Connection: keep-alive
+Transfer-encoding: chunked
+
+cmisaction=update&propertyId[0]=cmis%3Aname&propertyValue[0]=RenamedDocument
