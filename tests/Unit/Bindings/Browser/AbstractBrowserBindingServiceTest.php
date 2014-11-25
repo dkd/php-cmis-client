@@ -659,10 +659,11 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
             array('getRepositoryUrl', 'read')
         )->getMockForAbstractClass();
 
-        $urlDummy = Url::createFromUrl('http://foo.bar.baz');
+        $urlDummy = Url::createFromUrl('http://foo.bar.baz?foo=bar');
+        $expectedUrl = Url::createFromUrl('http://foo.bar.baz?foo=bar&typeId=typeId');
 
         $binding->expects($this->any())->method('getRepositoryUrl')->willReturn($urlDummy);
-        $binding->expects($this->any())->method('read')->willReturn($dummyResponse);
+        $binding->expects($this->any())->method('read')->with($expectedUrl)->willReturn($dummyResponse);
 
         $this->assertSame(
             'TypeDefinitionResult',

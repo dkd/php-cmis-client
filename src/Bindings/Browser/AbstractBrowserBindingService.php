@@ -407,7 +407,7 @@ abstract class AbstractBrowserBindingService
     {
         // build URL
         $url = $this->getRepositoryUrl($repositoryId, Constants::SELECTOR_TYPE_DEFINITION);
-        $url->getQuery()->set(array(Constants::PARAM_TYPE_ID => $typeId));
+        $url->getQuery()->modify(array(Constants::PARAM_TYPE_ID => $typeId));
 
         // read and parse
         $response = $this->read($url);
