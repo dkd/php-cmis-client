@@ -29,7 +29,7 @@ class CmisExtensionElementTest extends \PHPUnit_Framework_TestCase
             '\\InvalidArgumentException',
             'Value and children given! Only one of them is allowed.'
         );
-        new CmisExtensionElement('namespace', 'name', null, 'value', array('children'));
+        new CmisExtensionElement('namespace', 'name', array(), 'value', array('children'));
     }
 
     public function testConstructorThrowsExceptionIfNoValueAndChildrenGiven()
@@ -38,7 +38,7 @@ class CmisExtensionElementTest extends \PHPUnit_Framework_TestCase
             '\\InvalidArgumentException',
             'Value and children are empty! One of them is required.'
         );
-        new CmisExtensionElement('namespace', 'name', null, null, null);
+        new CmisExtensionElement('namespace', 'name', array(), null);
     }
 
     /**
@@ -48,7 +48,7 @@ class CmisExtensionElementTest extends \PHPUnit_Framework_TestCase
     {
         // filter empty values from the data provider because they will end in an exception here.
         if (!empty($value)) {
-            $cmisExtensionElement = new CmisExtensionElement('namespace', $value, null, 'value', null);
+            $cmisExtensionElement = new CmisExtensionElement('namespace', $value, array(), 'value');
             $this->assertAttributeSame($expected, 'name', $cmisExtensionElement);
         }
     }
@@ -58,7 +58,7 @@ class CmisExtensionElementTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructorSetsNamespaceAsProperty($expected, $value)
     {
-        $cmisExtensionElement = new CmisExtensionElement($value, 'name', null, 'value', null);
+        $cmisExtensionElement = new CmisExtensionElement($value, 'name', array(), 'value');
         $this->assertAttributeSame($expected, 'namespace', $cmisExtensionElement);
     }
 
@@ -75,7 +75,7 @@ class CmisExtensionElementTest extends \PHPUnit_Framework_TestCase
     {
         // filter empty values from the data provider because they will end in an exception here.
         if (!empty($value)) {
-            $cmisExtensionElement = new CmisExtensionElement('namespace', 'name', null, $value, null);
+            $cmisExtensionElement = new CmisExtensionElement('namespace', 'name', array(), $value);
             $this->assertAttributeSame($expected, 'value', $cmisExtensionElement);
             $this->assertAttributeSame(array(), 'children', $cmisExtensionElement);
         }
@@ -83,8 +83,8 @@ class CmisExtensionElementTest extends \PHPUnit_Framework_TestCase
 
     public function testConstructorSetsChildrenAsProperty()
     {
-        $children = array(new CmisExtensionElement('namespace', 'children', null, 'children'));
-        $cmisExtensionElement = new CmisExtensionElement('namespace', 'name', null, null, $children);
+        $children = array(new CmisExtensionElement('namespace', 'children', array(), 'children'));
+        $cmisExtensionElement = new CmisExtensionElement('namespace', 'name', array(), null, $children);
         $this->assertAttributeSame(null, 'value', $cmisExtensionElement);
         $this->assertAttributeSame($children, 'children', $cmisExtensionElement);
     }
@@ -103,8 +103,8 @@ class CmisExtensionElementTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetChildrenReturnsProperty()
     {
-        $children = array(new CmisExtensionElement('namespace', 'children', null, 'children'));
-        $cmisExtensionElement = new CmisExtensionElement('namespace', 'name', null, null, $children);
+        $children = array(new CmisExtensionElement('namespace', 'children', array(), 'children'));
+        $cmisExtensionElement = new CmisExtensionElement('namespace', 'name', array(), null, $children);
         $this->assertEquals($children, $cmisExtensionElement->getChildren());
     }
 
@@ -113,7 +113,7 @@ class CmisExtensionElementTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetNameReturnsProperty()
     {
-        $cmisExtensionElement = new CmisExtensionElement('namespace', 'name', null, 'value');
+        $cmisExtensionElement = new CmisExtensionElement('namespace', 'name', array(), 'value');
         $this->assertEquals('name', $cmisExtensionElement->getName());
     }
 
@@ -122,7 +122,7 @@ class CmisExtensionElementTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetNamespaceReturnsProperty()
     {
-        $cmisExtensionElement = new CmisExtensionElement('namespace', 'name', null, 'value');
+        $cmisExtensionElement = new CmisExtensionElement('namespace', 'name', array(), 'value');
         $this->assertEquals('namespace', $cmisExtensionElement->getNamespace());
     }
 
@@ -131,7 +131,7 @@ class CmisExtensionElementTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetValueReturnsProperty()
     {
-        $cmisExtensionElement = new CmisExtensionElement('namespace', 'name', null, 'value');
+        $cmisExtensionElement = new CmisExtensionElement('namespace', 'name', array(), 'value');
         $this->assertEquals('value', $cmisExtensionElement->getValue());
     }
 }

@@ -52,24 +52,29 @@ class CmisExtensionElement implements CmisExtensionElementInterface
      * @param CmisExtensionElement[] $children
      * @throws \InvalidArgumentException
      */
-    public function __construct($namespace, $name, array $attributes = null, $value = null, array $children = null)
-    {
+    public function __construct(
+        $namespace,
+        $name,
+        array $attributes = array(),
+        $value = null,
+        array $children = array()
+    ) {
         if (empty($name)) {
             throw new \InvalidArgumentException('Name must be given!');
         }
 
-        if (!empty($value) && !empty($children)) {
+        if ($value !== null && count($children) > 0) {
             throw new \InvalidArgumentException('Value and children given! Only one of them is allowed.');
         }
 
-        if (empty($value) && empty($children)) {
+        if ($value === null && count($children) === 0) {
             throw new \InvalidArgumentException('Value and children are empty! One of them is required.');
         }
 
         $this->name = (string) $name;
         $this->namespace = (string) $namespace;
 
-        if (!empty($value)) {
+        if ($value !== null) {
             $this->value = (string) $value;
             $this->children = array();
         } elseif (!empty($children)) {
