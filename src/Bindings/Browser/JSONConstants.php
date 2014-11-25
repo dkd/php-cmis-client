@@ -494,4 +494,62 @@ class JSONConstants
     {
         return self::$TYPE_KEYS;
     }
+
+
+    const JSON_PROPERTY_TYPE_ID = "id";
+    const JSON_PROPERTY_TYPE_LOCALNAME = "localName";
+    const JSON_PROPERTY_TYPE_LOCALNAMESPACE = "localNamespace";
+    const JSON_PROPERTY_TYPE_DISPLAYNAME = "displayName";
+    const JSON_PROPERTY_TYPE_QUERYNAME = "queryName";
+    const JSON_PROPERTY_TYPE_DESCRIPTION = "description";
+    const JSON_PROPERTY_TYPE_PROPERTY_TYPE = "propertyType";
+    const JSON_PROPERTY_TYPE_CARDINALITY = "cardinality";
+    const JSON_PROPERTY_TYPE_UPDATABILITY = "updatability";
+    const JSON_PROPERTY_TYPE_INHERITED = "inherited";
+    const JSON_PROPERTY_TYPE_REQUIRED = "required";
+    const JSON_PROPERTY_TYPE_QUERYABLE = "queryable";
+    const JSON_PROPERTY_TYPE_ORDERABLE = "orderable";
+    const JSON_PROPERTY_TYPE_OPENCHOICE = "openChoice";
+    const JSON_PROPERTY_TYPE_DEAULT_VALUE = "defaultValue";
+    const JSON_PROPERTY_TYPE_MAX_LENGTH = "maxLength";
+    const JSON_PROPERTY_TYPE_MIN_VALUE = "minValue";
+    const JSON_PROPERTY_TYPE_MAX_VALUE = "maxValue";
+    const JSON_PROPERTY_TYPE_PRECISION = "precision";
+    const JSON_PROPERTY_TYPE_RESOLUTION = "resolution";
+    const JSON_PROPERTY_TYPE_CHOICE = "choice";
+    const JSON_PROPERTY_TYPE_CHOICE_DISPLAYNAME = "displayName";
+    const JSON_PROPERTY_TYPE_CHOICE_VALUE = "value";
+    const JSON_PROPERTY_TYPE_CHOICE_CHOICE = "choice";
+
+    protected static $PROPERTY_TYPE_KEYS = array(
+        self::JSON_PROPERTY_TYPE_ID,
+        self::JSON_PROPERTY_TYPE_LOCALNAME,
+        self::JSON_PROPERTY_TYPE_LOCALNAMESPACE,
+        self::JSON_PROPERTY_TYPE_DISPLAYNAME,
+        self::JSON_PROPERTY_TYPE_QUERYNAME,
+        self::JSON_PROPERTY_TYPE_DESCRIPTION,
+        self::JSON_PROPERTY_TYPE_PROPERTY_TYPE,
+        self::JSON_PROPERTY_TYPE_CARDINALITY,
+        self::JSON_PROPERTY_TYPE_UPDATABILITY,
+        self::JSON_PROPERTY_TYPE_INHERITED,
+        self::JSON_PROPERTY_TYPE_REQUIRED,
+        self::JSON_PROPERTY_TYPE_QUERYABLE,
+        self::JSON_PROPERTY_TYPE_ORDERABLE,
+        self::JSON_PROPERTY_TYPE_OPENCHOICE,
+        self::JSON_PROPERTY_TYPE_DEAULT_VALUE,
+        self::JSON_PROPERTY_TYPE_MAX_LENGTH,
+        self::JSON_PROPERTY_TYPE_MIN_VALUE,
+        self::JSON_PROPERTY_TYPE_MAX_VALUE,
+        self::JSON_PROPERTY_TYPE_PRECISION,
+        self::JSON_PROPERTY_TYPE_RESOLUTION,
+        self::JSON_PROPERTY_TYPE_CHOICE
+    );
+
+    /**
+     * @return array Array of all property type keys
+     */
+    public static function getPropertyTypeKeys()
+    {
+        return self::$PROPERTY_TYPE_KEYS;
+    }
 }
