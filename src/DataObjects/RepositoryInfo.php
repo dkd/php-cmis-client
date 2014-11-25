@@ -25,17 +25,17 @@ class RepositoryInfo extends AbstractExtensionData implements RepositoryInfoInte
     /**
      * @var string
      */
-    private $id;
+    private $id = '';
 
     /**
      * @var string
      */
-    private $name;
+    private $name = '';
 
     /**
      * @var string
      */
-    private $description;
+    private $description = '';
 
     /**
      * @var CmisVersion
@@ -50,7 +50,7 @@ class RepositoryInfo extends AbstractExtensionData implements RepositoryInfoInte
     /**
      * @var string
      */
-    private $rootFolderId;
+    private $rootFolderId = '';
 
     /**
      * @var AclCapabilitiesInterface
@@ -60,22 +60,22 @@ class RepositoryInfo extends AbstractExtensionData implements RepositoryInfoInte
     /**
      * @var string
      */
-    private $principalIdAnonymous;
+    private $principalIdAnonymous = '';
 
     /**
      * @var string
      */
-    private $principalIdAnyone;
+    private $principalIdAnyone = '';
 
     /**
      * @var string
      */
-    private $thinClientUri;
+    private $thinClientUri = '';
 
     /**
      * @var boolean
      */
-    private $changesIncomplete;
+    private $changesIncomplete = false;
 
     /**
      * @var BaseTypeId[]
@@ -85,22 +85,22 @@ class RepositoryInfo extends AbstractExtensionData implements RepositoryInfoInte
     /**
      * @var string
      */
-    private $latestChangeLogToken;
+    private $latestChangeLogToken = '';
 
     /**
      * @var string
      */
-    private $vendorName;
+    private $vendorName = '';
 
     /**
      * @var string
      */
-    private $productName;
+    private $productName = '';
 
     /**
      * @var string
      */
-    private $productVersion;
+    private $productVersion = '';
 
     /**
      * @var ExtensionFeatureInterface[]

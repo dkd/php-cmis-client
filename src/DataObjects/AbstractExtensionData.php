@@ -22,7 +22,7 @@ abstract class AbstractExtensionData implements ExtensionDataInterface
     /**
      * @var CmisExtensionElementInterface[]
      */
-    protected $extensions;
+    protected $extensions = array();
 
     /**
      * Returns the list of top-level extension elements.
@@ -61,6 +61,7 @@ abstract class AbstractExtensionData implements ExtensionDataInterface
     {
         $invalidType = null;
         $valueType = gettype($value);
+        $nullAllowed = (boolean) $nullAllowed;
 
         if ($valueType === 'object') {
             if (!is_a($value, $expectedType)) {

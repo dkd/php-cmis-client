@@ -64,12 +64,12 @@ class RepositoryCapabilities extends AbstractExtensionData implements Repository
     /**
      * @var boolean
      */
-    protected $isPwcSearchable;
+    protected $isPwcSearchable = false;
 
     /**
      * @var boolean
      */
-    protected $isPwcUpdatable;
+    protected $isPwcUpdatable = false;
 
     /**
      * @var boolean
@@ -110,6 +110,22 @@ class RepositoryCapabilities extends AbstractExtensionData implements Repository
      * @var NewTypeSettableAttributesInterface
      */
     protected $newTypeSettableAttributes;
+
+    /**
+     * Constructor that sets some defaults
+     */
+    public function __construct()
+    {
+        $this->setAclCapability(CapabilityAcl::cast(CapabilityAcl::__DEFAULT));
+        $this->setChangesCapability(CapabilityChanges::cast(CapabilityChanges::__DEFAULT));
+        $this->setJoinCapability(CapabilityJoin::cast(CapabilityJoin::__DEFAULT));
+        $this->setContentStreamUpdatesCapability(
+            CapabilityContentStreamUpdates::cast(CapabilityContentStreamUpdates::__DEFAULT)
+        );
+        $this->setQueryCapability(CapabilityQuery::cast(CapabilityQuery::__DEFAULT));
+        $this->setRenditionsCapability(CapabilityRenditions::cast(CapabilityRenditions::__DEFAULT));
+        $this->setOrderByCapability(CapabilityOrderBy::cast(CapabilityOrderBy::__DEFAULT));
+    }
 
     /**
      * @return CapabilityAcl

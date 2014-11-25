@@ -18,12 +18,12 @@ class RepositoryInfoBrowserBinding extends RepositoryInfo
     /**
      * @var string
      */
-    private $repositoryUrl;
+    private $repositoryUrl = '';
 
     /**
      * @var string
      */
-    private $rootUrl;
+    private $rootUrl = '';
 
     /**
      * @return string
