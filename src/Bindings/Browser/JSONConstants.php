@@ -438,4 +438,60 @@ class JSONConstants
     const JSON_OBJECTLIST_HAS_MORE_ITEMS = "hasMoreItems";
     const JSON_OBJECTLIST_NUM_ITEMS = "numItems";
     const JSON_OBJECTLIST_CHANGE_LOG_TOKEN = "changeLogToken";
+
+    const JSON_TYPE_ID = "id";
+    const JSON_TYPE_LOCALNAME = "localName";
+    const JSON_TYPE_LOCALNAMESPACE = "localNamespace";
+    const JSON_TYPE_DISPLAYNAME = "displayName";
+    const JSON_TYPE_QUERYNAME = "queryName";
+    const JSON_TYPE_DESCRIPTION = "description";
+    const JSON_TYPE_BASE_ID = "baseId";
+    const JSON_TYPE_PARENT_ID = "parentId";
+    const JSON_TYPE_CREATABLE = "creatable";
+    const JSON_TYPE_FILEABLE = "fileable";
+    const JSON_TYPE_QUERYABLE = "queryable";
+    const JSON_TYPE_FULLTEXT_INDEXED = "fulltextIndexed";
+    const JSON_TYPE_INCLUDE_IN_SUPERTYPE_QUERY = "includedInSupertypeQuery";
+    const JSON_TYPE_CONTROLABLE_POLICY = "controllablePolicy";
+    const JSON_TYPE_CONTROLABLE_ACL = "controllableACL";
+    const JSON_TYPE_PROPERTY_DEFINITIONS = "propertyDefinitions";
+    const JSON_TYPE_TYPE_MUTABILITY = "typeMutability";
+    const JSON_TYPE_VERSIONABLE = "versionable"; // document
+    const JSON_TYPE_CONTENTSTREAM_ALLOWED = "contentStreamAllowed"; // document
+    const JSON_TYPE_ALLOWED_SOURCE_TYPES = "allowedSourceTypes"; // relationship
+    const JSON_TYPE_ALLOWED_TARGET_TYPES = "allowedTargetTypes"; // relationship
+
+    protected static $TYPE_KEYS = array(
+        self::JSON_TYPE_ID,
+        self::JSON_TYPE_LOCALNAME,
+        self::JSON_TYPE_LOCALNAMESPACE,
+        self::JSON_TYPE_DISPLAYNAME,
+        self::JSON_TYPE_QUERYNAME,
+        self::JSON_TYPE_DESCRIPTION,
+        self::JSON_TYPE_BASE_ID,
+        self::JSON_TYPE_PARENT_ID,
+        self::JSON_TYPE_CREATABLE,
+        self::JSON_TYPE_FILEABLE,
+        self::JSON_TYPE_QUERYABLE,
+        self::JSON_TYPE_FULLTEXT_INDEXED,
+        self::JSON_TYPE_INCLUDE_IN_SUPERTYPE_QUERY,
+        self::JSON_TYPE_CONTROLABLE_POLICY,
+        self::JSON_TYPE_CONTROLABLE_ACL,
+        self::JSON_TYPE_PROPERTY_DEFINITIONS,
+        self::JSON_TYPE_TYPE_MUTABILITY,
+        self::JSON_TYPE_VERSIONABLE,
+        self::JSON_TYPE_CONTENTSTREAM_ALLOWED,
+        self::JSON_TYPE_ALLOWED_SOURCE_TYPES,
+        self::JSON_TYPE_ALLOWED_TARGET_TYPES
+    );
+
+    /**
+     * Returns an array of all type keys
+     *
+     * @return array
+     */
+    public static function getTypeKeys()
+    {
+        return self::$TYPE_KEYS;
+    }
 }
