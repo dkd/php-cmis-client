@@ -1,5 +1,5 @@
 <?php
-namespace Dkd\PhpCmis\Data;
+namespace Dkd\PhpCmis\DataObjects;
 
 /**
  * This file is part of php-cmis-lib.
@@ -10,11 +10,19 @@ namespace Dkd\PhpCmis\Data;
  * file that was distributed with this source code.
  */
 
+use Dkd\PhpCmis\Data\PropertiesInterface;
+use Dkd\PhpCmis\Data\PropertyDataInterface;
+
 /**
- * Represents a set of properties.
+ * Properties data implementation.
  */
-interface PropertiesInterface extends ExtensionDataInterface
+class Properties extends AbstractExtensionData implements PropertiesInterface
 {
+    /**
+     * @var PropertyDataInterface[]
+     */
+    protected $properties = array();
+
     /**
      * Returns a map of properties (property ID => property).
      *
@@ -24,19 +32,30 @@ interface PropertiesInterface extends ExtensionDataInterface
      *
      * @return PropertyDataInterface[] the map of properties, not null
      */
-    public function getProperties();
+    public function getProperties()
+    {
+        return $this->properties;
+    }
 
     /**
-     * Adds a property to the end of the property list.
+     * Adds a property with propertyId as index. Existing property with same id will be replaced.
      *
      * @param PropertyDataInterface $property the property
      */
-    public function addProperty(PropertyDataInterface $property);
+    public function addProperty(PropertyDataInterface $property)
+    {
+        $this->properties[$property->getId()] = $property;
+    }
 
     /**
      * Removes a property.
      *
      * @param string $id the property ID
      */
-    public function removeProperty($id);
+    public function removeProperty($id)
+    {
+        if (isset($this->properties[$id])) {
+            unset($this->properties[$id]);
+        }
+    }
 }

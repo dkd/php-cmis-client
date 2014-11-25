@@ -56,7 +56,7 @@ interface ObjectDataInterface extends ExtensionDataInterface
     /**
      * Returns the IDs of the applied policies.
      *
-     * @return string[]|null the policy IDs or null if no policies are applied or the IDs are unknown
+     * @return PolicyIdList the policy IDs or null if no policies are applied or the IDs are unknown
      */
     public function getPolicyIds();
 
