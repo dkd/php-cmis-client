@@ -2,7 +2,8 @@ PHP CMIS Client
 ===============
 
 [![Build Status](https://api.travis-ci.org/dkd/php-cmis-client.svg)](https://travis-ci.org/dkd/php-cmis-client)
-[![Coverage Status](https://img.shields.io/coveralls/dkd/php-cmis-client.svg)](https://coveralls.io/r/dkd/php-cmis-client)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/dkd/php-cmis-client/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/dkd/php-cmis-client/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/dkd/php-cmis-client/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/dkd/php-cmis-client/?branch=master)
 [![Latest Stable Version](https://poser.pugx.org/dkd/php-cmis/v/stable.svg)](https://packagist.org/packages/dkd/php-cmis)
 [![Total Downloads](https://poser.pugx.org/dkd/php-cmis/downloads.svg)](https://packagist.org/packages/dkd/php-cmis)
 [![Latest Unstable Version](https://poser.pugx.org/dkd/php-cmis/v/unstable.svg)](https://packagist.org/packages/dkd/php-cmis)
