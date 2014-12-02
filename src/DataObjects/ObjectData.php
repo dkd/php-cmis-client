@@ -42,7 +42,7 @@ class ObjectData extends AbstractExtensionData implements ObjectDataInterface
     protected $relationships = array();
 
     /**
-     * @var RenditionDataInterface
+     * @var RenditionDataInterface[]
      */
     protected $renditions;
 

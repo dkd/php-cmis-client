@@ -11,7 +11,6 @@ namespace Dkd\PhpCmis\DataObjects;
  */
 
 use Dkd\PhpCmis\Data\AceInterface;
-use Dkd\PhpCmis\Data\AclInterface;
 use Dkd\PhpCmis\PrincipalInterface;
 
 /**

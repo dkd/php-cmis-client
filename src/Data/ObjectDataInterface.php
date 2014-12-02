@@ -10,6 +10,7 @@ namespace Dkd\PhpCmis\Data;
  * file that was distributed with this source code.
  */
 
+use Dkd\PhpCmis\DataObjects\PolicyIdList;
 use Dkd\PhpCmis\Enum\BaseTypeId;
 
 /**
@@ -56,7 +57,7 @@ interface ObjectDataInterface extends ExtensionDataInterface
     /**
      * Returns the IDs of the applied policies.
      *
-     * @return PolicyIdList the policy IDs or null if no policies are applied or the IDs are unknown
+     * @return PolicyIdListInterface|null the policy IDs or null if no policies are applied or the IDs are unknown
      */
     public function getPolicyIds();
 

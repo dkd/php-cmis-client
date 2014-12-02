@@ -11,7 +11,6 @@ namespace Dkd\PhpCmis\Definitions;
  */
 
 use Dkd\PhpCmis\Data\ExtensionDataInterface;
-use Dkd\PhpCmis\TypeDefinitionInterface;
 
 /**
  * Type Definition Container. This class is used to build a tree of type definitions.

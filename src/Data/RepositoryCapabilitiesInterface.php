@@ -41,7 +41,7 @@ interface RepositoryCapabilitiesInterface extends ExtensionDataInterface
     public function getContentStreamUpdatesCapability();
 
     /**
-     * @return CreatablePropertyTypes
+     * @return CreatablePropertyTypesInterface
      */
     public function getCreatablePropertyTypes();
 

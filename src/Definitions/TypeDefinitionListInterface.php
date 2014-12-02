@@ -11,7 +11,6 @@ namespace Dkd\PhpCmis\Definitions;
  */
 
 use Dkd\PhpCmis\Data\ExtensionDataInterface;
-use Dkd\PhpCmis\TypeDefinitionInterface;
 
 /**
  * List of type definitions.

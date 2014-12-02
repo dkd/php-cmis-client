@@ -10,7 +10,7 @@ namespace Dkd\PhpCmis\Data;
  * file that was distributed with this source code.
  */
 
-use Dkd\PhpCmis\Data\ExtensionDataInterface;
+use Dkd\PhpCmis\PrincipalInterface;
 
 /**
  * Access Control Entry (ACE)
