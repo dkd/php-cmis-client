@@ -336,7 +336,6 @@ abstract class AbstractBrowserBindingService
      */
     protected function getRepositoriesInternal($repositoryId = null)
     {
-        $url = null;
         $repositoryUrlCache = $this->getRepositoryUrlCache();
 
         if ($repositoryId === null) {
