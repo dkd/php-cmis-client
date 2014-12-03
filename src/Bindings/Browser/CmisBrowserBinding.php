@@ -14,7 +14,6 @@ use Dkd\PhpCmis\AclServiceInterface;
 use Dkd\PhpCmis\Bindings\BindingSessionInterface;
 use Dkd\PhpCmis\Bindings\CmisInterface;
 use Dkd\PhpCmis\DiscoveryServiceInterface;
-use Dkd\PhpCmis\Exception\IllegalStateException;
 use Dkd\PhpCmis\MultiFilingServiceInterface;
 use Dkd\PhpCmis\NavigationServiceInterface;
 use Dkd\PhpCmis\ObjectServiceInterface;
@@ -34,12 +33,56 @@ class CmisBrowserBinding implements CmisInterface
     protected $session;
 
     /**
+     * @var RepositoryService
+     */
+    protected $repositoryService;
+
+    /**
+     * @var NavigationService
+     */
+    protected $navigationService;
+
+    /**
+     * @var ObjectService
+     */
+    protected $objectService;
+
+    /**
+     * @var VersioningService
+     */
+    protected $versioningService;
+
+    /**
+     * @var DiscoveryService
+     */
+    protected $discoveryService;
+
+    /**
+     * @var MultiFilingService
+     */
+    protected $multiFilingService;
+
+    /**
+     * @var RelationshipService
+     */
+    protected $relationshipService;
+
+    /**
+     * @var PolicyService
+     */
+    protected $policyService;
+
+    /**
+     * @var AclService
+     */
+    protected $aclService;
+
+    /**
      * @param BindingSessionInterface $session
      */
     public function __construct(BindingSessionInterface $session)
     {
         $this->session = $session;
-
         $this->repositoryService = new RepositoryService($session);
         $this->navigationService = new NavigationService($session);
         $this->objectService = new ObjectService($session);
@@ -68,7 +111,7 @@ class CmisBrowserBinding implements CmisInterface
      */
     public function getNavigationService()
     {
-        // TODO: Implement getNavigationService() method.
+        return $this->navigationService;
     }
 
     /**
@@ -88,7 +131,7 @@ class CmisBrowserBinding implements CmisInterface
      */
     public function getVersioningService()
     {
-        // TODO: Implement getVersioningService() method.
+        return $this->versioningService;
     }
 
     /**
@@ -98,7 +141,7 @@ class CmisBrowserBinding implements CmisInterface
      */
     public function getRelationshipService()
     {
-        // TODO: Implement getRelationshipService() method.
+        return $this->relationshipService;
     }
 
     /**
@@ -108,7 +151,7 @@ class CmisBrowserBinding implements CmisInterface
      */
     public function getDiscoveryService()
     {
-        // TODO: Implement getDiscoveryService() method.
+        return $this->discoveryService;
     }
 
     /**
@@ -118,7 +161,7 @@ class CmisBrowserBinding implements CmisInterface
      */
     public function getMultiFilingService()
     {
-        // TODO: Implement getMultiFilingService() method.
+        return $this->multiFilingService;
     }
 
     /**
@@ -128,7 +171,7 @@ class CmisBrowserBinding implements CmisInterface
      */
     public function getAclService()
     {
-        // TODO: Implement getAclService() method.
+        return $this->aclService;
     }
 
     /**
@@ -138,7 +181,7 @@ class CmisBrowserBinding implements CmisInterface
      */
     public function getPolicyService()
     {
-        // TODO: Implement getPolicyService() method.
+        return $this->policyService;
     }
 
     /**
