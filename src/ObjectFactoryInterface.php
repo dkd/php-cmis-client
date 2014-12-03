@@ -12,7 +12,7 @@ namespace Dkd\PhpCmis;
 
 use Dkd\PhpCmis\CmisObject\CmisObjectInterface;
 use Dkd\PhpCmis\Data\ChangeEventInfoInterface;
-use Dkd\PhpCmis\Data\ContentStreamInterface;
+use GuzzleHttp\Stream\StreamInterface;
 use Dkd\PhpCmis\Data\ObjectDataInterface;
 use Dkd\PhpCmis\Data\ObjectListInterface;
 use Dkd\PhpCmis\Data\PropertiesInterface;
@@ -51,10 +51,10 @@ interface ObjectFactoryInterface
     /**
      * Converts a high level ContentStream object into a low level ContentStream object.
      *
-     * @param ContentStreamInterface $contentStream the original ContentStream object
-     * @return ContentStreamInterface the ContentStream object
+     * @param StreamInterface $contentStream the original ContentStream object
+     * @return StreamInterface the ContentStream object
      */
-    public function convertContentStream(ContentStreamInterface $contentStream);
+    public function convertContentStream(StreamInterface $contentStream);
 
     /**
      * @param ObjectDataInterface $objectData
@@ -135,7 +135,7 @@ interface ObjectFactoryInterface
      * @param string $mimeType
      * @param mixed $stream  @TODO define datatype
      * @param boolean $partial
-     * @return ContentStreamInterface
+     * @return StreamInterface
      */
     public function createContentStream($filename, $length, $mimeType, $stream, $partial = false);
 

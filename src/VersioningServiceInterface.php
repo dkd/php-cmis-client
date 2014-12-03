@@ -11,7 +11,7 @@ namespace Dkd\PhpCmis;
  */
 
 use Dkd\PhpCmis\Data\AclInterface;
-use Dkd\PhpCmis\Data\ContentStreamInterface;
+use GuzzleHttp\Stream\StreamInterface;
 use Dkd\PhpCmis\Data\ExtensionDataInterface;
 use Dkd\PhpCmis\Data\ObjectDataInterface;
 use Dkd\PhpCmis\Data\PropertiesInterface;
@@ -44,7 +44,7 @@ interface VersioningServiceInterface
      * @param boolean $major indicator if the new version should become a major (true) or minor (false) version
      * @param PropertiesInterface $properties the property values that must be applied to the
      * newly created document object
-     * @param ContentStreamInterface $contentStream the content stream that must be stored
+     * @param StreamInterface $contentStream the content stream that must be stored
      * for the newly created document object
      * @param String $checkinComment a version comment
      * @param string[] $policies a list of policy IDs that must be applied to the newly created document object
@@ -58,7 +58,7 @@ interface VersioningServiceInterface
         $objectId,
         $major,
         PropertiesInterface $properties = null,
-        ContentStreamInterface $contentStream = null,
+        StreamInterface $contentStream = null,
         $checkinComment = null,
         array $policies = array(),
         AclInterface $addAces = null,

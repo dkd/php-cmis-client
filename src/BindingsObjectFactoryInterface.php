@@ -10,7 +10,7 @@ namespace Dkd\PhpCmis;
  * file that was distributed with this source code.
  */
 
-use Dkd\PhpCmis\Data\ContentStreamInterface;
+use GuzzleHttp\Stream\StreamInterface;
 use Dkd\PhpCmis\Data\PropertiesInterface;
 use Dkd\PhpCmis\Data\PropertyBooleanInterface;
 use Dkd\PhpCmis\Data\PropertyDataInterface;
@@ -44,11 +44,10 @@ interface BindingsObjectFactoryInterface
     /**
      * @param string $filename
      * @param int $length
-     * @param string $mimetype
-     * @param mixed $stream @TODO define datatype
-     * @return ContentStreamInterface
+     * @param string $mimeType
+     * @return StreamInterface
      */
-    public function createContentStream($filename, $length, $mimetype, $stream);
+    public function createContentStream($filename, $length, $mimeType);
 
     /**
      * @param PropertyDataInterface[] $properties

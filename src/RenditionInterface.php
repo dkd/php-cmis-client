@@ -10,7 +10,7 @@ namespace Dkd\PhpCmis;
  * file that was distributed with this source code.
  */
 
-use Dkd\PhpCmis\Data\ContentStreamInterface;
+use GuzzleHttp\Stream\StreamInterface;
 use Dkd\PhpCmis\Data\RenditionDataInterface;
 
 /**
@@ -21,7 +21,7 @@ interface RenditionInterface extends RenditionDataInterface
     /**
      * Returns the content stream of the rendition.
      *
-     * @return ContentStreamInterface the content stream of the rendition or null if the rendition has no content
+     * @return StreamInterface the content stream of the rendition or null if the rendition has no content
      */
     public function getContentStream();
 

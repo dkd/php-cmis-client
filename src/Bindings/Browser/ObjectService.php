@@ -15,7 +15,7 @@ use Dkd\PhpCmis\Data\AclInterface;
 use Dkd\PhpCmis\Constants;
 use Dkd\PhpCmis\Data\AllowableActionsInterface;
 use Dkd\PhpCmis\Data\BulkUpdateObjectIdAndChangeTokenInterface;
-use Dkd\PhpCmis\Data\ContentStreamInterface;
+use GuzzleHttp\Stream\StreamInterface;
 use Dkd\PhpCmis\Data\ExtensionDataInterface;
 use Dkd\PhpCmis\Data\ObjectDataInterface;
 use Dkd\PhpCmis\Data\PropertiesInterface;
@@ -39,7 +39,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      * @param string $objectId the identifier for the object. The repository might return a different/new object id
      * @param string $changeToken (optional) the last change token of this object that the client received.
      * The repository might return a new change token (default is null)
-     * @param ContentStreamInterface $contentStream the content stream to append
+     * @param StreamInterface $contentStream the content stream to append
      * @param boolean $isLastChunk indicates if this content stream is the last chunk
      * @param ExtensionDataInterface $extension
      * @return void
@@ -48,7 +48,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         $repositoryId,
         $objectId,
         $changeToken,
-        ContentStreamInterface $contentStream,
+        StreamInterface $contentStream,
         $isLastChunk,
         ExtensionDataInterface $extension
     ) {
@@ -86,7 +86,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      * created document object
      * @param string $folderId if specified, the identifier for the folder that must be the parent folder
      * for the newly created document object
-     * @param ContentStreamInterface $contentStream the content stream that must be stored for the newly
+     * @param StreamInterface $contentStream the content stream that must be stored for the newly
      * created document object
      * @param VersioningState $versioningState specifies what the versioning state of the newly created object
      * must be (default is VersioningState::MAJOR)
@@ -102,7 +102,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         $repositoryId,
         PropertiesInterface $properties,
         $folderId = null,
-        ContentStreamInterface $contentStream = null,
+        StreamInterface $contentStream = null,
         VersioningState $versioningState = null,
         array $policies = array(),
         AclInterface $addAces = null,
@@ -341,7 +341,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      * @param integer $offset
      * @param integer $length
      * @param ExtensionDataInterface $extension
-     * @return ContentStreamInterface
+     * @return StreamInterface
      */
     public function getContentStream(
         $repositoryId,
@@ -488,7 +488,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      *
      * @param string $repositoryId the identifier for the repository
      * @param string $objectId the identifier for the object. The repository might return a different/new object id
-     * @param ContentStreamInterface $contentStream the content stream
+     * @param StreamInterface $contentStream the content stream
      * @param boolean $overwriteFlag (optional) If true, then the repository must replace the existing content stream
      * for the object (if any) with the input content stream. If If false, then the repository must only set
      * the input content stream for the object if the object currently does not have a content stream (default is true)
@@ -500,7 +500,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
     public function setContentStream(
         $repositoryId,
         $objectId,
-        ContentStreamInterface $contentStream,
+        StreamInterface $contentStream,
         $overwriteFlag = true,
         $changeToken = null,
         ExtensionDataInterface $extension = null

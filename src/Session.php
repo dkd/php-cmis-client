@@ -12,7 +12,7 @@ namespace Dkd\PhpCmis;
 
 use Dkd\PhpCmis\CmisObject\CmisObjectInterface;
 use Dkd\PhpCmis\Data\BulkUpdateObjectIdAndChangeTokenInterface;
-use Dkd\PhpCmis\Data\ContentStreamInterface;
+use GuzzleHttp\Stream\StreamInterface;
 use Dkd\PhpCmis\Data\RepositoryInfoInterface;
 use Dkd\PhpCmis\Enum\AclPropagation;
 use Dkd\PhpCmis\Enum\IncludeRelationships;
@@ -228,14 +228,14 @@ class Session implements SessionInterface
      *
      * @param string[] $properties
      * @param ObjectIdInterface $folderId
-     * @param ContentStreamInterface $contentStream
+     * @param StreamInterface $contentStream
      * @param VersioningState $versioningState
      * @return ObjectIdInterface the object ID of the new document
      */
     public function createDocument(
         array $properties,
         ObjectIdInterface $folderId,
-        ContentStreamInterface $contentStream,
+        StreamInterface $contentStream,
         VersioningState $versioningState
     ) {
         // TODO: Implement createDocument() method.
@@ -505,7 +505,7 @@ class Session implements SessionInterface
      * @param string $streamId the stream ID
      * @param int $offset the offset of the stream or null to read the stream from the beginning
      * @param int $length the maximum length of the stream or null to read to the end of the stream
-     * @return ContentStreamInterface|null the content stream or null if the
+     * @return StreamInterface|null the content stream or null if the
      * document has no content stream
      */
     public function getContentStream(ObjectIdInterface $docId, $streamId = null, $offset = null, $length = null)

@@ -11,7 +11,7 @@ namespace Dkd\PhpCmis\Bindings\Browser;
  */
 
 use Dkd\PhpCmis\Data\AclInterface;
-use Dkd\PhpCmis\Data\ContentStreamInterface;
+use GuzzleHttp\Stream\StreamInterface;
 use Dkd\PhpCmis\Data\ExtensionDataInterface;
 use Dkd\PhpCmis\Data\ObjectDataInterface;
 use Dkd\PhpCmis\Data\PropertiesInterface;
@@ -45,7 +45,7 @@ class VersioningService extends AbstractBrowserBindingService implements Version
      * @param boolean $major indicator if the new version should become a major (true) or minor (false) version
      * @param PropertiesInterface $properties the property values that must be applied to the
      * newly created document object
-     * @param ContentStreamInterface $contentStream the content stream that must be stored
+     * @param StreamInterface $contentStream the content stream that must be stored
      * for the newly created document object
      * @param string $checkinComment a version comment
      * @param string[] $policies a list of policy IDs that must be applied to the newly created document object
@@ -59,7 +59,7 @@ class VersioningService extends AbstractBrowserBindingService implements Version
         $objectId,
         $major,
         PropertiesInterface $properties = null,
-        ContentStreamInterface $contentStream = null,
+        StreamInterface $contentStream = null,
         $checkinComment = null,
         array $policies = array(),
         AclInterface $addAces = null,

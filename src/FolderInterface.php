@@ -11,7 +11,7 @@ namespace Dkd\PhpCmis;
  */
 
 use Dkd\PhpCmis\CmisObject\CmisObjectInterface;
-use Dkd\PhpCmis\Data\ContentStreamInterface;
+use GuzzleHttp\Stream\StreamInterface;
 use Dkd\PhpCmis\Enum\UnfileObject;
 use Dkd\PhpCmis\Enum\VersioningState;
 
@@ -24,7 +24,7 @@ interface FolderInterface extends FileableCmisObjectInterface, FolderPropertiesI
      * Creates a new document in this folder.
      *
      * @param array $properties
-     * @param ContentStreamInterface $contentStream
+     * @param StreamInterface $contentStream
      * @param VersioningState $versioningState
      * @param PolicyInterface[] $policies
      * @param AceInterface[] $addAces
@@ -34,7 +34,7 @@ interface FolderInterface extends FileableCmisObjectInterface, FolderPropertiesI
      */
     public function createDocument(
         $properties,
-        ContentStreamInterface $contentStream,
+        StreamInterface $contentStream,
         VersioningState $versioningState,
         array $policies = array(),
         array $addAces = array(),

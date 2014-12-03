@@ -10,7 +10,7 @@ namespace Dkd\PhpCmis;
  * file that was distributed with this source code.
  */
 
-use Dkd\PhpCmis\Data\ContentStreamInterface;
+use GuzzleHttp\Stream\StreamInterface;
 use Dkd\PhpCmis\Enum\VersioningState;
 
 /**
@@ -24,13 +24,13 @@ interface DocumentInterface extends FileableCmisObjectInterface, DocumentPropert
      * Otherwise the current document is returned.
      * The stream in contentStream is consumed but not closed by this method.
      *
-     * @param ContentStreamInterface $contentStream the content stream
+     * @param StreamInterface $contentStream the content stream
      * @param boolean $isLastChunk indicates if this stream is the last chunk of the content
      * @param boolean $refresh if this parameter is set to true, this object will be refreshed after the
      * content stream has been appended
      * @return ObjectIdInterface the updated object ID, or null if the repository did not return an object ID
      */
-    public function appendContentStream(ContentStreamInterface $contentStream, $isLastChunk, $refresh = false);
+    public function appendContentStream(StreamInterface $contentStream, $isLastChunk, $refresh = false);
 
     /**
      * If this is a PWC (private working copy) the check out will be reversed.
@@ -46,7 +46,7 @@ interface DocumentInterface extends FileableCmisObjectInterface, DocumentPropert
      *
      * @param boolean $major
      * @param array $properties
-     * @param ContentStreamInterface $contentStream
+     * @param StreamInterface $contentStream
      * @param string $checkinComment
      * @param PolicyInterface[] $policies
      * @param AceInterface[] $addAces
@@ -56,7 +56,7 @@ interface DocumentInterface extends FileableCmisObjectInterface, DocumentPropert
     public function checkIn(
         $major,
         array $properties,
-        ContentStreamInterface $contentStream,
+        StreamInterface $contentStream,
         $checkinComment,
         array $policies = array(),
         array $addAces = array(),
@@ -124,7 +124,7 @@ interface DocumentInterface extends FileableCmisObjectInterface, DocumentPropert
      * @param string $streamId the stream ID
      * @param int $offset the offset of the stream or null to read the stream from the beginning
      * @param int $length the maximum length of the stream or null to read to the end of the stream
-     * @return ContentStreamInterface|null the content stream, or null if no content is associated with this stream ID
+     * @return StreamInterface|null the content stream, or null if no content is associated with this stream ID
      */
     public function getContentStream($streamId = null, $offset = null, $length = null);
 
@@ -143,12 +143,12 @@ interface DocumentInterface extends FileableCmisObjectInterface, DocumentPropert
      * the object ID of this new version is returned. Otherwise the object ID of the current document is returned.
      * The stream in contentStream is consumed but not closed by this method.
      *
-     * @param ContentStreamInterface $contentStream the content stream
+     * @param StreamInterface $contentStream the content stream
      * @param boolean $overwrite  if this parameter is set to false and the document already has content,
      * the repository throws a CmisContentAlreadyExistsException
      * @param boolean $refresh if this parameter is set to true, this object will be refreshed
      * after the new content has been set
      * @return ObjectIdInterface|null the updated object ID, or null if the repository did not return an object ID
      */
-    public function setContentStream(ContentStreamInterface $contentStream, $overwrite, $refresh = true);
+    public function setContentStream(StreamInterface $contentStream, $overwrite, $refresh = true);
 }
