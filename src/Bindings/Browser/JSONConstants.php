@@ -197,8 +197,8 @@ class JSONConstants
         return self::$ACL_CAPABILITY_KEYS;
     }
 
-    const JSON_ACLCAP_PERMISSION_PERMISSION = "permission";
-    const JSON_ACLCAP_PERMISSION_DESCRIPTION = "description";
+    const JSON_ACLCAP_PERMISSION_PERMISSION = 'permission';
+    const JSON_ACLCAP_PERMISSION_DESCRIPTION = 'description';
 
     protected static $ACL_CAPABILITY_PERMISSION_KEYS = array(
         self::JSON_ACLCAP_PERMISSION_PERMISSION,
@@ -215,8 +215,8 @@ class JSONConstants
         return self::$ACL_CAPABILITY_PERMISSION_KEYS;
     }
 
-    const JSON_ACLCAP_MAPPING_KEY = "key";
-    const JSON_ACLCAP_MAPPING_PERMISSION = "permission";
+    const JSON_ACLCAP_MAPPING_KEY = 'key';
+    const JSON_ACLCAP_MAPPING_PERMISSION = 'permission';
 
     protected static $ACL_CAPABILITY_MAPPING_KEYS = array(
         self::JSON_ACLCAP_MAPPING_KEY,
@@ -233,12 +233,12 @@ class JSONConstants
         return self::$ACL_CAPABILITY_MAPPING_KEYS;
     }
 
-    const JSON_FEATURE_ID = "id";
-    const JSON_FEATURE_URL = "url";
-    const JSON_FEATURE_COMMON_NAME = "commonName";
-    const JSON_FEATURE_VERSION_LABEL = "versionLabel";
-    const JSON_FEATURE_DESCRIPTION = "description";
-    const JSON_FEATURE_DATA = "featureData";
+    const JSON_FEATURE_ID = 'id';
+    const JSON_FEATURE_URL = 'url';
+    const JSON_FEATURE_COMMON_NAME = 'commonName';
+    const JSON_FEATURE_VERSION_LABEL = 'versionLabel';
+    const JSON_FEATURE_DESCRIPTION = 'description';
+    const JSON_FEATURE_DATA = 'featureData';
 
     protected static $FEATURE_KEYS = array(
         self::JSON_FEATURE_ID,
@@ -254,17 +254,17 @@ class JSONConstants
         return self::$FEATURE_KEYS;
     }
 
-    const JSON_OBJECT_PROPERTIES = "properties";
-    const JSON_OBJECT_SUCCINCT_PROPERTIES = "succinctProperties";
-    const JSON_OBJECT_PROPERTIES_EXTENSION = "propertiesExtension";
-    const JSON_OBJECT_ALLOWABLE_ACTIONS = "allowableActions";
-    const JSON_OBJECT_RELATIONSHIPS = "relationships";
-    const JSON_OBJECT_CHANGE_EVENT_INFO = "changeEventInfo";
-    const JSON_OBJECT_ACL = "acl";
-    const JSON_OBJECT_EXACT_ACL = "exactACL";
-    const JSON_OBJECT_POLICY_IDS = "policyIds";
-    const JSON_OBJECT_POLICY_IDS_IDS = "ids";
-    const JSON_OBJECT_RENDITIONS = "renditions";
+    const JSON_OBJECT_PROPERTIES = 'properties';
+    const JSON_OBJECT_SUCCINCT_PROPERTIES = 'succinctProperties';
+    const JSON_OBJECT_PROPERTIES_EXTENSION = 'propertiesExtension';
+    const JSON_OBJECT_ALLOWABLE_ACTIONS = 'allowableActions';
+    const JSON_OBJECT_RELATIONSHIPS = 'relationships';
+    const JSON_OBJECT_CHANGE_EVENT_INFO = 'changeEventInfo';
+    const JSON_OBJECT_ACL = 'acl';
+    const JSON_OBJECT_EXACT_ACL = 'exactACL';
+    const JSON_OBJECT_POLICY_IDS = 'policyIds';
+    const JSON_OBJECT_POLICY_IDS_IDS = 'ids';
+    const JSON_OBJECT_RENDITIONS = 'renditions';
 
     protected static $OBJECT_KEYS = array(
         self::JSON_OBJECT_PROPERTIES,
@@ -298,19 +298,19 @@ class JSONConstants
         return self::$POLICY_IDS_KEYS;
     }
 
-    const JSON_OBJECTINFOLDER_OBJECT = "object";
-    const JSON_OBJECTINFOLDER_PATH_SEGMENT = "pathSegment";
+    const JSON_OBJECTINFOLDER_OBJECT = 'object';
+    const JSON_OBJECTINFOLDER_PATH_SEGMENT = 'pathSegment';
 
-    const JSON_OBJECTPARENTS_OBJECT = "object";
-    const JSON_OBJECTPARENTS_RELATIVE_PATH_SEGMENT = "relativePathSegment";
+    const JSON_OBJECTPARENTS_OBJECT = 'object';
+    const JSON_OBJECTPARENTS_RELATIVE_PATH_SEGMENT = 'relativePathSegment';
 
-    const JSON_PROPERTY_ID = "id";
-    const JSON_PROPERTY_LOCALNAME = "localName";
-    const JSON_PROPERTY_DISPLAYNAME = "displayName";
-    const JSON_PROPERTY_QUERYNAME = "queryName";
-    const JSON_PROPERTY_VALUE = "value";
-    const JSON_PROPERTY_DATATYPE = "type";
-    const JSON_PROPERTY_CARDINALITY = "cardinality";
+    const JSON_PROPERTY_ID = 'id';
+    const JSON_PROPERTY_LOCALNAME = 'localName';
+    const JSON_PROPERTY_DISPLAYNAME = 'displayName';
+    const JSON_PROPERTY_QUERYNAME = 'queryName';
+    const JSON_PROPERTY_VALUE = 'value';
+    const JSON_PROPERTY_DATATYPE = 'type';
+    const JSON_PROPERTY_CARDINALITY = 'cardinality';
 
     protected static $PROPERTY_KEYS = array(
         self::JSON_PROPERTY_ID,
@@ -332,8 +332,8 @@ class JSONConstants
         return self::$PROPERTY_KEYS;
     }
 
-    const JSON_CHANGE_EVENT_TYPE = "changeType";
-    const JSON_CHANGE_EVENT_TIME = "changeTime";
+    const JSON_CHANGE_EVENT_TYPE = 'changeType';
+    const JSON_CHANGE_EVENT_TIME = 'changeTime';
 
     protected static $CHANGE_EVENT_KEYS = array(
         self::JSON_CHANGE_EVENT_TYPE,
@@ -350,8 +350,8 @@ class JSONConstants
         return self::$CHANGE_EVENT_KEYS;
     }
 
-    const JSON_ACL_ACES = "aces";
-    const JSON_ACL_IS_EXACT = "isExact";
+    const JSON_ACL_ACES = 'aces';
+    const JSON_ACL_IS_EXACT = 'isExact';
 
     protected static $ACL_KEYS = array(
         self::JSON_ACL_ACES,
@@ -368,8 +368,8 @@ class JSONConstants
         return self::$ACL_KEYS;
     }
 
-    const JSON_ACE_PRINCIPAL = "principal";
-    const JSON_ACE_PRINCIPAL_ID = "principalId";
+    const JSON_ACE_PRINCIPAL = 'principal';
+    const JSON_ACE_PRINCIPAL_ID = 'principalId';
 
     protected static $ACE_PRINCIPAL_KEYS = array(
         self::JSON_ACE_PRINCIPAL_ID
@@ -385,8 +385,8 @@ class JSONConstants
         return self::$ACE_PRINCIPAL_KEYS;
     }
 
-    const JSON_ACE_PERMISSIONS = "permissions";
-    const JSON_ACE_IS_DIRECT = "isDirect";
+    const JSON_ACE_PERMISSIONS = 'permissions';
+    const JSON_ACE_IS_DIRECT = 'isDirect';
 
     protected static $ACE_KEYS = array(
         self::JSON_ACE_PRINCIPAL,
@@ -404,14 +404,14 @@ class JSONConstants
         return self::$ACE_KEYS;
     }
 
-    const JSON_RENDITION_STREAM_ID = "streamId";
-    const JSON_RENDITION_MIMETYPE = "mimeType";
-    const JSON_RENDITION_LENGTH = "length";
-    const JSON_RENDITION_KIND = "kind";
-    const JSON_RENDITION_TITLE = "title";
-    const JSON_RENDITION_HEIGHT = "height";
-    const JSON_RENDITION_WIDTH = "width";
-    const JSON_RENDITION_DOCUMENT_ID = "renditionDocumentId";
+    const JSON_RENDITION_STREAM_ID = 'streamId';
+    const JSON_RENDITION_MIMETYPE = 'mimeType';
+    const JSON_RENDITION_LENGTH = 'length';
+    const JSON_RENDITION_KIND = 'kind';
+    const JSON_RENDITION_TITLE = 'title';
+    const JSON_RENDITION_HEIGHT = 'height';
+    const JSON_RENDITION_WIDTH = 'width';
+    const JSON_RENDITION_DOCUMENT_ID = 'renditionDocumentId';
 
     protected static $RENDITION_KEYS = array(
         self::JSON_RENDITION_STREAM_ID,
@@ -434,32 +434,32 @@ class JSONConstants
         return self::$RENDITION_KEYS;
     }
 
-    const JSON_OBJECTLIST_OBJECTS = "objects";
-    const JSON_OBJECTLIST_HAS_MORE_ITEMS = "hasMoreItems";
-    const JSON_OBJECTLIST_NUM_ITEMS = "numItems";
-    const JSON_OBJECTLIST_CHANGE_LOG_TOKEN = "changeLogToken";
+    const JSON_OBJECTLIST_OBJECTS = 'objects';
+    const JSON_OBJECTLIST_HAS_MORE_ITEMS = 'hasMoreItems';
+    const JSON_OBJECTLIST_NUM_ITEMS = 'numItems';
+    const JSON_OBJECTLIST_CHANGE_LOG_TOKEN = 'changeLogToken';
 
-    const JSON_TYPE_ID = "id";
-    const JSON_TYPE_LOCALNAME = "localName";
-    const JSON_TYPE_LOCALNAMESPACE = "localNamespace";
-    const JSON_TYPE_DISPLAYNAME = "displayName";
-    const JSON_TYPE_QUERYNAME = "queryName";
-    const JSON_TYPE_DESCRIPTION = "description";
-    const JSON_TYPE_BASE_ID = "baseId";
-    const JSON_TYPE_PARENT_ID = "parentId";
-    const JSON_TYPE_CREATABLE = "creatable";
-    const JSON_TYPE_FILEABLE = "fileable";
-    const JSON_TYPE_QUERYABLE = "queryable";
-    const JSON_TYPE_FULLTEXT_INDEXED = "fulltextIndexed";
-    const JSON_TYPE_INCLUDE_IN_SUPERTYPE_QUERY = "includedInSupertypeQuery";
-    const JSON_TYPE_CONTROLABLE_POLICY = "controllablePolicy";
-    const JSON_TYPE_CONTROLABLE_ACL = "controllableACL";
-    const JSON_TYPE_PROPERTY_DEFINITIONS = "propertyDefinitions";
-    const JSON_TYPE_TYPE_MUTABILITY = "typeMutability";
-    const JSON_TYPE_VERSIONABLE = "versionable"; // document
-    const JSON_TYPE_CONTENTSTREAM_ALLOWED = "contentStreamAllowed"; // document
-    const JSON_TYPE_ALLOWED_SOURCE_TYPES = "allowedSourceTypes"; // relationship
-    const JSON_TYPE_ALLOWED_TARGET_TYPES = "allowedTargetTypes"; // relationship
+    const JSON_TYPE_ID = 'id';
+    const JSON_TYPE_LOCALNAME = 'localName';
+    const JSON_TYPE_LOCALNAMESPACE = 'localNamespace';
+    const JSON_TYPE_DISPLAYNAME = 'displayName';
+    const JSON_TYPE_QUERYNAME = 'queryName';
+    const JSON_TYPE_DESCRIPTION = 'description';
+    const JSON_TYPE_BASE_ID = 'baseId';
+    const JSON_TYPE_PARENT_ID = 'parentId';
+    const JSON_TYPE_CREATABLE = 'creatable';
+    const JSON_TYPE_FILEABLE = 'fileable';
+    const JSON_TYPE_QUERYABLE = 'queryable';
+    const JSON_TYPE_FULLTEXT_INDEXED = 'fulltextIndexed';
+    const JSON_TYPE_INCLUDE_IN_SUPERTYPE_QUERY = 'includedInSupertypeQuery';
+    const JSON_TYPE_CONTROLABLE_POLICY = 'controllablePolicy';
+    const JSON_TYPE_CONTROLABLE_ACL = 'controllableACL';
+    const JSON_TYPE_PROPERTY_DEFINITIONS = 'propertyDefinitions';
+    const JSON_TYPE_TYPE_MUTABILITY = 'typeMutability';
+    const JSON_TYPE_VERSIONABLE = 'versionable'; // document
+    const JSON_TYPE_CONTENTSTREAM_ALLOWED = 'contentStreamAllowed'; // document
+    const JSON_TYPE_ALLOWED_SOURCE_TYPES = 'allowedSourceTypes'; // relationship
+    const JSON_TYPE_ALLOWED_TARGET_TYPES = 'allowedTargetTypes'; // relationship
 
     protected static $TYPE_KEYS = array(
         self::JSON_TYPE_ID,
@@ -496,30 +496,30 @@ class JSONConstants
     }
 
 
-    const JSON_PROPERTY_TYPE_ID = "id";
-    const JSON_PROPERTY_TYPE_LOCALNAME = "localName";
-    const JSON_PROPERTY_TYPE_LOCALNAMESPACE = "localNamespace";
-    const JSON_PROPERTY_TYPE_DISPLAYNAME = "displayName";
-    const JSON_PROPERTY_TYPE_QUERYNAME = "queryName";
-    const JSON_PROPERTY_TYPE_DESCRIPTION = "description";
-    const JSON_PROPERTY_TYPE_PROPERTY_TYPE = "propertyType";
-    const JSON_PROPERTY_TYPE_CARDINALITY = "cardinality";
-    const JSON_PROPERTY_TYPE_UPDATABILITY = "updatability";
-    const JSON_PROPERTY_TYPE_INHERITED = "inherited";
-    const JSON_PROPERTY_TYPE_REQUIRED = "required";
-    const JSON_PROPERTY_TYPE_QUERYABLE = "queryable";
-    const JSON_PROPERTY_TYPE_ORDERABLE = "orderable";
-    const JSON_PROPERTY_TYPE_OPENCHOICE = "openChoice";
-    const JSON_PROPERTY_TYPE_DEAULT_VALUE = "defaultValue";
-    const JSON_PROPERTY_TYPE_MAX_LENGTH = "maxLength";
-    const JSON_PROPERTY_TYPE_MIN_VALUE = "minValue";
-    const JSON_PROPERTY_TYPE_MAX_VALUE = "maxValue";
-    const JSON_PROPERTY_TYPE_PRECISION = "precision";
-    const JSON_PROPERTY_TYPE_RESOLUTION = "resolution";
-    const JSON_PROPERTY_TYPE_CHOICE = "choice";
-    const JSON_PROPERTY_TYPE_CHOICE_DISPLAYNAME = "displayName";
-    const JSON_PROPERTY_TYPE_CHOICE_VALUE = "value";
-    const JSON_PROPERTY_TYPE_CHOICE_CHOICE = "choice";
+    const JSON_PROPERTY_TYPE_ID = 'id';
+    const JSON_PROPERTY_TYPE_LOCALNAME = 'localName';
+    const JSON_PROPERTY_TYPE_LOCALNAMESPACE = 'localNamespace';
+    const JSON_PROPERTY_TYPE_DISPLAYNAME = 'displayName';
+    const JSON_PROPERTY_TYPE_QUERYNAME = 'queryName';
+    const JSON_PROPERTY_TYPE_DESCRIPTION = 'description';
+    const JSON_PROPERTY_TYPE_PROPERTY_TYPE = 'propertyType';
+    const JSON_PROPERTY_TYPE_CARDINALITY = 'cardinality';
+    const JSON_PROPERTY_TYPE_UPDATABILITY = 'updatability';
+    const JSON_PROPERTY_TYPE_INHERITED = 'inherited';
+    const JSON_PROPERTY_TYPE_REQUIRED = 'required';
+    const JSON_PROPERTY_TYPE_QUERYABLE = 'queryable';
+    const JSON_PROPERTY_TYPE_ORDERABLE = 'orderable';
+    const JSON_PROPERTY_TYPE_OPENCHOICE = 'openChoice';
+    const JSON_PROPERTY_TYPE_DEAULT_VALUE = 'defaultValue';
+    const JSON_PROPERTY_TYPE_MAX_LENGTH = 'maxLength';
+    const JSON_PROPERTY_TYPE_MIN_VALUE = 'minValue';
+    const JSON_PROPERTY_TYPE_MAX_VALUE = 'maxValue';
+    const JSON_PROPERTY_TYPE_PRECISION = 'precision';
+    const JSON_PROPERTY_TYPE_RESOLUTION = 'resolution';
+    const JSON_PROPERTY_TYPE_CHOICE = 'choice';
+    const JSON_PROPERTY_TYPE_CHOICE_DISPLAYNAME = 'displayName';
+    const JSON_PROPERTY_TYPE_CHOICE_VALUE = 'value';
+    const JSON_PROPERTY_TYPE_CHOICE_CHOICE = 'choice';
 
     protected static $PROPERTY_TYPE_KEYS = array(
         self::JSON_PROPERTY_TYPE_ID,
@@ -553,9 +553,9 @@ class JSONConstants
         return self::$PROPERTY_TYPE_KEYS;
     }
 
-    const JSON_TYPE_TYPE_MUTABILITY_CREATE = "create";
-    const JSON_TYPE_TYPE_MUTABILITY_UPDATE = "update";
-    const JSON_TYPE_TYPE_MUTABILITY_DELETE = "delete";
+    const JSON_TYPE_TYPE_MUTABILITY_CREATE = 'create';
+    const JSON_TYPE_TYPE_MUTABILITY_UPDATE = 'update';
+    const JSON_TYPE_TYPE_MUTABILITY_DELETE = 'delete';
 
     protected static $TYPE_TYPE_MUTABILITY_KEYS = array(
         self::JSON_TYPE_TYPE_MUTABILITY_CREATE,
