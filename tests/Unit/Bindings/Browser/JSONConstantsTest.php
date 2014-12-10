@@ -170,4 +170,15 @@ class JSONConstantsTest extends \PHPUnit_Framework_TestCase
             JSONConstants::getPropertyTypeKeys()
         );
     }
+
+    public function testGetTypeTypeMutabilityKeysReturnsContentOfStaticArray()
+    {
+        $this->assertSame(
+            $this->getStaticAttribute(
+                '\\Dkd\\PhpCmis\\Bindings\\Browser\\JSONConstants',
+                'TYPE_TYPE_MUTABILITY_KEYS'
+            ),
+            JSONConstants::getTypeTypeMutabilityKeys()
+        );
+    }
 }

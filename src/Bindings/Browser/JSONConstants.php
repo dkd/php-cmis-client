@@ -552,4 +552,22 @@ class JSONConstants
     {
         return self::$PROPERTY_TYPE_KEYS;
     }
+
+    const JSON_TYPE_TYPE_MUTABILITY_CREATE = "create";
+    const JSON_TYPE_TYPE_MUTABILITY_UPDATE = "update";
+    const JSON_TYPE_TYPE_MUTABILITY_DELETE = "delete";
+
+    protected static $TYPE_TYPE_MUTABILITY_KEYS = array(
+        self::JSON_TYPE_TYPE_MUTABILITY_CREATE,
+        self::JSON_TYPE_TYPE_MUTABILITY_DELETE,
+        self::JSON_TYPE_TYPE_MUTABILITY_UPDATE
+    );
+
+    /**
+     * @return array Array of all type mutability keys
+     */
+    public static function getTypeTypeMutabilityKeys()
+    {
+        return self::$TYPE_TYPE_MUTABILITY_KEYS;
+    }
 }
