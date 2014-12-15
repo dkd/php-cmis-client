@@ -10,7 +10,7 @@ namespace Dkd\PhpCmis;
  * file that was distributed with this source code.
  */
 
-use Dkd\PhpCmis\DataObjects\Repository;
+use Dkd\PhpCmis\DataObjects\RepositoryInfo;
 use Doctrine\Common\Cache\Cache;
 
 /**
@@ -47,7 +47,7 @@ interface SessionFactoryInterface
      * @param ObjectFactoryInterface $objectFactory
      * @param Cache $cache
      * @param Cache $typeDefinitionCache
-     * @return Repository[] a list of all available repositories
+     * @return RepositoryInfo[] a list of all available repositories
      *
      * @see org.apache.chemistry.opencmis.commons.SessionParameter
      */

@@ -10,6 +10,7 @@ namespace Dkd\PhpCmis;
  * file that was distributed with this source code.
  */
 
+use Dkd\PhpCmis\Bindings\CmisBindingsHelper;
 use Doctrine\Common\Cache\Cache;
 
 /**
@@ -20,7 +21,11 @@ use Doctrine\Common\Cache\Cache;
 class SessionFactory implements SessionFactoryInterface
 {
     /**
-     * {@inheritdoc}
+     * @param array $parameters
+     * @param ObjectFactoryInterface $objectFactory
+     * @param Cache $cache
+     * @param Cache $typeDefinitionCache
+     * @return Session
      */
     public function createSession(
         array $parameters,
@@ -28,22 +33,33 @@ class SessionFactory implements SessionFactoryInterface
         Cache $cache = null,
         Cache $typeDefinitionCache = null
     ) {
-        return new Session($parameters, $objectFactory, $cache, $typeDefinitionCache);
+        $session = new Session($parameters, $objectFactory, $cache, $typeDefinitionCache);
+        $session->connect();
+
+        return $session;
     }
 
     /**
-     * Returns all repositories that are available at the endpoint.
-     *
-     * @param $parameters a array of name/value pairs with parameters for the session, see
-     * {@link SessionParameter} for parameters supported by php cmis lib, the parameter
-     * {@link SessionParameter::REPOSITORY_ID} should not be set
-     *
-     * @return Repository[] a list of all available repositories
-     *
-     * @see SessionParameter
+     * @param array $parameters
+     * @param ObjectFactoryInterface $objectFactory
+     * @param Cache $cache
+     * @param Cache $typeDefinitionCache
+     * @return Data\RepositoryInfoInterface[]
      */
-    public function getRepositories($parameters)
-    {
-        // TODO: Implement getRepositories() method.
+    public function getRepositories(
+        array $parameters,
+        ObjectFactoryInterface $objectFactory = null,
+        Cache $cache = null,
+        Cache $typeDefinitionCache = null
+    ) {
+        $cmisBindingsHelper = new CmisBindingsHelper();
+        $binding = $cmisBindingsHelper->createBinding(
+            $parameters,
+            $objectFactory,
+            $cache,
+            $typeDefinitionCache
+        );
+
+        return $binding->getRepositoryService()->getRepositoryInfos();
     }
 }
