@@ -212,13 +212,15 @@ abstract class AbstractBrowserBindingService
      */
     protected function convertStatusCode($code, $message, \Exception $exception = null)
     {
-        $object = json_decode($message, true);
+        $messageData = json_decode($message, true);
 
-        if (is_array($object) && !empty($object[JSONConstants::ERROR_EXCEPTION])) {
-            $jsonError = $object[JSONConstants::ERROR_EXCEPTION];
+        if (is_array($messageData) && !empty($messageData[JSONConstants::ERROR_EXCEPTION])) {
+            $jsonError = $messageData[JSONConstants::ERROR_EXCEPTION];
 
-            if (!empty($object[JSONConstants::ERROR_MESSAGE]) && is_string($object[JSONConstants::ERROR_MESSAGE])) {
-                $message = $object[JSONConstants::ERROR_MESSAGE];
+            if (!empty($messageData[JSONConstants::ERROR_MESSAGE])
+                && is_string($messageData[JSONConstants::ERROR_MESSAGE])
+            ) {
+                $message = $messageData[JSONConstants::ERROR_MESSAGE];
             }
 
             $exceptionName = '\\Dkd\\PhpCmis\\Exception\\Cmis' . ucfirst($jsonError) . 'Exception';
@@ -270,9 +272,15 @@ abstract class AbstractBrowserBindingService
         try {
             $response = $this->getHttpInvoker()->get((string) $url);
         } catch (RequestException $exception) {
+            $code = 0;
+            $message = null;
+            if ($exception->getResponse()) {
+                $code = $exception->getResponse()->getStatusCode();
+                $message = $exception->getResponse()->getBody();
+            }
             throw $this->convertStatusCode(
-                $exception->getResponse()->getStatusCode(),
-                $exception->getResponse()->getBody(),
+                $code,
+                $message,
                 $exception
             );
         }

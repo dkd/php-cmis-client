@@ -537,6 +537,42 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         );
     }
 
+    public function testReadCatchesRequestExceptionAndPassesOnlyExceptionIfNoRequestDataExists()
+    {
+        $sessionMock = $this->getSessionMock();
+
+        $testUrl = Url::createFromUrl(self::BROWSER_URL_TEST);
+        $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor()->getMock(
+        );
+        $httpInvokerMock = $this->getMockBuilder('\\GuzzleHttp\\Client')->disableOriginalConstructor()->setMethods(
+            array('get')
+        )->getMock();
+        /** @var RequestException|PHPUnit_Framework_MockObject_MockObject $exceptionMock */
+        $exceptionMock = $this->getMockBuilder('\\GuzzleHttp\\Exception\\RequestException')->disableOriginalConstructor(
+        )->getMock();
+        $httpInvokerMock->expects($this->once())->method('get')->with($testUrl)->willThrowException(
+            $exceptionMock
+        );
+
+        $this->setExpectedException(get_class($exceptionMock));
+
+        /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
+        $binding = $this->getMockBuilder(
+            self::CLASS_TO_TEST
+        )->setConstructorArgs(array($sessionMock))->setMethods(
+            array('getHttpInvoker', 'convertStatusCode')
+        )->getMockForAbstractClass();
+        $binding->expects($this->any())->method('getHttpInvoker')->willReturn($httpInvokerMock);
+        $binding->expects($this->any())->method('convertStatusCode')->with(0, null, $exceptionMock)->willReturn(
+            $exceptionMock
+        );
+
+        $this->assertSame(
+            $responseMock,
+            $this->getMethod(self::CLASS_TO_TEST, 'read')->invokeArgs($binding, array($testUrl))
+        );
+    }
+
     public function testPostCallsHttpInvokerAndReturnsRequestResult()
     {
         $testUrl = Url::createFromUrl('http://foo.bar.baz');
