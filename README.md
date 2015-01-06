@@ -13,7 +13,7 @@ PHP CMIS Client
 
 LICENSE
 =======
-   Copyright 2014 Sascha Egerer
+   Copyright 2014 Sascha Egerer - dkd Internet Service GmbH <http://www.dkd.de>
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -26,3 +26,7 @@ LICENSE
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
+
+   This PHP CMIS Client library is part of the ForgetIT project: <http://www.forgetit-project.eu/>
+   The ForgetIT project is funded by the EC within the 7th Framework Programme under the objective "Digital Preservation" (GA 600826).
+
