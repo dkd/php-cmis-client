@@ -28,5 +28,6 @@ LICENSE
    limitations under the License.
 
    This PHP CMIS Client library is part of the ForgetIT project: <http://www.forgetit-project.eu/>
+
    The ForgetIT project is funded by the EC within the 7th Framework Programme under the objective "Digital Preservation" (GA 600826).
 
