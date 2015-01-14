@@ -30,6 +30,8 @@ class PermissionDefinitionTest extends PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider stringCastDataProvider
+     * @param string $expected
+     * @param mixed $value
      */
     public function testSetDescriptionSetsProperty($expected, $value)
     {
@@ -48,6 +50,8 @@ class PermissionDefinitionTest extends PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider stringCastDataProvider
+     * @param string $expected
+     * @param mixed $value
      */
     public function testSetIdSetsProperty($expected, $value)
     {

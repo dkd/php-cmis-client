@@ -139,8 +139,8 @@ class RepositoryInfoTest extends \PHPUnit_Framework_TestCase
      * Test setter for a property
      *
      * @dataProvider propertiesOfSutDataProvider
-     * @param $propertyName
-     * @param $validValue
+     * @param string $propertyName
+     * @param mixed $validValue
      */
     public function testPropertySetterSetsProperty($propertyName, $validValue)
     {
@@ -153,9 +153,9 @@ class RepositoryInfoTest extends \PHPUnit_Framework_TestCase
      * Test setter for a property - should cast value to expected type
      *
      * @dataProvider propertiesOfSutDataProvider
-     * @param $propertyName
-     * @param $validValue
-     * @param $invalidValue
+     * @param string $propertyName
+     * @param mixed $validValue
+     * @param mixed $invalidValue
      */
     public function testPropertySetterCastsValueToExpectedType($propertyName, $validValue, $invalidValue)
     {
@@ -180,7 +180,8 @@ class RepositoryInfoTest extends \PHPUnit_Framework_TestCase
      * Test getter for a property
      *
      * @dataProvider propertiesOfSutDataProvider
-     * @param $propertyName
+     * @param string $propertyName
+     * @param mixed $validValue
      */
     public function testPropertyGetterReturnsPropertyValue($propertyName, $validValue)
     {

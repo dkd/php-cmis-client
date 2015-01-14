@@ -68,7 +68,10 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @depends testPutAddsAValueToTheSession
-     * @dataProvider getProvider
+     * @dataProvider getFunctionDataProvider
+     * @param string $key
+     * @param mixed $defaultValue
+     * @param mixed $expected
      */
     public function testGetReturnsSessionValueForAGivenKey($key, $defaultValue, $expected)
     {
@@ -80,7 +83,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $session->get($key, $defaultValue));
     }
 
-    public function getProvider()
+    public function getFunctionDataProvider()
     {
         return array(
             'int-1 returns an integer 1' => array(

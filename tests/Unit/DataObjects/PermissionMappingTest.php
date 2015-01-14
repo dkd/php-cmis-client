@@ -29,6 +29,8 @@ class PermissionMappingTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider stringCastDataProvider
+     * @param string $expected
+     * @param mixed $value
      */
     public function testSetPermissionsSetsProperty($expected, $value)
     {
@@ -47,6 +49,8 @@ class PermissionMappingTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider stringCastDataProvider
+     * @param string $expected
+     * @param mixed $value
      */
     public function testSetKeySetsProperty($expected, $value)
     {

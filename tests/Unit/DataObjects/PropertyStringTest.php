@@ -28,7 +28,9 @@ class PropertyStringTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider StringCastDataProvider
+     * @dataProvider stringCastDataProvider
+     * @param string $expected
+     * @param mixed $value
      */
     public function testSetValuesSetsProperty($expected, $value)
     {
@@ -45,7 +47,9 @@ class PropertyStringTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider StringCastDataProvider
+     * @dataProvider stringCastDataProvider
+     * @param string $expected
+     * @param mixed $value
      */
     public function testSetValueSetsValuesProperty($expected, $value)
     {

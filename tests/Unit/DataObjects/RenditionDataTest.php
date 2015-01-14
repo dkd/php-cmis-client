@@ -44,6 +44,8 @@ class RenditionDataTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider integerCastDataProvider
+     * @param integer $expected
+     * @param mixed $value
      */
     public function testSetHeightSetsPropertyAsInteger($expected, $value)
     {
@@ -62,6 +64,8 @@ class RenditionDataTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider integerCastDataProvider
+     * @param integer $expected
+     * @param mixed $value
      */
     public function testSetWidthSetsPropertyAsInteger($expected, $value)
     {
@@ -80,6 +84,8 @@ class RenditionDataTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider integerCastDataProvider
+     * @param integer $expected
+     * @param mixed $value
      */
     public function testSetLengthSetsPropertyAsInteger($expected, $value)
     {
@@ -98,6 +104,8 @@ class RenditionDataTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider stringCastDataProvider
+     * @param string $expected
+     * @param mixed $value
      */
     public function testSetMimeTypeSetsPropertyAsString($expected, $value)
     {
@@ -116,6 +124,8 @@ class RenditionDataTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider stringCastDataProvider
+     * @param string $expected
+     * @param mixed $value
      */
     public function testSetKindSetsPropertyAsString($expected, $value)
     {
@@ -134,6 +144,8 @@ class RenditionDataTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider stringCastDataProvider
+     * @param string $expected
+     * @param mixed $value
      */
     public function testSetTitleSetsPropertyAsString($expected, $value)
     {
@@ -152,6 +164,8 @@ class RenditionDataTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider stringCastDataProvider
+     * @param string $expected
+     * @param mixed $value
      */
     public function testSetRenditionDocumentIdSetsPropertyAsString($expected, $value)
     {

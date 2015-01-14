@@ -43,6 +43,8 @@ class CmisExtensionElementTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider stringCastDataProvider
+     * @param string $expected
+     * @param mixed $value
      */
     public function testConstructorSetsNameAsProperty($expected, $value)
     {
@@ -55,6 +57,8 @@ class CmisExtensionElementTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider stringCastDataProvider
+     * @param string $expected
+     * @param mixed $value
      */
     public function testConstructorSetsNamespaceAsProperty($expected, $value)
     {
@@ -70,6 +74,8 @@ class CmisExtensionElementTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider stringCastDataProvider
+     * @param string $expected
+     * @param mixed $value
      */
     public function testConstructorSetsValueAsProperty($expected, $value)
     {

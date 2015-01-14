@@ -29,6 +29,8 @@ class PropertyIntegerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider integerCastDataProvider
+     * @param integer $expected
+     * @param mixed $value
      */
     public function testSetValuesSetsProperty($expected, $value)
     {
@@ -46,6 +48,8 @@ class PropertyIntegerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider integerCastDataProvider
+     * @param integer $expected
+     * @param mixed $value
      */
     public function testSetValueSetsValuesProperty($expected, $value)
     {

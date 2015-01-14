@@ -83,6 +83,9 @@ class AbstractExtensionDataTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function checkTypeDataProvider()
     {
         return array(
@@ -153,10 +156,9 @@ class AbstractExtensionDataTest extends PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider castValueToSimpleTypeDataProvider
-     * @param $expectedType
-     * @param $expectedValue
-     * @param $value
-     * @param $errorNoticeMessageExpected
+     * @param string $expectedType
+     * @param mixed $expectedValue
+     * @param mixed $value
      */
     public function testCastValueToSimpleTypeCastsValueToExpectedType(
         $expectedType,
@@ -170,10 +172,10 @@ class AbstractExtensionDataTest extends PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider castValueToSimpleTypeDataProvider
-     * @param $expectedType
-     * @param $expectedValue
-     * @param $value
-     * @param $errorNoticeMessageExpected
+     * @param string $expectedType
+     * @param mixed $expectedValue
+     * @param mixed $value
+     * @param boolean $errorNoticeMessageExpected
      */
     public function testCastValueToSimpleTypeTriggersErrorNoticeIfValueIsCasted(
         $expectedType,
@@ -189,6 +191,9 @@ class AbstractExtensionDataTest extends PHPUnit_Framework_TestCase
         $this->assertSame($expectedValue, $result);
     }
 
+    /**
+     * @return array
+     */
     public function castValueToSimpleTypeDataProvider()
     {
         return array(

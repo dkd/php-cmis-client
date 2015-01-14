@@ -72,6 +72,8 @@ class RepositoryCapabilitiesTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider booleanCastDataProvider
+     * @param boolean $expected
+     * @param mixed $value
      */
     public function testSetSupportsAllVersionsSearchableSetsProperty($expected, $value)
     {
@@ -90,6 +92,8 @@ class RepositoryCapabilitiesTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider booleanCastDataProvider
+     * @param boolean $expected
+     * @param mixed $value
      */
     public function testSetIsPwcSearchableSetsProperty($expected, $value)
     {
@@ -108,6 +112,8 @@ class RepositoryCapabilitiesTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider booleanCastDataProvider
+     * @param boolean $expected
+     * @param mixed $value
      */
     public function testSetIsPwcUpdatableSetsProperty($expected, $value)
     {
@@ -256,6 +262,8 @@ class RepositoryCapabilitiesTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider booleanCastDataProvider
+     * @param boolean $expected
+     * @param mixed $value
      */
     public function testSetSupportsGetDescendantsSetsProperty($expected, $value)
     {
@@ -274,6 +282,8 @@ class RepositoryCapabilitiesTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider booleanCastDataProvider
+     * @param boolean $expected
+     * @param mixed $value
      */
     public function testSetSupportsGetFolderTreeSetsProperty($expected, $value)
     {
@@ -292,6 +302,8 @@ class RepositoryCapabilitiesTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider booleanCastDataProvider
+     * @param boolean $expected
+     * @param mixed $value
      */
     public function testSetSupportsMultifilingSetsProperty($expected, $value)
     {
@@ -310,6 +322,8 @@ class RepositoryCapabilitiesTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider booleanCastDataProvider
+     * @param boolean $expected
+     * @param mixed $value
      */
     public function testSetSupportsUnfilingSetsProperty($expected, $value)
     {
@@ -328,6 +342,8 @@ class RepositoryCapabilitiesTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider booleanCastDataProvider
+     * @param boolean $expected
+     * @param mixed $value
      */
     public function testSetSupportsVersionSpecificFilingSetsProperty($expected, $value)
     {
