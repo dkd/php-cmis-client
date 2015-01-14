@@ -13,10 +13,10 @@ namespace Dkd\PhpCmis\Bindings\Browser;
 use Dkd\PhpCmis\Data\ExtensionDataInterface;
 use Dkd\PhpCmis\Data\RepositoryInfoInterface;
 use Dkd\PhpCmis\Definitions\TypeDefinitionContainerInterface;
+use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
 use Dkd\PhpCmis\Definitions\TypeDefinitionListInterface;
 use Dkd\PhpCmis\Exception\CmisObjectNotFoundException;
 use Dkd\PhpCmis\RepositoryServiceInterface;
-use Dkd\PhpCmis\TypeDefinitionInterface;
 
 /**
  * Repository Service Browser Binding client.

@@ -1,6 +1,10 @@
 <?php
 namespace Dkd\PhpCmis;
 
+use Dkd\PhpCmis\Data\AceInterface;
+use Dkd\PhpCmis\Data\AclInterface;
+use Dkd\PhpCmis\Data\ObjectTypeInterface;
+use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
 use Dkd\PhpCmis\Enum\Updatability;
 use Dkd\PhpCmis\CmisObject\CmisObjectInterface;
 use Dkd\PhpCmis\Data\PropertiesInterface;

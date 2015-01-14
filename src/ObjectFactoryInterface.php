@@ -11,16 +11,20 @@ namespace Dkd\PhpCmis;
  */
 
 use Dkd\PhpCmis\CmisObject\CmisObjectInterface;
+use Dkd\PhpCmis\Data\AceInterface;
+use Dkd\PhpCmis\Data\AclInterface;
 use Dkd\PhpCmis\Data\ChangeEventInfoInterface;
-use GuzzleHttp\Stream\StreamInterface;
 use Dkd\PhpCmis\Data\ObjectDataInterface;
 use Dkd\PhpCmis\Data\ObjectListInterface;
+use Dkd\PhpCmis\Data\ObjectTypeInterface;
 use Dkd\PhpCmis\Data\PropertiesInterface;
 use Dkd\PhpCmis\Data\PropertyDataInterface;
 use Dkd\PhpCmis\Data\RenditionDataInterface;
 use Dkd\PhpCmis\Data\RepositoryInfoInterface;
 use Dkd\PhpCmis\Definitions\PropertyDefinitionInterface;
+use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
 use Dkd\PhpCmis\Enum\Updatability;
+use GuzzleHttp\Stream\StreamInterface;
 
 /**
  * A factory to create and convert CMIS objects.

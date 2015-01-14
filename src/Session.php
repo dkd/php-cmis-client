@@ -15,6 +15,11 @@ use Dkd\PhpCmis\CmisObject\CmisObjectInterface;
 use Dkd\PhpCmis\Data\AceInterface;
 use Dkd\PhpCmis\Data\AclInterface;
 use Dkd\PhpCmis\Data\BulkUpdateObjectIdAndChangeTokenInterface;
+use Dkd\PhpCmis\Data\DocumentInterface;
+use Dkd\PhpCmis\Data\FolderInterface;
+use Dkd\PhpCmis\Data\ObjectIdInterface;
+use Dkd\PhpCmis\Data\ObjectTypeInterface;
+use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
 use GuzzleHttp\Stream\StreamInterface;
 use Dkd\PhpCmis\Data\RepositoryInfoInterface;
 use Dkd\PhpCmis\Enum\AclPropagation;
@@ -33,7 +38,7 @@ use Doctrine\Common\Cache\Cache;
 class Session implements SessionInterface
 {
     /**
-     * @var CacheInterface
+     * @var Cache
      */
     protected $cache;
 
