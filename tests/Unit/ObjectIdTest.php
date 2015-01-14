@@ -1,8 +1,6 @@
 <?php
 namespace Dkd\PhpCmis\Test\Unit;
 
-use Dkd\PhpCmis\ObjectId;
-
 /**
  * This file is part of php-cmis-lib.
  *
@@ -11,6 +9,8 @@ use Dkd\PhpCmis\ObjectId;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
+use Dkd\PhpCmis\DataObjects\ObjectId;
 
 class ObjectIdTest extends \PHPUnit_Framework_TestCase
 {

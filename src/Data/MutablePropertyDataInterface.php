@@ -49,7 +49,7 @@ interface MutablePropertyDataInterface extends PropertyDataInterface
      * If this property is a single value property, this list must either be
      * empty or <code>null</code> (= unset) or must only contain one entry.
      *
-     * @param array $values the property value or <code>null</code> to unset the property
+     * @param array $values the property values
      */
     public function setValues(array $values);
 

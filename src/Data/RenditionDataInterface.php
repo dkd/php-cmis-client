@@ -18,21 +18,21 @@ interface RenditionDataInterface extends ExtensionDataInterface
     /**
      * Returns the height in pixels, if the rendition is an image.
      *
-     * @return int|null
+     * @return integer|null
      */
     public function getHeight();
 
     /**
      * Returns the size of the rendition in bytes, if available.
      *
-     * @return int|null the size of the rendition in bytes, may be null
+     * @return integer|null the size of the rendition in bytes, may be null
      */
     public function getLength();
 
     /**
      * Returns the width in pixels, if the rendition is an image.
      *
-     * @return int|null
+     * @return integer|null
      */
     public function getWidth();
 

@@ -18,7 +18,7 @@ interface ObjectInFolderListInterface extends ExtensionDataInterface
     /**
      * Returns the total number of the objects in the folder.
      *
-     * @return int|null the total number of the objects or null if the repository didn't provide the number
+     * @return integer|null the total number of the objects or null if the repository didn't provide the number
      */
     public function getNumItems();
 

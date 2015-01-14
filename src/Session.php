@@ -673,7 +673,8 @@ class Session implements SessionInterface
      * @param string $typeId the type ID or null to request the base types
      * @param int $depth indicates whether the property definitions should be included or not
      * @param boolean $includePropertyDefinitions the tree depth, must be greater than 0 or -1 for infinite depth
-     * @return Tree<ObjectTypeInterface>
+     * @return Tree A tree that contains ObjectTypeInterface objects
+     * @see ObjectTypeInterface ObjectTypeInterface contained in returned Tree
      * @throws CmisObjectNotFoundException - if a type with the given type ID doesn't exist
      */
     public function getTypeDescendants($typeId, $depth, $includePropertyDefinitions)

@@ -1,5 +1,5 @@
 <?php
-namespace Dkd\PhpCmis;
+namespace Dkd\PhpCmis\Definitions;
 
 /**
  * This file is part of php-cmis-lib.
@@ -11,19 +11,17 @@ namespace Dkd\PhpCmis;
  */
 
 use Dkd\PhpCmis\Data\ExtensionDataInterface;
-use Dkd\PhpCmis\Definitions\PropertyDefinitionInterface;
-use Dkd\PhpCmis\Definitions\TypeMutabilityInterface;
 use Dkd\PhpCmis\Enum\BaseTypeId;
 
 /**
  * Base type definition interface.
  */
-interface TypeDefinitionInterface extends ExtensionDataInterface, \Serializable
+interface TypeDefinitionInterface extends ExtensionDataInterface
 {
     /**
      * Returns the base object type ID.
      *
-     * @return BaseTypeId the base object type ID
+     * @return BaseTypeId|null the base object type ID
      */
     public function getBaseTypeId();
 
@@ -68,6 +66,14 @@ interface TypeDefinitionInterface extends ExtensionDataInterface, \Serializable
      * @return string|null the parent type ID or null if the type is a base type
      */
     public function getParentTypeId();
+
+    /**
+     * Returns the property definitions for the given id of this type.
+     *
+     * @param string $id id of the property
+     * @return PropertyDefinitionInterface|null the property definition
+     */
+    public function getPropertyDefinition($id);
 
     /**
      * Returns the property definitions of this type.

@@ -1,5 +1,5 @@
 <?php
-namespace Dkd\PhpCmis;
+namespace Dkd\PhpCmis\Data;
 
 /**
  * This file is part of php-cmis-lib.
@@ -12,6 +12,7 @@ namespace Dkd\PhpCmis;
 
 use Dkd\PhpCmis\CmisObject\CmisObjectInterface;
 use Dkd\PhpCmis\CmisObject\CmisObjectPropertiesInterface;
+use Dkd\PhpCmis\OperationContextInterface;
 
 /**
  * Fileable CMIS object. A fileable object is an object that can reside in a folder.

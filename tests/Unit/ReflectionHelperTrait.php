@@ -28,4 +28,20 @@ trait ReflectionHelperTrait
 
         return $method;
     }
+
+    /**
+     * Helper function that could set protected properties of an object by creating a reflection class.
+     *
+     * @param \stdClass $object The object where the property should be set
+     * @param string $propertyName The property name
+     * @param mixed $value The value the property should get assigned to
+     */
+    protected function setProtectedProperty(&$object, $propertyName, $value)
+    {
+        $reflection = new \ReflectionObject($object);
+
+        $property = $reflection->getProperty($propertyName);
+        $property->setAccessible(true);
+        $property->setValue($object, $value);
+    }
 }

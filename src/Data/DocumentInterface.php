@@ -1,5 +1,5 @@
 <?php
-namespace Dkd\PhpCmis;
+namespace Dkd\PhpCmis\Data;
 
 /**
  * This file is part of php-cmis-lib.
@@ -10,6 +10,8 @@ namespace Dkd\PhpCmis;
  * file that was distributed with this source code.
  */
 
+use Dkd\PhpCmis\OperationContextInterface;
+use Dkd\PhpCmis\PolicyInterface;
 use GuzzleHttp\Stream\StreamInterface;
 use Dkd\PhpCmis\Enum\VersioningState;
 

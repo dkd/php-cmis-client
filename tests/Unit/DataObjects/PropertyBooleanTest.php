@@ -29,6 +29,8 @@ class PropertyBooleanTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider booleanCastDataProvider
+     * @param boolean $expected
+     * @param mixed $value
      */
     public function testSetValuesSetsProperty($expected, $value)
     {
@@ -45,6 +47,8 @@ class PropertyBooleanTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider booleanCastDataProvider
+     * @param boolean $expected
+     * @param mixed $value
      */
     public function testSetValueSetsValuesProperty($expected, $value)
     {

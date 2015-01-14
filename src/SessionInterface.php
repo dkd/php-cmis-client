@@ -10,15 +10,23 @@ namespace Dkd\PhpCmis;
  * file that was distributed with this source code.
  */
 
+use Dkd\PhpCmis\Bindings\CmisBindingInterface;
 use Dkd\PhpCmis\CmisObject\CmisObjectInterface;
+use Dkd\PhpCmis\Data\AceInterface;
+use Dkd\PhpCmis\Data\AclInterface;
 use Dkd\PhpCmis\Data\BulkUpdateObjectIdAndChangeTokenInterface;
-use GuzzleHttp\Stream\StreamInterface;
+use Dkd\PhpCmis\Data\DocumentInterface;
+use Dkd\PhpCmis\Data\FolderInterface;
+use Dkd\PhpCmis\Data\ObjectIdInterface;
+use Dkd\PhpCmis\Data\ObjectTypeInterface;
 use Dkd\PhpCmis\Data\RepositoryInfoInterface;
+use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
 use Dkd\PhpCmis\Enum\AclPropagation;
 use Dkd\PhpCmis\Enum\IncludeRelationships;
 use Dkd\PhpCmis\Enum\RelationshipDirection;
 use Dkd\PhpCmis\Enum\VersioningState;
 use Dkd\PhpCmis\Exception\CmisObjectNotFoundException;
+use GuzzleHttp\Stream\StreamInterface;
 
 /**
  * A session is a connection to a CMIS repository with a specific user.
@@ -465,7 +473,8 @@ interface SessionInterface
      * @param string $typeId the type ID or null to request the base types
      * @param int $depth indicates whether the property definitions should be included or not
      * @param boolean $includePropertyDefinitions the tree depth, must be greater than 0 or -1 for infinite depth
-     * @return Tree<ObjectTypeInterface>
+     * @return Tree A tree that contains ObjectTypeInterface objects
+     * @see ObjectTypeInterface ObjectTypeInterface contained in returned Tree
      * @throws CmisObjectNotFoundException - if a type with the given type ID doesn't exist
      */
     public function getTypeDescendants($typeId, $depth, $includePropertyDefinitions);

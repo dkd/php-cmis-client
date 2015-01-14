@@ -16,9 +16,9 @@ namespace Dkd\PhpCmis\Definitions;
 interface PropertyStringDefinitionInterface extends PropertyDefinitionInterface
 {
     /**
-     * Returns the max length of the string.
+     * Returns the maximum length of the string.
      *
-     * @return int|null the max string length in characters or null if the the length is not limited
+     * @return integer|null the maximum string length in characters or null if the the length is not limited
      */
     public function getMaxLength();
 }

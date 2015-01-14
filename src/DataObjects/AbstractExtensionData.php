@@ -89,8 +89,8 @@ abstract class AbstractExtensionData implements ExtensionDataInterface
      * Ensure that a value is an instance of the expected type. If not the value
      * is casted to the expected type and a log message is triggered.
      *
-     * @param $expectedType
-     * @param $value
+     * @param string $expectedType the expected object type (class name)
+     * @param mixed $value The value that has to be checked
      * @param boolean $nullIsValidValue defines if <code>null</code> is also a valid value
      * @return mixed
      */

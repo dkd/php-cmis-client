@@ -1,5 +1,5 @@
 <?php
-namespace Dkd\PhpCmis;
+namespace Dkd\PhpCmis\DataObjects;
 
 /**
  * This file is part of php-cmis-lib.
@@ -9,6 +9,8 @@ namespace Dkd\PhpCmis;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
+use Dkd\PhpCmis\Data\ObjectIdInterface;
 
 /**
  * ObjectId

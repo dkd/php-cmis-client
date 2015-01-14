@@ -16,16 +16,16 @@ namespace Dkd\PhpCmis\Definitions;
 interface PropertyIntegerDefinitionInterface extends PropertyDefinitionInterface
 {
     /**
-     * Returns the max value of this integer.
+     * Returns the maximum value of this integer.
      *
-     * @return int|null the max value or null if no limit is specified
+     * @return integer|null the maximum value or null if no limit is specified
      */
     public function getMaxValue();
 
     /**
-     * Returns the min value of this integer.
+     * Returns the minimum value of this integer.
      *
-     * @return int|null the min value or null if no limit is specified
+     * @return integer|null the minimum value or null if no limit is specified
      */
     public function getMinValue();
 }

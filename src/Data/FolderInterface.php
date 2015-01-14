@@ -1,5 +1,5 @@
 <?php
-namespace Dkd\PhpCmis;
+namespace Dkd\PhpCmis\Data;
 
 /**
  * This file is part of php-cmis-lib.
@@ -11,6 +11,10 @@ namespace Dkd\PhpCmis;
  */
 
 use Dkd\PhpCmis\CmisObject\CmisObjectInterface;
+use Dkd\PhpCmis\ItemInterface;
+use Dkd\PhpCmis\OperationContextInterface;
+use Dkd\PhpCmis\PolicyInterface;
+use Dkd\PhpCmis\Tree;
 use GuzzleHttp\Stream\StreamInterface;
 use Dkd\PhpCmis\Enum\UnfileObject;
 use Dkd\PhpCmis\Enum\VersioningState;
@@ -147,9 +151,10 @@ interface FolderInterface extends FileableCmisObjectInterface, FolderPropertiesI
     /**
      * Gets the folder descendants starting with this folder.
      *
-     * @param int $depth
+     * @param integer $depth
      * @param OperationContextInterface $context
-     * @return Tree<FileableCmisObject>
+     * @return Tree A tree that contains FileableCmisObject objects
+     * @see FileableCmisObject FileableCmisObject contained in returned Tree
      */
     public function getDescendants($depth, OperationContextInterface $context = null);
 
@@ -165,7 +170,8 @@ interface FolderInterface extends FileableCmisObjectInterface, FolderPropertiesI
      *
      * @param $depth
      * @param OperationContextInterface $context
-     * @return Tree<FileableCmisObject>
+     * @return Tree A tree that contains FileableCmisObject objects
+     * @see FileableCmisObject FileableCmisObject contained in returned Tree
      */
     public function getFolderTree($depth, OperationContextInterface $context = null);
 

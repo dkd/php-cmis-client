@@ -18,16 +18,16 @@ use Dkd\PhpCmis\Enum\DecimalPrecision;
 interface PropertyDecimalDefinitionInterface extends PropertyDefinitionInterface
 {
     /**
-     * Returns the max value of this decimal.
+     * Returns the maximum value of this decimal.
      *
-     * @return float|null the max value or null if no limit is specified
+     * @return float|null the maximum value or null if no limit is specified
      */
     public function getMaxValue();
 
     /**
-     * Returns the min value of this decimal.
+     * Returns the minimum value of this decimal.
      *
-     * @return float|null the min value or null if no limit is specified
+     * @return float|null the minimum value or null if no limit is specified
      */
     public function getMinValue();
 
