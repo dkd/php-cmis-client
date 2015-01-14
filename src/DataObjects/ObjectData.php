@@ -62,7 +62,7 @@ class ObjectData extends AbstractExtensionData implements ObjectDataInterface
     protected $acl;
 
     /**
-     * @var bool
+     * @var boolean|null
      */
     protected $isExactAcl;
 

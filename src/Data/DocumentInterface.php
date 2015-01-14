@@ -12,8 +12,8 @@ namespace Dkd\PhpCmis\Data;
 
 use Dkd\PhpCmis\OperationContextInterface;
 use Dkd\PhpCmis\PolicyInterface;
-use GuzzleHttp\Stream\StreamInterface;
 use Dkd\PhpCmis\Enum\VersioningState;
+use GuzzleHttp\Stream\StreamInterface;
 
 /**
  * CMIS document interface.
@@ -124,8 +124,8 @@ interface DocumentInterface extends FileableCmisObjectInterface, DocumentPropert
      * This is usually a rendition of the document.
      *
      * @param string $streamId the stream ID
-     * @param int $offset the offset of the stream or null to read the stream from the beginning
-     * @param int $length the maximum length of the stream or null to read to the end of the stream
+     * @param integer $offset the offset of the stream or null to read the stream from the beginning
+     * @param integer $length the maximum length of the stream or null to read to the end of the stream
      * @return StreamInterface|null the content stream, or null if no content is associated with this stream ID
      */
     public function getContentStream($streamId = null, $offset = null, $length = null);

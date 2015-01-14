@@ -32,10 +32,9 @@ interface RelationshipServiceInterface
      * @param string $typeId
      * @param string $filter
      * @param boolean $includeAllowableActions
-     * @param int $maxItems
-     * @param int $skipCount
+     * @param integer $maxItems
+     * @param integer $skipCount
      * @param ExtensionDataInterface $extension
-     * @internal param $String $
      * @return ObjectListInterface
      */
     public function getObjectRelationships(

@@ -10,7 +10,10 @@ namespace Dkd\PhpCmis;
  * file that was distributed with this source code.
  */
 
+use Dkd\PhpCmis\Bindings\CmisBindingInterface;
 use Dkd\PhpCmis\CmisObject\CmisObjectInterface;
+use Dkd\PhpCmis\Data\AceInterface;
+use Dkd\PhpCmis\Data\AclInterface;
 use Dkd\PhpCmis\Data\BulkUpdateObjectIdAndChangeTokenInterface;
 use GuzzleHttp\Stream\StreamInterface;
 use Dkd\PhpCmis\Data\RepositoryInfoInterface;
@@ -332,7 +335,7 @@ class Session implements SessionInterface
      * @param string $orderBy the object order, a comma-separated list of query names and the ascending
      * modifier "ASC" or the descending modifier "DESC" for each query name
      * @param boolean $cacheEnabled flag that indicates if the object cache should be used
-     * @param int $maxItemsPerPage the max items per batch
+     * @param integer $maxItemsPerPage the max items per page/batch
      * @return OperationContextInterface the newly created operation context object
      */
     public function createOperationContext(
@@ -485,7 +488,7 @@ class Session implements SessionInterface
      * @param string $changeLogToken the change log token to start from or null to start from
      * the first available event in the repository
      * @param boolean $includeProperties indicates whether changed properties should be included in the result or not
-     * @param int $maxNumItems maximum numbers of events
+     * @param integer $maxNumItems maximum numbers of events
      * @param OperationContextInterface $context the OperationContext
      * @return ChangeEventsInterface the change events
      */
@@ -671,7 +674,7 @@ class Session implements SessionInterface
      * Gets the type descendants of a type.
      *
      * @param string $typeId the type ID or null to request the base types
-     * @param int $depth indicates whether the property definitions should be included or not
+     * @param integer $depth indicates whether the property definitions should be included or not
      * @param boolean $includePropertyDefinitions the tree depth, must be greater than 0 or -1 for infinite depth
      * @return Tree A tree that contains ObjectTypeInterface objects
      * @see ObjectTypeInterface ObjectTypeInterface contained in returned Tree

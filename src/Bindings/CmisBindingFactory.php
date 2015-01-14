@@ -78,7 +78,8 @@ class CmisBindingFactory
      *
      * @param array $sessionParameters
      * @param string $parameter
-     * @return bool
+     * @throws CmisInvalidArgumentException
+     * @return boolean
      */
     protected function check(array $sessionParameters, $parameter)
     {

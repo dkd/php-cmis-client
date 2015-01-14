@@ -93,7 +93,7 @@ interface ObjectServiceInterface
      * @param AclInterface $removeAces a list of ACEs that must be removed from the newly created document object,
      * either using the ACL from folderId if specified, or being ignored if no folderId is specified
      * @param ExtensionDataInterface $extension
-     * @return string
+     * @return ObjectDataInterface
      */
     public function createDocument(
         $repositoryId,
@@ -314,8 +314,8 @@ interface ObjectServiceInterface
      * @param string $repositoryId the identifier for the repository
      * @param string $objectId the identifier for the object
      * @param string $streamId
-     * @param int $offset
-     * @param int $length
+     * @param integer $offset
+     * @param integer $length
      * @param ExtensionDataInterface $extension
      * @return StreamInterface
      */
@@ -415,8 +415,8 @@ interface ObjectServiceInterface
      * @param string $objectId the identifier for the object
      * @param string $renditionFilter indicates what set of renditions the repository must return whose kind
      * matches this filter (default is "cmis:none")
-     * @param int $maxItems
-     * @param int $skipCount
+     * @param integer $maxItems
+     * @param integer $skipCount
      * @param ExtensionDataInterface $extension
      * @return RenditionDataInterface[]
      */

@@ -187,7 +187,7 @@ class ObjectFactory implements ObjectFactoryInterface
      * Creates an object that implements the ContentStream interface.
      *
      * @param string $filename
-     * @param int $length
+     * @param integer $length
      * @param string $mimeType
      * @param mixed $stream @TODO define datatype
      * @param boolean $partial

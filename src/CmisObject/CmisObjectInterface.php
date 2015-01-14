@@ -131,7 +131,7 @@ interface CmisObjectInterface extends ObjectIdInterface, CmisObjectPropertiesInt
     /**
      * Reloads the data from the repository if the last refresh did not occur within durationInMillis.
      *
-     * @param int $durationInMillis
+     * @param integer $durationInMillis
      * @return void
      * @throws CmisObjectNotFoundException - if the object doesn't exist anymore in the repository
      */

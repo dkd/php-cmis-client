@@ -60,7 +60,7 @@ class OperationContext implements OperationContextInterface
     private $includePathSegments = true;
 
     /**
-     * @var String
+     * @var string
      */
     private $orderBy = null;
 
@@ -70,7 +70,7 @@ class OperationContext implements OperationContextInterface
     private $cacheEnabled = false;
 
     /**
-     * @var int
+     * @var integer
      */
     private $maxItemsPerPage = 100;
 

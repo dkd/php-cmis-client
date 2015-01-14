@@ -42,8 +42,8 @@ interface NavigationServiceInterface
      * participate must be returned (default is IncludeRelationships::NONE)
      * @param string $renditionFilter indicates what set of renditions the repository must return whose kind
      * matches this filter (default is "cmis:none")
-     * @param int $maxItems the maximum number of items to return in a response (default is repository specific)
-     * @param int $skipCount number of potential results that the repository MUST skip/page over before returning
+     * @param integer $maxItems the maximum number of items to return in a response (default is repository specific)
+     * @param integer $skipCount number of potential results that the repository MUST skip/page over before returning
      * any results (default is 0)
      * @param ExtensionDataInterface $extension
      * @return ObjectListInterface
@@ -79,8 +79,8 @@ interface NavigationServiceInterface
      * matches this filter (default is "cmis:none")
      * @param boolean $includePathSegment if true, returns a path segment for each child object for use in
      * constructing that object's path (default is false)
-     * @param int $maxItems the maximum number of items to return in a response (default is repository specific)
-     * @param int $skipCount number of potential results that the repository MUST skip/page over before
+     * @param integer $maxItems the maximum number of items to return in a response (default is repository specific)
+     * @param integer $skipCount number of potential results that the repository MUST skip/page over before
      * returning any results (default is 0)
      * @param ExtensionDataInterface $extension
      * @return ObjectInFolderListInterface
@@ -104,7 +104,7 @@ interface NavigationServiceInterface
      *
      * @param string $repositoryId the identifier for the repository
      * @param string $folderId the identifier for the folder
-     * @param int $depth the number of levels of depth in the folder hierarchy from which to return results
+     * @param integer $depth the number of levels of depth in the folder hierarchy from which to return results
      * @param string $filter a comma-separated list of query names that defines which properties must be
      * returned by the repository (default is repository specific)
      * @param boolean $includeAllowableActions if true, then the repository must return the available actions for each
@@ -152,7 +152,7 @@ interface NavigationServiceInterface
      *
      * @param string $repositoryId the identifier for the repository
      * @param string $folderId the identifier for the folder
-     * @param int $depth the number of levels of depth in the folder hierarchy from which to return results
+     * @param integer $depth the number of levels of depth in the folder hierarchy from which to return results
      * @param string $filter a comma-separated list of query names that defines which properties must be
      * returned by the repository (default is repository specific)
      * @param boolean $includeAllowableActions if true, then the repository must return the available actions for each

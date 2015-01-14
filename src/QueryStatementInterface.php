@@ -30,7 +30,7 @@ interface QueryStatementInterface
     /**
      * Sets the designated parameter to the given boolean.
      *
-     * @param int $parameterIndex the parameter index (one-based)
+     * @param integer $parameterIndex the parameter index (one-based)
      * @param boolean $bool the boolean
      * @return void
      */
@@ -39,7 +39,7 @@ interface QueryStatementInterface
     /**
      * Sets the designated parameter to the given DateTime value.
      *
-     * @param int $parameterIndex the parameter index (one-based)
+     * @param integer $parameterIndex the parameter index (one-based)
      * @param \DateTime $dateTime the DateTime value as DateTime object
      * @return void
      */
@@ -48,7 +48,7 @@ interface QueryStatementInterface
     /**
      * Sets the designated parameter to the given DateTime value with the prefix 'TIMESTAMP '.
      *
-     * @param int $parameterIndex the parameter index (one-based)
+     * @param integer $parameterIndex the parameter index (one-based)
      * @param \DateTime $dateTime the DateTime value as DateTime object
      * @return void
      */
@@ -57,7 +57,7 @@ interface QueryStatementInterface
     /**
      * Sets the designated parameter to the given object ID.
      *
-     * @param int $parameterIndex the parameter index (one-based)
+     * @param integer $parameterIndex the parameter index (one-based)
      * @param ObjectIdInterface $id the object ID
      * @return void
      */
@@ -66,8 +66,8 @@ interface QueryStatementInterface
     /**
      * Sets the designated parameter to the given number.
      *
-     * @param int $parameterIndex the parameter index (one-based)
-     * @param int $number the number
+     * @param integer $parameterIndex the parameter index (one-based)
+     * @param integer $number the value to be set as number
      * @return void
      */
     public function setNumber($parameterIndex, $number);
@@ -75,7 +75,7 @@ interface QueryStatementInterface
     /**
      * Sets the designated parameter to the query name of the given property.
      *
-     * @param int $parameterIndex the parameter index (one-based)
+     * @param integer $parameterIndex the parameter index (one-based)
      * @param PropertyDefinitionInterface $propertyDefinition
      * @return void
      */
@@ -84,7 +84,7 @@ interface QueryStatementInterface
     /**
      * Sets the designated parameter to the given string.
      *
-     * @param int $parameterIndex the parameter index (one-based)
+     * @param integer $parameterIndex the parameter index (one-based)
      * @param string $string the string
      * @return void
      */
@@ -114,7 +114,7 @@ interface QueryStatementInterface
      * ' --> \' --> \\\'
      * " --> \" --> \\\"
      *
-     * @param int $parameterIndex the parameter index (one-based)
+     * @param integer $parameterIndex the parameter index (one-based)
      * @param string $string the CONTAINS string
      * @return void
      */
@@ -124,7 +124,7 @@ interface QueryStatementInterface
      * Sets the designated parameter to the given string.
      * It does not escape backslashes ('\') in front of '%' and '_'.
      *
-     * @param int $parameterIndex the parameter index (one-based)
+     * @param integer $parameterIndex the parameter index (one-based)
      * @param $string
      * @return void
      */
@@ -133,7 +133,7 @@ interface QueryStatementInterface
     /**
      * Sets the designated parameter to the query name of the given type.
      *
-     * @param int $parameterIndex the parameter index (one-based)
+     * @param integer $parameterIndex the parameter index (one-based)
      * @param ObjectTypeInterface $type the object type
      * @return void
      */
@@ -142,7 +142,7 @@ interface QueryStatementInterface
     /**
      * Sets the designated parameter to the given URI.
      *
-     * @param int $parameterIndex the parameter index (one-based)
+     * @param integer $parameterIndex the parameter index (one-based)
      * @param string $uri the URI
      * @return void
      */
@@ -151,7 +151,7 @@ interface QueryStatementInterface
     /**
      * Sets the designated parameter to the given URL.
      *
-     * @param int $parameterIndex the parameter index (one-based)
+     * @param integer $parameterIndex the parameter index (one-based)
      * @param string $url the URL
      * @return mixed
      */

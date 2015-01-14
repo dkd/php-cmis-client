@@ -31,7 +31,7 @@ interface DiscoveryServiceInterface
      * @param string $filter
      * @param boolean $includePolicyIds
      * @param boolean $includeAcl
-     * @param int $maxItems
+     * @param integer $maxItems
      * @param ExtensionDataInterface $extension
      * @return ObjectListInterface
      */
@@ -55,8 +55,8 @@ interface DiscoveryServiceInterface
      * @param boolean $includeAllowableActions
      * @param IncludeRelationships $includeRelationships
      * @param string $renditionFilter
-     * @param int $maxItems
-     * @param int $skipCount
+     * @param integer $maxItems
+     * @param integer $skipCount
      * @param ExtensionDataInterface $extension
      * @return ObjectListInterface
      */

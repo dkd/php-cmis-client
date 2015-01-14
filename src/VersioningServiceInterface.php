@@ -46,7 +46,7 @@ interface VersioningServiceInterface
      * newly created document object
      * @param StreamInterface $contentStream the content stream that must be stored
      * for the newly created document object
-     * @param String $checkinComment a version comment
+     * @param string $checkinComment a version comment
      * @param string[] $policies a list of policy IDs that must be applied to the newly created document object
      * @param AclInterface $addAces a list of ACEs that must be added to the newly created document object
      * @param AclInterface $removeAces a list of ACEs that must be removed from the newly created document object

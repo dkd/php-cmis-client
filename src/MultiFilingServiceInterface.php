@@ -23,9 +23,9 @@ interface MultiFilingServiceInterface
     /**
      * Adds an existing fileable non-folder object to a folder.
      *
-     * @param String $repositoryId
-     * @param String $objectId
-     * @param String $folderId
+     * @param string $repositoryId
+     * @param string $objectId
+     * @param string $folderId
      * @param boolean $allVersions
      * @param ExtensionDataInterface $extension
      * @return void

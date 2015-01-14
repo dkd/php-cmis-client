@@ -102,12 +102,12 @@ class RepositoryCapabilities extends AbstractExtensionData implements Repository
     protected $supportsVersionSpecificFiling = false;
 
     /**
-     * @var CreatablePropertyTypesInterface
+     * @var CreatablePropertyTypesInterface|null
      */
     protected $creatablePropertyTypes;
 
     /**
-     * @var NewTypeSettableAttributesInterface
+     * @var NewTypeSettableAttributesInterface|null
      */
     protected $newTypeSettableAttributes;
 

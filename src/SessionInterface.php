@@ -52,10 +52,10 @@ interface SessionInterface
      * Applies ACL changes to an object and dependent objects. Only direct ACEs can be added and removed.
      *
      * @param ObjectIdInterface $objectId the ID the object
-     * @param AceInterface[] $addAces list of ACEs to be added or null if no ACEs should be added
-     * @param AceInterface[] $removeAces list of ACEs to be removed or null if no ACEs should be removed
+     * @param AceInterface[] $addAces list of ACEs to be added or <code>null</code> if no ACEs should be added
+     * @param AceInterface[] $removeAces list of ACEs to be removed or <code>null</code> if no ACEs should be removed
      * @param AclPropagation $aclPropagation value that defines the propagation of the ACE changes;
-     * null is equal to AclPropagation.REPOSITORYDETERMINED
+     * <code>null</code> is equal to AclPropagation.REPOSITORYDETERMINED
      * @return AclInterface the new ACL of the object
      *
      * @api cmis 1.0
@@ -185,19 +185,19 @@ interface SessionInterface
      * Creates a new operation context object with the given properties.
      *
      * @param string[] $filter the property filter, a comma separated string of query names or "*" for all
-     * properties or null to let the repository determine a set of properties
+     * properties or <code>null</code> to let the repository determine a set of properties
      * @param boolean $includeAcls indicates whether ACLs should be included or not
      * @param boolean $includeAllowableActions indicates whether Allowable Actions should be included or not
      * @param boolean $includePolicies indicates whether policies should be included or not
      * @param IncludeRelationships $includeRelationships enum that indicates if and which
      * relationships should be includes
-     * @param string[] $renditionFilter the rendition filter or null for no renditions
+     * @param string[] $renditionFilter the rendition filter or <code>null</code> for no renditions
      * @param boolean $includePathSegments indicates whether path segment or the relative path segment should
      * be included or not
      * @param string $orderBy the object order, a comma-separated list of query names and the ascending
      * modifier "ASC" or the descending modifier "DESC" for each query name
      * @param boolean $cacheEnabled flag that indicates if the object cache should be used
-     * @param int $maxItemsPerPage the max items per batch
+     * @param integer $maxItemsPerPage the max items per batch
      * @return OperationContextInterface the newly created operation context object
      */
     public function createOperationContext(
@@ -238,7 +238,8 @@ interface SessionInterface
      * `SELECT d.cmis:name,s.SecondaryStringProp FROM cmis:document AS d JOIN MySecondaryType AS s ON
      * d.cmis:objectId=s.cmis:objectId WHERE d.cmis:name LIKE ? ORDER BY d.cmis:name,s.SecondaryIntegerProp`
      *
-     * @param string[] $selectPropertyIds the property IDs in the SELECT statement, if null all properties are selected
+     * @param string[] $selectPropertyIds the property IDs in the SELECT statement, if <code>null</code>
+     * all properties are selected
      * @param string[] $fromTypes a Map of type aliases (keys) and type IDs (values), the Map must contain
      * exactly one primary type and zero or more secondary types
      * @param string $whereClause an optional WHERE clause with placeholders ('?'), see QueryStatement for details
@@ -321,10 +322,10 @@ interface SessionInterface
     /**
      * Returns the content changes.
      *
-     * @param string $changeLogToken the change log token to start from or null to start from
+     * @param string $changeLogToken the change log token to start from or <code>null</code> to start from
      * the first available event in the repository
      * @param boolean $includeProperties indicates whether changed properties should be included in the result or not
-     * @param int $maxNumItems maximum numbers of events
+     * @param integer $maxNumItems maximum numbers of events
      * @param OperationContextInterface $context the OperationContext
      * @return ChangeEventsInterface the change events
      */
@@ -340,10 +341,9 @@ interface SessionInterface
      *
      * @param ObjectIdInterface $docId the ID of the document
      * @param string $streamId the stream ID
-     * @param int $offset the offset of the stream or null to read the stream from the beginning
-     * @param int $length the maximum length of the stream or null to read to the end of the stream
-     * @return StreamInterface|null the content stream or null if the
-     * document has no content stream
+     * @param integer $offset the offset of the stream or null to read the stream from the beginning
+     * @param integer $length the maximum length of the stream or <code>null</code> to read to the end of the stream
+     * @return StreamInterface|null the content stream or <code>null</code> if the document has no content stream
      */
     public function getContentStream(ObjectIdInterface $docId, $streamId = null, $offset = null, $length = null);
 
@@ -360,7 +360,7 @@ interface SessionInterface
      * In contrast to the repository info, this change log token is *not cached*.
      * This method requests the token from the repository every single time it is called.
      *
-     * @return string|null the latest change log token or null if the repository doesn't provide one
+     * @return string|null the latest change log token or <code>null</code> if the repository doesn't provide one
      */
     public function getLatestChangeLogToken();
 
@@ -451,7 +451,7 @@ interface SessionInterface
     /**
      * Gets the type children of a type.
      *
-     * @param string $typeId the type ID or null to request the base types
+     * @param string $typeId the type ID or <code>null</code> to request the base types
      * @param boolean $includePropertyDefinitions indicates whether the property definitions should be included or not
      * @return ObjectTypeInterface[] the type iterator, not null
      * @throws CmisObjectNotFoundException - if a type with the given type ID doesn't exist
@@ -470,8 +470,8 @@ interface SessionInterface
     /**
      * Gets the type descendants of a type.
      *
-     * @param string $typeId the type ID or null to request the base types
-     * @param int $depth indicates whether the property definitions should be included or not
+     * @param string $typeId the type ID or <code>null</code> to request the base types
+     * @param integer $depth indicates whether the property definitions should be included or not
      * @param boolean $includePropertyDefinitions the tree depth, must be greater than 0 or -1 for infinite depth
      * @return Tree A tree that contains ObjectTypeInterface objects
      * @see ObjectTypeInterface ObjectTypeInterface contained in returned Tree

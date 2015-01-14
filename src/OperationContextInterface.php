@@ -49,7 +49,7 @@ interface OperationContextInterface
     /**
      * Returns the current max number of items per batch.
      *
-     * @return int
+     * @return integer
      */
     public function getMaxItemsPerPage();
 
@@ -184,7 +184,7 @@ interface OperationContextInterface
     /**
      * Set the max number of items per batch for operations that return lists.
      *
-     * @param int $maxItemsPerPage max number of items (must be >0)
+     * @param integer $maxItemsPerPage max number of items (must be >0)
      */
     public function setMaxItemsPerPage($maxItemsPerPage);
 

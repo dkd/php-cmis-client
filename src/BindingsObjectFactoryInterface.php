@@ -10,6 +10,8 @@ namespace Dkd\PhpCmis;
  * file that was distributed with this source code.
  */
 
+use Dkd\PhpCmis\Data\AceInterface;
+use Dkd\PhpCmis\Data\AclInterface;
 use GuzzleHttp\Stream\StreamInterface;
 use Dkd\PhpCmis\Data\PropertiesInterface;
 use Dkd\PhpCmis\Data\PropertyBooleanInterface;
@@ -78,7 +80,7 @@ interface BindingsObjectFactoryInterface
 
     /**
      * @param string $id
-     * @param int $value
+     * @param integer $value
      * @return PropertyDecimalInterface
      */
     public function createPropertyDecimalData($id, $value);
@@ -99,7 +101,7 @@ interface BindingsObjectFactoryInterface
 
     /**
      * @param string $id
-     * @param int $value
+     * @param integer $value
      * @return PropertyIntegerInterface
      */
     public function createPropertyIntegerData($id, $value);

@@ -13,6 +13,7 @@ namespace Dkd\PhpCmis;
 use Dkd\PhpCmis\Data\ExtensionDataInterface;
 use Dkd\PhpCmis\Data\RepositoryInfoInterface;
 use Dkd\PhpCmis\Definitions\TypeDefinitionContainerInterface;
+use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
 use Dkd\PhpCmis\Definitions\TypeDefinitionListInterface;
 
 /**
@@ -70,8 +71,8 @@ interface RepositoryServiceInterface
      * (if not specified the repository MUST return all base object types)
      * @param boolean $includePropertyDefinitions if true the repository MUST return the property
      * definitions for each object type returned (default is false)
-     * @param int $maxItems the maximum number of items to return in a response (default is repository specific)
-     * @param int $skipCount number of potential results that the repository MUST skip/page over
+     * @param integer $maxItems the maximum number of items to return in a response (default is repository specific)
+     * @param integer $skipCount number of potential results that the repository MUST skip/page over
      * before returning any results (default is 0)
      * @param ExtensionDataInterface $extension
      * @return TypeDefinitionListInterface
@@ -101,7 +102,7 @@ interface RepositoryServiceInterface
      * @param string $repositoryId repositoryId - the identifier for the repository
      * @param string $typeId the typeId of an object type specified in the repository
      * (if not specified the repository MUST return all types and MUST ignore the value of the depth parameter)
-     * @param int $depth the number of levels of depth in the type hierarchy from which
+     * @param integer $depth the number of levels of depth in the type hierarchy from which
      * to return results (default is repository specific)
      * @param boolean $includePropertyDefinitions if true the repository MUST return the property
      * definitions for each object type returned (default is false)
