@@ -24,3 +24,6 @@ if (!file_exists(__DIR__.'/../vendor/autoload.php')) {
 /** @var \Composer\Autoload\ClassLoader $loader */
 $loader = require dirname(__DIR__) . '/vendor/autoload.php';
 $loader->addPsr4('Dkd\\PhpCmis\\Test\\', __DIR__);
+
+// set timezone
+date_default_timezone_set('Europe/Berlin');       // Set the default timezone
