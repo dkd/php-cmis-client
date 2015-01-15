@@ -10,6 +10,8 @@ namespace Dkd\PhpCmis;
  * file that was distributed with this source code.
  */
 
+use \Dkd\PhpCmis\Data\FileableCmisObjectInterface;
+
 /**
  * CMIS item interface.
  */

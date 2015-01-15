@@ -17,7 +17,7 @@ use Dkd\PhpCmis\OperationContextInterface;
 /**
  * Fileable CMIS object. A fileable object is an object that can reside in a folder.
  */
-interface FileableCmisObjectInterface extends CmisObjectInterface, CmisObjectPropertiesInterface, ObjectIdInterface
+interface FileableCmisObjectInterface extends CmisObjectInterface
 {
     /**
      * Adds this object to a folder.

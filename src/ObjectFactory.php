@@ -1,22 +1,6 @@
 <?php
 namespace Dkd\PhpCmis;
 
-use Dkd\PhpCmis\Data\AceInterface;
-use Dkd\PhpCmis\Data\AclInterface;
-use Dkd\PhpCmis\Data\ObjectTypeInterface;
-use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
-use Dkd\PhpCmis\Enum\Updatability;
-use Dkd\PhpCmis\CmisObject\CmisObjectInterface;
-use Dkd\PhpCmis\Data\PropertiesInterface;
-use Dkd\PhpCmis\Data\RenditionDataInterface;
-use Dkd\PhpCmis\Data\RepositoryInfoInterface;
-use GuzzleHttp\Stream\StreamInterface;
-use Dkd\PhpCmis\Data\ObjectDataInterface;
-use Dkd\PhpCmis\Definitions\PropertyDefinitionInterface;
-use Dkd\PhpCmis\Data\PropertyDataInterface;
-use Dkd\PhpCmis\Data\ObjectListInterface;
-use Dkd\PhpCmis\Data\ChangeEventInfoInterface;
-
 /**
  * This file is part of php-cmis-client
  *
@@ -25,6 +9,39 @@ use Dkd\PhpCmis\Data\ChangeEventInfoInterface;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
+use Dkd\PhpCmis\CmisObject\CmisObjectInterface;
+use Dkd\PhpCmis\Data\AceInterface;
+use Dkd\PhpCmis\Data\AclInterface;
+use Dkd\PhpCmis\Data\BindingsObjectFactoryInterface;
+use Dkd\PhpCmis\Data\ChangeEventInfoInterface;
+use Dkd\PhpCmis\Data\ObjectDataInterface;
+use Dkd\PhpCmis\Data\ObjectListInterface;
+use Dkd\PhpCmis\Data\ObjectTypeInterface;
+use Dkd\PhpCmis\Data\PropertiesInterface;
+use Dkd\PhpCmis\Data\PropertyDataInterface;
+use Dkd\PhpCmis\Data\RenditionDataInterface;
+use Dkd\PhpCmis\Data\RepositoryInfoInterface;
+use Dkd\PhpCmis\Data\SecondaryTypeInterface;
+use Dkd\PhpCmis\DataObjects\DocumentType;
+use Dkd\PhpCmis\DataObjects\FolderType;
+use Dkd\PhpCmis\DataObjects\ItemType;
+use Dkd\PhpCmis\DataObjects\PolicyType;
+use Dkd\PhpCmis\DataObjects\RelationshipType;
+use Dkd\PhpCmis\DataObjects\SecondaryType;
+use Dkd\PhpCmis\Definitions\DocumentTypeDefinitionInterface;
+use Dkd\PhpCmis\Definitions\FolderTypeDefinitionInterface;
+use Dkd\PhpCmis\Definitions\ItemTypeDefinitionInterface;
+use Dkd\PhpCmis\Definitions\PolicyTypeDefinitionInterface;
+use Dkd\PhpCmis\Definitions\PropertyDefinitionInterface;
+use Dkd\PhpCmis\Definitions\RelationshipTypeDefinitionInterface;
+use Dkd\PhpCmis\Definitions\SecondaryTypeDefinitionInterface;
+use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
+use Dkd\PhpCmis\Enum\Cardinality;
+use Dkd\PhpCmis\Enum\Updatability;
+use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
+use Dkd\PhpCmis\Exception\CmisRuntimeException;
+use GuzzleHttp\Stream\StreamInterface;
 
 /**
  * Object Factory implementation

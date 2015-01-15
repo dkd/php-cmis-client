@@ -21,6 +21,7 @@ use Dkd\PhpCmis\Data\PropertiesInterface;
 use Dkd\PhpCmis\Data\PropertyDataInterface;
 use Dkd\PhpCmis\Data\RenditionDataInterface;
 use Dkd\PhpCmis\Data\RepositoryInfoInterface;
+use Dkd\PhpCmis\Data\SecondaryTypeInterface;
 use Dkd\PhpCmis\Definitions\PropertyDefinitionInterface;
 use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
 use Dkd\PhpCmis\Enum\Updatability;
@@ -135,7 +136,7 @@ interface ObjectFactoryInterface
      * Creates an object that implements the ContentStream interface.
      *
      * @param string $filename
-     * @param int $length
+     * @param integer $length
      * @param string $mimeType
      * @param mixed $stream  @TODO define datatype
      * @param boolean $partial

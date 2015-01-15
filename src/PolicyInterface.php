@@ -12,7 +12,6 @@ namespace Dkd\PhpCmis;
 
 use Dkd\PhpCmis\CmisObject\CmisObjectInterface;
 use Dkd\PhpCmis\Data\FileableCmisObjectInterface;
-use Dkd\PhpCmis\Data\ObjectIdInterface;
 
 /**
  * CMIS policy interface.
@@ -20,7 +19,6 @@ use Dkd\PhpCmis\Data\ObjectIdInterface;
 interface PolicyInterface extends
     CmisObjectInterface,
     FileableCmisObjectInterface,
-    ObjectIdInterface,
     PolicyPropertiesInterface
 {
 
