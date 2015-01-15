@@ -11,7 +11,7 @@ namespace Dkd\PhpCmis\Bindings;
  */
 
 use Dkd\PhpCmis\AclServiceInterface;
-use Dkd\PhpCmis\BindingsObjectFactoryInterface;
+use Dkd\PhpCmis\Data\BindingsObjectFactoryInterface;
 use Dkd\PhpCmis\DiscoveryServiceInterface;
 use Dkd\PhpCmis\Enum\BindingType;
 use Dkd\PhpCmis\MultiFilingServiceInterface;
@@ -33,7 +33,6 @@ use Dkd\PhpCmis\VersioningServiceInterface;
  */
 interface CmisBindingInterface
 {
-
     /**
      * Clears all caches of the current CMIS binding session.
      *

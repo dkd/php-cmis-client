@@ -17,7 +17,7 @@ use Dkd\PhpCmis\Data\CmisExtensionElementInterface;
 use Dkd\PhpCmis\Enum\AclPropagation;
 use Dkd\PhpCmis\Enum\ExtensionLevel;
 use Dkd\PhpCmis\Exception\CmisObjectNotFoundException;
-use Dkd\PhpCmis\ObjectIdInterface;
+use Dkd\PhpCmis\Data\ObjectIdInterface;
 use Dkd\PhpCmis\PolicyInterface;
 use Dkd\PhpCmis\RelationshipInterface;
 use Dkd\PhpCmis\RenditionInterface;

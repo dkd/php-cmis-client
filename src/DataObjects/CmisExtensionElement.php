@@ -30,7 +30,7 @@ class CmisExtensionElement implements CmisExtensionElementInterface
     protected $namespace;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $value;
 
@@ -59,35 +59,25 @@ class CmisExtensionElement implements CmisExtensionElementInterface
         $value = null,
         array $children = array()
     ) {
-        if (empty($name)) {
-            throw new \InvalidArgumentException('Name must be given!');
-        }
-
         if ($value !== null && count($children) > 0) {
             throw new \InvalidArgumentException('Value and children given! Only one of them is allowed.');
         }
 
-        if ($value === null && count($children) === 0) {
-            throw new \InvalidArgumentException('Value and children are empty! One of them is required.');
+        $name = (string) $name;
+        if ($name === '') {
+            throw new \InvalidArgumentException('Name must be given!');
         }
 
-        $this->name = (string) $name;
+        $this->name = $name;
         $this->namespace = (string) $namespace;
 
-        if ($value !== null) {
-            $this->value = (string) $value;
-            $this->children = array();
-        } elseif (!empty($children)) {
-            $this->value = null;
-            // TODO: We should check here if the array does only contain entries of the expected type.
-            // This could be done with AbstractExtensionData::checkType() which is currently not available here.
-            // The checkType method could be moved to a trait but this would raise the required php version to 5.4.
-            $this->children = $children;
-        }
+        $this->value = ($value === null ? null : (string) $value);
 
-        if (!empty($attributes)) {
-            $this->attributes = $attributes;
-        }
+        // TODO: We should check here if the array does only contain entries of the expected type.
+        // This could be done with AbstractExtensionData::checkType() which is currently not available here.
+        // The checkType method could be moved to a trait but this would raise the required php version to 5.4.
+        $this->children = $children;
+        $this->attributes = $attributes;
     }
 
     /**

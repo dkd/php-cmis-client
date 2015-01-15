@@ -11,7 +11,7 @@ namespace Dkd\PhpCmis\CmisObject;
  */
 
 use Dkd\PhpCmis\Enum\BaseTypeId;
-use Dkd\PhpCmis\ObjectTypeInterface;
+use Dkd\PhpCmis\Data\ObjectTypeInterface;
 use Dkd\PhpCmis\PropertyInterface;
 use Dkd\PhpCmis\SecondaryTypeInterface;
 
