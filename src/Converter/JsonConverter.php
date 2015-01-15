@@ -91,6 +91,7 @@ use Dkd\PhpCmis\Enum\DecimalPrecision;
 use Dkd\PhpCmis\Enum\PropertyType;
 use Dkd\PhpCmis\Enum\SupportedPermissions;
 use Dkd\PhpCmis\Enum\Updatability;
+use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
 use Dkd\PhpCmis\Exception\CmisRuntimeException;
 
 /**
@@ -615,7 +616,6 @@ class JsonConverter extends AbstractDataConverter
         }
         $baseType = BaseTypeId::cast($data[JSONConstants::JSON_TYPE_BASE_ID]);
 
-        /** @var TypeDefinitionInterface $result */
         if ($baseType->equals(BaseTypeId::cast(BaseTypeId::CMIS_FOLDER))) {
             $result = new FolderTypeDefinition();
         } elseif ($baseType->equals(BaseTypeId::cast(BaseTypeId::CMIS_DOCUMENT))) {
@@ -629,26 +629,26 @@ class JsonConverter extends AbstractDataConverter
             if (isset($data[JSONConstants::JSON_TYPE_ALLOWED_SOURCE_TYPES])
                 && is_array($data[JSONConstants::JSON_TYPE_ALLOWED_SOURCE_TYPES])
             ) {
-                $allowedSourceTypes = array();
-                foreach ($data[JSONConstants::JSON_TYPE_ALLOWED_SOURCE_TYPES] as $allowedSourceType) {
-                    $allowedSourceType = (string) $allowedSourceType;
-                    if (!empty($allowedSourceType)) {
-                        $allowedSourceTypes[] = $allowedSourceType;
+                $allowedSourceTypeIds = array();
+                foreach ($data[JSONConstants::JSON_TYPE_ALLOWED_SOURCE_TYPES] as $allowedSourceTypeId) {
+                    $allowedSourceTypeId = (string) $allowedSourceTypeId;
+                    if (!empty($allowedSourceTypeId)) {
+                        $allowedSourceTypeIds[] = $allowedSourceTypeId;
                     }
                 }
-                $result->setAllowedSourceTypes($allowedSourceTypes);
+                $result->setAllowedSourceTypeIds($allowedSourceTypeIds);
             }
             if (isset($data[JSONConstants::JSON_TYPE_ALLOWED_TARGET_TYPES])
                 && is_array($data[JSONConstants::JSON_TYPE_ALLOWED_TARGET_TYPES])
             ) {
-                $allowedTargetTypes = array();
-                foreach ($data[JSONConstants::JSON_TYPE_ALLOWED_TARGET_TYPES] as $allowedTargetType) {
-                    $allowedTargetType = (string) $allowedTargetType;
-                    if (!empty($allowedTargetType)) {
-                        $allowedTargetTypes[] = $allowedTargetType;
+                $allowedTargetTypeIds = array();
+                foreach ($data[JSONConstants::JSON_TYPE_ALLOWED_TARGET_TYPES] as $allowedTargetTypeId) {
+                    $allowedTargetTypeId = (string) $allowedTargetTypeId;
+                    if (!empty($allowedTargetTypeId)) {
+                        $allowedTargetTypeIds[] = $allowedTargetTypeId;
                     }
                 }
-                $result->setAllowedTargetTypes($allowedTargetTypes);
+                $result->setAllowedTargetTypeIds($allowedTargetTypeIds);
             }
         } elseif ($baseType->equals(BaseTypeId::cast(BaseTypeId::CMIS_POLICY))) {
             $result = new PolicyTypeDefinition();
@@ -656,6 +656,11 @@ class JsonConverter extends AbstractDataConverter
             $result = new ItemTypeDefinition();
         } elseif ($baseType->equals(BaseTypeId::cast(BaseTypeId::CMIS_SECONDARY))) {
             $result = new SecondaryTypeDefinition();
+        } else {
+            // this could only happen if a new baseType is added to the enumeration and not implemented here.
+            throw new CmisInvalidArgumentException(
+                sprintf('The given type definition "%s" could not be converted.', $baseType)
+            );
         }
 
         $result->setBaseTypeId($baseType);
@@ -801,6 +806,11 @@ class JsonConverter extends AbstractDataConverter
             $propertyDefinition = new PropertyHtmlDefinition();
         } elseif ($propertyType->equals(PropertyType::URI)) {
             $propertyDefinition = new PropertyUriDefinition();
+        } else {
+            // this could only happen if a new property type is added to the enumeration and not implemented here.
+            throw new CmisInvalidArgumentException(
+                sprintf('The given property definition "%s" could not be converted.', $propertyType)
+            );
         }
 
         // TODO
@@ -1055,6 +1065,11 @@ class JsonConverter extends AbstractDataConverter
             } elseif ($propertyType->equals(PropertyType::cast(PropertyType::URI))) {
                 $property = new PropertyUri();
                 $property->setValues($this->convertStringValues($propertyValues));
+            } else {
+                // this could only happen if a new property type is added to the enumeration and not implemented here.
+                throw new CmisInvalidArgumentException(
+                    sprintf('The given property type "%s" could not be converted.', $propertyType)
+                );
             }
 
             $property->setId($id);
@@ -1082,17 +1097,17 @@ class JsonConverter extends AbstractDataConverter
      * TODO Add description
      *
      * @param array $data
-     * @return null
+     * @param array $extensions
+     * @return PropertiesInterface[]
      * @throws \Exception
      */
-    public function convertSuccinctProperties(array $data = null)
+    public function convertSuccinctProperties(array $data = null, $extensions = array())
     {
         throw new \Exception('Succinct properties are currently not supported.');
-        if (empty($data)) {
-            return null;
-        }
-
-        // TODO IMPLEMENT SUCCINCT PROPERTY SUPPORT
+// TODO IMPLEMENT SUCCINCT PROPERTY SUPPORT
+//        if (empty($data)) {
+//            return null;
+//        }
 //        if (isset($data[PropertyIds::SECONDARY_OBJECT_TYPE_IDS])
 //            && is_array($data[PropertyIds::SECONDARY_OBJECT_TYPE_IDS])
 //        ) {
@@ -1108,10 +1123,10 @@ class JsonConverter extends AbstractDataConverter
 //        $properties = array();
 //
 //        foreach ($data as $propertyId => $propertyData) {
-//
+//          ...
 //        }
-
-        return $properties;
+//
+//        return $properties;
     }
 
     /**
@@ -1176,7 +1191,7 @@ class JsonConverter extends AbstractDataConverter
                 $rendition = $this->convertRendition($renditionData);
             }
 
-           // @TODO once a logger is available we should log an INFO message if the rendition could not be converted
+            // @TODO once a logger is available we should log an INFO message if the rendition could not be converted
             if ($rendition !== null) {
                 $renditions[] = $rendition;
             }

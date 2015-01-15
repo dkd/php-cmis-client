@@ -55,8 +55,6 @@ class SessionFactory implements SessionFactoryInterface
         $cmisBindingsHelper = new CmisBindingsHelper();
         $binding = $cmisBindingsHelper->createBinding(
             $parameters,
-            $objectFactory,
-            $cache,
             $typeDefinitionCache
         );
 

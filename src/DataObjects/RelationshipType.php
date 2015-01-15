@@ -25,12 +25,12 @@ class RelationshipType extends RelationshipTypeDefinition implements Relationshi
     }
 
     /**
-     * @var ObjectTypeInterface[]
+     * @var ObjectTypeInterface[]|null
      */
     protected $allowedSourceTypes;
 
     /**
-     * @var ObjectTypeInterface[]
+     * @var ObjectTypeInterface[]|null
      */
     protected $allowedTargetTypes;
 

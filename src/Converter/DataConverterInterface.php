@@ -337,7 +337,7 @@ interface DataConverterInterface
      *
      * @param array $data
      * @param array $cmisKeys
-     * @return CmisExtensionElementInterface
+     * @return CmisExtensionElementInterface[]
      */
     public function convertExtension(array $data = null, array $cmisKeys = array());
 

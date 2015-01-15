@@ -3,7 +3,6 @@ namespace Dkd\PhpCmis\Bindings;
 
 use Dkd\PhpCmis\AclServiceInterface;
 use Dkd\PhpCmis\Bindings\Browser\RepositoryService;
-use Dkd\PhpCmis\BindingsObjectFactoryInterface;
 use Dkd\PhpCmis\VersioningServiceInterface;
 use Dkd\PhpCmis\DiscoveryServiceInterface;
 use Dkd\PhpCmis\Enum\BindingType;
@@ -16,6 +15,7 @@ use Dkd\PhpCmis\PolicyServiceInterface;
 use Dkd\PhpCmis\RelationshipServiceInterface;
 use Dkd\PhpCmis\RepositoryServiceInterface;
 use Dkd\PhpCmis\SessionParameter;
+use Doctrine\Common\Cache\Cache;
 
 /**
  * This file is part of php-cmis-lib.
@@ -37,10 +37,15 @@ class CmisBinding implements CmisBindingInterface
      */
     protected $repositoryService;
 
+    /**
+     * @param BindingSessionInterface $session
+     * @param array $sessionParameters
+     * @param Cache $typeDefinitionCache
+     */
     public function __construct(
         BindingSessionInterface $session,
         array $sessionParameters,
-        \Doctrine\Common\Cache\Cache $typeDefinitionCache = null
+        Cache $typeDefinitionCache = null
     ) {
         if (count($sessionParameters) === 0) {
             throw new CmisRuntimeException('Session parameters must be set!');
@@ -56,6 +61,9 @@ class CmisBinding implements CmisBindingInterface
             $this->session->put($key, $value);
         }
 
+        if ($typeDefinitionCache !== null) {
+            // @TODO add cache
+        }
         $this->repositoryService = new RepositoryService($this->session);
     }
 
