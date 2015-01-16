@@ -1,4 +1,9 @@
-# Code Review
+# This document describes the internal development workflow of dkd.
+# Feel free to do pull request on Github and ignore this guide!
+
+---
+
+## Code Review
 
 We use [Phabricator](https://secure.phabricator.com/book/phabricator/) to 
 manage our code reviews.
