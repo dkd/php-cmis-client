@@ -13,27 +13,21 @@ namespace Dkd\PhpCmis\Bindings\Browser;
 use Dkd\PhpCmis\Bindings\BindingSessionInterface;
 use Dkd\PhpCmis\Bindings\CmisBindingsHelper;
 use Dkd\PhpCmis\Constants;
+use Dkd\PhpCmis\Data\PropertiesInterface;
 use Dkd\PhpCmis\DataObjects\RepositoryInfo;
 use Dkd\PhpCmis\DataObjects\RepositoryInfoBrowserBinding;
+use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
 use Dkd\PhpCmis\Exception\CmisBaseException;
 use Dkd\PhpCmis\Exception\CmisConnectionException;
 use Dkd\PhpCmis\Exception\CmisConstraintException;
-use Dkd\PhpCmis\Exception\CmisContentAlreadyExistsException;
-use Dkd\PhpCmis\Exception\CmisFilterNotValidException;
 use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
-use Dkd\PhpCmis\Exception\CmisNameConstraintViolationException;
 use Dkd\PhpCmis\Exception\CmisNotSupportedException;
 use Dkd\PhpCmis\Exception\CmisObjectNotFoundException;
 use Dkd\PhpCmis\Exception\CmisPermissionDeniedException;
 use Dkd\PhpCmis\Exception\CmisProxyAuthenticationException;
 use Dkd\PhpCmis\Exception\CmisRuntimeException;
-use Dkd\PhpCmis\Exception\CmisStorageException;
-use Dkd\PhpCmis\Exception\CmisStreamNotSupportedException;
 use Dkd\PhpCmis\Exception\CmisUnauthorizedException;
-use Dkd\PhpCmis\Exception\CmisUpdateConflictException;
-use Dkd\PhpCmis\Exception\CmisVersioningException;
 use Dkd\PhpCmis\SessionParameter;
-use Dkd\PhpCmis\TypeDefinitionInterface;
 use GuzzleHttp\Exception\RequestException;
 use League\Url\Url;
 
@@ -68,7 +62,10 @@ abstract class AbstractBrowserBindingService
     }
 
     /**
-     * @param CmisBindingsHelper $cmisBindingsHelper
+     * Set cmis binding helper property
+     *
+     * @param CmisBindingsHelper $cmisBindingsHelper The cmis binding helper that should be defined.
+     * If <code>null</code> is given a new instance of CmisBindingsHelper will be created.
      */
     protected function setCmisBindingsHelper($cmisBindingsHelper = null)
     {
@@ -76,75 +73,8 @@ abstract class AbstractBrowserBindingService
     }
 
     /**
-     * Sets the current session.
+     * Get the url for an object
      *
-     * @param BindingSessionInterface $session
-     */
-    protected function setSession(BindingSessionInterface $session)
-    {
-        $this->session = $session;
-        $succinct = $session->get(SessionParameter::BROWSER_SUCCINCT);
-        $this->succinct = ($succinct === null ? true : (boolean) $succinct);
-    }
-
-    /**
-     * @return BindingSessionInterface
-     */
-    public function getSession()
-    {
-        return $this->session;
-    }
-
-    /**
-     * @return \GuzzleHttp\Client
-     */
-    protected function getHttpInvoker()
-    {
-        /** @var \GuzzleHttp\Client $invoker */
-        $invoker = $this->cmisBindingsHelper->getHttpInvoker($this->session);
-
-        return $invoker;
-    }
-
-    /**
-     * Returns the service URL of this session.
-     *
-     * @return string|null
-     */
-    protected function getServiceUrl()
-    {
-        $browserUrl = $this->getSession()->get(SessionParameter::BROWSER_URL);
-        if (is_string($browserUrl)) {
-            return $browserUrl;
-        }
-
-        return null;
-    }
-
-    /**
-     * @param string $repositoryId
-     * @param string $selector
-     * @throws CmisConnectionException
-     * @throws CmisObjectNotFoundException
-     * @return Url
-     */
-    protected function getRepositoryUrl($repositoryId, $selector = null)
-    {
-        $result = $this->getRepositoryUrlCache()->getRepositoryUrl($repositoryId, $selector);
-
-        if ($result === null) {
-            $this->getRepositoriesInternal($repositoryId);
-            $result = $this->getRepositoryUrlCache()->getRepositoryUrl($repositoryId, $selector);
-        }
-
-        if ($result === null) {
-            throw new CmisObjectNotFoundException("Unknown repository!");
-        }
-
-        return $result;
-    }
-
-    /**
      * @param string $repositoryId
      * @param string $objectId
      * @param string $selector
@@ -169,35 +99,166 @@ abstract class AbstractBrowserBindingService
     }
 
     /**
-     * @param string $repositoryId
-     * @param string $path
-     * @param string $selector
-     * @throws CmisConnectionException
-     * @throws CmisObjectNotFoundException
-     * @return Url
+     * Returns the repository URL cache or creates a new cache if it doesn't
+     * exist.
+     *
+     * @return RepositoryUrlCache
      */
-    protected function getPathUrl($repositoryId, $path, $selector = null)
+    protected function getRepositoryUrlCache()
     {
-        $result = $this->getRepositoryUrlCache()->getPathUrl($repositoryId, $path, $selector);
-
-        if ($result === null) {
-            $this->getRepositoriesInternal($repositoryId);
-            $result = $this->getRepositoryUrlCache()->getPathUrl($repositoryId, $path, $selector);
+        $repositoryUrlCache = $this->getSession()->get(SessionParameter::REPOSITORY_URL_CACHE);
+        if ($repositoryUrlCache === null) {
+            $repositoryUrlCache = new RepositoryUrlCache();
+            $this->getSession()->put(SessionParameter::REPOSITORY_URL_CACHE, $repositoryUrlCache);
         }
 
-        if ($result === null) {
-            throw new CmisObjectNotFoundException("Unknown repository!");
-        }
-
-        return $result;
+        return $repositoryUrlCache;
     }
 
     /**
-     * @return boolean
+     * Get current session
+     *
+     * @return BindingSessionInterface
      */
-    protected function getSuccinct()
+    public function getSession()
     {
-        return $this->succinct;
+        return $this->session;
+    }
+
+    /**
+     * Sets the current session.
+     *
+     * @param BindingSessionInterface $session
+     */
+    protected function setSession(BindingSessionInterface $session)
+    {
+        $this->session = $session;
+        $succinct = $session->get(SessionParameter::BROWSER_SUCCINCT);
+        $this->succinct = ($succinct === null ? true : (boolean) $succinct);
+    }
+
+    /**
+     * Retrieves the the repository info objects.
+     *
+     * @param string $repositoryId
+     * @throws CmisConnectionException
+     * @return RepositoryInfo[] Returns ALL Repository Infos that are available and not just the one requested by id.
+     */
+    protected function getRepositoriesInternal($repositoryId = null)
+    {
+        $repositoryUrlCache = $this->getRepositoryUrlCache();
+
+        if ($repositoryId === null) {
+            // no repository id provided -> get all
+            $url = $repositoryUrlCache->buildUrl($this->getServiceUrl());
+        } else {
+            // use URL of the specified repository
+            $url = $repositoryUrlCache->getRepositoryUrl($repositoryId, Constants::SELECTOR_REPOSITORY_INFO);
+            if ($url === null) {
+                // repository infos haven't been fetched yet -> get them all
+                $url = $repositoryUrlCache->buildUrl($this->getServiceUrl());
+            }
+        }
+
+        $repositoryInfos = array();
+        $result = $this->read($url)->json();
+        if (!is_array($result)) {
+            throw new CmisConnectionException(
+                'Could not fetch repository info! Response is not a valid JSON.',
+                1416343166
+            );
+        }
+        foreach ($result as $item) {
+            if (is_array($item)) {
+                $repositoryInfo = $this->getJsonConverter()->convertRepositoryInfo($item);
+
+                if ($repositoryInfo instanceof RepositoryInfoBrowserBinding) {
+                    $id = $repositoryInfo->getId();
+                    $repositoryUrl = $repositoryInfo->getRepositoryUrl();
+                    $rootUrl = $repositoryInfo->getRootUrl();
+
+                    if (empty($id) || empty($repositoryUrl) || empty($rootUrl)) {
+                        throw new CmisConnectionException(
+                            sprintf('Found invalid Repository Info! (id: %s)', $id),
+                            1415187765
+                        );
+                    }
+
+                    $this->getRepositoryUrlCache()->addRepository($id, $repositoryUrl, $rootUrl);
+
+                    $repositoryInfos[] = $repositoryInfo;
+                }
+            } else {
+                throw new CmisConnectionException(
+                    sprintf(
+                        'Found invalid repository info! Value of type "array" was expected'
+                        . 'but value of type "%s" was given.',
+                        gettype($item)
+                    ),
+                    1415187764
+                );
+            }
+        }
+
+        return $repositoryInfos;
+    }
+
+    /**
+     * Returns the service URL of this session.
+     *
+     * @return string|null
+     */
+    protected function getServiceUrl()
+    {
+        $browserUrl = $this->getSession()->get(SessionParameter::BROWSER_URL);
+        if (is_string($browserUrl)) {
+            return $browserUrl;
+        }
+
+        return null;
+    }
+
+    /**
+     * Do a get request for the given url
+     *
+     * @param Url $url
+     * @return \GuzzleHttp\Message\Response
+     * @throws CmisBaseException an more specific exception of this type could be thrown. For more details see
+     * @see AbstractBrowserBindingService::convertStatusCode()
+     */
+    protected function read(Url $url)
+    {
+        /** @var \GuzzleHttp\Message\Response $response */
+        try {
+            $response = $this->getHttpInvoker()->get((string) $url);
+        } catch (RequestException $exception) {
+            $code = 0;
+            $message = null;
+            if ($exception->getResponse()) {
+                $code = $exception->getResponse()->getStatusCode();
+                $message = $exception->getResponse()->getBody();
+            }
+            throw $this->convertStatusCode(
+                $code,
+                $message,
+                $exception
+            );
+        }
+
+        return $response;
+    }
+
+    /**
+     * Get a HTTP Invoker instance
+     *
+     * @return \GuzzleHttp\Client
+     */
+    protected function getHttpInvoker()
+    {
+        /** @var \GuzzleHttp\Client $invoker */
+        $invoker = $this->cmisBindingsHelper->getHttpInvoker($this->getSession());
+
+        return $invoker;
     }
 
     /**
@@ -263,29 +324,51 @@ abstract class AbstractBrowserBindingService
     // ---- helpers ----
 
     /**
-     * @param Url $url
-     * @return \GuzzleHttp\Message\Response
+     * Returns JSON Converter instance
+     *
+     * @return \Dkd\PhpCmis\Converter\JsonConverter
      */
-    protected function read(Url $url)
+    protected function getJsonConverter()
     {
-        /** @var \GuzzleHttp\Message\Response $response */
-        try {
-            $response = $this->getHttpInvoker()->get((string) $url);
-        } catch (RequestException $exception) {
-            $code = 0;
-            $message = null;
-            if ($exception->getResponse()) {
-                $code = $exception->getResponse()->getStatusCode();
-                $message = $exception->getResponse()->getBody();
-            }
-            throw $this->convertStatusCode(
-                $code,
-                $message,
-                $exception
-            );
+        return $this->cmisBindingsHelper->getJsonConverter($this->getSession());
+    }
+
+    /**
+     * Generate url for a given path of a given repository.
+     *
+     * @param string $repositoryId
+     * @param string $path
+     * @param string $selector
+     * @throws CmisConnectionException
+     * @throws CmisObjectNotFoundException
+     * @return Url
+     */
+    protected function getPathUrl($repositoryId, $path, $selector = null)
+    {
+        $result = $this->getRepositoryUrlCache()->getPathUrl($repositoryId, $path, $selector);
+
+        if ($result === null) {
+            $this->getRepositoriesInternal($repositoryId);
+            $result = $this->getRepositoryUrlCache()->getPathUrl($repositoryId, $path, $selector);
         }
 
-        return $response;
+        if ($result === null) {
+            throw new CmisObjectNotFoundException("Unknown repository!");
+        }
+
+        return $result;
+    }
+
+// ---- URL ----
+
+    /**
+     * Get if succinct mode is used
+     *
+     * @return boolean
+     */
+    protected function getSuccinct()
+    {
+        return $this->succinct;
     }
 
     /**
@@ -293,14 +376,15 @@ abstract class AbstractBrowserBindingService
      * result.
      *
      * @param Url $url
-     * @param string $contentType
      * @param mixed $content
-     * @throws CmisBaseException
+     * @param array $headers
      * @return \GuzzleHttp\Message\Response
+     * @throws CmisBaseException an more specific exception of this type could be thrown. For more details see
+     * @see AbstractBrowserBindingService::convertStatusCode()
      */
-    protected function post(Url $url, $contentType, $content)
+    protected function post(Url $url, $content, array $headers = array())
     {
-        $headers = array('Content-Type' => $contentType, 'body' => $content);
+        $headers['body'] = $content;
 
         try {
             /** @var \GuzzleHttp\Message\Response $response */
@@ -316,99 +400,12 @@ abstract class AbstractBrowserBindingService
         return $response;
     }
 
-// ---- URL ----
-
-    /**
-     * Returns the repository URL cache or creates a new cache if it doesn't
-     * exist.
-     *
-     * @return RepositoryUrlCache
-     */
-    protected function getRepositoryUrlCache()
-    {
-        $repositoryUrlCache = $this->getSession()->get(SessionParameter::REPOSITORY_URL_CACHE);
-        if ($repositoryUrlCache === null) {
-            $repositoryUrlCache = new RepositoryUrlCache();
-            $this->getSession()->put(SessionParameter::REPOSITORY_URL_CACHE, $repositoryUrlCache);
-        }
-
-        return $repositoryUrlCache;
-    }
-
-    /**
-     * Retrieves the the repository info objects.
-     *
-     * @param string $repositoryId
-     * @throws CmisConnectionException
-     * @return RepositoryInfo[] Returns ALL Repository Infos that are available and not just the one requested by id.
-     */
-    protected function getRepositoriesInternal($repositoryId = null)
-    {
-        $repositoryUrlCache = $this->getRepositoryUrlCache();
-
-        if ($repositoryId === null) {
-            // no repository id provided -> get all
-            $url = $repositoryUrlCache->buildUrl($this->getServiceUrl());
-        } else {
-            // use URL of the specified repository
-            $url = $repositoryUrlCache->getRepositoryUrl($repositoryId, Constants::SELECTOR_REPOSITORY_INFO);
-            if ($url === null) {
-                // repository infos haven't been fetched yet -> get them all
-                $url = $repositoryUrlCache->buildUrl($this->getServiceUrl());
-            }
-        }
-
-        $repositoryInfos = array();
-        $result = $this->read($url)->json();
-        if (!is_array($result)) {
-            throw new CmisConnectionException(
-                'Could not fetch repository info! Response is not a valid JSON.',
-                1416343166
-            );
-        }
-        foreach ($result as $item) {
-            if (is_array($item)) {
-                $repositoryInfo = $this->cmisBindingsHelper->getJsonConverter(
-                    $this->getSession()
-                )->convertRepositoryInfo($item);
-
-                if ($repositoryInfo instanceof RepositoryInfoBrowserBinding) {
-                    $id = $repositoryInfo->getId();
-                    $repositoryUrl = $repositoryInfo->getRepositoryUrl();
-                    $rootUrl = $repositoryInfo->getRootUrl();
-
-                    if (empty($id) || empty($repositoryUrl) || empty($rootUrl)) {
-                        throw new CmisConnectionException(
-                            sprintf('Found invalid Repository Info! (id: %s)', $id),
-                            1415187765
-                        );
-                    }
-
-                    $this->getRepositoryUrlCache()->addRepository($id, $repositoryUrl, $rootUrl);
-
-                    $repositoryInfos[] = $repositoryInfo;
-                }
-            } else {
-                throw new CmisConnectionException(
-                    sprintf(
-                        'Found invalid repository info! Value of type "array" was expected'
-                        . 'but value of type "%s" was given.',
-                        gettype($item)
-                    ),
-                    1415187764
-                );
-            }
-        }
-
-        return $repositoryInfos;
-    }
-
     /**
      * Retrieves a type definition.
      *
      * @param string $repositoryId
      * @param string $typeId
-     * @return TypeDefinitionInterface
+     * @return TypeDefinitionInterface|null
      */
     protected function getTypeDefinitionInternal($repositoryId, $typeId)
     {
@@ -416,11 +413,85 @@ abstract class AbstractBrowserBindingService
         $url = $this->getRepositoryUrl($repositoryId, Constants::SELECTOR_TYPE_DEFINITION);
         $url->getQuery()->modify(array(Constants::PARAM_TYPE_ID => $typeId));
 
-        // read and parse
-        $response = $this->read($url);
+        return $this->getJsonConverter()->convertTypeDefinition($this->read($url)->json());
+    }
 
-        return $this->cmisBindingsHelper->getJsonConverter(
-            $this->getSession()
-        )->convertTypeDefinition($response->json());
+    /**
+     * Get url for a repository
+     *
+     * @param string $repositoryId
+     * @param string $selector
+     * @throws CmisConnectionException
+     * @throws CmisObjectNotFoundException
+     * @return Url
+     */
+    protected function getRepositoryUrl($repositoryId, $selector = null)
+    {
+        $result = $this->getRepositoryUrlCache()->getRepositoryUrl($repositoryId, $selector);
+
+        if ($result === null) {
+            $this->getRepositoriesInternal($repositoryId);
+            $result = $this->getRepositoryUrlCache()->getRepositoryUrl($repositoryId, $selector);
+        }
+
+        if ($result === null) {
+            throw new CmisObjectNotFoundException("Unknown repository!");
+        }
+
+        return $result;
+    }
+
+    /**
+     * Converts a Properties list into an array that can be used for the CMIS request.
+     *
+     * @param PropertiesInterface $properties
+     * @return array Example <code>array('propertyId[0]' => 'myId', 'propertyValue[0]', 'valueOfMyId')</code>
+     */
+    protected function convertPropertiesToQueryArray(PropertiesInterface $properties)
+    {
+        $propertiesArray = array();
+
+        $propertyCounter = 0;
+        foreach ($properties->getProperties() as $property) {
+            $propertyCounterString = '[' . $propertyCounter . ']';
+            $propertiesArray[Constants::CONTROL_PROP_ID . $propertyCounterString] = $property->getId();
+
+            $propertyValues = $property->getValues();
+
+            if (count($propertyValues) === 1) {
+                $propertiesArray[Constants::CONTROL_PROP_VALUE . $propertyCounterString] = $this->convertPropertyValueToSimpleType(
+                    $property->getFirstValue()
+                );
+            } elseif (count($propertyValues) > 1) {
+                $propertyValueCounter = 0;
+                foreach ($propertyValues as $propertyValue) {
+                    $propertyValueCounterString = $propertyCounterString . '[' . $propertyValueCounter . ']';
+                    $propertiesArray[Constants::CONTROL_PROP_VALUE . $propertyValueCounterString] = $this->convertPropertyValueToSimpleType(
+                        $propertyValue
+                    );
+                    $propertyValueCounter ++;
+                }
+            }
+
+            $propertyCounter ++;
+        }
+
+        return $propertiesArray;
+    }
+
+    /**
+     * Converts values to a format that can be used for the CMIS Browser binding request.
+     *
+     * @param mixed $value
+     * @return mixed
+     */
+    protected function convertPropertyValueToSimpleType($value)
+    {
+        if ($value instanceof \DateTime) {
+            // CMIS expects a timestamp in milliseconds
+            $value = $value->getTimestamp() * 1000;
+        }
+
+        return $value;
     }
 }

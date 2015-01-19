@@ -48,6 +48,18 @@ class Properties extends AbstractExtensionData implements PropertiesInterface
     }
 
     /**
+     * Adds a list of properties with propertyId as index. Existing property with same id will be replaced.
+     *
+     * @param PropertyDataInterface[] $properties
+     */
+    public function addProperties(array $properties)
+    {
+        foreach ($properties as $property) {
+            $this->addProperty($property);
+        }
+    }
+
+    /**
      * Removes a property.
      *
      * @param string $id the property ID

@@ -12,6 +12,14 @@ namespace Dkd\PhpCmis\Test\Unit\Bindings\Browser;
 
 use Dkd\PhpCmis\Bindings\Browser\AbstractBrowserBindingService;
 use Dkd\PhpCmis\Bindings\Browser\RepositoryUrlCache;
+use Dkd\PhpCmis\Constants;
+use Dkd\PhpCmis\DataObjects\ObjectId;
+use Dkd\PhpCmis\DataObjects\Properties;
+use Dkd\PhpCmis\DataObjects\PropertyBoolean;
+use Dkd\PhpCmis\DataObjects\PropertyDateTime;
+use Dkd\PhpCmis\DataObjects\PropertyDecimal;
+use Dkd\PhpCmis\DataObjects\PropertyId;
+use Dkd\PhpCmis\DataObjects\PropertyString;
 use Dkd\PhpCmis\DataObjects\RepositoryInfoBrowserBinding;
 use Dkd\PhpCmis\SessionParameter;
 use GuzzleHttp\Client;
@@ -576,7 +584,6 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
     public function testPostCallsHttpInvokerAndReturnsRequestResult()
     {
         $testUrl = Url::createFromUrl('http://foo.bar.baz');
-        $contentType = 'text/plain';
         $content = 'fooBarBaz';
 
         $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor()->getMock(
@@ -586,7 +593,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         )->getMock();
         $httpInvokerMock->expects($this->once())->method('post')->with(
             $testUrl,
-            array('Content-Type' => $contentType, 'body' => $content)
+            array('body' => $content)
         )->willReturn($responseMock);
 
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
@@ -599,14 +606,13 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
 
         $this->assertSame(
             $responseMock,
-            $this->getMethod(self::CLASS_TO_TEST, 'post')->invokeArgs($binding, array($testUrl, $contentType, $content))
+            $this->getMethod(self::CLASS_TO_TEST, 'post')->invokeArgs($binding, array($testUrl, $content))
         );
     }
 
     public function testPostCatchesAllRequestExceptionsAndConvertsThemToACmisException()
     {
         $testUrl = Url::createFromUrl('http://foo.bar.baz');
-        $contentType = 'text/plain';
         $content = 'fooBarBaz';
 
         $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor()->getMock(
@@ -620,7 +626,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         $exceptionMock->expects($this->any())->method('getResponse')->willReturn($responseMock);
         $httpInvokerMock->expects($this->once())->method('post')->with(
             (string) $testUrl,
-            array('Content-Type' => $contentType, 'body' => $content)
+            array('body' => $content)
         )->willThrowException(
             $exceptionMock
         );
@@ -638,7 +644,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
 
         $this->assertSame(
             $responseMock,
-            $this->getMethod(self::CLASS_TO_TEST, 'post')->invokeArgs($binding, array($testUrl, $contentType, $content))
+            $this->getMethod(self::CLASS_TO_TEST, 'post')->invokeArgs($binding, array($testUrl, $content))
         );
     }
 
@@ -903,6 +909,79 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
             'with repository id - repository url cache does return repository url - url is fetched from cache' => array(
                 'repository-id',
                 $repositoryUrlCacheMockWithRepositoryUrlEntry
+            )
+        );
+    }
+
+    public function testConvertPropertiesToQueryArrayConvertsPropertiesIntoAnArray()
+    {
+        $sessionMock = $this->getSessionMock();
+
+        /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
+        $binding = $this->getMockBuilder(
+            self::CLASS_TO_TEST
+        )->setConstructorArgs(array($sessionMock))->getMockForAbstractClass();
+
+        $properties = new Properties();
+
+        $currentTime = new \DateTime('now');
+
+        $singleValueStringProperty = new PropertyString();
+        $singleValueStringProperty->setId('stringProp');
+        $singleValueStringProperty->setValue('stringValue');
+
+        $multiValueStringProperty = new PropertyString();
+        $multiValueStringProperty->setId('stringProp2');
+        $multiValueStringProperty->setValues(array('stringValue1', 'stringValue2'));
+
+        $singleValueBooleanProperty = new PropertyBoolean();
+        $singleValueBooleanProperty->setId('booleanProp');
+        $singleValueBooleanProperty->setValue(true);
+
+        $singleValueDecimalProperty = new PropertyDecimal();
+        $singleValueDecimalProperty->setId('decimalProp');
+        $singleValueDecimalProperty->setValue(1.2);
+
+        $singleValueDateTimeProperty = new PropertyDateTime();
+        $singleValueDateTimeProperty->setId('dateTimeProp');
+        $singleValueDateTimeProperty->setValue($currentTime);
+
+        $singleValueIdProperty = new PropertyId();
+        $singleValueIdProperty->setId('idProp');
+        $singleValueIdProperty->setValue('idValue');
+
+        $properties->addProperties(
+            array(
+                $singleValueStringProperty,
+                $multiValueStringProperty,
+                $singleValueBooleanProperty,
+                $singleValueDecimalProperty,
+                $singleValueDateTimeProperty,
+                $singleValueIdProperty
+            )
+        );
+
+        $expectedArray = array(
+            Constants::CONTROL_PROP_ID . '[0]' => 'stringProp',
+            Constants::CONTROL_PROP_VALUE . '[0]' => 'stringValue',
+            Constants::CONTROL_PROP_ID . '[1]' => 'stringProp2',
+            Constants::CONTROL_PROP_VALUE . '[1][0]' => 'stringValue1',
+            Constants::CONTROL_PROP_VALUE . '[1][1]' => 'stringValue2',
+            Constants::CONTROL_PROP_ID . '[2]' => 'booleanProp',
+            Constants::CONTROL_PROP_VALUE . '[2]' => true,
+            Constants::CONTROL_PROP_ID . '[3]' => 'decimalProp',
+            Constants::CONTROL_PROP_VALUE . '[3]' => 1.2,
+            Constants::CONTROL_PROP_ID . '[4]' => 'dateTimeProp',
+            Constants::CONTROL_PROP_VALUE . '[4]' => $currentTime->getTimestamp() * 1000,
+            Constants::CONTROL_PROP_ID . '[5]' => 'idProp',
+            Constants::CONTROL_PROP_VALUE . '[5]' => 'idValue',
+        );
+
+        $this->assertEquals(
+            $expectedArray,
+            $this->getMethod(self::CLASS_TO_TEST, 'convertPropertiesToQueryArray')->invokeArgs(
+                $binding,
+                array($properties)
             )
         );
     }

@@ -84,4 +84,36 @@ class PropertiesTest extends \PHPUnit_Framework_TestCase
 
         $this->assertAttributeSame(array($stringProperty2->getId() => $stringProperty2), 'properties', $properties);
     }
+
+    /**
+     * @depends testAddPropertyAddsProperty
+     */
+    public function testAddPropertiesAddsAListOfProperties()
+    {
+        $properties = new Properties();
+
+        $stringProperty = new PropertyString();
+        $stringProperty->setId('stringProp');
+        $stringProperty->setValue('stringPropValue');
+        $properties->addProperty($stringProperty);
+
+        $stringProperty2 = new PropertyString();
+        $stringProperty2->setId('stringProp2');
+        $stringProperty2->setValue('stringPropValue2');
+
+        $stringProperty3 = new PropertyString();
+        $stringProperty3->setId('stringProp3');
+        $stringProperty3->setValue('stringPropValue3');
+        $properties->addProperties(array($stringProperty2, $stringProperty3));
+
+        $this->assertAttributeSame(
+            array(
+                $stringProperty->getId() => $stringProperty,
+                $stringProperty2->getId() => $stringProperty2,
+                $stringProperty3->getId() => $stringProperty3
+            ),
+            'properties',
+            $properties
+        );
+    }
 }
