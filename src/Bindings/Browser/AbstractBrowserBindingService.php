@@ -445,30 +445,35 @@ abstract class AbstractBrowserBindingService
      * Converts a Properties list into an array that can be used for the CMIS request.
      *
      * @param PropertiesInterface $properties
-     * @return array Example <code>array('propertyId[0]' => 'myId', 'propertyValue[0]', 'valueOfMyId')</code>
+     * @return array Example <code>
+     * array('propertyId' => array(0 => 'myId'), 'propertyValue' => array(0 => 'valueOfMyId'))
+     * </code>
      */
     protected function convertPropertiesToQueryArray(PropertiesInterface $properties)
     {
         $propertiesArray = array();
 
         $propertyCounter = 0;
+        $propertiesArray[Constants::CONTROL_PROP_ID] = array();
+        $propertiesArray[Constants::CONTROL_PROP_VALUE] = array();
         foreach ($properties->getProperties() as $property) {
-            $propertyCounterString = '[' . $propertyCounter . ']';
-            $propertiesArray[Constants::CONTROL_PROP_ID . $propertyCounterString] = $property->getId();
+            $propertiesArray[Constants::CONTROL_PROP_ID][$propertyCounter] = $property->getId();
 
             $propertyValues = $property->getValues();
 
             if (count($propertyValues) === 1) {
-                $propertiesArray[Constants::CONTROL_PROP_VALUE . $propertyCounterString] = $this->convertPropertyValueToSimpleType(
-                    $property->getFirstValue()
-                );
+                $propertiesArray[Constants::CONTROL_PROP_VALUE][$propertyCounter] =
+                    $this->convertPropertyValueToSimpleType(
+                        $property->getFirstValue()
+                    );
             } elseif (count($propertyValues) > 1) {
                 $propertyValueCounter = 0;
+                $propertiesArray[Constants::CONTROL_PROP_VALUE][$propertyCounter] = array();
                 foreach ($propertyValues as $propertyValue) {
-                    $propertyValueCounterString = $propertyCounterString . '[' . $propertyValueCounter . ']';
-                    $propertiesArray[Constants::CONTROL_PROP_VALUE . $propertyValueCounterString] = $this->convertPropertyValueToSimpleType(
-                        $propertyValue
-                    );
+                    $propertiesArray[Constants::CONTROL_PROP_VALUE][$propertyCounter][$propertyValueCounter] =
+                        $this->convertPropertyValueToSimpleType(
+                            $propertyValue
+                        );
                     $propertyValueCounter ++;
                 }
             }

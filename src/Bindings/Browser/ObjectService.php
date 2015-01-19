@@ -10,12 +10,10 @@ namespace Dkd\PhpCmis\Bindings\Browser;
  * file that was distributed with this source code.
  */
 
-use Dkd\PhpCmis\Converter\JsonConverter;
 use Dkd\PhpCmis\Data\AclInterface;
 use Dkd\PhpCmis\Constants;
 use Dkd\PhpCmis\Data\AllowableActionsInterface;
 use Dkd\PhpCmis\Data\BulkUpdateObjectIdAndChangeTokenInterface;
-use GuzzleHttp\Stream\StreamInterface;
 use Dkd\PhpCmis\Data\ExtensionDataInterface;
 use Dkd\PhpCmis\Data\ObjectDataInterface;
 use Dkd\PhpCmis\Data\PropertiesInterface;
@@ -24,6 +22,7 @@ use Dkd\PhpCmis\Enum\IncludeRelationships;
 use Dkd\PhpCmis\Enum\UnfileObject;
 use Dkd\PhpCmis\Enum\VersioningState;
 use Dkd\PhpCmis\ObjectServiceInterface;
+use GuzzleHttp\Stream\StreamInterface;
 
 /**
  * Object Service Browser Binding client.
@@ -96,7 +95,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      * @param AclInterface $removeAces a list of ACEs that must be removed from the newly created document object,
      * either using the ACL from folderId if specified, or being ignored if no folderId is specified
      * @param ExtensionDataInterface $extension
-     * @return string
+     * @return ObjectDataInterface|null
      */
     public function createDocument(
         $repositoryId,
@@ -109,7 +108,27 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         AclInterface $removeAces = null,
         ExtensionDataInterface $extension = null
     ) {
-        // TODO: Implement createDocument() method.
+        $url = $this->getObjectUrl($repositoryId, $folderId);
+        $url->getQuery()->modify($this->convertPropertiesToQueryArray($properties));
+        $url->getQuery()->modify(array(
+            Constants::CONTROL_CMISACTION => Constants::CMISACTION_CREATE_DOCUMENT,
+            Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
+        ));
+
+        if ($versioningState !== null) {
+            $url->getQuery()->modify(array(Constants::PARAM_VERSIONIG_STATE => (string) $versioningState));
+        }
+
+        // TODO add addAces Support
+        // TODO add removeAces Support
+        // TODO add policies Support
+
+        $responseData = $this->post(
+            $url,
+            array('content' => $contentStream)
+        )->json();
+
+        return $this->getJsonConverter()->convertObject($responseData);
     }
 
     /**
@@ -371,7 +390,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      * the object (default is false)
      * @param boolean $includeAcl if true, then the repository must return the ACL for the object (default is false)
      * @param ExtensionDataInterface $extension
-     * @return ObjectDataInterface
+     * @return ObjectDataInterface|null
      */
     public function getObject(
         $repositoryId,
@@ -384,7 +403,24 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         $includeAcl = false,
         ExtensionDataInterface $extension = null
     ) {
-        // TODO: Implement getObject() method.
+        $url = $this->getObjectUrl($repositoryId, $objectId, Constants::SELECTOR_OBJECT);
+        $url->getQuery()->modify(
+            array(
+                Constants::PARAM_FILTER => $filter,
+                Constants::PARAM_ALLOWABLE_ACTIONS => $includeAllowableActions ? 'true' : 'false',
+                Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships,
+                Constants::PARAM_RENDITION_FILTER => $renditionFilter,
+                Constants::PARAM_POLICY_IDS => $includePolicyIds ? 'true' : 'false',
+                Constants::PARAM_ACL => $includeAcl ? 'true' : 'false',
+                Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
+            )
+        );
+
+        // read and parse
+        $responseData = $this->read($url)->json();
+
+        // TODO Implement Cache
+        return $this->getJsonConverter()->convertObject($responseData);
     }
 
     /**

@@ -961,19 +961,25 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         );
 
         $expectedArray = array(
-            Constants::CONTROL_PROP_ID . '[0]' => 'stringProp',
-            Constants::CONTROL_PROP_VALUE . '[0]' => 'stringValue',
-            Constants::CONTROL_PROP_ID . '[1]' => 'stringProp2',
-            Constants::CONTROL_PROP_VALUE . '[1][0]' => 'stringValue1',
-            Constants::CONTROL_PROP_VALUE . '[1][1]' => 'stringValue2',
-            Constants::CONTROL_PROP_ID . '[2]' => 'booleanProp',
-            Constants::CONTROL_PROP_VALUE . '[2]' => true,
-            Constants::CONTROL_PROP_ID . '[3]' => 'decimalProp',
-            Constants::CONTROL_PROP_VALUE . '[3]' => 1.2,
-            Constants::CONTROL_PROP_ID . '[4]' => 'dateTimeProp',
-            Constants::CONTROL_PROP_VALUE . '[4]' => $currentTime->getTimestamp() * 1000,
-            Constants::CONTROL_PROP_ID . '[5]' => 'idProp',
-            Constants::CONTROL_PROP_VALUE . '[5]' => 'idValue',
+            Constants::CONTROL_PROP_ID => array(
+                0 => 'stringProp',
+                1 => 'stringProp2',
+                2 => 'booleanProp',
+                3 => 'decimalProp',
+                4 => 'dateTimeProp',
+                5 => 'idProp'
+            ),
+            Constants::CONTROL_PROP_VALUE => array(
+                0 => 'stringValue',
+                1 => array(
+                    0 => 'stringValue1',
+                    1 => 'stringValue2'
+                ),
+                2 => true,
+                3 => 1.2,
+                4 => $currentTime->getTimestamp() * 1000,
+                5 => 'idValue'
+            )
         );
 
         $this->assertEquals(

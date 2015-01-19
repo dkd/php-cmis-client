@@ -10,6 +10,7 @@ namespace Dkd\PhpCmis\Bindings\Browser;
  * file that was distributed with this source code.
  */
 
+use Dkd\PhpCmis\Constants;
 use Dkd\PhpCmis\Data\ExtensionDataInterface;
 use Dkd\PhpCmis\Data\ObjectDataInterface;
 use Dkd\PhpCmis\Data\ObjectInFolderContainerInterface;
