@@ -76,4 +76,24 @@ class RepositoryServiceTest extends AbstractBrowserBindingServiceTestCase
 
         $this->assertSame(array($repositoryInfo1, $repositoryInfo2), $repositoryService->getRepositoryInfos());
     }
+
+    public function testGetTypeDefinitionReturnsTypeDefinitionObjectForGivenTypeId()
+    {
+        /** @var RepositoryService|PHPUnit_Framework_MockObject_MockObject $repositoryService */
+        $repositoryService = $this->getMockBuilder(
+            '\\Dkd\\PhpCmis\\Bindings\\Browser\\RepositoryService'
+        )->setMethods(array('getTypeDefinitionInternal'))->setConstructorArgs(
+            array($this->getSessionMock())
+        )->getMock();
+
+        $dummyTypeDefinition = $this->getMockBuilder(
+            '\\Dkd\\PhpCmis\\Definitions\\TypeDefinitionInterface'
+        )->getMockForAbstractClass();
+
+        $repositoryService->expects($this->any())->method('getTypeDefinitionInternal')->willReturn(
+            $dummyTypeDefinition
+        );
+
+        $this->assertSame($dummyTypeDefinition, $repositoryService->getTypeDefinition('foo', 'bar'));
+    }
 }

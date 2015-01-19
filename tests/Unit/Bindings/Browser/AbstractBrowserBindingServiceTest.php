@@ -13,7 +13,6 @@ namespace Dkd\PhpCmis\Test\Unit\Bindings\Browser;
 use Dkd\PhpCmis\Bindings\Browser\AbstractBrowserBindingService;
 use Dkd\PhpCmis\Bindings\Browser\RepositoryUrlCache;
 use Dkd\PhpCmis\Constants;
-use Dkd\PhpCmis\DataObjects\ObjectId;
 use Dkd\PhpCmis\DataObjects\Properties;
 use Dkd\PhpCmis\DataObjects\PropertyBoolean;
 use Dkd\PhpCmis\DataObjects\PropertyDateTime;
@@ -209,7 +208,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         );
     }
 
-    public function testGetObjectUrlReturnsUrlFromRepositoryUrlCachet()
+    public function testGetObjectUrlReturnsUrlFromRepositoryUrlCache()
     {
         $sessionMock = $this->getSessionMock();
 

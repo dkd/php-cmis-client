@@ -240,7 +240,7 @@ abstract class AbstractBrowserBindingService
             }
             throw $this->convertStatusCode(
                 $code,
-                $message,
+                (string) $message,
                 $exception
             );
         }
@@ -392,7 +392,7 @@ abstract class AbstractBrowserBindingService
         } catch (RequestException $exception) {
             throw $this->convertStatusCode(
                 $exception->getResponse()->getStatusCode(),
-                $exception->getResponse()->getBody(),
+                (string) $exception->getResponse()->getBody(),
                 $exception
             );
         }

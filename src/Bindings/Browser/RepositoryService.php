@@ -112,11 +112,11 @@ class RepositoryService extends AbstractBrowserBindingService implements Reposit
      * @param string $repositoryId the identifier for the repository
      * @param string $typeId he type definition
      * @param ExtensionDataInterface $extension
-     * @return TypeDefinitionInterface the newly created type
+     * @return TypeDefinitionInterface|null the newly created type
      */
     public function getTypeDefinition($repositoryId, $typeId, ExtensionDataInterface $extension = null)
     {
-        // TODO: Implement getTypeDefinition() method.
+        return $this->getTypeDefinitionInternal($repositoryId, $typeId);
     }
 
     /**
