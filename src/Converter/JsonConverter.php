@@ -736,9 +736,12 @@ class JsonConverter extends AbstractDataConverter
         if (isset($data[JSONConstants::JSON_TYPE_PROPERTY_DEFINITIONS])
             && is_array($data[JSONConstants::JSON_TYPE_PROPERTY_DEFINITIONS])
         ) {
-            foreach ($data[JSONConstants::JSON_TYPE_PROPERTY_DEFINITIONS] as $propertyDefinition) {
-                if (is_array($propertyDefinition)) {
-                    $result->addPropertyDefinition($this->convertPropertyDefinition($propertyDefinition));
+            foreach ($data[JSONConstants::JSON_TYPE_PROPERTY_DEFINITIONS] as $propertyDefinitionData) {
+                if (is_array($propertyDefinitionData)) {
+                    $propertyDefinition = $this->convertPropertyDefinition($propertyDefinitionData);
+                    if ($propertyDefinition !== null) {
+                        $result->addPropertyDefinition($propertyDefinition);
+                    }
                 }
             }
         }
@@ -892,18 +895,20 @@ class JsonConverter extends AbstractDataConverter
         if (isset($data[JSONConstants::JSON_OBJECT_ACL]) && is_array($data[JSONConstants::JSON_OBJECT_ACL])
             && isset($data[JSONConstants::JSON_OBJECT_EXACT_ACL])
         ) {
-            $object->setAcl(
-                $this->convertAcl(
-                    $data[JSONConstants::JSON_OBJECT_ACL],
-                    (boolean) $data[JSONConstants::JSON_OBJECT_EXACT_ACL]
-                )
+            $acl = $this->convertAcl(
+                $data[JSONConstants::JSON_OBJECT_ACL],
+                (boolean) $data[JSONConstants::JSON_OBJECT_EXACT_ACL]
             );
+            if ($acl !== null) {
+                $object->setAcl($acl);
+            }
         }
 
         if (isset($data[JSONConstants::JSON_OBJECT_ALLOWABLE_ACTIONS])) {
-            $object->setAllowableActions(
-                $this->convertAllowableActions($data[JSONConstants::JSON_OBJECT_ALLOWABLE_ACTIONS])
-            );
+            $allowableActions = $this->convertAllowableActions($data[JSONConstants::JSON_OBJECT_ALLOWABLE_ACTIONS]);
+            if ($allowableActions !== null) {
+                $object->setAllowableActions($allowableActions);
+            }
         }
 
         if (isset($data[JSONConstants::JSON_OBJECT_CHANGE_EVENT_INFO])
@@ -952,12 +957,14 @@ class JsonConverter extends AbstractDataConverter
         } elseif (isset($data[JSONConstants::JSON_OBJECT_PROPERTIES])
             && is_array($data[JSONConstants::JSON_OBJECT_PROPERTIES])
         ) {
-            $properties = $data[JSONConstants::JSON_OBJECT_PROPERTIES];
             $propertiesExtension = array();
             if (isset($data[JSONConstants::JSON_OBJECT_PROPERTIES_EXTENSION])) {
                 $propertiesExtension = (array) $data[JSONConstants::JSON_OBJECT_PROPERTIES_EXTENSION];
             }
-            $object->setProperties($this->convertProperties($properties, $propertiesExtension));
+            $properties = $this->convertProperties($data[JSONConstants::JSON_OBJECT_PROPERTIES], $propertiesExtension);
+            if ($properties !== null) {
+                $object->setProperties($properties);
+            }
         }
 
         if (isset($data[JSONConstants::JSON_OBJECT_RELATIONSHIPS])
@@ -988,6 +995,10 @@ class JsonConverter extends AbstractDataConverter
     public function convertObjects(array $data = null)
     {
         $objects = array();
+
+        if (empty($data)) {
+            return $objects;
+        }
 
         foreach ($data as $itemData) {
             if (!is_array($itemData)) {
