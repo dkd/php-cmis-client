@@ -25,7 +25,7 @@ interface BindingsObjectFactoryInterface
      * @param string[] $permissions
      * @return AceInterface
      */
-    public function createAccessControlEntry($principal, $permissions);
+    public function createAccessControlEntry($principal, array $permissions);
 
     /**
      * Create an access control list object
@@ -41,10 +41,10 @@ interface BindingsObjectFactoryInterface
      * @param string $filename
      * @param integer $length
      * @param string $mimeType
-     * @param StreamInterface $stream
+     * @param mixed $stream
      * @return StreamInterface
      */
-    public function createContentStream($filename, $length, $mimeType, StreamInterface $stream);
+    public function createContentStream($filename, $length, $mimeType, $stream);
 
     /**
      * Create an array of property data objects
