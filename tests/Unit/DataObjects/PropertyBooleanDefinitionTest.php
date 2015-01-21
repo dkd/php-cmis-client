@@ -18,7 +18,7 @@ class PropertyBooleanDefinitionTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(
             '\\Dkd\\PhpCmis\\DataObjects\\AbstractPropertyDefinition',
-            new PropertyBooleanDefinition()
+            new PropertyBooleanDefinition('testId')
         );
     }
 }

@@ -769,16 +769,16 @@ class JsonConverter extends AbstractDataConverter
         $cardinality = Cardinality::cast($data[JSONConstants::JSON_PROPERTY_TYPE_CARDINALITY]);
 
         if ($propertyType->equals(PropertyType::STRING)) {
-            $propertyDefinition = new PropertyStringDefinition();
+            $propertyDefinition = new PropertyStringDefinition($id);
             if (isset($data[JSONConstants::JSON_PROPERTY_TYPE_MAX_LENGTH])) {
                 $propertyDefinition->setMaxLength((integer) $data[JSONConstants::JSON_PROPERTY_TYPE_MAX_LENGTH]);
             }
         } elseif ($propertyType->equals(PropertyType::ID)) {
-            $propertyDefinition = new PropertyIdDefinition();
+            $propertyDefinition = new PropertyIdDefinition($id);
         } elseif ($propertyType->equals(PropertyType::BOOLEAN)) {
-            $propertyDefinition = new PropertyBooleanDefinition();
+            $propertyDefinition = new PropertyBooleanDefinition($id);
         } elseif ($propertyType->equals(PropertyType::INTEGER)) {
-            $propertyDefinition = new PropertyIntegerDefinition();
+            $propertyDefinition = new PropertyIntegerDefinition($id);
             if (isset($data[JSONConstants::JSON_PROPERTY_TYPE_MIN_VALUE])) {
                 $propertyDefinition->setMinValue((integer) $data[JSONConstants::JSON_PROPERTY_TYPE_MIN_VALUE]);
             }
@@ -786,14 +786,14 @@ class JsonConverter extends AbstractDataConverter
                 $propertyDefinition->setMaxValue((integer) $data[JSONConstants::JSON_PROPERTY_TYPE_MAX_VALUE]);
             }
         } elseif ($propertyType->equals(PropertyType::DATETIME)) {
-            $propertyDefinition = new PropertyDateTimeDefinition();
+            $propertyDefinition = new PropertyDateTimeDefinition($id);
             if (isset($data[JSONConstants::JSON_PROPERTY_TYPE_RESOLUTION])) {
                 $propertyDefinition->setDateTimeResolution(
                     DateTimeResolution::cast($data[JSONConstants::JSON_PROPERTY_TYPE_RESOLUTION])
                 );
             }
         } elseif ($propertyType->equals(PropertyType::DECIMAL)) {
-            $propertyDefinition = new PropertyDecimalDefinition();
+            $propertyDefinition = new PropertyDecimalDefinition($id);
             if (isset($data[JSONConstants::JSON_PROPERTY_TYPE_MIN_VALUE])) {
                 $propertyDefinition->setMinValue((integer) $data[JSONConstants::JSON_PROPERTY_TYPE_MIN_VALUE]);
             }
@@ -806,9 +806,9 @@ class JsonConverter extends AbstractDataConverter
                 );
             }
         } elseif ($propertyType->equals(PropertyType::HTML)) {
-            $propertyDefinition = new PropertyHtmlDefinition();
+            $propertyDefinition = new PropertyHtmlDefinition($id);
         } elseif ($propertyType->equals(PropertyType::URI)) {
-            $propertyDefinition = new PropertyUriDefinition();
+            $propertyDefinition = new PropertyUriDefinition($id);
         } else {
             // this could only happen if a new property type is added to the enumeration and not implemented here.
             throw new CmisInvalidArgumentException(
@@ -835,7 +835,6 @@ class JsonConverter extends AbstractDataConverter
 //            }
 //        }
 
-        $propertyDefinition->setId($id);
         $propertyDefinition->setPropertyType($propertyType);
         $propertyDefinition->setCardinality($cardinality);
         if (isset($data[JSONConstants::JSON_PROPERTY_TYPE_LOCALNAME])) {
@@ -1053,29 +1052,21 @@ class JsonConverter extends AbstractDataConverter
             }
 
             if ($propertyType->equals(PropertyType::cast(PropertyType::STRING))) {
-                $property = new PropertyString();
-                $property->setValues($this->convertStringValues($propertyValues));
+                $property = new PropertyString($id, $this->convertStringValues($propertyValues));
             } elseif ($propertyType->equals(PropertyType::cast(PropertyType::ID))) {
-                $property = new PropertyId();
-                $property->setValues($this->convertStringValues($propertyValues));
+                $property = new PropertyId($id, $this->convertStringValues($propertyValues));
             } elseif ($propertyType->equals(PropertyType::cast(PropertyType::BOOLEAN))) {
-                $property = new PropertyBoolean();
-                $property->setValues($this->convertBooleanValues($propertyValues));
+                $property = new PropertyBoolean($id, $this->convertBooleanValues($propertyValues));
             } elseif ($propertyType->equals(PropertyType::cast(PropertyType::INTEGER))) {
-                $property = new PropertyInteger();
-                $property->setValues($this->convertIntegerValues($propertyValues));
+                $property = new PropertyInteger($id, $this->convertIntegerValues($propertyValues));
             } elseif ($propertyType->equals(PropertyType::cast(PropertyType::DATETIME))) {
-                $property = new PropertyDateTime();
-                $property->setValues($this->convertDateTimeValues($propertyValues));
+                $property = new PropertyDateTime($id, $this->convertDateTimeValues($propertyValues));
             } elseif ($propertyType->equals(PropertyType::cast(PropertyType::DECIMAL))) {
-                $property = new PropertyDecimal();
-                $property->setValues($this->convertDecimalValues($propertyValues));
+                $property = new PropertyDecimal($id, $this->convertDecimalValues($propertyValues));
             } elseif ($propertyType->equals(PropertyType::cast(PropertyType::HTML))) {
-                $property = new PropertyHtml();
-                $property->setValues($this->convertStringValues($propertyValues));
+                $property = new PropertyHtml($id, $this->convertStringValues($propertyValues));
             } elseif ($propertyType->equals(PropertyType::cast(PropertyType::URI))) {
-                $property = new PropertyUri();
-                $property->setValues($this->convertStringValues($propertyValues));
+                $property = new PropertyUri($id, $this->convertStringValues($propertyValues));
             } else {
                 // this could only happen if a new property type is added to the enumeration and not implemented here.
                 throw new CmisInvalidArgumentException(
@@ -1083,7 +1074,6 @@ class JsonConverter extends AbstractDataConverter
                 );
             }
 
-            $property->setId($id);
             $property->setQueryName($queryName);
             if (isset($propertyData[JSONConstants::JSON_PROPERTY_DISPLAYNAME])) {
                 $property->setDisplayName((string) $propertyData[JSONConstants::JSON_PROPERTY_DISPLAYNAME]);

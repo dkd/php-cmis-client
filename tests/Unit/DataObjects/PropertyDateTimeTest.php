@@ -24,7 +24,7 @@ class PropertyDateTimeTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->propertyDateTime = new PropertyDateTime();
+        $this->propertyDateTime = new PropertyDateTime('testId');
     }
 
     public function testSetValuesSetsProperty()

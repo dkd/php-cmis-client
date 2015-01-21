@@ -25,7 +25,7 @@ class PropertyDecimalDefinitionTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->propertyDecimalDefinition = new PropertyDecimalDefinition();
+        $this->propertyDecimalDefinition = new PropertyDecimalDefinition('testId');
     }
 
     public function testAssertIsInstanceOfAbstractPropertyDefinition()

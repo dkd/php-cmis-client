@@ -925,29 +925,17 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
 
         $currentTime = new \DateTime('now');
 
-        $singleValueStringProperty = new PropertyString();
-        $singleValueStringProperty->setId('stringProp');
-        $singleValueStringProperty->setValue('stringValue');
+        $singleValueStringProperty = new PropertyString('stringProp', 'stringValue');
 
-        $multiValueStringProperty = new PropertyString();
-        $multiValueStringProperty->setId('stringProp2');
-        $multiValueStringProperty->setValues(array('stringValue1', 'stringValue2'));
+        $multiValueStringProperty = new PropertyString('stringProp2', array('stringValue1', 'stringValue2'));
 
-        $singleValueBooleanProperty = new PropertyBoolean();
-        $singleValueBooleanProperty->setId('booleanProp');
-        $singleValueBooleanProperty->setValue(true);
+        $singleValueBooleanProperty = new PropertyBoolean('booleanProp', true);
 
-        $singleValueDecimalProperty = new PropertyDecimal();
-        $singleValueDecimalProperty->setId('decimalProp');
-        $singleValueDecimalProperty->setValue(1.2);
+        $singleValueDecimalProperty = new PropertyDecimal('decimalProp', 1.2);
 
-        $singleValueDateTimeProperty = new PropertyDateTime();
-        $singleValueDateTimeProperty->setId('dateTimeProp');
-        $singleValueDateTimeProperty->setValue($currentTime);
+        $singleValueDateTimeProperty = new PropertyDateTime('dateTimeProp', $currentTime);
 
-        $singleValueIdProperty = new PropertyId();
-        $singleValueIdProperty->setId('idProp');
-        $singleValueIdProperty->setValue('idValue');
+        $singleValueIdProperty = new PropertyId('idProp', 'idValue');
 
         $properties->addProperties(
             array(

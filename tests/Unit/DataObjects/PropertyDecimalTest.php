@@ -22,7 +22,7 @@ class PropertyDecimalTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->propertyDecimal = new PropertyDecimal();
+        $this->propertyDecimal = new PropertyDecimal('testId');
     }
 
     public function testSetValuesSetsProperty()

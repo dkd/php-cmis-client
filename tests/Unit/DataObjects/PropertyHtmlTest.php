@@ -24,6 +24,6 @@ class PropertyHtmlTest extends PropertyStringTest
 
     public function setUp()
     {
-        $this->subjectUnderTest = new PropertyHtml();
+        $this->subjectUnderTest = new PropertyHtml('testId');
     }
 }

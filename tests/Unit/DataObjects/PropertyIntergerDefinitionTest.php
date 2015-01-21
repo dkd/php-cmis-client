@@ -24,7 +24,7 @@ class PropertyIntegerDefinitionTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->propertyIntegerDefinition = new PropertyIntegerDefinition();
+        $this->propertyIntegerDefinition = new PropertyIntegerDefinition('testId');
     }
 
     public function testAssertIsInstanceOfAbstractPropertyDefinition()

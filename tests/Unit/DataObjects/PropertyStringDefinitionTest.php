@@ -24,7 +24,7 @@ class PropertyStringDefinitionTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->propertyStringDefinition = new PropertyStringDefinition();
+        $this->propertyStringDefinition = new PropertyStringDefinition('testId');
     }
 
     public function testAssertIsInstanceOfAbstractPropertyDefinition()

@@ -18,7 +18,7 @@ class PropertyIdDefinitionTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(
             '\\Dkd\\PhpCmis\\DataObjects\\AbstractPropertyDefinition',
-            new PropertyIdDefinition()
+            new PropertyIdDefinition('testId')
         );
     }
 }

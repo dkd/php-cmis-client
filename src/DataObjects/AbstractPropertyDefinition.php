@@ -102,6 +102,14 @@ abstract class AbstractPropertyDefinition extends AbstractExtensionData implemen
     protected $isOpenChoice = false;
 
     /**
+     * @param string $id
+     */
+    public function __construct($id)
+    {
+        $this->setId($id);
+    }
+
+    /**
      * @return string
      */
     public function getId()

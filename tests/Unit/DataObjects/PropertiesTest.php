@@ -18,9 +18,7 @@ class PropertiesTest extends \PHPUnit_Framework_TestCase
     public function testAddPropertyAddsProperty()
     {
         $properties = new Properties();
-        $stringProperty = new PropertyString();
-        $stringProperty->setId('stringProp');
-        $stringProperty->setValue('stringPropValue');
+        $stringProperty = new PropertyString('stringProp', 'stringPropValue');
 
         $properties->addProperty($stringProperty);
 
@@ -33,15 +31,11 @@ class PropertiesTest extends \PHPUnit_Framework_TestCase
     public function testAddPropertyReplacesPropertyWithEqualId()
     {
         $properties = new Properties();
-        $stringProperty = new PropertyString();
-        $stringProperty->setId('stringProp');
-        $stringProperty->setValue('stringPropValue');
+        $stringProperty = new PropertyString('stringProp', 'stringPropValue');
 
         $properties->addProperty($stringProperty);
 
-        $stringProperty2 = new PropertyString();
-        $stringProperty2->setId('stringProp');
-        $stringProperty2->setValue('stringPropValue2');
+        $stringProperty2 = new PropertyString('stringProp', 'stringPropValue2');
 
         $properties->addProperty($stringProperty2);
 
@@ -54,9 +48,7 @@ class PropertiesTest extends \PHPUnit_Framework_TestCase
     public function testGetPropertiesReturnsAttributeValue()
     {
         $properties = new Properties();
-        $stringProperty = new PropertyString();
-        $stringProperty->setId('stringProp');
-        $stringProperty->setValue('stringPropValue');
+        $stringProperty = new PropertyString('stringProp', 'stringPropValue');
 
         $properties->addProperty($stringProperty);
 
@@ -70,14 +62,10 @@ class PropertiesTest extends \PHPUnit_Framework_TestCase
     {
 
         $properties = new Properties();
-        $stringProperty = new PropertyString();
-        $stringProperty->setId('stringProp');
-        $stringProperty->setValue('stringPropValue');
+        $stringProperty = new PropertyString('stringProp', 'stringPropValue');
         $properties->addProperty($stringProperty);
 
-        $stringProperty2 = new PropertyString();
-        $stringProperty2->setId('stringProp2');
-        $stringProperty2->setValue('stringPropValue2');
+        $stringProperty2 = new PropertyString('stringProp2', 'stringPropValue2');
         $properties->addProperty($stringProperty2);
 
         $properties->removeProperty('stringProp');
@@ -92,18 +80,12 @@ class PropertiesTest extends \PHPUnit_Framework_TestCase
     {
         $properties = new Properties();
 
-        $stringProperty = new PropertyString();
-        $stringProperty->setId('stringProp');
-        $stringProperty->setValue('stringPropValue');
+        $stringProperty = new PropertyString('stringProp', 'stringPropValue');
         $properties->addProperty($stringProperty);
 
-        $stringProperty2 = new PropertyString();
-        $stringProperty2->setId('stringProp2');
-        $stringProperty2->setValue('stringPropValue2');
+        $stringProperty2 = new PropertyString('stringProp2', 'stringPropValue2');
 
-        $stringProperty3 = new PropertyString();
-        $stringProperty3->setId('stringProp3');
-        $stringProperty3->setValue('stringPropValue3');
+        $stringProperty3 = new PropertyString('stringProp3', 'stringPropValue3');
         $properties->addProperties(array($stringProperty2, $stringProperty3));
 
         $this->assertAttributeSame(

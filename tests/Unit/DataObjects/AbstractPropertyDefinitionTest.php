@@ -46,7 +46,7 @@ class AbstractPropertyDefinitionTest extends \PHPUnit_Framework_TestCase
     {
         $this->abstractPropertyDefinition = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\DataObjects\\AbstractPropertyDefinition'
-        )->getMockForAbstractClass();
+        )->setConstructorArgs(array('testId'))->getMockForAbstractClass();
     }
 
     public function stringPropertyDataProvider()

@@ -379,129 +379,102 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
     {
         $properties = new Properties();
 
-        $htmlProperty = new PropertyHtml();
-        $htmlProperty->setId('HtmlProp');
+        $htmlProperty = new PropertyHtml('HtmlProp', 'dummy value');
         $htmlProperty->setLocalName('HtmlProp');
         $htmlProperty->setQueryName('HtmlProp');
-        $htmlProperty->setValue(null);
         $htmlProperty->setDisplayName('Sample Html Property');
         $properties->addProperty($htmlProperty);
 
-        $idProperty = new PropertyId();
-        $idProperty->setId('IdProp');
+        $idProperty = new PropertyId('IdProp', 'dummy value');
         $idProperty->setLocalName('IdProp');
         $idProperty->setQueryName('IdProp');
-        $idProperty->setValue(null);
         $idProperty->setDisplayName('Sample Id Property');
         $properties->addProperty($idProperty);
 
-        $dateTimeMultiValueProperty = new PropertyDateTime();
-        $dateTimeMultiValueProperty->setId('DateTimePropMV');
+        $dateTimeMultiValueProperty = new PropertyDateTime('DateTimePropMV', array(
+            new \DateTime('@1342160128'),
+            new \DateTime('@1342170128')
+        ));
         $dateTimeMultiValueProperty->setLocalName('DateTimePropMV');
         $dateTimeMultiValueProperty->setQueryName('DateTimePropMV');
         $dateTimeMultiValueProperty->setDisplayName('Sample DateTime multi-value Property');
         $properties->addProperty($dateTimeMultiValueProperty);
 
-        $uriProperty = new PropertyUri();
-        $uriProperty->setId('UriProp');
+        $uriProperty = new PropertyUri('UriProp', 'dummy value');
         $uriProperty->setLocalName('UriProp');
         $uriProperty->setQueryName('UriProp');
-        $uriProperty->setValue(null);
         $uriProperty->setDisplayName('Sample Uri Property');
         $properties->addProperty($uriProperty);
 
-        $decimalProperty = new PropertyDecimal();
-        $decimalProperty->setId('DecimalProp');
+        $decimalProperty = new PropertyDecimal('DecimalProp', 1.2);
         $decimalProperty->setLocalName('DecimalProp');
         $decimalProperty->setQueryName('DecimalProp');
-        $decimalProperty->setValue(null);
         $decimalProperty->setDisplayName('Sample Decimal Property');
         $properties->addProperty($decimalProperty);
 
-        $uriMultiValueProperty = new PropertyUri();
-        $uriMultiValueProperty->setId('UriPropMV');
+        $uriMultiValueProperty = new PropertyUri('UriPropMV', array('dummy value', 'dummy value'));
         $uriMultiValueProperty->setLocalName('UriPropMV');
         $uriMultiValueProperty->setQueryName('UriPropMV');
-        $uriMultiValueProperty->setValue(null);
         $uriMultiValueProperty->setDisplayName('Sample Uri multi-value Property');
         $properties->addProperty($uriMultiValueProperty);
 
-        $booleanProperty = new PropertyBoolean();
-        $booleanProperty->setId('BooleanProp');
+        $booleanProperty = new PropertyBoolean('BooleanProp', true);
         $booleanProperty->setLocalName('BooleanProp');
         $booleanProperty->setQueryName('BooleanProp');
-        $booleanProperty->setValue(null);
         $booleanProperty->setDisplayName('Sample Boolean Property');
         $properties->addProperty($booleanProperty);
 
-        $idMultiValueProperty = new PropertyId();
-        $idMultiValueProperty->setId('IdPropMV');
+        $idMultiValueProperty = new PropertyId('IdPropMV', array('dummy value', 'dummy value'));
         $idMultiValueProperty->setLocalName('IdPropMV');
         $idMultiValueProperty->setQueryName('IdPropMV');
-        $idMultiValueProperty->setValue(null);
         $idMultiValueProperty->setDisplayName('Sample Id Html multi-value Property');
         $properties->addProperty($idMultiValueProperty);
 
-        $pickListProperty = new PropertyString();
-        $pickListProperty->setId('PickListProp');
+        $pickListProperty = new PropertyString('PickListProp', 'blue');
         $pickListProperty->setLocalName('PickListProp');
         $pickListProperty->setQueryName('PickListProp');
-        $pickListProperty->setValue('blue');
         $pickListProperty->setDisplayName('Sample Pick List Property');
         $properties->addProperty($pickListProperty);
 
-        $htmlMultiValueProperty = new PropertyHtml();
-        $htmlMultiValueProperty->setId('HtmlPropMV');
+        $htmlMultiValueProperty = new PropertyHtml('HtmlPropMV', array('dummy value', 'dummy value'));
         $htmlMultiValueProperty->setLocalName('HtmlPropMV');
         $htmlMultiValueProperty->setQueryName('HtmlPropMV');
-        $htmlMultiValueProperty->setValue(null);
         $htmlMultiValueProperty->setDisplayName('Sample Html multi-value Property');
         $properties->addProperty($htmlMultiValueProperty);
 
-        $intProperty = new PropertyInteger();
-        $intProperty->setId('IntProp');
+        $intProperty = new PropertyInteger('IntProp', 12);
         $intProperty->setLocalName('IntProp');
         $intProperty->setQueryName('IntProp');
-        $intProperty->setValue(null);
         $intProperty->setDisplayName('Sample Int Property');
         $properties->addProperty($intProperty);
 
-        $stringProperty = new PropertyString();
-        $stringProperty->setId('StringProp');
+        $stringProperty = new PropertyString('StringProp', 'My Doc StringProperty 18');
         $stringProperty->setLocalName('StringProp');
         $stringProperty->setQueryName('StringProp');
-        $stringProperty->setValue('My Doc StringProperty 18');
         $stringProperty->setDisplayName('Sample String Property');
         $properties->addProperty($stringProperty);
 
-        $decimalMultiValueProperty = new PropertyDecimal();
-        $decimalMultiValueProperty->setId('DecimalPropMV');
+        $decimalMultiValueProperty = new PropertyDecimal('DecimalPropMV', array(1.2, 2.3));
         $decimalMultiValueProperty->setLocalName('DecimalPropMV');
         $decimalMultiValueProperty->setQueryName('DecimalPropMV');
-        $decimalMultiValueProperty->setValue(null);
         $decimalMultiValueProperty->setDisplayName('Sample Decimal multi-value Property');
         $properties->addProperty($decimalMultiValueProperty);
 
-        $dateTimeProperty = new PropertyDateTime();
-        $dateTimeProperty->setId('DateTimeProp');
+        $dateTimeProperty = new PropertyDateTime('DateTimeProp', new \DateTime('@1342160128'));
         $dateTimeProperty->setLocalName('DateTimeProp');
         $dateTimeProperty->setQueryName('DateTimeProp');
         $dateTimeProperty->setDisplayName('Sample DateTime Property');
         $properties->addProperty($dateTimeProperty);
 
-        $booleanMultiValueProperty = new PropertyBoolean();
-        $booleanMultiValueProperty->setId('BooleanPropMV');
+        $booleanMultiValueProperty = new PropertyBoolean('BooleanPropMV', array(true, false));
         $booleanMultiValueProperty->setLocalName('BooleanPropMV');
         $booleanMultiValueProperty->setQueryName('BooleanPropMV');
-        $booleanMultiValueProperty->setValue(null);
         $booleanMultiValueProperty->setDisplayName('Sample Boolean multi-value Property');
         $properties->addProperty($booleanMultiValueProperty);
 
-        $intMultiValueProperty = new PropertyInteger();
-        $intMultiValueProperty->setId('IntPropMV');
+        $intMultiValueProperty = new PropertyInteger('IntPropMV', array(1, 2));
         $intMultiValueProperty->setLocalName('IntPropMV');
         $intMultiValueProperty->setQueryName('IntPropMV');
-        $intMultiValueProperty->setValues(array(1, 2));
         $intMultiValueProperty->setDisplayName('Sample Int multi-value Property');
         $properties->addProperty($intMultiValueProperty);
 

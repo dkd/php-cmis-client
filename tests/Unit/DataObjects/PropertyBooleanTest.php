@@ -24,7 +24,7 @@ class PropertyBooleanTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->propertyBoolean = new PropertyBoolean();
+        $this->propertyBoolean = new PropertyBoolean('testId');
     }
 
     /**

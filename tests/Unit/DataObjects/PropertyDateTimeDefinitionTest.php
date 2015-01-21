@@ -22,7 +22,7 @@ class PropertyDateTimeDefinitionTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->propertyDateTimeDefinition = new PropertyDateTimeDefinition();
+        $this->propertyDateTimeDefinition = new PropertyDateTimeDefinition('testId');
     }
 
     public function testAssertIsInstanceOfAbstractPropertyDefinition()

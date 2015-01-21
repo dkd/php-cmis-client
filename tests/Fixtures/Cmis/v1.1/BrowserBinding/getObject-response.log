@@ -73,7 +73,7 @@ Cache-Control: private, max-age=0
             "id":"HtmlProp",
             "localName":"HtmlProp",
             "queryName":"HtmlProp",
-            "value":null,
+            "value":"dummy value",
             "type":"html",
             "displayName":"Sample Html Property",
             "cardinality":"single"
@@ -82,7 +82,7 @@ Cache-Control: private, max-age=0
             "id":"IdProp",
             "localName":"IdProp",
             "queryName":"IdProp",
-            "value":null,
+            "value":"dummy value",
             "type":"id",
             "displayName":"Sample Id Property",
             "cardinality":"single"
@@ -91,7 +91,10 @@ Cache-Control: private, max-age=0
             "id":"DateTimePropMV",
             "localName":"DateTimePropMV",
             "queryName":"DateTimePropMV",
-            "value":null,
+            "value": [
+                1342160128747,
+                1342170128747
+            ],
             "type":"datetime",
             "displayName":"Sample DateTime multi-value Property",
             "cardinality":"multi"
@@ -100,7 +103,7 @@ Cache-Control: private, max-age=0
             "id":"UriProp",
             "localName":"UriProp",
             "queryName":"UriProp",
-            "value":null,
+            "value":"dummy value",
             "type":"uri",
             "displayName":"Sample Uri Property",
             "cardinality":"single"
@@ -109,7 +112,7 @@ Cache-Control: private, max-age=0
             "id":"DecimalProp",
             "localName":"DecimalProp",
             "queryName":"DecimalProp",
-            "value":null,
+            "value":1.2,
             "type":"decimal",
             "displayName":"Sample Decimal Property",
             "cardinality":"single"
@@ -118,7 +121,10 @@ Cache-Control: private, max-age=0
             "id":"UriPropMV",
             "localName":"UriPropMV",
             "queryName":"UriPropMV",
-            "value":null,
+            "value":[
+                "dummy value",
+                "dummy value"
+            ],
             "type":"uri",
             "displayName":"Sample Uri multi-value Property",
             "cardinality":"multi"
@@ -127,7 +133,7 @@ Cache-Control: private, max-age=0
             "id":"BooleanProp",
             "localName":"BooleanProp",
             "queryName":"BooleanProp",
-            "value":null,
+            "value":true,
             "type":"boolean",
             "displayName":"Sample Boolean Property",
             "cardinality":"single"
@@ -136,7 +142,10 @@ Cache-Control: private, max-age=0
             "id":"IdPropMV",
             "localName":"IdPropMV",
             "queryName":"IdPropMV",
-            "value":null,
+            "value":[
+                "dummy value",
+                "dummy value"
+            ],
             "type":"id",
             "displayName":"Sample Id Html multi-value Property",
             "cardinality":"multi"
@@ -154,7 +163,10 @@ Cache-Control: private, max-age=0
             "id":"HtmlPropMV",
             "localName":"HtmlPropMV",
             "queryName":"HtmlPropMV",
-            "value":null,
+            "value":[
+                "dummy value",
+                "dummy value"
+            ],
             "type":"html",
             "displayName":"Sample Html multi-value Property",
             "cardinality":"multi"
@@ -163,7 +175,7 @@ Cache-Control: private, max-age=0
             "id":"IntProp",
             "localName":"IntProp",
             "queryName":"IntProp",
-            "value":null,
+            "value":12,
             "type":"integer",
             "displayName":"Sample Int Property",
             "cardinality":"single"
@@ -181,7 +193,10 @@ Cache-Control: private, max-age=0
             "id":"DecimalPropMV",
             "localName":"DecimalPropMV",
             "queryName":"DecimalPropMV",
-            "value":null,
+            "value": [
+                1.2,
+                2.3
+            ],
             "type":"decimal",
             "displayName":"Sample Decimal multi-value Property",
             "cardinality":"multi"
@@ -190,7 +205,7 @@ Cache-Control: private, max-age=0
             "id":"DateTimeProp",
             "localName":"DateTimeProp",
             "queryName":"DateTimeProp",
-            "value":null,
+            "value":1342160128747,
             "type":"datetime",
             "displayName":"Sample DateTime Property",
             "cardinality":"single"
@@ -199,7 +214,10 @@ Cache-Control: private, max-age=0
             "id":"BooleanPropMV",
             "localName":"BooleanPropMV",
             "queryName":"BooleanPropMV",
-            "value":null,
+            "value":[
+                true,
+                false
+            ],
             "type":"boolean",
             "displayName":"Sample Boolean multi-value Property",
             "cardinality":"multi"

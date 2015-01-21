@@ -18,7 +18,7 @@ class PropertyHtmlDefinitionTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(
             '\\Dkd\\PhpCmis\\DataObjects\\AbstractPropertyDefinition',
-            new PropertyHtmlDefinition()
+            new PropertyHtmlDefinition('testId')
         );
     }
 }

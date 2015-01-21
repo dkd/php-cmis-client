@@ -46,7 +46,7 @@ abstract class AbstractPropertyData extends AbstractExtensionData implements Mut
      * @param string $id
      * @param mixed $value
      */
-    public function __construct($id = null, $value = null)
+    public function __construct($id, $value = null)
     {
         $this->setId($id);
 

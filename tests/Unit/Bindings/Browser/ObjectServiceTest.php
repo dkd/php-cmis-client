@@ -207,9 +207,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
 
     public function createDocumentDataProvider()
     {
-        $property = new PropertyString();
-        $property->setId('cmis:name');
-        $property->setValue('name');
+        $property = new PropertyString('cmis:name', 'name');
         $properties = new Properties();
         $properties->addProperty($property);
         $stream = $this->getMockForAbstractClass('\\GuzzleHttp\\Stream\\StreamInterface');

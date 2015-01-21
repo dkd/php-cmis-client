@@ -24,6 +24,6 @@ class PropertyUriTest extends PropertyStringTest
 
     public function setUp()
     {
-        $this->subjectUnderTest = new PropertyUri();
+        $this->subjectUnderTest = new PropertyUri('testId');
     }
 }

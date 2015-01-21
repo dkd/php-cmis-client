@@ -172,9 +172,7 @@ class ObjectDataTest extends \PHPUnit_Framework_TestCase
 
     public function testGetIdReturnsIdPropertyValue()
     {
-        $idProperty = new PropertyId();
-        $idProperty->setId(PropertyIds::OBJECT_ID);
-        $idProperty->setValue('fooPropertyId');
+        $idProperty = new PropertyId(PropertyIds::OBJECT_ID, 'fooPropertyId');
         $properties = new Properties();
         $properties->addProperty($idProperty);
         $this->objectData->setProperties($properties);
@@ -184,9 +182,7 @@ class ObjectDataTest extends \PHPUnit_Framework_TestCase
 
     public function testGetIdReturnsFirstValueOfIdMultiValuePropertyValue()
     {
-        $idProperty = new PropertyId();
-        $idProperty->setId(PropertyIds::OBJECT_ID);
-        $idProperty->setValues(array('fooPropertyId', 'secondValue'));
+        $idProperty = new PropertyId(PropertyIds::OBJECT_ID, array('fooPropertyId', 'secondValue'));
         $properties = new Properties();
         $properties->addProperty($idProperty);
         $this->objectData->setProperties($properties);
@@ -201,9 +197,7 @@ class ObjectDataTest extends \PHPUnit_Framework_TestCase
 
     public function testGetBaseTypeIdReturnsNullIfRequestedPropertyDoesNotExist()
     {
-        $idProperty = new PropertyId();
-        $idProperty->setId(PropertyIds::OBJECT_ID);
-        $idProperty->setValues(array('fooPropertyId', 'secondValue'));
+        $idProperty = new PropertyId(PropertyIds::OBJECT_ID, array('fooPropertyId', 'secondValue'));
         $properties = new Properties();
         $properties->addProperty($idProperty);
         $this->objectData->setProperties($properties);
@@ -213,9 +207,7 @@ class ObjectDataTest extends \PHPUnit_Framework_TestCase
 
     public function testGetBaseTypeIdReturnsNullIfBaseTypeIdValueIsInvalid()
     {
-        $idProperty = new PropertyId();
-        $idProperty->setId(PropertyIds::BASE_TYPE_ID);
-        $idProperty->setValue('invalidBaseTypeId');
+        $idProperty = new PropertyId(PropertyIds::BASE_TYPE_ID, 'invalidBaseTypeId');
         $properties = new Properties();
         $properties->addProperty($idProperty);
         $this->objectData->setProperties($properties);
@@ -225,9 +217,7 @@ class ObjectDataTest extends \PHPUnit_Framework_TestCase
 
     public function testGetBaseTypeIdReturnsIdPropertyValue()
     {
-        $idProperty = new PropertyId();
-        $idProperty->setId(PropertyIds::BASE_TYPE_ID);
-        $idProperty->setValue('cmis:item');
+        $idProperty = new PropertyId(PropertyIds::BASE_TYPE_ID, 'cmis:item');
         $properties = new Properties();
         $properties->addProperty($idProperty);
         $this->objectData->setProperties($properties);
@@ -237,9 +227,7 @@ class ObjectDataTest extends \PHPUnit_Framework_TestCase
 
     public function testGetBaseTypeIdReturnsFirstValueOfIdMultiValuePropertyValue()
     {
-        $idProperty = new PropertyId();
-        $idProperty->setId(PropertyIds::BASE_TYPE_ID);
-        $idProperty->setValues(array('cmis:item', 'cmis:document'));
+        $idProperty = new PropertyId(PropertyIds::BASE_TYPE_ID, array('cmis:item', 'cmis:document'));
         $properties = new Properties();
         $properties->addProperty($idProperty);
         $this->objectData->setProperties($properties);
