@@ -10,10 +10,10 @@ namespace Dkd\PhpCmis\CmisObject;
  * file that was distributed with this source code.
  */
 
-use Dkd\PhpCmis\Enum\BaseTypeId;
 use Dkd\PhpCmis\Data\ObjectTypeInterface;
+use Dkd\PhpCmis\Data\SecondaryTypeInterface;
+use Dkd\PhpCmis\Enum\BaseTypeId;
 use Dkd\PhpCmis\PropertyInterface;
-use Dkd\PhpCmis\SecondaryTypeInterface;
 
 /**
  * Accessors to CMIS object properties.

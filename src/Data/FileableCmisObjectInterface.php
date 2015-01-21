@@ -11,7 +11,6 @@ namespace Dkd\PhpCmis\Data;
  */
 
 use Dkd\PhpCmis\CmisObject\CmisObjectInterface;
-use Dkd\PhpCmis\CmisObject\CmisObjectPropertiesInterface;
 use Dkd\PhpCmis\OperationContextInterface;
 
 /**
