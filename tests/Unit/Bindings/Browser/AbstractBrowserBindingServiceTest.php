@@ -555,8 +555,10 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
             array('get')
         )->getMock();
         /** @var RequestException|PHPUnit_Framework_MockObject_MockObject $exceptionMock */
-        $exceptionMock = $this->getMockBuilder('\\GuzzleHttp\\Exception\\RequestException')->disableOriginalConstructor(
-        )->getMock();
+        $exceptionMock = new \GuzzleHttp\Exception\RequestException(
+            'dummy message',
+            $this->getMockForAbstractClass('\\GuzzleHttp\\Message\\RequestInterface')
+        );
         $httpInvokerMock->expects($this->once())->method('get')->with($testUrl)->willThrowException(
             $exceptionMock
         );
