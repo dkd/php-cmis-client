@@ -11,7 +11,6 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  */
 
 use Dkd\PhpCmis\DataObjects\AccessControlEntry;
-use Dkd\PhpCmis\DataObjects\Principal;
 use Dkd\PhpCmis\PrincipalInterface;
 use PHPUnit_Framework_MockObject_MockObject;
 

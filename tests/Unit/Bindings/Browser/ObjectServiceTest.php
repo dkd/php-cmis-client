@@ -212,22 +212,18 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $properties->addProperty($property);
         $stream = $this->getMockForAbstractClass('\\GuzzleHttp\\Stream\\StreamInterface');
 
-        $principal1 = new Principal();
-        $principal1->setId('principalId1');
+        $principal1 = new Principal('principalId1');
         $ace1 = new AccessControlEntry($principal1, array('permissionValue1', 'permissionValue2'));
 
-        $principal2 = new Principal();
-        $principal2->setId('principalId2');
+        $principal2 = new Principal('principalId2');
         $ace2 = new AccessControlEntry($principal2, array('permissionValue3', 'permissionValue4'));
 
         $addAcl = new AccessControlList(array($ace1, $ace2));
 
-        $principal3 = new Principal();
-        $principal3->setId('principalId3');
+        $principal3 = new Principal('principalId3');
         $ace3 = new AccessControlEntry($principal3, array('permissionValue5', 'permissionValue6'));
 
-        $principal4 = new Principal();
-        $principal4->setId('principalId4');
+        $principal4 = new Principal('principalId4');
         $ace4 = new AccessControlEntry($principal4, array('permissionValue7', 'permissionValue8'));
 
         $removeAcl = new AccessControlList(array($ace3, $ace4));

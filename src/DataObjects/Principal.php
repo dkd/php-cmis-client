@@ -23,6 +23,14 @@ class Principal extends AbstractExtensionData implements PrincipalInterface
     protected $id;
 
     /**
+     * @param string $id
+     */
+    public function __construct($id)
+    {
+        $this->setId($id);
+    }
+
+    /**
      * @return string
      */
     public function getId()

@@ -18,6 +18,11 @@ use Dkd\PhpCmis\Data\ExtensionDataInterface;
 interface PrincipalInterface extends ExtensionDataInterface
 {
     /**
+     * @param string $id
+     */
+    public function __construct($id);
+
+    /**
      * Returns the principal ID.
      *
      * @return string

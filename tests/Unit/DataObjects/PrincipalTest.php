@@ -14,9 +14,15 @@ use Dkd\PhpCmis\DataObjects\Principal;
 
 class PrincipalTest extends \PHPUnit_Framework_TestCase
 {
+    public function testConstructorSetsId()
+    {
+        $principal = new Principal('foo');
+        $this->assertAttributeSame('foo', 'id', $principal);
+    }
+
     public function testSetPrincipalIdSetsProperty()
     {
-        $principal = new Principal();
+        $principal = new Principal('foo');
         $principal->setId('value');
         $this->assertAttributeSame('value', 'id', $principal);
     }
@@ -26,8 +32,7 @@ class PrincipalTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPrincipalIdReturnsProperty()
     {
-        $principal = new Principal();
-        $principal->setId('value');
+        $principal = new Principal('value');
         $this->assertSame('value', $principal->getId());
     }
 }

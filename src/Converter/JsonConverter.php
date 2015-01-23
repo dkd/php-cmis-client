@@ -465,8 +465,7 @@ class JsonConverter extends AbstractDataConverter
                     }
                 }
 
-                $principal = new Principal();
-                $principal->setId(
+                $principal = new Principal(
                     (string) $aceData[JSONConstants::JSON_ACE_PRINCIPAL][JSONConstants::JSON_ACE_PRINCIPAL_ID]
                 );
 
@@ -546,7 +545,6 @@ class JsonConverter extends AbstractDataConverter
 
             $aclCapabilities->setPermissions($permissionDefinitionList);
         }
-
 
         if (isset($data[JSONConstants::JSON_ACLCAP_PERMISSION_MAPPING])
             && is_array($data[JSONConstants::JSON_ACLCAP_PERMISSION_MAPPING])
@@ -964,7 +962,6 @@ class JsonConverter extends AbstractDataConverter
                 $object->setRelationships($relationships);
             }
         }
-
 
         if (isset($data[JSONConstants::JSON_OBJECT_RENDITIONS])
             && is_array($data[JSONConstants::JSON_OBJECT_RENDITIONS])

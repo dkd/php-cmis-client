@@ -224,8 +224,7 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
     public function testConvertAclConvertsArrayToAclObject()
     {
 
-        $principal = new Principal();
-        $principal->setId('anyone');
+        $principal = new Principal('anyone');
         $principal->setExtensions($this->cmisExtensionsDummy);
         $ace = new AccessControlEntry($principal, array('cmis:all'));
         $ace->setIsDirect(true);

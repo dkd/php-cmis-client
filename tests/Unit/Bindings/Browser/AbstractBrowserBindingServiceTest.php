@@ -992,12 +992,10 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
             self::CLASS_TO_TEST
         )->setConstructorArgs(array($sessionMock))->getMockForAbstractClass();
 
-        $principal1 = new Principal();
-        $principal1->setId('principalId1');
+        $principal1 = new Principal('principalId1');
         $ace1 = new AccessControlEntry($principal1, array('permissionValue1', 'permissionValue2'));
 
-        $principal2 = new Principal();
-        $principal2->setId('principalId2');
+        $principal2 = new Principal('principalId2');
         $ace2 = new AccessControlEntry($principal2, array('permissionValue3', 'permissionValue4'));
         $acl = new AccessControlList(array($ace1, $ace2));
 
@@ -1036,12 +1034,10 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
             self::CLASS_TO_TEST
         )->setConstructorArgs(array($sessionMock))->getMockForAbstractClass();
 
-        $principal1 = new Principal();
-        $principal1->setId('principalId1');
+        $principal1 = new Principal('principalId1');
         $ace1 = new AccessControlEntry($principal1, array('permissionValue1', 'permissionValue2'));
 
-        $principal2 = new Principal();
-        $principal2->setId('principalId2');
+        $principal2 = new Principal('principalId2');
         $ace2 = new AccessControlEntry($principal2, array('permissionValue3', 'permissionValue4'));
         $acl = new AccessControlList(array($ace1, $ace2));
 
