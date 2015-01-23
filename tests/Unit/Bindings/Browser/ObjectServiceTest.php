@@ -212,10 +212,25 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $properties->addProperty($property);
         $stream = $this->getMockForAbstractClass('\\GuzzleHttp\\Stream\\StreamInterface');
 
-        $principal = new Principal();
-        $principal->setId('dummyPrincipal');
-        $ace = new AccessControlEntry($principal, array());
-        $acl = new AccessControlList(array($ace));
+        $principal1 = new Principal();
+        $principal1->setId('principalId1');
+        $ace1 = new AccessControlEntry($principal1, array('permissionValue1', 'permissionValue2'));
+
+        $principal2 = new Principal();
+        $principal2->setId('principalId2');
+        $ace2 = new AccessControlEntry($principal2, array('permissionValue3', 'permissionValue4'));
+
+        $addAcl = new AccessControlList(array($ace1, $ace2));
+
+        $principal3 = new Principal();
+        $principal3->setId('principalId3');
+        $ace3 = new AccessControlEntry($principal3, array('permissionValue5', 'permissionValue6'));
+
+        $principal4 = new Principal();
+        $principal4->setId('principalId4');
+        $ace4 = new AccessControlEntry($principal4, array('permissionValue7', 'permissionValue8'));
+
+        $removeAcl = new AccessControlList(array($ace3, $ace4));
 
         return array(
             array(
@@ -232,6 +247,15 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
                     self::BROWSER_URL_TEST
                     . '?propertyId[0]=cmis:name&propertyValue[0]=name&cmisaction=createDocument'
                     . '&versioningState=major&succinct=false'
+                    . '&policy[0]=policyOne&policy[1]=policyTwo'
+                    . '&addACEPrincipal[0]=principalId1'
+                    . '&addACEPermission[0][0]=permissionValue1&addACEPermission[0][1]=permissionValue2'
+                    . '&addACEPrincipal[1]=principalId2'
+                    . '&addACEPermission[1][0]=permissionValue3&addACEPermission[1][1]=permissionValue4'
+                    . '&removeACEPrincipal[0]=principalId3'
+                    . '&removeACEPermission[0][0]=permissionValue5&removeACEPermission[0][1]=permissionValue6'
+                    . '&removeACEPrincipal[1]=principalId4'
+                    . '&removeACEPermission[1][0]=permissionValue7&removeACEPermission[1][1]=permissionValue8'
                 ),
                 'repositoryId',
                 $properties,
@@ -239,8 +263,8 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
                 $stream,
                 VersioningState::cast(VersioningState::MAJOR),
                 array('policyOne', 'policyTwo'),
-                $acl,
-                $acl
+                $addAcl,
+                $removeAcl
             )
         );
     }

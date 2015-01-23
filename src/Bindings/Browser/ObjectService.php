@@ -110,18 +110,40 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
     ) {
         $url = $this->getObjectUrl($repositoryId, $folderId);
         $url->getQuery()->modify($this->convertPropertiesToQueryArray($properties));
-        $url->getQuery()->modify(array(
-            Constants::CONTROL_CMISACTION => Constants::CMISACTION_CREATE_DOCUMENT,
-            Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
-        ));
+        $url->getQuery()->modify(
+            array(
+                Constants::CONTROL_CMISACTION => Constants::CMISACTION_CREATE_DOCUMENT,
+                Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
+            )
+        );
 
         if ($versioningState !== null) {
             $url->getQuery()->modify(array(Constants::PARAM_VERSIONIG_STATE => (string) $versioningState));
         }
 
-        // TODO add addAces Support
-        // TODO add removeAces Support
-        // TODO add policies Support
+        if ($addAces !== null) {
+            $url->getQuery()->modify(
+                $this->convertAclToQueryArray(
+                    $addAces,
+                    Constants::CONTROL_ADD_ACE_PRINCIPAL,
+                    Constants::CONTROL_ADD_ACE_PERMISSION
+                )
+            );
+        }
+
+        if ($removeAces !== null) {
+            $url->getQuery()->modify(
+                $this->convertAclToQueryArray(
+                    $removeAces,
+                    Constants::CONTROL_REMOVE_ACE_PRINCIPAL,
+                    Constants::CONTROL_REMOVE_ACE_PERMISSION
+                )
+            );
+        }
+
+        if (!empty($policies)) {
+            $url->getQuery()->modify($this->convertPoliciesToQueryArray($policies));
+        }
 
         $responseData = $this->post(
             $url,

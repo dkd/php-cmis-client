@@ -13,6 +13,9 @@ namespace Dkd\PhpCmis\Test\Unit\Bindings\Browser;
 use Dkd\PhpCmis\Bindings\Browser\AbstractBrowserBindingService;
 use Dkd\PhpCmis\Bindings\Browser\RepositoryUrlCache;
 use Dkd\PhpCmis\Constants;
+use Dkd\PhpCmis\DataObjects\AccessControlEntry;
+use Dkd\PhpCmis\DataObjects\AccessControlList;
+use Dkd\PhpCmis\DataObjects\Principal;
 use Dkd\PhpCmis\DataObjects\Properties;
 use Dkd\PhpCmis\DataObjects\PropertyBoolean;
 use Dkd\PhpCmis\DataObjects\PropertyDateTime;
@@ -900,7 +903,6 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         );
         $repositoryUrlCacheMockWithRepositoryUrlEntry->expects($this->once())->method('addRepository');
 
-
         return array(
             'no repository id - repository url cache builds url' => array(null, $repositoryUrlCacheMock),
             'with repository id - repository url cache does NOT return repository url - url is build' => array(
@@ -977,6 +979,124 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
             $this->getMethod(self::CLASS_TO_TEST, 'convertPropertiesToQueryArray')->invokeArgs(
                 $binding,
                 array($properties)
+            )
+        );
+    }
+
+    public function testConvertAclToQueryArrayConvertsAclIntoAnArrayForRemovingAcls()
+    {
+        $sessionMock = $this->getSessionMock();
+
+        /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
+        $binding = $this->getMockBuilder(
+            self::CLASS_TO_TEST
+        )->setConstructorArgs(array($sessionMock))->getMockForAbstractClass();
+
+        $principal1 = new Principal();
+        $principal1->setId('principalId1');
+        $ace1 = new AccessControlEntry($principal1, array('permissionValue1', 'permissionValue2'));
+
+        $principal2 = new Principal();
+        $principal2->setId('principalId2');
+        $ace2 = new AccessControlEntry($principal2, array('permissionValue3', 'permissionValue4'));
+        $acl = new AccessControlList(array($ace1, $ace2));
+
+        $expectedArray = array(
+            'removeACEPrincipal' => array(
+                0 => 'principalId1',
+                1 => 'principalId2'
+            ),
+            'removeACEPermission' => array(
+                0 => array(
+                    0 => 'permissionValue1',
+                    1 => 'permissionValue2'
+                ),
+                1 => array(
+                    0 => 'permissionValue3',
+                    1 => 'permissionValue4'
+                )
+            )
+        );
+
+        $this->assertEquals(
+            $expectedArray,
+            $this->getMethod(self::CLASS_TO_TEST, 'convertAclToQueryArray')->invokeArgs(
+                $binding,
+                array($acl, Constants::CONTROL_REMOVE_ACE_PRINCIPAL, Constants::CONTROL_REMOVE_ACE_PERMISSION)
+            )
+        );
+    }
+
+    public function testConvertAclToQueryArrayConvertsAclIntoAnArrayForAddingAcls()
+    {
+        $sessionMock = $this->getSessionMock();
+
+        /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
+        $binding = $this->getMockBuilder(
+            self::CLASS_TO_TEST
+        )->setConstructorArgs(array($sessionMock))->getMockForAbstractClass();
+
+        $principal1 = new Principal();
+        $principal1->setId('principalId1');
+        $ace1 = new AccessControlEntry($principal1, array('permissionValue1', 'permissionValue2'));
+
+        $principal2 = new Principal();
+        $principal2->setId('principalId2');
+        $ace2 = new AccessControlEntry($principal2, array('permissionValue3', 'permissionValue4'));
+        $acl = new AccessControlList(array($ace1, $ace2));
+
+        $expectedArray = array(
+            'addACEPrincipal' => array(
+                0 => 'principalId1',
+                1 => 'principalId2'
+            ),
+            'addACEPermission' => array(
+                0 => array(
+                    0 => 'permissionValue1',
+                    1 => 'permissionValue2'
+                ),
+                1 => array(
+                    0 => 'permissionValue3',
+                    1 => 'permissionValue4'
+                )
+            )
+        );
+
+        $this->assertEquals(
+            $expectedArray,
+            $this->getMethod(self::CLASS_TO_TEST, 'convertAclToQueryArray')->invokeArgs(
+                $binding,
+                array($acl, Constants::CONTROL_ADD_ACE_PRINCIPAL, Constants::CONTROL_ADD_ACE_PERMISSION)
+            )
+        );
+    }
+
+    public function testConvertPoliciesToQueryArrayConvertsPoliciesIntoAnArray()
+    {
+        $sessionMock = $this->getSessionMock();
+
+        /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
+        $binding = $this->getMockBuilder(
+            self::CLASS_TO_TEST
+        )->setConstructorArgs(array($sessionMock))->getMockForAbstractClass();
+
+        $policies = array(
+            'policyOne',
+            'policyTwo'
+        );
+
+        $expectedArray = array(
+            'policy' => array(
+                0 => 'policyOne',
+                1 => 'policyTwo'
+            )
+        );
+
+        $this->assertEquals(
+            $expectedArray,
+            $this->getMethod(self::CLASS_TO_TEST, 'convertPoliciesToQueryArray')->invokeArgs(
+                $binding,
+                array($policies)
             )
         );
     }

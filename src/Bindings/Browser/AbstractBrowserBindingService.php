@@ -14,6 +14,7 @@ use Dkd\PhpCmis\Bindings\BindingSessionInterface;
 use Dkd\PhpCmis\Bindings\CmisBindingsHelper;
 use Dkd\PhpCmis\Constants;
 use Dkd\PhpCmis\Data\PropertiesInterface;
+use Dkd\PhpCmis\Data\AclInterface;
 use Dkd\PhpCmis\DataObjects\RepositoryInfo;
 use Dkd\PhpCmis\DataObjects\RepositoryInfoBrowserBinding;
 use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
@@ -498,5 +499,61 @@ abstract class AbstractBrowserBindingService
         }
 
         return $value;
+    }
+
+    /**
+     * Converts a Access Control list into an array that can be used for the CMIS request
+     *
+     * @param AclInterface $acl
+     * @param string $principalControl one of principal ace constants
+     * CONTROL_ADD_ACE_PRINCIPAL or CONTROL_REMOVE_ACE_PRINCIPAL
+     * @param string $permissionControl one of permission ace constants
+     * CONTROL_REMOVE_ACE_PRINCIPAL or CONTROL_REMOVE_ACE_PERMISSION
+     * @return array Example <code>
+     * array('addACEPrincipal' => array(0 => 'principalId'),
+     *       'addACEPermission' => array(0 => array(0 => 'permissonValue')))
+     * </code>
+     */
+    protected function convertAclToQueryArray(AclInterface $acl, $principalControl, $permissionControl)
+    {
+        $acesArray = array();
+        $principalCounter = 0;
+
+        foreach ($acl->getAces() as $ace) {
+            $permissions = $ace->getPermissions();
+            if ($ace->getPrincipal() !== null && $ace->getPrincipal()->getId() && !empty($permissions)) {
+                $acesArray[$principalControl][$principalCounter] = $ace->getPrincipal()->getId();
+                $permissionCounter = 0;
+                $acesArray[$permissionControl][$principalCounter] = array();
+
+                foreach ($permissions as $permission) {
+                    $acesArray[$permissionControl][$principalCounter][$permissionCounter] = $permission;
+                    $permissionCounter ++;
+                }
+
+                $principalCounter ++;
+            }
+        }
+
+        return $acesArray;
+    }
+
+    /**
+     * Converts a policies array into an array that can be used for the CMIS request
+     *
+     * @param array $policies
+     * @return array
+     */
+    protected function convertPoliciesToQueryArray(array $policies)
+    {
+        $policiesArray = array();
+        $policyCounter = 0;
+
+        foreach ($policies as $policy) {
+            $policiesArray[Constants::CONTROL_POLICY][$policyCounter] = (string) $policy;
+            $policyCounter ++;
+        }
+
+        return $policiesArray;
     }
 }
