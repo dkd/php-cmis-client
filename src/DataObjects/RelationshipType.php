@@ -51,7 +51,7 @@ class RelationshipType extends RelationshipTypeDefinition implements Relationshi
      * Reset the allowedSourceTypes to <code>null</code> so that the get recreated on the
      * new defined ids.
      *
-     * @param array $allowedSourceTypeIds
+     * @param string[] $allowedSourceTypeIds
      */
     public function setAllowedSourceTypeIds(array $allowedSourceTypeIds)
     {
@@ -78,7 +78,7 @@ class RelationshipType extends RelationshipTypeDefinition implements Relationshi
      * Reset the allowedSourceTypes to <code>null</code> so that the get recreated on the
      * new defined ids.
      *
-     * @param array $allowedTargetTypeIds
+     * @param string[] $allowedTargetTypeIds
      */
     public function setAllowedTargetTypeIds(array $allowedTargetTypeIds)
     {

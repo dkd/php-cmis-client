@@ -214,8 +214,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
 
         $principal = new Principal();
         $principal->setId('dummyPrincipal');
-        $ace = new AccessControlEntry();
-        $ace->setPrincipal($principal);
+        $ace = new AccessControlEntry($principal, array());
         $acl = new AccessControlList(array($ace));
 
         return array(

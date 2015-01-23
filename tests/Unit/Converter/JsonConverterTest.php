@@ -223,17 +223,14 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
 
     public function testConvertAclConvertsArrayToAclObject()
     {
-        $acl = new AccessControlList();
-        $ace = new AccessControlEntry();
 
-        $ace->setIsDirect(true);
         $principal = new Principal();
         $principal->setId('anyone');
         $principal->setExtensions($this->cmisExtensionsDummy);
-        $ace->setPrincipal($principal);
-        $ace->setPermissions(array('cmis:all'));
+        $ace = new AccessControlEntry($principal, array('cmis:all'));
+        $ace->setIsDirect(true);
         $ace->setExtensions($this->cmisExtensionsDummy);
-        $acl->setAces(array($ace));
+        $acl = new AccessControlList(array($ace));
         $acl->setIsExact(true);
         $acl->setExtensions($this->cmisExtensionsDummy);
 
@@ -246,6 +243,21 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($acl, $result);
 
         return $result;
+    }
+
+    /**
+     * @depends testConvertAclConvertsArrayToAclObject
+     */
+    public function testConvertAclSkipsAclIfPrincipalIdIsEmpty()
+    {
+        $getObjectResponse = $this->getResponseFixtureContentAsArray('Cmis/v1.1/BrowserBinding/getObject-response.log');
+        unset($getObjectResponse[JSONConstants::JSON_OBJECT_ACL]
+            [JSONConstants::JSON_ACL_ACES][0][JSONConstants::JSON_ACE_PRINCIPAL][JSONConstants::JSON_ACE_PRINCIPAL_ID]);
+        $acl = $this->jsonConverter->convertAcl(
+            $getObjectResponse[JSONConstants::JSON_OBJECT_ACL],
+            $getObjectResponse[JSONConstants::JSON_OBJECT_EXACT_ACL]
+        );
+        $this->assertEmpty($acl->getAces());
     }
 
     public function testConvertRenditionReturnsNullIfEmptyDataArrayGiven()
@@ -391,10 +403,13 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
         $idProperty->setDisplayName('Sample Id Property');
         $properties->addProperty($idProperty);
 
-        $dateTimeMultiValueProperty = new PropertyDateTime('DateTimePropMV', array(
-            new \DateTime('@1342160128'),
-            new \DateTime('@1342170128')
-        ));
+        $dateTimeMultiValueProperty = new PropertyDateTime(
+            'DateTimePropMV',
+            array(
+                new \DateTime('@1342160128'),
+                new \DateTime('@1342170128')
+            )
+        );
         $dateTimeMultiValueProperty->setLocalName('DateTimePropMV');
         $dateTimeMultiValueProperty->setQueryName('DateTimePropMV');
         $dateTimeMultiValueProperty->setDisplayName('Sample DateTime multi-value Property');

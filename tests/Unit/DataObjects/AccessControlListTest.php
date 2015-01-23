@@ -20,14 +20,23 @@ class AccessControlListTest extends \PHPUnit_Framework_TestCase
      */
     protected $acl;
 
+    /**
+     * @var AccessControlEntry
+     */
+    protected $aceMock;
+
     public function setUp()
     {
-        $this->acl = new AccessControlList();
+        $this->aceMock = $this->getMockBuilder(
+            '\\Dkd\\PhpCmis\\Data\\AceInterface'
+        )->disableOriginalConstructor()->getMockForAbstractClass();
+
+        $this->acl = new AccessControlList(array($this->aceMock));
     }
 
     public function testSetAcesSetsProperty()
     {
-        $aces = array(new AccessControlEntry());
+        $aces = array($this->aceMock);
         $this->acl->setAces($aces);
         $this->assertAttributeSame($aces, 'aces', $this->acl);
     }
@@ -43,14 +52,14 @@ class AccessControlListTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAcesReturnsPropertyValue()
     {
-        $aces = array(new AccessControlEntry());
+        $aces = array($this->aceMock);
         $this->acl->setAces($aces);
         $this->assertSame($aces, $this->acl->getAces());
     }
 
     public function testConstructorSetsAces()
     {
-        $aces = array(new AccessControlEntry());
+        $aces = array($this->aceMock);
         $acl = new AccessControlList($aces);
         $this->assertAttributeSame($aces, 'aces', $acl);
     }

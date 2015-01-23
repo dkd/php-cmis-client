@@ -12,6 +12,8 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
 
 use Dkd\PhpCmis\DataObjects\AccessControlEntry;
 use Dkd\PhpCmis\DataObjects\Principal;
+use Dkd\PhpCmis\PrincipalInterface;
+use PHPUnit_Framework_MockObject_MockObject;
 
 class AccessControlEntryTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,14 +23,28 @@ class AccessControlEntryTest extends \PHPUnit_Framework_TestCase
      */
     protected $ace;
 
+    /**
+     * @var string[]
+     */
+    protected $dummyPermissions = array('foo', 'bar');
+
+    /**
+     * @var PrincipalInterface|PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $dummyPrincipal;
+
     public function setUp()
     {
-        $this->ace = new AccessControlEntry();
+        $this->dummyPrincipal = $this->getMockBuilder('\\Dkd\\PhpCmis\\PrincipalInterface')->getMockForAbstractClass();
+        $this->ace = new AccessControlEntry(
+            $this->dummyPrincipal,
+            $this->dummyPermissions
+        );
     }
 
     public function testSetPermissionsSetsPermissions()
     {
-        $permissions = array('foo', 'bar');
+        $permissions = array('baz', 'bazz');
         $this->ace->setPermissions($permissions);
         $this->assertAttributeSame($permissions, 'permissions', $this->ace);
     }
@@ -39,21 +55,29 @@ class AccessControlEntryTest extends \PHPUnit_Framework_TestCase
         $this->ace->setPermissions(array(new \stdClass()));
     }
 
+    public function testSetPrincipalSetsPrincipal()
+    {
+        $principal = $this->getMockBuilder('\\Dkd\\PhpCmis\\PrincipalInterface')->getMockForAbstractClass();
+        $this->ace->setPrincipal($principal);
+        $this->assertAttributeSame($principal, 'principal', $this->ace);
+    }
+
+    /**
+     * @depends testSetPermissionsSetsPermissions
+     * @depends testSetPrincipalSetsPrincipal
+     */
+    public function testConstructorSetsPermissionAndPrincipalIfGiven()
+    {
+        $this->assertAttributeSame($this->dummyPrincipal, 'principal', $this->ace);
+        $this->assertAttributeSame($this->dummyPermissions, 'permissions', $this->ace);
+    }
+
     /**
      * @depends testSetPermissionsSetsPermissions
      */
     public function testGetPermissionsReturnsPermissions()
     {
-        $permissions = array('foo', 'bar');
-        $this->ace->setPermissions($permissions);
-        $this->assertSame($permissions, $this->ace->getPermissions());
-    }
-
-    public function testSetPrincipalSetsPrincipal()
-    {
-        $principal = new Principal();
-        $this->ace->setPrincipal($principal);
-        $this->assertAttributeSame($principal, 'principal', $this->ace);
+        $this->assertSame($this->dummyPermissions, $this->ace->getPermissions());
     }
 
     /**
@@ -61,9 +85,7 @@ class AccessControlEntryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPrincipalReturnsPrincipal()
     {
-        $principal = new Principal();
-        $this->ace->setPrincipal($principal);
-        $this->assertSame($principal, $this->ace->getPrincipal());
+        $this->assertSame($this->dummyPrincipal, $this->ace->getPrincipal());
     }
 
     public function testSetIsDirectSetsIsDirect()

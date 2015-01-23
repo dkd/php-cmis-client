@@ -447,50 +447,40 @@ class JsonConverter extends AbstractDataConverter
             return null;
         }
 
-        $acl = new AccessControlList();
         $aces = array();
-
         if (isset($data[JSONConstants::JSON_ACL_ACES]) && is_array($data[JSONConstants::JSON_ACL_ACES])) {
             foreach ($data[JSONConstants::JSON_ACL_ACES] as $aceData) {
-                if (!is_array($aceData) || empty($aceData)) {
+                if (empty($aceData[JSONConstants::JSON_ACE_PRINCIPAL][JSONConstants::JSON_ACE_PRINCIPAL_ID])) {
                     continue;
                 }
 
-                $ace = new AccessControlEntry();
-
-                if (isset($aceData[JSONConstants::JSON_ACE_IS_DIRECT])) {
-                    $ace->setIsDirect((boolean) $aceData[JSONConstants::JSON_ACE_IS_DIRECT]);
-                }
-
+                $permissions = array();
                 if (isset($aceData[JSONConstants::JSON_ACE_PERMISSIONS])
                     && is_array($aceData[JSONConstants::JSON_ACE_PERMISSIONS])
                 ) {
-                    $permissions = array();
                     foreach ($aceData[JSONConstants::JSON_ACE_PERMISSIONS] as $permissionItem) {
                         if (!empty($permissionItem)) {
                             $permissions[] = $permissionItem;
                         }
                     }
-                    $ace->setPermissions($permissions);
                 }
 
+                $principal = new Principal();
+                $principal->setId(
+                    (string) $aceData[JSONConstants::JSON_ACE_PRINCIPAL][JSONConstants::JSON_ACE_PRINCIPAL_ID]
+                );
 
-                if (isset($aceData[JSONConstants::JSON_ACE_PRINCIPAL])
-                    && is_array($aceData[JSONConstants::JSON_ACE_PRINCIPAL])
-                ) {
-                    $principal = new Principal();
-                    $principal->setId(
-                        (string) $aceData[JSONConstants::JSON_ACE_PRINCIPAL][JSONConstants::JSON_ACE_PRINCIPAL_ID]
-                    );
+                $principal->setExtensions(
+                    $this->convertExtension(
+                        $aceData[JSONConstants::JSON_ACE_PRINCIPAL],
+                        JSONConstants::getAcePrincipalKeys()
+                    )
+                );
 
-                    $principal->setExtensions(
-                        $this->convertExtension(
-                            $aceData[JSONConstants::JSON_ACE_PRINCIPAL],
-                            JSONConstants::getAcePrincipalKeys()
-                        )
-                    );
+                $ace = new AccessControlEntry($principal, $permissions);
 
-                    $ace->setPrincipal($principal);
+                if (isset($aceData[JSONConstants::JSON_ACE_IS_DIRECT])) {
+                    $ace->setIsDirect((boolean) $aceData[JSONConstants::JSON_ACE_IS_DIRECT]);
                 }
 
                 $ace->setExtensions($this->convertExtension($aceData, JSONConstants::getAceKeys()));
@@ -499,7 +489,7 @@ class JsonConverter extends AbstractDataConverter
             }
         }
 
-        $acl->setAces($aces);
+        $acl = new AccessControlList($aces);
         $acl->setIsExact($isExact);
         $acl->setExtensions($this->convertExtension($data, JSONConstants::getAclKeys()));
 

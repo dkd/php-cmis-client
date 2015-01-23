@@ -10,13 +10,13 @@ namespace Dkd\PhpCmis\DataObjects;
  * file that was distributed with this source code.
  */
 
-use Dkd\PhpCmis\Data\AceInterface;
+use Dkd\PhpCmis\Data\MutableAceInterface;
 use Dkd\PhpCmis\PrincipalInterface;
 
 /**
  * Access control entry data implementation.
  */
-class AccessControlEntry extends AbstractExtensionData implements AceInterface
+class AccessControlEntry extends AbstractExtensionData implements MutableAceInterface
 {
     /**
      * @var string[]
@@ -32,6 +32,16 @@ class AccessControlEntry extends AbstractExtensionData implements AceInterface
      * @var boolean
      */
     protected $isDirect;
+
+    /**
+     * @param PrincipalInterface $principal
+     * @param string[] $permissions
+     */
+    public function __construct(PrincipalInterface $principal, array $permissions)
+    {
+        $this->setPrincipal($principal);
+        $this->setPermissions($permissions);
+    }
 
     /**
      * @return string[]

@@ -11,12 +11,12 @@ namespace Dkd\PhpCmis\DataObjects;
  */
 
 use Dkd\PhpCmis\Data\AceInterface;
-use Dkd\PhpCmis\Data\AclInterface;
+use Dkd\PhpCmis\Data\MutableAclInterface;
 
 /**
  * Access control list data implementation.
  */
-class AccessControlList extends AbstractExtensionData implements AclInterface
+class AccessControlList extends AbstractExtensionData implements MutableAclInterface
 {
     /**
      * @var AceInterface[]
@@ -31,12 +31,9 @@ class AccessControlList extends AbstractExtensionData implements AclInterface
     /**
      * @param AceInterface[] $aces
      */
-    public function __construct(array $aces = array())
+    public function __construct(array $aces)
     {
-        if (!empty($aces)) {
-            $this->setAces($aces);
-
-        }
+        $this->setAces($aces);
     }
 
     /**

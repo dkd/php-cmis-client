@@ -37,8 +37,12 @@ class BindingsObjectFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreateAccessControlListCreatesAnAccessControlListObjectWithGivenAces()
     {
         $aces = array(
-            new AccessControlEntry(),
-            new AccessControlEntry()
+            $this->getMockBuilder(
+                '\\Dkd\\PhpCmis\\Data\\AceInterface'
+            )->disableOriginalConstructor()->getMockForAbstractClass(),
+            $this->getMockBuilder(
+                '\\Dkd\\PhpCmis\\Data\\AceInterface'
+            )->disableOriginalConstructor()->getMockForAbstractClass()
         );
         $acl = $this->bindingsObjectFactory->createAccessControlList($aces);
 
