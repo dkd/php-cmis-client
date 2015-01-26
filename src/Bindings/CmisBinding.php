@@ -3,6 +3,8 @@ namespace Dkd\PhpCmis\Bindings;
 
 use Dkd\PhpCmis\AclServiceInterface;
 use Dkd\PhpCmis\Bindings\Browser\RepositoryService;
+use Dkd\PhpCmis\Data\BindingsObjectFactoryInterface;
+use Dkd\PhpCmis\DataObjects\BindingsObjectFactory;
 use Dkd\PhpCmis\VersioningServiceInterface;
 use Dkd\PhpCmis\DiscoveryServiceInterface;
 use Dkd\PhpCmis\Enum\BindingType;
@@ -38,14 +40,21 @@ class CmisBinding implements CmisBindingInterface
     protected $repositoryService;
 
     /**
+     * @var BindingsObjectFactoryInterface
+     */
+    protected $objectFactory;
+
+    /**
      * @param BindingSessionInterface $session
      * @param array $sessionParameters
-     * @param Cache $typeDefinitionCache
+     * @param Cache|null $typeDefinitionCache
+     * @param BindingsObjectFactoryInterface|null $objectFactory
      */
     public function __construct(
         BindingSessionInterface $session,
         array $sessionParameters,
-        Cache $typeDefinitionCache = null
+        Cache $typeDefinitionCache = null,
+        BindingsObjectFactoryInterface $objectFactory = null
     ) {
         if (count($sessionParameters) === 0) {
             throw new CmisRuntimeException('Session parameters must be set!');
@@ -61,8 +70,14 @@ class CmisBinding implements CmisBindingInterface
             $this->session->put($key, $value);
         }
 
-        if ($typeDefinitionCache !== null) {
-            // @TODO add cache
+        // if ($typeDefinitionCache !== null) {
+        //     @TODO add cache
+        // }
+
+        if ($objectFactory !== null) {
+            $this->objectFactory = $objectFactory;
+        } else {
+            $this->objectFactory = new BindingsObjectFactory();
         }
         $this->repositoryService = new RepositoryService($this->session);
     }
@@ -163,8 +178,7 @@ class CmisBinding implements CmisBindingInterface
      */
     public function getObjectFactory()
     {
-        throw new \Exception('Not yet implemented!');
-        // TODO: Implement getObjectFactory() method.
+        return $this->objectFactory;
     }
 
     /**
