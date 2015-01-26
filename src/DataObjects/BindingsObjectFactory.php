@@ -31,13 +31,15 @@ use GuzzleHttp\Stream\StreamInterface;
 class BindingsObjectFactory implements BindingsObjectFactoryInterface
 {
     /**
+     * Create a AccessControlEntry for the given principal and permissions
+     *
      * @param string $principal
      * @param string[] $permissions
-     * @return AceInterface
+     * @return AccessControlEntry
      */
     public function createAccessControlEntry($principal, array $permissions)
     {
-        // TODO: Implement createAccessControlEntry() method.
+        return new AccessControlEntry(new Principal($principal), $permissions);
     }
 
     /**

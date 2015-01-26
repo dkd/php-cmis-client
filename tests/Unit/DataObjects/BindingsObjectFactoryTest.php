@@ -12,6 +12,7 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
 
 use Dkd\PhpCmis\DataObjects\AccessControlEntry;
 use Dkd\PhpCmis\DataObjects\BindingsObjectFactory;
+use Dkd\PhpCmis\DataObjects\Principal;
 use Dkd\PhpCmis\DataObjects\PropertyBooleanDefinition;
 use Dkd\PhpCmis\DataObjects\PropertyDateTimeDefinition;
 use Dkd\PhpCmis\DataObjects\PropertyDecimalDefinition;
@@ -32,6 +33,17 @@ class BindingsObjectFactoryTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->bindingsObjectFactory = new BindingsObjectFactory();
+    }
+
+    public function testCreateAccessControlEntryReturnsAccessControlEntryObjectWithGivenProperties()
+    {
+        $principal = 'DummyPrincipal';
+        $permissions = array('perm1', 'perm2');
+        $ace = $this->bindingsObjectFactory->createAccessControlEntry($principal, $permissions);
+
+        $this->assertInstanceOf('\\Dkd\\PhpCmis\\DataObjects\\AccessControlEntry', $ace);
+        $this->assertEquals(new Principal($principal), $ace->getPrincipal());
+        $this->assertSame($permissions, $ace->getPermissions());
     }
 
     public function testCreateAccessControlListCreatesAnAccessControlListObjectWithGivenAces()
