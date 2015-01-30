@@ -75,7 +75,9 @@ interface ObjectFactoryInterface
     public function convertPolicies($policies);
 
     /**
-     * @param array $properties
+     * Convert properties to their property data objects and put them into a Properties object
+     *
+     * @param mixed[] $properties
      * @param ObjectTypeInterface $type
      * @param SecondaryTypeInterface[] $secondaryTypes
      * @param Updatability[] $updatabilityFilter
@@ -83,9 +85,9 @@ interface ObjectFactoryInterface
      */
     public function convertProperties(
         array $properties,
-        ObjectTypeInterface $type,
-        array $secondaryTypes,
-        array $updatabilityFilter
+        ObjectTypeInterface $type = null,
+        array $secondaryTypes = array(),
+        array $updatabilityFilter = array()
     );
 
     /**

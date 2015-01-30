@@ -56,6 +56,8 @@ class ObjectFactory implements ObjectFactoryInterface
     protected $session;
 
     /**
+     * Initialize the object factory with a session.
+     *
      * @param SessionInterface $session
      * @param string[] $parameters
      * @return void
@@ -66,12 +68,19 @@ class ObjectFactory implements ObjectFactoryInterface
     }
 
     /**
+     * Convert ACEs to an ACL.
+     *
+     * This method does not create a copy of the ACE as the Java OpenCMIS implementation does. #
+     * For details see the discussion in the mailing list
+     *
+     * @see http://mail-archives.apache.org/mod_mbox/chemistry-dev/201501.mbox/<843F5117-E79B-47AF-B4E3-32760263CF26@dkd.de>
+     *
      * @param AceInterface[] $aces
      * @return AclInterface
      */
     public function convertAces(array $aces)
     {
-        // TODO: Implement convertAces() method.
+        return $this->getBindingsObjectFactory()->createAccessControlList($aces);
     }
 
     /**
@@ -124,7 +133,9 @@ class ObjectFactory implements ObjectFactoryInterface
     }
 
     /**
-     * @param array $properties
+     * Convert properties to their property data objects and put them into a Properties object
+     *
+     * @param mixed[] $properties
      * @param ObjectTypeInterface $type
      * @param SecondaryTypeInterface[] $secondaryTypes
      * @param Updatability[] $updatabilityFilter
@@ -132,11 +143,122 @@ class ObjectFactory implements ObjectFactoryInterface
      */
     public function convertProperties(
         array $properties,
-        ObjectTypeInterface $type,
-        array $secondaryTypes,
-        array $updatabilityFilter
+        ObjectTypeInterface $type = null,
+        array $secondaryTypes = array(),
+        array $updatabilityFilter = array()
     ) {
-        // TODO: Implement convertProperties() method.
+        if (empty($properties)) {
+            return null;
+        }
+
+        if ($type === null) {
+            $type = $this->getTypeDefinition(
+                isset($properties[PropertyIds::OBJECT_TYPE_ID]) ? $properties[PropertyIds::OBJECT_TYPE_ID] : null
+            );
+        }
+
+        // get secondary types
+        $allSecondaryTypes = array();
+        $secondaryTypeIds = $this->getValueFromArray(PropertyIds::SECONDARY_OBJECT_TYPE_IDS, $properties);
+
+        if (is_array($secondaryTypeIds)) {
+            foreach ($secondaryTypeIds as $secondaryTypeId) {
+                $secondaryType = $this->session->getTypeDefinition((string) $secondaryTypeId);
+
+                if (!$secondaryType instanceof SecondaryType) {
+                    throw new CmisInvalidArgumentException(
+                        "Secondary types property contains a type that is not a secondary type: " . $secondaryTypeId
+                    );
+                }
+                $allSecondaryTypes[] = $secondaryType;
+            }
+        }
+
+        if (!empty($secondaryTypes) && empty($allSecondaryTypes)) {
+            $allSecondaryTypes = $secondaryTypes;
+        }
+
+        $propertyList = array();
+
+        foreach ($properties as $propertyId => $propertyValue) {
+            $definition = $type->getPropertyDefinition($propertyId);
+
+            if ($definition === null && !empty($allSecondaryTypes)) {
+                foreach ($allSecondaryTypes as $secondaryType) {
+                    $definition = $secondaryType->getPropertyDefinition($propertyId);
+
+                    if ($definition !== null) {
+                        break;
+                    }
+                }
+            }
+
+            if ($definition === null) {
+                throw new CmisInvalidArgumentException(
+                    sprintf('Property "%s" is not valid for this type or one of the secondary types!', $propertyId)
+                );
+            }
+
+            // check updatability
+            if (!empty($updatabilityFilter) && !in_array($definition->getUpdatability(), $updatabilityFilter)) {
+                continue;
+            }
+
+            if (is_array($propertyValue)) {
+                if (!$definition->getCardinality()->equals(Cardinality::MULTI)) {
+                    throw new CmisInvalidArgumentException(
+                        sprintf('Property "%s" is not a multi value property but multiple values given!', $propertyId)
+                    );
+                }
+                $values = $propertyValue;
+            } else {
+                if (!$definition->getCardinality()->equals(Cardinality::SINGLE)) {
+                    throw new CmisInvalidArgumentException(
+                        sprintf('Property "%s" is not a single value property but single value given!', $propertyId)
+                    );
+                }
+                $values = array();
+                $values[] = $propertyValue;
+            }
+
+            $propertyList[] = $this->getBindingsObjectFactory()->createPropertyData($definition, $values);
+        }
+
+        return $this->getBindingsObjectFactory()->createPropertiesData($propertyList);
+    }
+
+    /**
+     * Get a type definition for the given object type id. If an empty id is given throw an exception.
+     *
+     * @param string $objectTypeId
+     * @return ObjectTypeInterface
+     * @throws CmisInvalidArgumentException
+     */
+    private function getTypeDefinition($objectTypeId)
+    {
+        if (empty($objectTypeId)) {
+            throw new CmisInvalidArgumentException(
+                'Type property must be set and must be of type string but is empty.'
+            );
+        }
+
+        return $this->session->getTypeDefinition($objectTypeId);
+    }
+
+    /**
+     * Get a value from an array. Return null if the key does not exist in the array.
+     *
+     * @param integer|string $needle
+     * @param mixed $haystack
+     * @return mixed
+     */
+    private function getValueFromArray($needle, $haystack)
+    {
+        if (!is_array($haystack) || !isset($haystack[$needle])) {
+            return null;
+        }
+
+        return $haystack[$needle];
     }
 
     /**
@@ -177,12 +299,32 @@ class ObjectFactory implements ObjectFactoryInterface
     }
 
     /**
+     * Convert a type definition to a type
+     *
      * @param TypeDefinitionInterface $typeDefinition
      * @return ObjectTypeInterface
+     * @throws CmisRuntimeException
      */
     public function convertTypeDefinition(TypeDefinitionInterface $typeDefinition)
     {
-        // TODO: Implement convertTypeDefinition() method.
+        if ($typeDefinition instanceof DocumentTypeDefinitionInterface) {
+            return new DocumentType($this->session, $typeDefinition);
+        } elseif ($typeDefinition instanceof FolderTypeDefinitionInterface) {
+            return new FolderType($this->session, $typeDefinition);
+        } elseif ($typeDefinition instanceof RelationshipTypeDefinitionInterface) {
+            return new RelationshipType($this->session, $typeDefinition);
+        } elseif ($typeDefinition instanceof PolicyTypeDefinitionInterface) {
+            return new PolicyType($this->session, $typeDefinition);
+        } elseif ($typeDefinition instanceof ItemTypeDefinitionInterface) {
+            return new ItemType($this->session, $typeDefinition);
+        } elseif ($typeDefinition instanceof SecondaryTypeDefinitionInterface) {
+            return new SecondaryType($this->session, $typeDefinition);
+        } else {
+            throw new CmisRuntimeException(
+                sprintf('Unknown base type! Received "%s"', + get_class($typeDefinition)),
+                1422028427
+            );
+        }
     }
 
     /**
@@ -236,5 +378,15 @@ class ObjectFactory implements ObjectFactoryInterface
     public function getTypeFromObjectData(ObjectDataInterface $objectData)
     {
         // TODO: Implement getTypeFromObjectData() method.
+    }
+
+    /**
+     * Get the bindings object factory for the current session binding
+     *
+     * @return BindingsObjectFactoryInterface
+     */
+    protected function getBindingsObjectFactory()
+    {
+        return $this->session->getBinding()->getObjectFactory();
     }
 }
