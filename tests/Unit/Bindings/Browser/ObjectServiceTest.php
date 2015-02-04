@@ -11,6 +11,7 @@ namespace Dkd\PhpCmis\Test\Unit\Bindings\Browser;
  */
 
 use Dkd\PhpCmis\Bindings\Browser\ObjectService;
+use Dkd\PhpCmis\Bindings\CmisBindingsHelper;
 use Dkd\PhpCmis\Constants;
 use Dkd\PhpCmis\Data\AclInterface;
 use Dkd\PhpCmis\Data\ExtensionDataInterface;
@@ -56,26 +57,31 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $includeAcl = false,
         ExtensionDataInterface $extension = null
     ) {
-        /** @var ObjectService|PHPUnit_Framework_MockObject_MockObject $objectService */
-        $objectService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
-            array($this->getSessionMock())
-        )->setMethods(
-            array('getObjectUrl', 'read', 'getJsonConverter')
-        )->getMock();
-
         $responseData = array('foo' => 'bar');
         $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
         )->setMethods(array('json'))->getMock();
         $responseMock->expects($this->any())->method('json')->willReturn($responseData);
 
+        $dummyObjectData = new ObjectData();
         $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
             array('convertObject')
         )->getMock();
-        $dummyObjectData = new ObjectData();
         $jsonConverterMock->expects($this->once())->method('convertObject')->with($responseData)->willReturn(
             $dummyObjectData
         );
-        $objectService->expects($this->any())->method('getJsonConverter')->willReturn($jsonConverterMock);
+
+        $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
+            array('getJsonConverter')
+        )->getMock();
+        $cmisBindingsHelperMock->expects($this->any())->method('getJsonConverter')->willReturn($jsonConverterMock);
+
+        /** @var ObjectService|PHPUnit_Framework_MockObject_MockObject $objectService */
+        $objectService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
+            array($this->getSessionMock(), $cmisBindingsHelperMock)
+        )->setMethods(
+            array('getObjectUrl', 'read')
+        )->getMock();
+
         $objectService->expects($this->any())->method('getObjectUrl')->with(
             $repositoryId,
             $objectId,
@@ -160,26 +166,31 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         AclInterface $removeAces = null,
         ExtensionDataInterface $extension = null
     ) {
-        /** @var ObjectService|PHPUnit_Framework_MockObject_MockObject $objectService */
-        $objectService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
-            array($this->getSessionMock())
-        )->setMethods(
-            array('getObjectUrl', 'post', 'getJsonConverter')
-        )->getMock();
-
         $responseData = array('foo' => 'bar');
         $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
         )->setMethods(array('json'))->getMock();
         $responseMock->expects($this->any())->method('json')->willReturn($responseData);
 
+        $dummyObjectData = new ObjectData();
         $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
             array('convertObject')
         )->getMock();
-        $dummyObjectData = new ObjectData();
         $jsonConverterMock->expects($this->once())->method('convertObject')->with($responseData)->willReturn(
             $dummyObjectData
         );
-        $objectService->expects($this->any())->method('getJsonConverter')->willReturn($jsonConverterMock);
+
+        $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
+            array('getJsonConverter')
+        )->getMock();
+        $cmisBindingsHelperMock->expects($this->any())->method('getJsonConverter')->willReturn($jsonConverterMock);
+
+        /** @var ObjectService|PHPUnit_Framework_MockObject_MockObject $objectService */
+        $objectService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
+            array($this->getSessionMock(), $cmisBindingsHelperMock)
+        )->setMethods(
+            array('getObjectUrl', 'post')
+        )->getMock();
+
         $objectService->expects($this->any())->method('getObjectUrl')->with(
             $repositoryId,
             $folderId
