@@ -23,7 +23,7 @@ class ObjectId implements ObjectIdInterface
     protected $id;
 
     /**
-     * {@inheritdoc}
+     * @param string $id The Object ID as string
      */
     public function __construct($id)
     {
@@ -42,7 +42,9 @@ class ObjectId implements ObjectIdInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Returns the object ID as string
+     *
+     * @return string
      */
     public function __toString()
     {

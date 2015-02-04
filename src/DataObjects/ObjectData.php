@@ -44,7 +44,7 @@ class ObjectData extends AbstractExtensionData implements ObjectDataInterface
     /**
      * @var RenditionDataInterface[]
      */
-    protected $renditions;
+    protected $renditions = array();
 
     /**
      * @var PolicyIdListInterface
@@ -149,7 +149,7 @@ class ObjectData extends AbstractExtensionData implements ObjectDataInterface
     }
 
     /**
-     * @return PropertiesInterface
+     * @return PropertiesInterface|null
      */
     public function getProperties()
     {

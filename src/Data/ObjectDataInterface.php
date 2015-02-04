@@ -65,7 +65,7 @@ interface ObjectDataInterface extends ExtensionDataInterface
      * Returns the object properties.
      * The properties can be incomplete if a property filter was used.
      *
-     * @return PropertiesInterface the properties or null if no properties are known
+     * @return PropertiesInterface|null the properties or null if no properties are known
      */
     public function getProperties();
 

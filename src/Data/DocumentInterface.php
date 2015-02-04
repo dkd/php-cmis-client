@@ -10,9 +10,8 @@ namespace Dkd\PhpCmis\Data;
  * file that was distributed with this source code.
  */
 
-use Dkd\PhpCmis\OperationContextInterface;
-use Dkd\PhpCmis\PolicyInterface;
 use Dkd\PhpCmis\Enum\VersioningState;
+use Dkd\PhpCmis\OperationContextInterface;
 use GuzzleHttp\Stream\StreamInterface;
 
 /**
@@ -28,16 +27,14 @@ interface DocumentInterface extends FileableCmisObjectInterface, DocumentPropert
      *
      * @param StreamInterface $contentStream the content stream
      * @param boolean $isLastChunk indicates if this stream is the last chunk of the content
-     * @param boolean $refresh if this parameter is set to true, this object will be refreshed after the
-     * content stream has been appended
+     * @param boolean $refresh when set to <code>false</code> this object will not be refreshed after the content
+     *     stream has been appended.
      * @return ObjectIdInterface the updated object ID, or null if the repository did not return an object ID
      */
-    public function appendContentStream(StreamInterface $contentStream, $isLastChunk, $refresh = false);
+    public function appendContentStream(StreamInterface $contentStream, $isLastChunk, $refresh = true);
 
     /**
      * If this is a PWC (private working copy) the check out will be reversed.
-     *
-     * @return void
      */
     public function cancelCheckOut();
 
@@ -46,14 +43,17 @@ interface DocumentInterface extends FileableCmisObjectInterface, DocumentPropert
      * If this is not a PWC an exception will be thrown.
      * The stream in contentStream is consumed but not closed by this method.
      *
-     * @param boolean $major
-     * @param array $properties
-     * @param StreamInterface $contentStream
-     * @param string $checkinComment
-     * @param PolicyInterface[] $policies
-     * @param AceInterface[] $addAces
-     * @param AceInterface[] $removeAces
-     * @return ObjectIdInterface
+     * @param boolean $major <code>true</code> if the checked-in document object MUST be a major version.
+     *     <code>false</code> if the checked-in document object MUST NOT be a major version but a minor version.
+     * @param array $properties The property values that MUST be applied to the checked-in document object.
+     * @param StreamInterface $contentStream The content stream that MUST be stored for the checked-in document object.
+     *     The method of passing the contentStream to the server and the encoding mechanism will be specified by each
+     *     specific binding. MUST be required if the type requires it.
+     * @param string $checkinComment Textual comment associated with the given version. MAY be "not set".
+     * @param PolicyInterface[] $policies A list of policy ids that MUST be applied to the newly-created document object
+     * @param AceInterface[] $addAces A list of ACEs that MUST be added to the newly-created document object.
+     * @param AceInterface[] $removeAces A list of ACEs that MUST be removed from the newly-created document object.
+     * @return ObjectIdInterface The id of the checked-in document.
      */
     public function checkIn(
         $major,
@@ -76,13 +76,29 @@ interface DocumentInterface extends FileableCmisObjectInterface, DocumentPropert
      * Creates a copy of this document, including content.
      *
      * @param ObjectIdInterface $targetFolderId the ID of the target folder, null to create an unfiled document
-     * @param array $properties
-     * @param VersioningState $versioningState
-     * @param PolicyInterface[] $policies
-     * @param AceInterface[] $addAces
-     * @param AceInterface[] $removeAces
+     * @param array $properties The property values that MUST be applied to the object. This list of properties SHOULD
+     *     only contain properties whose values differ from the source document.
+     * @param VersioningState $versioningState An enumeration specifying what the versioning state of the newly-created
+     *     object MUST be. Valid values are:
+     *      <code>none</code>
+     *          (default, if the object-type is not versionable) The document MUST be created as a non-versionable
+     *          document.
+     *     <code>checkedout</code>
+     *          The document MUST be created in the checked-out state. The checked-out document MAY be
+     *          visible to other users.
+     *     <code>major</code>
+     *          (default, if the object-type is versionable) The document MUST be created as a major version.
+     *     <code>minor</code>
+     *          The document MUST be created as a minor version.
+     * @param PolicyInterface[] $policies A list of policy ids that MUST be applied to the newly-created document
+     *     object.
+     * @param AceInterface[] $addAces A list of ACEs that MUST be added to the newly-created document object, either
+     *     using the ACL from folderId if specified, or being applied if no folderId is specified.
+     * @param AceInterface[] $removeAces A list of ACEs that MUST be removed from the newly-created document object,
+     *     either using the ACL from folderId if specified, or being ignored if no folderId is specified.
      * @param OperationContextInterface $context
-     * @return DocumentInterface the new document object
+     * @return DocumentInterface|null the new document object or <code>null</code> if the parameter <code>context</code>
+     *     was set to <code>null</code>
      */
     public function copy(
         ObjectIdInterface $targetFolderId,
@@ -96,15 +112,14 @@ interface DocumentInterface extends FileableCmisObjectInterface, DocumentPropert
 
     /**
      * Deletes this document and all its versions.
-     *
-     * @return void
      */
     public function deleteAllVersions();
 
     /**
      * Removes the current content stream from the document and refreshes this object afterwards.
      *
-     * @param boolean $refresh
+     * @param boolean $refresh if this parameter is set to <code>true</code>, this object will be refreshed after the
+     *     content stream has been deleted
      * @return DocumentInterface|null the updated document, or null if the repository did not return an object ID
      */
     public function deleteContentStream($refresh = true);
@@ -135,7 +150,7 @@ interface DocumentInterface extends FileableCmisObjectInterface, DocumentPropert
      *
      * @param boolean $major if true the latest major version will be returned,
      * otherwise the very last version will be returned
-     * @param OperationContextInterface $context
+     * @param OperationContextInterface|null $context
      * @return DocumentInterface the latest document object
      */
     public function getObjectOfLatestVersion($major, OperationContextInterface $context = null);
@@ -146,7 +161,7 @@ interface DocumentInterface extends FileableCmisObjectInterface, DocumentPropert
      * The stream in contentStream is consumed but not closed by this method.
      *
      * @param StreamInterface $contentStream the content stream
-     * @param boolean $overwrite  if this parameter is set to false and the document already has content,
+     * @param boolean $overwrite if this parameter is set to false and the document already has content,
      * the repository throws a CmisContentAlreadyExistsException
      * @param boolean $refresh if this parameter is set to true, this object will be refreshed
      * after the new content has been set

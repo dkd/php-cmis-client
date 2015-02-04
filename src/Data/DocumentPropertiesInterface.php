@@ -51,7 +51,7 @@ interface DocumentPropertiesInterface
     /**
      * Returns the content stream length or -1 if the document has no content (CMIS property cmis:contentStreamLength).
      *
-     * @return int the content stream length of this document or -1 if the property hasn't been requested,
+     * @return integer the content stream length of this document or -1 if the property hasn't been requested,
      * hasn't been provided by the repository, or the document has no content
      */
     public function getContentStreamLength();

@@ -32,6 +32,13 @@ interface AceInterface extends ExtensionDataInterface
     public function getPrincipal();
 
     /**
+     * Returns the ACE principal id.
+     *
+     * @return string
+     */
+    public function getPrincipalId();
+
+    /**
      * Indicates if the ACE was directly applied to the object or has been
      * inherited from another object (for example from the folder it resides in).
      *

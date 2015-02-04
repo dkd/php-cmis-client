@@ -43,7 +43,6 @@ interface ObjectServiceInterface
      * @param StreamInterface $contentStream the content stream to append
      * @param boolean $isLastChunk indicates if this content stream is the last chunk
      * @param ExtensionDataInterface $extension
-     * @return void
      */
     public function appendContentStream(
         $repositoryId,
@@ -248,7 +247,6 @@ interface ObjectServiceInterface
      * @param string $changeToken the last change token of this object that the client received. The repository might
      * return a new change token (default is null)
      * @param ExtensionDataInterface $extension
-     * @return void
      */
     public function deleteContentStream(
         $repositoryId,
@@ -265,7 +263,6 @@ interface ObjectServiceInterface
      * @param boolean $allVersions If true then delete all versions of the document, otherwise delete only the document
      * object specified (default is true)
      * @param ExtensionDataInterface $extension
-     * @return void
      */
     public function deleteObject(
         $repositoryId,
@@ -345,7 +342,8 @@ interface ObjectServiceInterface
      * the object (default is false)
      * @param boolean $includeAcl if true, then the repository must return the ACL for the object (default is false)
      * @param ExtensionDataInterface $extension
-     * @return ObjectDataInterface
+     * @return ObjectDataInterface|null Returns object of type ObjectDataInterface or null if the repository response
+     *     was empty
      */
     public function getObject(
         $repositoryId,
@@ -437,7 +435,6 @@ interface ObjectServiceInterface
      * @param string $targetFolderId the identifier for the target folder
      * @param string $sourceFolderId the identifier for the source folder
      * @param ExtensionDataInterface $extension
-     * @return void
      */
     public function moveObject(
         $repositoryId,
@@ -459,7 +456,6 @@ interface ObjectServiceInterface
      * @param string $changeToken the last change token of this object that the client received.
      * The repository might return a new change token (default is null)
      * @param ExtensionDataInterface $extension
-     * @return void
      */
     public function setContentStream(
         $repositoryId,
@@ -479,7 +475,6 @@ interface ObjectServiceInterface
      * @param string $changeToken (optional) the last change token of this object that the client received.
      * The repository might return a new change token (default is null)
      * @param ExtensionDataInterface $extension
-     * @return void
      */
     public function updateProperties(
         $repositoryId,

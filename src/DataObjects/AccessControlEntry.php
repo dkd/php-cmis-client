@@ -79,6 +79,16 @@ class AccessControlEntry extends AbstractExtensionData implements MutableAceInte
     }
 
     /**
+     * Returns the ACE principal id.
+     *
+     * @return string
+     */
+    public function getPrincipalId()
+    {
+        return $this->getPrincipal()->getId();
+    }
+
+    /**
      * @return boolean
      */
     public function isDirect()

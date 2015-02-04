@@ -75,13 +75,17 @@ class VersioningService extends AbstractBrowserBindingService implements Version
      * @param string $repositoryId the identifier for the repository
      * @param string $objectId input: the identifier for the document that should be checked out,
      * output: the identifier for the newly created PWC
-     * @param ExtensionDataInterface $extension
-     * @param boolean $contentCopied output: indicator if the content of the original
+     * @param ExtensionDataInterface|null $extension
+     * @param boolean|null $contentCopied output: indicator if the content of the original
      * document has been copied to the PWC
      * @return void
      */
-    public function checkOut($repositoryId, $objectId, ExtensionDataInterface $extension, $contentCopied)
-    {
+    public function checkOut(
+        $repositoryId,
+        & $objectId,
+        ExtensionDataInterface $extension = null,
+        $contentCopied = null
+    ) {
         // TODO: Implement checkOut() method.
     }
 

@@ -17,6 +17,7 @@ use Dkd\PhpCmis\Data\ChangeEventInfoInterface;
 use Dkd\PhpCmis\Data\ObjectDataInterface;
 use Dkd\PhpCmis\Data\ObjectListInterface;
 use Dkd\PhpCmis\Data\ObjectTypeInterface;
+use Dkd\PhpCmis\Data\PolicyInterface;
 use Dkd\PhpCmis\Data\PropertiesInterface;
 use Dkd\PhpCmis\Data\PropertyDataInterface;
 use Dkd\PhpCmis\Data\RenditionDataInterface;

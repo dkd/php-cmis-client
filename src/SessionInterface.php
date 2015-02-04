@@ -74,7 +74,7 @@ interface SessionInterface
      * @param ObjectIdInterface[] $policyIds the IDs of the policies to be applied
      * @return mixed
      */
-    public function applyPolicy(ObjectIdInterface $objectId, array $policyIds);
+    public function applyPolicies(ObjectIdInterface $objectId, array $policyIds);
 
     /**
      * Updates multiple objects in one request.
@@ -392,7 +392,7 @@ interface SessionInterface
      * @return CmisObjectInterface the requested object
      * @throws CmisObjectNotFoundException - if an object with the given ID doesn't exist
      */
-    public function getObject(ObjectIdInterface $objectId, OperationContextInterface $context);
+    public function getObject(ObjectIdInterface $objectId, OperationContextInterface $context = null);
 
     /**
      * Returns a CMIS object from the session cache. If the object is not in the cache or the given OperationContext

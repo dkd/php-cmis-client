@@ -198,7 +198,7 @@ class Session implements SessionInterface
      * @param ObjectIdInterface[] $policyIds the IDs of the policies to be applied
      * @return mixed
      */
-    public function applyPolicy(ObjectIdInterface $objectId, array $policyIds)
+    public function applyPolicies(ObjectIdInterface $objectId, array $policyIds)
     {
         // TODO: Implement applyPolicy() method.
     }

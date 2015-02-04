@@ -1,5 +1,5 @@
 <?php
-namespace Dkd\PhpCmis;
+namespace Dkd\PhpCmis\Data;
 
 /**
  * This file is part of php-cmis-lib.
@@ -11,7 +11,6 @@ namespace Dkd\PhpCmis;
  */
 
 use Dkd\PhpCmis\CmisObject\CmisObjectInterface;
-use Dkd\PhpCmis\Data\FileableCmisObjectInterface;
 
 /**
  * CMIS policy interface.

@@ -105,6 +105,27 @@ final class PropertyIds
      */
     const SECONDARY_OBJECT_TYPE_IDS = "cmis:secondaryObjectTypeIds";
 
+    protected static $BASE_PROPERTY_KEYS = array(
+        self::NAME,
+        self::OBJECT_ID,
+        self::OBJECT_TYPE_ID,
+        self::BASE_TYPE_ID,
+        self::CREATED_BY,
+        self::CREATION_DATE,
+        self::LAST_MODIFIED_BY,
+        self::LAST_MODIFICATION_DATE,
+        self::CHANGE_TOKEN
+    );
+
+    /**
+     * Returns all base properties that are required for every CMIS object.
+     *
+     * @return array
+     */
+    public static function getBasePropertyKeys()
+    {
+        return self::$BASE_PROPERTY_KEYS;
+    }
 
     // ---- document ----
     /**

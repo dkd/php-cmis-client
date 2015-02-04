@@ -412,7 +412,8 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      * the object (default is false)
      * @param boolean $includeAcl if true, then the repository must return the ACL for the object (default is false)
      * @param ExtensionDataInterface $extension
-     * @return ObjectDataInterface|null
+     * @return ObjectDataInterface|null Returns object of type ObjectDataInterface or null if the repository response
+     *     was empty
      */
     public function getObject(
         $repositoryId,

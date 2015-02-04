@@ -1,5 +1,5 @@
 <?php
-namespace Dkd\PhpCmis;
+namespace Dkd\PhpCmis\Data;
 
 /**
  * This file is part of php-cmis-lib.

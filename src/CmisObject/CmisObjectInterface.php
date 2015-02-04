@@ -14,12 +14,13 @@ use Dkd\PhpCmis\Data\AceInterface;
 use Dkd\PhpCmis\Data\AclInterface;
 use Dkd\PhpCmis\Data\AllowableActionsInterface;
 use Dkd\PhpCmis\Data\CmisExtensionElementInterface;
+use Dkd\PhpCmis\Data\PolicyInterface;
+use Dkd\PhpCmis\Data\RelationshipInterface;
 use Dkd\PhpCmis\Enum\AclPropagation;
 use Dkd\PhpCmis\Enum\ExtensionLevel;
 use Dkd\PhpCmis\Exception\CmisObjectNotFoundException;
 use Dkd\PhpCmis\Data\ObjectIdInterface;
-use Dkd\PhpCmis\PolicyInterface;
-use Dkd\PhpCmis\RelationshipInterface;
+use Dkd\PhpCmis\Exception\IllegalStateException;
 use Dkd\PhpCmis\RenditionInterface;
 
 /**
@@ -31,7 +32,7 @@ interface CmisObjectInterface extends ObjectIdInterface, CmisObjectPropertiesInt
      * Adds ACEs to the object and refreshes this object afterwards.
      * @param AceInterface[] $addAces
      * @param AclPropagation $aclPropagation
-     * @return AclInterface
+     * @return AclInterface the new ACL of this object
      */
     public function addAcl(array $addAces, AclPropagation $aclPropagation);
 
@@ -41,7 +42,7 @@ interface CmisObjectInterface extends ObjectIdInterface, CmisObjectPropertiesInt
      * @param AceInterface[] $addAces
      * @param AceInterface[] $removeAces
      * @param AclPropagation $aclPropagation
-     * @return AclInterface
+     * @return AclInterface the new ACL of this object
      */
     public function applyAcl(array $addAces, array $removeAces, AclPropagation $aclPropagation);
 
@@ -50,7 +51,7 @@ interface CmisObjectInterface extends ObjectIdInterface, CmisObjectPropertiesInt
      * @param ObjectIdInterface[] $policyIds
      * @return void
      */
-    public function applyPolicy(array $policyIds);
+    public function applyPolicies(array $policyIds);
 
     /**
      * Deletes this object
@@ -63,24 +64,14 @@ interface CmisObjectInterface extends ObjectIdInterface, CmisObjectPropertiesInt
     /**
      * Returns the ACL if it has been fetched for this object.
      *
-     * @return AclInterface
+     * @return AclInterface|null
      */
     public function getAcl();
 
     /**
-     * Returns an adapter based on the given interface.
-     *
-     * @TODO check that to do here
-     *
-     * @param mixed $adapterInterface
-     * @return mixed an adapter object or null if no adapter object could be created
-     */
-    public function getAdapter($adapterInterface);
-
-    /**
      * Returns the allowable actions if they have been fetched for this object.
      *
-     * @return AllowableActionsInterface[]
+     * @return AllowableActionsInterface
      */
     public function getAllowableActions();
 
@@ -138,13 +129,13 @@ interface CmisObjectInterface extends ObjectIdInterface, CmisObjectPropertiesInt
     public function refreshIfOld($durationInMillis);
 
     /**
-     * Removes ACEs to the object and refreshes this object afterwards.
+     * Removes ACEs from the object and refreshes this object afterwards.
      *
-     * @param $removeAces
+     * @param array $removeAces
      * @param AclPropagation $aclPropagation
      * @return AclInterface the new ACL of this object
      */
-    public function removeAcl($removeAces, AclPropagation $aclPropagation);
+    public function removeAcl(array $removeAces, AclPropagation $aclPropagation);
 
     /**
      * Removes the provided policies and refreshes this object afterwards.
@@ -161,7 +152,8 @@ interface CmisObjectInterface extends ObjectIdInterface, CmisObjectPropertiesInt
      *
      * @param string $newName the new name, not null or empty
      * @param boolean $refresh true if this object should be refresh after the update, false if not
-     * @return CmisObjectInterface the updated object
+     * @return CmisObjectInterface|null the object ID of the updated object - can return null in case of a repository
+     *     failure
      */
     public function rename($newName, $refresh);
 
@@ -177,8 +169,18 @@ interface CmisObjectInterface extends ObjectIdInterface, CmisObjectPropertiesInt
      * the object ID of the new object is returned. Otherwise the object ID of the current object is returned.
      *
      * @param array $properties the properties to update
-     * @param $refresh true if this object should be refresh after the update, false if not
-     * @return ObjectIdInterface the object ID of the updated object
+     * @param boolean $refresh true if this object should be refresh after the update, false if not
+     * @return CmisObjectInterface|null the object ID of the updated object - can return null in case of a repository
+     *     failure
      */
     public function updateProperties(array $properties, $refresh);
+
+    /**
+     * Returns all permissions for the given principal from the ACL.
+     *
+     * @param string $principalId the principal ID
+     * @return string the set of permissions for this user, or an empty set if principal is not in the ACL
+     * @throws IllegalStateException if the ACL hasn't been fetched or provided by the repository
+     */
+    public function getPermissionsForPrincipal($principalId);
 }
