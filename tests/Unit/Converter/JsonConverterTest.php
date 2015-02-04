@@ -22,6 +22,8 @@ use Dkd\PhpCmis\DataObjects\CreatablePropertyTypes;
 use Dkd\PhpCmis\DataObjects\ExtensionFeature;
 use Dkd\PhpCmis\DataObjects\NewTypeSettableAttributes;
 use Dkd\PhpCmis\DataObjects\ObjectData;
+use Dkd\PhpCmis\DataObjects\ObjectInFolderData;
+use Dkd\PhpCmis\DataObjects\ObjectInFolderList;
 use Dkd\PhpCmis\DataObjects\PermissionDefinition;
 use Dkd\PhpCmis\DataObjects\PermissionMapping;
 use Dkd\PhpCmis\DataObjects\PolicyIdList;
@@ -54,6 +56,7 @@ use Dkd\PhpCmis\Enum\PropertyType;
 use Dkd\PhpCmis\Enum\SupportedPermissions;
 use Dkd\PhpCmis\Test\Unit\ReflectionHelperTrait;
 use GuzzleHttp\Message\MessageFactory;
+use PHPUnit_Framework_MockObject_MockObject;
 
 class JsonConverterTest extends \PHPUnit_Framework_TestCase
 {
@@ -708,5 +711,52 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
         }
 
         return $result;
+    }
+
+    public function testConvertObjectInFolderConvertsArrayToObjectInFolderData()
+    {
+        /** @var  PHPUnit_Framework_MockObject_MockObject|JsonConverter $jsonConverterMock */
+        $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
+            array('convertObject')
+        )->getMock();
+
+        $response = $this->getResponseFixtureContentAsArray('Cmis/v1.1/BrowserBinding/getChildren-response.log');
+        $convertInputData = array_shift($response[JSONConstants::JSON_OBJECTINFOLDERLIST_OBJECTS]);
+        $convertObjectData = $convertInputData[JSONConstants::JSON_OBJECTINFOLDER_OBJECT];
+        $dummyObjectData = new ObjectData();
+
+        $jsonConverterMock->expects($this->once())->method('convertObject')->with($convertObjectData)->willReturn(
+            $dummyObjectData
+        );
+
+        $expectedObjectInFolderData = new ObjectInFolderData();
+        $expectedObjectInFolderData->setPathSegment('My_Document-1-0');
+        $expectedObjectInFolderData->setObject($dummyObjectData);
+
+        $this->assertEquals($expectedObjectInFolderData, $jsonConverterMock->convertObjectInFolder($convertInputData));
+    }
+
+    public function testConvertObjectInFolderListConvertsArrayToObjectInFolderList()
+    {
+        /** @var  PHPUnit_Framework_MockObject_MockObject|JsonConverter $jsonConverterMock */
+        $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
+            array('convertObjectInFolder')
+        )->getMock();
+
+        $dummyObjectInFolderData = new ObjectInFolderData();
+        $jsonConverterMock->expects($this->any())->method('convertObjectInFolder')->willReturn(
+            $dummyObjectInFolderData
+        );
+
+        $expectedObjectInFolderList = new ObjectInFolderList();
+        $expectedObjectInFolderList->setNumItems(5);
+        $expectedObjectInFolderList->setHasMoreItems(false);
+        $expectedObjectInFolderList->setObjects(
+            array_fill(0, 5, new ObjectInFolderData())
+        );
+
+        $response = $this->getResponseFixtureContentAsArray('Cmis/v1.1/BrowserBinding/getChildren-response.log');
+
+        $this->assertEquals($expectedObjectInFolderList, $jsonConverterMock->convertObjectInFolderList($response));
     }
 }

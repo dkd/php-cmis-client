@@ -12,8 +12,8 @@ namespace Dkd\PhpCmis\Converter;
 
 use Dkd\Enumeration\Exception\InvalidEnumerationValueException;
 use Dkd\PhpCmis\Bindings\Browser\JSONConstants;
-use Dkd\PhpCmis\Data\AclInterface;
 use Dkd\PhpCmis\Data\AclCapabilitiesInterface;
+use Dkd\PhpCmis\Data\AclInterface;
 use Dkd\PhpCmis\Data\AllowableActionsInterface;
 use Dkd\PhpCmis\Data\ExtensionFeatureInterface;
 use Dkd\PhpCmis\Data\ObjectDataInterface;
@@ -40,6 +40,8 @@ use Dkd\PhpCmis\DataObjects\FolderTypeDefinition;
 use Dkd\PhpCmis\DataObjects\ItemTypeDefinition;
 use Dkd\PhpCmis\DataObjects\NewTypeSettableAttributes;
 use Dkd\PhpCmis\DataObjects\ObjectData;
+use Dkd\PhpCmis\DataObjects\ObjectInFolderData;
+use Dkd\PhpCmis\DataObjects\ObjectInFolderList;
 use Dkd\PhpCmis\DataObjects\PermissionDefinition;
 use Dkd\PhpCmis\DataObjects\PermissionMapping;
 use Dkd\PhpCmis\DataObjects\PolicyIdList;
@@ -1534,21 +1536,73 @@ class JsonConverter extends AbstractDataConverter
      * Convert given input data to a ObjectInFolderList object
      *
      * @param array $data
-     * @return ObjectInFolderListInterface
+     * @return null|ObjectInFolderList
      */
     public function convertObjectInFolderList(array $data = null)
     {
-        // TODO: Implement convertObjectInFolderList() method.
+        if (empty($data)) {
+            return null;
+        }
+
+        $objectInFolderList = new ObjectInFolderList();
+        $objects = array();
+
+        if (isset($data[JSONConstants::JSON_OBJECTINFOLDERLIST_OBJECTS])) {
+            foreach ((array) $data[JSONConstants::JSON_OBJECTINFOLDERLIST_OBJECTS] as $objectInFolderData) {
+                if (!empty($objectInFolderData)) {
+                    $object = $this->convertObjectInFolder($objectInFolderData);
+
+                    if ($object !== null) {
+                        $objects[] = $object;
+                    }
+                }
+            }
+        }
+
+        $objectInFolderList->setObjects($objects);
+
+        if (isset($data[JSONConstants::JSON_OBJECTINFOLDERLIST_HAS_MORE_ITEMS])) {
+            $objectInFolderList->setHasMoreItems(
+                (boolean) $data[JSONConstants::JSON_OBJECTINFOLDERLIST_HAS_MORE_ITEMS]
+            );
+        }
+
+        if (isset($data[JSONConstants::JSON_OBJECTINFOLDERLIST_NUM_ITEMS])) {
+            $objectInFolderList->setNumItems((integer) $data[JSONConstants::JSON_OBJECTINFOLDERLIST_NUM_ITEMS]);
+        }
+
+        $objectInFolderList->setExtensions($this->convertExtension($data, JSONConstants::getObjectInFolderListKeys()));
+
+        return $objectInFolderList;
     }
 
     /**
-     * Convert given input data to a ObjectInFolder object
+     * Convert given input data to a ObjectInFolderData object
      *
      * @param array $data
-     * @return ObjectInFolderListInterface
+     * @return ObjectInFolderData|null
      */
     public function convertObjectInFolder(array $data = null)
     {
-        // TODO: Implement convertObjectInFolder() method.
+        if (empty($data)) {
+            return null;
+        }
+
+        $objectInFolderData = new ObjectInFolderData();
+
+        if (isset($data[JSONConstants::JSON_OBJECTINFOLDER_OBJECT])) {
+            $object = $this->convertObject($data[JSONConstants::JSON_OBJECTINFOLDER_OBJECT]);
+            if ($object !== null) {
+                $objectInFolderData->setObject($object);
+            }
+        }
+
+        if (isset($data[JSONConstants::JSON_OBJECTINFOLDER_PATH_SEGMENT])) {
+            $objectInFolderData->setPathSegment((string) $data[JSONConstants::JSON_OBJECTINFOLDER_PATH_SEGMENT]);
+        }
+
+        $objectInFolderData->setExtensions($this->convertExtension($data, JSONConstants::getObjectInFolderKeys()));
+
+        return $objectInFolderData;
     }
 }

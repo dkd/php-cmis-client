@@ -99,7 +99,27 @@ class NavigationService extends AbstractBrowserBindingService implements Navigat
         $skipCount = 0,
         ExtensionDataInterface $extension = null
     ) {
-        // TODO: Implement getChildren() method.
+        $url = $this->getObjectUrl($repositoryId, $folderId, Constants::SELECTOR_CHILDREN);
+        $url->getQuery()->modify(
+            array(
+                Constants::PARAM_FILTER => $filter,
+                Constants::PARAM_ORDER_BY => $orderBy,
+                Constants::PARAM_ALLOWABLE_ACTIONS => $includeAllowableActions ? 'true' : 'false',
+                Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships,
+                Constants::PARAM_RENDITION_FILTER => $renditionFilter,
+                Constants::PARAM_PATH_SEGMENT => $includePathSegment ? 'true' : 'false',
+                Constants::PARAM_MAX_ITEMS => (string) $maxItems,
+                Constants::PARAM_SKIP_COUNT => (string) $skipCount,
+                Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
+                Constants::PARAM_DATETIME_FORMAT => (string) $this->getDateTimeFormat()
+            )
+        );
+
+        // read and parse
+        $responseData = $this->read($url)->json();
+
+        // TODO Implement Cache
+        return $this->getJsonConverter()->convertObjectInFolderList($responseData);
     }
 
     /**

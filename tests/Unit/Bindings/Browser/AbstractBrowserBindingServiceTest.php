@@ -23,6 +23,7 @@ use Dkd\PhpCmis\DataObjects\PropertyDecimal;
 use Dkd\PhpCmis\DataObjects\PropertyId;
 use Dkd\PhpCmis\DataObjects\PropertyString;
 use Dkd\PhpCmis\DataObjects\RepositoryInfoBrowserBinding;
+use Dkd\PhpCmis\Enum\DateTimeFormat;
 use Dkd\PhpCmis\SessionParameter;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
@@ -62,10 +63,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
 
         $this->assertAttributeSame(false, 'succinct', $binding);
 
-        $sessionMock = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\Bindings\\BindingSessionInterface'
-        )->setMethods(array('get'))->getMockForAbstractClass();
-        $sessionMock->expects($this->once())->method('get')->willReturn(true);
+        $sessionMock = $this->getSessionMock(array(array(SessionParameter::BROWSER_SUCCINCT, null, true)));
 
         $binding = $this->getMockBuilder(
             self::CLASS_TO_TEST
@@ -1095,5 +1093,73 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
                 array($policies)
             )
         );
+    }
+
+    public function testGetDateTimeFormatReturnsPropertyValue()
+    {
+        $sessionMock = $this->getSessionMock();
+
+        /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
+        $binding = $this->getMockBuilder(
+            self::CLASS_TO_TEST
+        )->setConstructorArgs(array($sessionMock))->getMockForAbstractClass();
+
+        $this->assertAttributeSame(
+            $binding->getDateTimeFormat(),
+            'dateTimeFormat',
+            $binding
+        );
+    }
+
+    public function testSetDateTimeFormatSetsProperty()
+    {
+        $sessionMock = $this->getSessionMock();
+
+        /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
+        $binding = $this->getMockBuilder(
+            self::CLASS_TO_TEST
+        )->setConstructorArgs(array($sessionMock))->getMockForAbstractClass();
+
+        $dateTimeFormat = DateTimeFormat::cast(DateTimeFormat::EXTENDED);
+        $binding->setDateTimeFormat($dateTimeFormat);
+        $this->assertAttributeSame(
+            $dateTimeFormat,
+            'dateTimeFormat',
+            $binding
+        );
+    }
+
+    public function testConstructorSetsDateTimeFormatPropertyBasedOnSessionParameter()
+    {
+        $sessionMock = $this->getSessionMock();
+
+        $binding = $this->getMockBuilder(
+            self::CLASS_TO_TEST
+        )->setConstructorArgs(array($sessionMock))->getMockForAbstractClass();
+
+        $this->assertAttributeEquals(DateTimeFormat::cast(DateTimeFormat::SIMPLE), 'dateTimeFormat', $binding);
+
+        $sessionMock = $this->getSessionMock(array(array(
+            SessionParameter::BROWSER_DATETIME_FORMAT,
+            null,
+            DateTimeFormat::cast(DateTimeFormat::EXTENDED)
+         )));
+
+        $binding = $this->getMockBuilder(
+            self::CLASS_TO_TEST
+        )->setConstructorArgs(array($sessionMock))->getMockForAbstractClass();
+
+        $this->assertAttributeEquals(DateTimeFormat::cast(DateTimeFormat::EXTENDED), 'dateTimeFormat', $binding);
+    }
+
+    public function testConstructorSetsDateTimeFormatPropertyBasedOnDefaultValue()
+    {
+        $sessionMock = $this->getSessionMock(array(array(SessionParameter::BROWSER_DATETIME_FORMAT, null, null)));
+
+        $binding = $this->getMockBuilder(
+            self::CLASS_TO_TEST
+        )->setConstructorArgs(array($sessionMock))->getMockForAbstractClass();
+
+        $this->assertAttributeEquals(DateTimeFormat::cast(DateTimeFormat::SIMPLE), 'dateTimeFormat', $binding);
     }
 }

@@ -301,6 +301,37 @@ class JSONConstants
     const JSON_OBJECTINFOLDER_OBJECT = 'object';
     const JSON_OBJECTINFOLDER_PATH_SEGMENT = 'pathSegment';
 
+    protected static $OBJECTINFOLDER_KEYS = array(
+        self::JSON_OBJECTINFOLDER_OBJECT,
+        self::JSON_OBJECTINFOLDER_PATH_SEGMENT
+    );
+
+    /**
+     * @return array Array of all object in folder keys
+     */
+    public static function getObjectInFolderKeys()
+    {
+        return self::$OBJECTINFOLDER_KEYS;
+    }
+
+    const JSON_OBJECTINFOLDERLIST_OBJECTS = "objects";
+    const JSON_OBJECTINFOLDERLIST_HAS_MORE_ITEMS = "hasMoreItems";
+    const JSON_OBJECTINFOLDERLIST_NUM_ITEMS = "numItems";
+
+    protected static $OBJECTINFOLDERLIST_KEYS = array(
+        self::JSON_OBJECTINFOLDERLIST_OBJECTS,
+        self::JSON_OBJECTINFOLDERLIST_HAS_MORE_ITEMS,
+        self::JSON_OBJECTINFOLDERLIST_NUM_ITEMS
+    );
+
+    /**
+     * @return array Array of all object in folder list keys
+     */
+    public static function getObjectInFolderListKeys()
+    {
+        return self::$OBJECTINFOLDERLIST_KEYS;
+    }
+
     const JSON_OBJECTPARENTS_OBJECT = 'object';
     const JSON_OBJECTPARENTS_RELATIVE_PATH_SEGMENT = 'relativePathSegment';
 

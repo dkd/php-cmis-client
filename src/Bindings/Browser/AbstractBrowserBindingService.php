@@ -13,11 +13,12 @@ namespace Dkd\PhpCmis\Bindings\Browser;
 use Dkd\PhpCmis\Bindings\BindingSessionInterface;
 use Dkd\PhpCmis\Bindings\CmisBindingsHelper;
 use Dkd\PhpCmis\Constants;
-use Dkd\PhpCmis\Data\PropertiesInterface;
 use Dkd\PhpCmis\Data\AclInterface;
+use Dkd\PhpCmis\Data\PropertiesInterface;
 use Dkd\PhpCmis\DataObjects\RepositoryInfo;
 use Dkd\PhpCmis\DataObjects\RepositoryInfoBrowserBinding;
 use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
+use Dkd\PhpCmis\Enum\DateTimeFormat;
 use Dkd\PhpCmis\Exception\CmisBaseException;
 use Dkd\PhpCmis\Exception\CmisConnectionException;
 use Dkd\PhpCmis\Exception\CmisConstraintException;
@@ -51,6 +52,11 @@ abstract class AbstractBrowserBindingService
      * @var CmisBindingsHelper
      */
     protected $cmisBindingsHelper;
+
+    /**
+     * @var DateTimeFormat
+     */
+    protected $dateTimeFormat;
 
     /**
      * @param BindingSessionInterface $session
@@ -136,6 +142,8 @@ abstract class AbstractBrowserBindingService
         $this->session = $session;
         $succinct = $session->get(SessionParameter::BROWSER_SUCCINCT);
         $this->succinct = ($succinct === null ? true : (boolean) $succinct);
+
+        $this->dateTimeFormat = DateTimeFormat::cast($session->get(SessionParameter::BROWSER_DATETIME_FORMAT));
     }
 
     /**
@@ -555,5 +563,25 @@ abstract class AbstractBrowserBindingService
         }
 
         return $policiesArray;
+    }
+
+    /**
+     * Returns the date time format
+     *
+     * @return DateTimeFormat
+     */
+    public function getDateTimeFormat()
+    {
+        return $this->dateTimeFormat;
+    }
+
+    /**
+     * Sets the date time format
+     *
+     * @param DateTimeFormat $dateTimeFormat
+     */
+    public function setDateTimeFormat(DateTimeFormat $dateTimeFormat)
+    {
+        $this->dateTimeFormat = $dateTimeFormat;
     }
 }
