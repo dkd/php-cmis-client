@@ -10,7 +10,7 @@ namespace Dkd\PhpCmis\Data;
  * file that was distributed with this source code.
  */
 
-use Dkd\PhpCmis\Tree;
+use Dkd\PhpCmis\TreeInterface;
 use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
 
 /**
@@ -36,8 +36,8 @@ interface ObjectTypeInterface extends TypeDefinitionInterface
      * Gets the list of all types somehow derived from this type.
      *
      * @param integer $depth the tree depth, must be greater than 0 or -1 for infinite depth
-     * @return Tree[] a list of trees of types which are derived from this type (direct and via their parents)
-     * @see ObjectTypeInterface ObjectTypeInterface contained in returned list of Tree's
+     * @return TreeInterface[] a list of trees of types which are derived from this type (direct and via their parents)
+     * @see ObjectTypeInterface ObjectTypeInterface contained in returned list of TreeInterface's
      */
     public function getDescendants($depth);
 

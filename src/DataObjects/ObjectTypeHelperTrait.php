@@ -14,7 +14,7 @@ use Dkd\PhpCmis\Data\ObjectTypeInterface;
 use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
 use Dkd\PhpCmis\Enum\BaseTypeId;
 use Dkd\PhpCmis\SessionInterface;
-use Dkd\PhpCmis\Tree;
+use Dkd\PhpCmis\TreeInterface;
 
 /**
  * Helper for object types, containing session-related info.
@@ -133,8 +133,8 @@ trait ObjectTypeHelperTrait
 
     /**
      * @param integer $depth
-     * @return Tree A tree that contains ObjectTypeInterface objects
-     * @see ObjectTypeInterface ObjectTypeInterface contained in returned Tree
+     * @return TreeInterface A tree that contains ObjectTypeInterface objects
+     * @see ObjectTypeInterface ObjectTypeInterface contained in returned TreeInterface
      */
     public function getDescendants($depth)
     {

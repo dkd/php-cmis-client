@@ -473,7 +473,7 @@ interface SessionInterface
      * @param string $typeId the type ID or <code>null</code> to request the base types
      * @param integer $depth indicates whether the property definitions should be included or not
      * @param boolean $includePropertyDefinitions the tree depth, must be greater than 0 or -1 for infinite depth
-     * @return Tree A tree that contains ObjectTypeInterface objects
+     * @return TreeInterface A tree that contains ObjectTypeInterface objects
      * @see ObjectTypeInterface ObjectTypeInterface contained in returned Tree
      * @throws CmisObjectNotFoundException - if a type with the given type ID doesn't exist
      */

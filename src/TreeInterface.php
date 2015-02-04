@@ -13,12 +13,12 @@ namespace Dkd\PhpCmis;
 /**
  * Basic tree structure.
  */
-interface Tree
+interface TreeInterface
 {
     /**
      * Returns the children.
      *
-     * @return Tree[]
+     * @return TreeInterface[]
      */
     public function getChildren();
 
