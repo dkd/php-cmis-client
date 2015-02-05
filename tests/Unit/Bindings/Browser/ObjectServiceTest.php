@@ -175,6 +175,10 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
             array('convertObject')
         )->getMock();
+        $dummyObjectData = $this->getMockBuilder('\\Dkd\\PhpCmis\\ObjectData\\ObjectData')->setMethods(
+            array('getId')
+        )->getMock();
+        $dummyObjectData->expects($this->any())->method('getId')->willReturn('foo-id');
         $jsonConverterMock->expects($this->once())->method('convertObject')->with($responseData)->willReturn(
             $dummyObjectData
         );
@@ -201,7 +205,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         )->willReturn($responseMock);
 
         $this->assertSame(
-            $dummyObjectData,
+            $dummyObjectData->getId(),
             $objectService->createDocument(
                 $repositoryId,
                 $properties,
