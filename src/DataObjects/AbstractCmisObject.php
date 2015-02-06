@@ -218,8 +218,9 @@ abstract class AbstractCmisObject implements CmisObjectInterface
 
         foreach ($properties as $property) {
             $propertyId = $property->getId();
-            if (isset($basePropertyKeys[$propertyId])) {
-                unset($basePropertyKeys[$propertyId]);
+            $basePropertyKey = array_search($propertyId, $basePropertyKeys);
+            if ($basePropertyKey !== false) {
+                unset($basePropertyKeys[$basePropertyKey]);
             }
         }
 
