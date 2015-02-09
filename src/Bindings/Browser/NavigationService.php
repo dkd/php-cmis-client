@@ -59,7 +59,25 @@ class NavigationService extends AbstractBrowserBindingService implements Navigat
         $skipCount = 0,
         ExtensionDataInterface $extension = null
     ) {
-        // TODO: Implement getCheckedOutDocs() method.
+        $url = $this->getObjectUrl($repositoryId, $folderId, Constants::SELECTOR_CHECKEDOUT);
+        $url->getQuery()->modify(
+            array(
+                Constants::PARAM_FILTER => $filter,
+                Constants::PARAM_ORDER_BY => $orderBy,
+                Constants::PARAM_ALLOWABLE_ACTIONS => $includeAllowableActions ? 'true' : 'false',
+                Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships,
+                Constants::PARAM_RENDITION_FILTER => $renditionFilter,
+                Constants::PARAM_MAX_ITEMS => (string) $maxItems,
+                Constants::PARAM_SKIP_COUNT => (string) $skipCount,
+                Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
+                Constants::PARAM_DATETIME_FORMAT => (string) $this->getDateTimeFormat()
+            )
+        );
+        // read and parse
+        $responseData = $this->read($url)->json();
+
+        // TODO Implement Cache
+        return $this->getJsonConverter()->convertObjectList($responseData);
     }
 
     /**
@@ -152,7 +170,25 @@ class NavigationService extends AbstractBrowserBindingService implements Navigat
         $includePathSegment = false,
         ExtensionDataInterface $extension = null
     ) {
-        // TODO: Implement getDescendants() method.
+        $url = $this->getObjectUrl($repositoryId, $folderId, Constants::SELECTOR_DESCENDANTS);
+        $url->getQuery()->modify(
+            array(
+                Constants::PARAM_DEPTH => (string) $depth,
+                Constants::PARAM_FILTER => $filter,
+                Constants::PARAM_ALLOWABLE_ACTIONS => $includeAllowableActions ? 'true' : 'false',
+                Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships,
+                Constants::PARAM_RENDITION_FILTER => $renditionFilter,
+                Constants::PARAM_PATH_SEGMENT => $includePathSegment ? 'true' : 'false',
+                Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
+                Constants::PARAM_DATETIME_FORMAT => (string) $this->getDateTimeFormat()
+            )
+        );
+
+        // read and parse
+        $responseData = $this->read($url)->json();
+
+        // TODO Implement Cache
+        return $this->getJsonConverter()->convertDescendants($responseData);
     }
 
     /**
@@ -171,7 +207,20 @@ class NavigationService extends AbstractBrowserBindingService implements Navigat
         $filter = null,
         ExtensionDataInterface $extension = null
     ) {
-        // TODO: Implement getFolderParent() method.
+        $url = $this->getObjectUrl($repositoryId, $folderId, Constants::SELECTOR_PARENT);
+        $url->getQuery()->modify(
+            array(
+                Constants::PARAM_FILTER => $filter,
+                Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
+                Constants::PARAM_DATETIME_FORMAT => (string) $this->getDateTimeFormat()
+            )
+        );
+
+        // read and parse
+        $responseData = $this->read($url)->json();
+
+        // TODO Implement Cache
+        return $this->getJsonConverter()->convertObject($responseData);
     }
 
     /**
@@ -204,7 +253,25 @@ class NavigationService extends AbstractBrowserBindingService implements Navigat
         $includePathSegment = false,
         ExtensionDataInterface $extension = null
     ) {
-        // TODO: Implement getFolderTree() method.
+        $url = $this->getObjectUrl($repositoryId, $folderId, Constants::SELECTOR_FOLDER_TREE);
+        $url->getQuery()->modify(
+            array(
+                Constants::PARAM_DEPTH => (string) $depth,
+                Constants::PARAM_FILTER => $filter,
+                Constants::PARAM_ALLOWABLE_ACTIONS => $includeAllowableActions ? 'true' : 'false',
+                Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships,
+                Constants::PARAM_RENDITION_FILTER => $renditionFilter,
+                Constants::PARAM_PATH_SEGMENT => $includePathSegment ? 'true' : 'false',
+                Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
+                Constants::PARAM_DATETIME_FORMAT => (string) $this->getDateTimeFormat()
+            )
+        );
+
+        // read and parse
+        $responseData = $this->read($url)->json();
+
+        // TODO Implement Cache
+        return $this->getJsonConverter()->convertDescendants($responseData);
     }
 
     /**
@@ -235,6 +302,23 @@ class NavigationService extends AbstractBrowserBindingService implements Navigat
         $includeRelativePathSegment = false,
         ExtensionDataInterface $extension = null
     ) {
-        // TODO: Implement getObjectParents() method.
+        $url = $this->getObjectUrl($repositoryId, $objectId, Constants::SELECTOR_PARENTS);
+        $url->getQuery()->modify(
+            array(
+                Constants::PARAM_FILTER => $filter,
+                Constants::PARAM_ALLOWABLE_ACTIONS => $includeAllowableActions ? 'true' : 'false',
+                Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships,
+                Constants::PARAM_RENDITION_FILTER => $renditionFilter,
+                Constants::PARAM_RELATIVE_PATH_SEGMENT => $includeRelativePathSegment ? 'true' : 'false',
+                Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
+                Constants::PARAM_DATETIME_FORMAT => (string) $this->getDateTimeFormat()
+            )
+        );
+
+        // read and parse
+        $responseData = $this->read($url)->json();
+
+        // TODO Implement Cache
+        return $this->getJsonConverter()->convertObjectParents($responseData);
     }
 }

@@ -314,9 +314,9 @@ class JSONConstants
         return self::$OBJECTINFOLDER_KEYS;
     }
 
-    const JSON_OBJECTINFOLDERLIST_OBJECTS = "objects";
-    const JSON_OBJECTINFOLDERLIST_HAS_MORE_ITEMS = "hasMoreItems";
-    const JSON_OBJECTINFOLDERLIST_NUM_ITEMS = "numItems";
+    const JSON_OBJECTINFOLDERLIST_OBJECTS = 'objects';
+    const JSON_OBJECTINFOLDERLIST_HAS_MORE_ITEMS = 'hasMoreItems';
+    const JSON_OBJECTINFOLDERLIST_NUM_ITEMS = 'numItems';
 
     protected static $OBJECTINFOLDERLIST_KEYS = array(
         self::JSON_OBJECTINFOLDERLIST_OBJECTS,
@@ -332,8 +332,37 @@ class JSONConstants
         return self::$OBJECTINFOLDERLIST_KEYS;
     }
 
+    const JSON_OBJECTINFOLDERCONTAINER_OBJECT = 'object';
+    const JSON_OBJECTINFOLDERCONTAINER_CHILDREN = 'children';
+
+    protected static $OBJECTINFOLDERCONTAINER_KEYS = array(
+        self::JSON_OBJECTINFOLDERCONTAINER_OBJECT,
+        self::JSON_OBJECTINFOLDERCONTAINER_CHILDREN
+    );
+
+    /**
+     * @return array Array of all object in folder container keys
+     */
+    public static function getObjectInFolderContainerKeys()
+    {
+        return self::$OBJECTINFOLDERCONTAINER_KEYS;
+    }
+
     const JSON_OBJECTPARENTS_OBJECT = 'object';
     const JSON_OBJECTPARENTS_RELATIVE_PATH_SEGMENT = 'relativePathSegment';
+
+    protected static $OBJECTPARENTS_KEYS = array(
+        self::JSON_OBJECTPARENTS_OBJECT,
+        self::JSON_OBJECTPARENTS_RELATIVE_PATH_SEGMENT
+    );
+
+    /**
+     * @return array Array of all object parents keys
+     */
+    public static function getObjectParentsKeys()
+    {
+        return self::$OBJECTPARENTS_KEYS;
+    }
 
     const JSON_PROPERTY_ID = 'id';
     const JSON_PROPERTY_LOCALNAME = 'localName';
@@ -469,6 +498,39 @@ class JSONConstants
     const JSON_OBJECTLIST_HAS_MORE_ITEMS = 'hasMoreItems';
     const JSON_OBJECTLIST_NUM_ITEMS = 'numItems';
     const JSON_OBJECTLIST_CHANGE_LOG_TOKEN = 'changeLogToken';
+
+    protected static $OBJECTLIST_KEYS = array(
+        self::JSON_OBJECTLIST_OBJECTS,
+        self::JSON_OBJECTLIST_HAS_MORE_ITEMS,
+        self::JSON_OBJECTLIST_NUM_ITEMS,
+        self::JSON_OBJECTLIST_CHANGE_LOG_TOKEN
+    );
+
+    /**
+     * @return array Array of all object list keys
+     */
+    public static function getObjectListKeys()
+    {
+        return self::$OBJECTLIST_KEYS;
+    }
+
+    const JSON_QUERYRESULTLIST_RESULTS = 'results';
+    const JSON_QUERYRESULTLIST_HAS_MORE_ITEMS = 'hasMoreItems';
+    const JSON_QUERYRESULTLIST_NUM_ITEMS = 'numItems';
+
+    protected static $QUERYRESULTLIST_KEYS = array(
+        self::JSON_QUERYRESULTLIST_RESULTS,
+        self::JSON_QUERYRESULTLIST_HAS_MORE_ITEMS,
+        self::JSON_QUERYRESULTLIST_NUM_ITEMS
+    );
+
+    /**
+     * @return array Array of all query result list keys
+     */
+    public static function getQueryResultListKeys()
+    {
+        return self::$QUERYRESULTLIST_KEYS;
+    }
 
     const JSON_TYPE_ID = 'id';
     const JSON_TYPE_LOCALNAME = 'localName';

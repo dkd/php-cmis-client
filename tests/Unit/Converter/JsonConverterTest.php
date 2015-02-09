@@ -22,8 +22,11 @@ use Dkd\PhpCmis\DataObjects\CreatablePropertyTypes;
 use Dkd\PhpCmis\DataObjects\ExtensionFeature;
 use Dkd\PhpCmis\DataObjects\NewTypeSettableAttributes;
 use Dkd\PhpCmis\DataObjects\ObjectData;
+use Dkd\PhpCmis\DataObjects\ObjectInFolderContainer;
 use Dkd\PhpCmis\DataObjects\ObjectInFolderData;
 use Dkd\PhpCmis\DataObjects\ObjectInFolderList;
+use Dkd\PhpCmis\DataObjects\ObjectList;
+use Dkd\PhpCmis\DataObjects\ObjectParentData;
 use Dkd\PhpCmis\DataObjects\PermissionDefinition;
 use Dkd\PhpCmis\DataObjects\PermissionMapping;
 use Dkd\PhpCmis\DataObjects\PolicyIdList;
@@ -744,19 +747,205 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
         )->getMock();
 
         $dummyObjectInFolderData = new ObjectInFolderData();
-        $jsonConverterMock->expects($this->any())->method('convertObjectInFolder')->willReturn(
-            $dummyObjectInFolderData
-        );
+        $expectedNumberOfItems = 5;
+
+        $jsonConverterMock->expects($this->exactly($expectedNumberOfItems))->method(
+            'convertObjectInFolder'
+        )->willReturn($dummyObjectInFolderData);
 
         $expectedObjectInFolderList = new ObjectInFolderList();
-        $expectedObjectInFolderList->setNumItems(5);
+        $expectedObjectInFolderList->setNumItems($expectedNumberOfItems);
         $expectedObjectInFolderList->setHasMoreItems(false);
         $expectedObjectInFolderList->setObjects(
-            array_fill(0, 5, new ObjectInFolderData())
+            array_fill(0, $expectedNumberOfItems, new ObjectInFolderData())
         );
 
         $response = $this->getResponseFixtureContentAsArray('Cmis/v1.1/BrowserBinding/getChildren-response.log');
 
         $this->assertEquals($expectedObjectInFolderList, $jsonConverterMock->convertObjectInFolderList($response));
+    }
+
+    public function testConvertObjectParentsConvertsArrayToObjectParentDataArray()
+    {
+        /** @var  PHPUnit_Framework_MockObject_MockObject|JsonConverter $jsonConverterMock */
+        $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
+            array('convertObjectParentData')
+        )->getMock();
+
+        $dummyObjectParentData = new ObjectParentData();
+        $numberOfObjectsInResponse = 2;
+
+        $jsonConverterMock->expects($this->exactly($numberOfObjectsInResponse))->method(
+            'convertObjectParentData'
+        )->willReturn($dummyObjectParentData);
+
+        $expectedObjectParentDataArray = array_fill(0, $numberOfObjectsInResponse, new ObjectParentData());
+
+        $response = $this->getResponseFixtureContentAsArray('Cmis/v1.1/BrowserBinding/getObjectParents-response.log');
+
+        $this->assertEquals($expectedObjectParentDataArray, $jsonConverterMock->convertObjectParents($response));
+    }
+
+    public function testConvertObjectParentDataConvertsArrayToObjectParentData()
+    {
+        /** @var  PHPUnit_Framework_MockObject_MockObject|JsonConverter $jsonConverterMock */
+        $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
+            array('convertObject')
+        )->getMock();
+
+        $response = $this->getResponseFixtureContentAsArray('Cmis/v1.1/BrowserBinding/getObjectParents-response.log');
+        $convertInputData = array_shift($response);
+        $convertObjectData = $convertInputData[JSONConstants::JSON_OBJECTPARENTS_OBJECT];
+        $dummyObjectData = new ObjectData();
+
+        $jsonConverterMock->expects($this->once())->method('convertObject')->with($convertObjectData)->willReturn(
+            $dummyObjectData
+        );
+
+        $expectedObjectParentData = new ObjectParentData();
+        $expectedObjectParentData->setRelativePathSegment('MultifiledDocument');
+        $expectedObjectParentData->setObject($dummyObjectData);
+
+        $this->assertEquals($expectedObjectParentData, $jsonConverterMock->convertObjectParentData($convertInputData));
+    }
+
+    public function testConvertObjectListConvertsArrayToObjectList()
+    {
+        /** @var  PHPUnit_Framework_MockObject_MockObject|JsonConverter $jsonConverterMock */
+        $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
+            array('convertObject')
+        )->getMock();
+
+        $response = $this->getResponseFixtureContentAsArray('Cmis/v1.1/BrowserBinding/getContentChanges-response.log');
+
+        $dummyObjectData = new ObjectData();
+        $expectedNumberOfItems = 39;
+
+        $jsonConverterMock->expects($this->exactly($expectedNumberOfItems))->method('convertObject')->willReturn(
+            $dummyObjectData
+        );
+
+        $expectedObjectList = new ObjectList();
+        $expectedObjectList->setObjects(array_fill(0, $expectedNumberOfItems, new ObjectData()));
+        $expectedObjectList->setNumItems($expectedNumberOfItems);
+        $expectedObjectList->hasMoreItems(false);
+
+        $this->assertEquals($expectedObjectList, $jsonConverterMock->convertObjectList($response));
+    }
+
+    public function testConvertQueryResultListConvertsArrayToObjectList()
+    {
+        /** @var  PHPUnit_Framework_MockObject_MockObject|JsonConverter $jsonConverterMock */
+        $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
+            array('convertObject')
+        )->getMock();
+
+        $response = $this->getResponseFixtureContentAsArray('Cmis/v1.1/BrowserBinding/doQuery-response.log');
+
+        $dummyObjectData = new ObjectData();
+        $expectedNumberOfItems = 4;
+
+        $jsonConverterMock->expects($this->exactly($expectedNumberOfItems))->method('convertObject')->willReturn(
+            $dummyObjectData
+        );
+
+        $expectedObjectList = new ObjectList();
+        $expectedObjectList->setObjects(array_fill(0, $expectedNumberOfItems, new ObjectData()));
+        $expectedObjectList->setNumItems($expectedNumberOfItems);
+        $expectedObjectList->hasMoreItems(false);
+
+        $this->assertEquals($expectedObjectList, $jsonConverterMock->convertQueryResultList($response));
+    }
+
+    public function testConvertDescendantsConvertsArrayToObjectInFolderContainerArray()
+    {
+        /** @var  PHPUnit_Framework_MockObject_MockObject|JsonConverter $jsonConverterMock */
+        $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
+            array('convertDescendant')
+        )->getMock();
+
+        $response = $this->getResponseFixtureContentAsArray('Cmis/v1.1/BrowserBinding/getDescendants-response.log');
+
+        $dummyObjectInFolderContainer = new ObjectInFolderContainer(new ObjectInFolderData());
+
+        $numberOfObjectsInResponse = 5;
+        $jsonConverterMock->expects($this->exactly($numberOfObjectsInResponse))->method(
+            'convertDescendant'
+        )->willReturn($dummyObjectInFolderContainer);
+
+        $expectedDescendantsArray = array_fill(
+            0,
+            $numberOfObjectsInResponse,
+            new ObjectInFolderContainer(
+                new ObjectInFolderData()
+            )
+        );
+
+        $this->assertEquals($expectedDescendantsArray, $jsonConverterMock->convertDescendants($response));
+    }
+
+    public function testConvertDescendantConvertsArrayToObjectInFolderContainer()
+    {
+        /** @var  PHPUnit_Framework_MockObject_MockObject|JsonConverter $jsonConverterMock */
+        $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
+            array('convertObject')
+        )->getMock();
+
+        $response = $this->getResponseFixtureContentAsArray('Cmis/v1.1/BrowserBinding/getDescendants-response.log');
+
+        // example with children to test recursion
+        $convertInputData = $response[3];
+
+        $dummyObjectData = new ObjectData();
+
+        $jsonConverterMock->expects($this->any())->method('convertObject')->willReturn(
+            $dummyObjectData
+        );
+
+        $expectedObjectInFolderContainer = new ObjectInFolderContainer(new ObjectInFolderData());
+
+        $objectInFolderData = new ObjectInFolderData();
+        $objectInFolderData->setObject($dummyObjectData);
+        $objectInFolderData->setPathSegment('My_Folder-1-0');
+        $expectedObjectInFolderContainer->setObject($objectInFolderData);
+
+        $dummyObjectInFolderData1 = new ObjectInFolderData();
+        $dummyObjectInFolderData1->setObject($dummyObjectData);
+        $dummyObjectInFolderData1->setPathSegment('My_Document-2-0');
+        $dummyObjectInFolderContainer1 = new ObjectInFolderContainer(new ObjectInFolderData());
+        $dummyObjectInFolderContainer1->setObject($dummyObjectInFolderData1);
+        $children[] = $dummyObjectInFolderContainer1;
+
+        $dummyObjectInFolderData2 = new ObjectInFolderData();
+        $dummyObjectInFolderData2->setObject($dummyObjectData);
+        $dummyObjectInFolderData2->setPathSegment('My_Document-2-1');
+        $dummyObjectInFolderContainer2 = new ObjectInFolderContainer(new ObjectInFolderData());
+        $dummyObjectInFolderContainer2->setObject($dummyObjectInFolderData2);
+        $children[] = $dummyObjectInFolderContainer2;
+
+        $dummyObjectInFolderData3 = new ObjectInFolderData();
+        $dummyObjectInFolderData3->setObject($dummyObjectData);
+        $dummyObjectInFolderData3->setPathSegment('My_Document-2-2');
+        $dummyObjectInFolderContainer3 = new ObjectInFolderContainer(new ObjectInFolderData());
+        $dummyObjectInFolderContainer3->setObject($dummyObjectInFolderData3);
+        $children[] = $dummyObjectInFolderContainer3;
+
+        $dummyObjectInFolderData4 = new ObjectInFolderData();
+        $dummyObjectInFolderData4->setObject($dummyObjectData);
+        $dummyObjectInFolderData4->setPathSegment('My_Folder-2-0');
+        $dummyObjectInFolderContainer4 = new ObjectInFolderContainer(new ObjectInFolderData());
+        $dummyObjectInFolderContainer4->setObject($dummyObjectInFolderData4);
+        $children[] = $dummyObjectInFolderContainer4;
+
+        $dummyObjectInFolderData5 = new ObjectInFolderData();
+        $dummyObjectInFolderData5->setObject($dummyObjectData);
+        $dummyObjectInFolderData5->setPathSegment('My_Folder-2-1');
+        $dummyObjectInFolderContainer5 = new ObjectInFolderContainer(new ObjectInFolderData());
+        $dummyObjectInFolderContainer5->setObject($dummyObjectInFolderData5);
+        $children[] = $dummyObjectInFolderContainer5;
+
+        $expectedObjectInFolderContainer->setChildren($children);
+
+        $this->assertEquals($expectedObjectInFolderContainer, $jsonConverterMock->convertDescendant($convertInputData));
     }
 }

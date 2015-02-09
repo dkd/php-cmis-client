@@ -40,8 +40,11 @@ use Dkd\PhpCmis\DataObjects\FolderTypeDefinition;
 use Dkd\PhpCmis\DataObjects\ItemTypeDefinition;
 use Dkd\PhpCmis\DataObjects\NewTypeSettableAttributes;
 use Dkd\PhpCmis\DataObjects\ObjectData;
+use Dkd\PhpCmis\DataObjects\ObjectInFolderContainer;
 use Dkd\PhpCmis\DataObjects\ObjectInFolderData;
 use Dkd\PhpCmis\DataObjects\ObjectInFolderList;
+use Dkd\PhpCmis\DataObjects\ObjectList;
+use Dkd\PhpCmis\DataObjects\ObjectParentData;
 use Dkd\PhpCmis\DataObjects\PermissionDefinition;
 use Dkd\PhpCmis\DataObjects\PermissionMapping;
 use Dkd\PhpCmis\DataObjects\PolicyIdList;
@@ -1592,6 +1595,7 @@ class JsonConverter extends AbstractDataConverter
 
         if (isset($data[JSONConstants::JSON_OBJECTINFOLDER_OBJECT])) {
             $object = $this->convertObject($data[JSONConstants::JSON_OBJECTINFOLDER_OBJECT]);
+
             if ($object !== null) {
                 $objectInFolderData->setObject($object);
             }
@@ -1604,5 +1608,211 @@ class JsonConverter extends AbstractDataConverter
         $objectInFolderData->setExtensions($this->convertExtension($data, JSONConstants::getObjectInFolderKeys()));
 
         return $objectInFolderData;
+    }
+
+    /**
+     * Convert given input data to a list of ObjectParentData objects
+     *
+     * @param array $data
+     * @return ObjectParentData[]
+     */
+    public function convertObjectParents(array $data = null)
+    {
+        if (empty($data)) {
+            return array();
+        }
+        $parents = array();
+
+        foreach ($data as $parentData) {
+            $parent = $this->convertObjectParentData($parentData);
+
+            // @TODO once a logger is available we should log an INFO message if the parent data could not be converted
+            if ($parent !== null) {
+                $parents[] = $parent;
+            }
+        }
+
+        return $parents;
+    }
+
+    /**
+     * Convert given input data to a ObjectParentData object
+     *
+     * @param array $data
+     * @return null|ObjectParentData
+     */
+    public function convertObjectParentData(array $data = null)
+    {
+        if (empty($data)) {
+            return null;
+        }
+        $parent = new ObjectParentData();
+
+        if (isset($data[JSONConstants::JSON_OBJECTPARENTS_OBJECT])) {
+            $object = $this->convertObject($data[JSONConstants::JSON_OBJECTPARENTS_OBJECT]);
+            if ($object !== null) {
+                $parent->setObject($object);
+            }
+        }
+
+        if (isset($data[JSONConstants::JSON_OBJECTPARENTS_RELATIVE_PATH_SEGMENT])) {
+            $parent->setRelativePathSegment((string) $data[JSONConstants::JSON_OBJECTPARENTS_RELATIVE_PATH_SEGMENT]);
+        }
+
+        $parent->setExtensions($this->convertExtension($data, JSONConstants::getObjectParentsKeys()));
+
+        return $parent;
+    }
+
+    /**
+     * Convert given input data array to a ObjectList object
+     *
+     * @param array $data
+     * @return null|ObjectList
+     */
+    public function convertObjectList(array $data = null)
+    {
+        if (empty($data)) {
+            return null;
+        }
+
+        $objectList = new ObjectList();
+        $objects = array();
+
+        if (isset($data[JSONConstants::JSON_OBJECTLIST_OBJECTS])) {
+            foreach ((array) $data[JSONConstants::JSON_OBJECTLIST_OBJECTS] as $objectData) {
+                $object = $this->convertObject($objectData);
+
+                if ($object !== null) {
+                    $objects[] = $object;
+                }
+            }
+        }
+
+        $objectList->setObjects($objects);
+
+        if (isset($data[JSONConstants::JSON_OBJECTLIST_HAS_MORE_ITEMS])) {
+            $objectList->setHasMoreItems(
+                (boolean) $data[JSONConstants::JSON_OBJECTLIST_HAS_MORE_ITEMS]
+            );
+        }
+
+        if (isset($data[JSONConstants::JSON_OBJECTLIST_NUM_ITEMS])) {
+            $objectList->setNumItems((integer) $data[JSONConstants::JSON_OBJECTLIST_NUM_ITEMS]);
+        }
+
+        $objectList->setExtensions($this->convertExtension($data, JSONConstants::getObjectListKeys()));
+
+        return $objectList;
+    }
+
+    /**
+     * Convert given input data array from query result to a ObjectList object
+     *
+     * @param array $data
+     * @return null|ObjectList
+     */
+    public function convertQueryResultList(array $data = null)
+    {
+        if (empty($data)) {
+            return null;
+        }
+
+        $objectList = new ObjectList();
+        $objects = array();
+
+        if (isset($data[JSONConstants::JSON_QUERYRESULTLIST_RESULTS])) {
+            foreach ((array) $data[JSONConstants::JSON_QUERYRESULTLIST_RESULTS] as $objectData) {
+                $object = $this->convertObject($objectData);
+
+                if ($object !== null) {
+                    $objects[] = $object;
+                }
+            }
+        }
+
+        $objectList->setObjects($objects);
+
+        if (isset($data[JSONConstants::JSON_QUERYRESULTLIST_HAS_MORE_ITEMS])) {
+            $objectList->setHasMoreItems(
+                (boolean) $data[JSONConstants::JSON_QUERYRESULTLIST_HAS_MORE_ITEMS]
+            );
+        }
+
+        if (isset($data[JSONConstants::JSON_QUERYRESULTLIST_NUM_ITEMS])) {
+            $objectList->setNumItems((integer) $data[JSONConstants::JSON_QUERYRESULTLIST_NUM_ITEMS]);
+        }
+
+        $objectList->setExtensions($this->convertExtension($data, JSONConstants::getQueryResultListKeys()));
+
+        return $objectList;
+    }
+
+    /**
+     * Convert given input data array to a ObjectList object
+     *
+     * @param array $data
+     * @return ObjectInFolderContainer[]
+     */
+    public function convertDescendants(array $data = null)
+    {
+        if (empty($data)) {
+            return array();
+        }
+
+        $descendants = array();
+
+        foreach ($data as $descendantData) {
+            $descendant = $this->convertDescendant($descendantData);
+            if ($descendant !== null) {
+                $descendants[] = $descendant;
+            }
+        }
+
+        return $descendants;
+    }
+
+    /**
+     * Convert given input data array to a ObjectInFolderContainer object
+     *
+     * @param array $data
+     * @return null|ObjectInFolderContainer
+     * @throws CmisRuntimeException
+     */
+    public function convertDescendant(array $data = null)
+    {
+        if (empty($data)) {
+            return null;
+        }
+
+        $object = null;
+        if (isset($data[JSONConstants::JSON_OBJECTINFOLDERCONTAINER_OBJECT])) {
+            $object = $this->convertObjectInFolder($data[JSONConstants::JSON_OBJECTINFOLDERCONTAINER_OBJECT]);
+        }
+
+        if ($object === null) {
+            throw new CmisRuntimeException('Given data could not be converted to ObjectInFolder!');
+        }
+
+        $objectInFolderContainer = new ObjectInFolderContainer($object);
+        $children = array();
+
+        if (isset($data[JSONConstants::JSON_OBJECTINFOLDERCONTAINER_CHILDREN])) {
+            foreach ((array) $data[JSONConstants::JSON_OBJECTINFOLDERCONTAINER_CHILDREN] as $childData) {
+                $child = $this->convertDescendant($childData);
+
+                if ($child !== null) {
+                    $children[] = $child;
+                }
+            }
+        }
+
+        $objectInFolderContainer->setChildren($children);
+
+        $objectInFolderContainer->setExtensions(
+            $this->convertExtension($data, JSONConstants::getObjectInFolderContainerKeys())
+        );
+
+        return $objectInFolderContainer;
     }
 }

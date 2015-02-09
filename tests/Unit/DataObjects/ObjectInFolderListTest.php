@@ -41,7 +41,7 @@ class ObjectInFolderListTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeSame($objects, 'objects', $this->objectInFolderList);
     }
 
-    public function testSetAcesThrowsExceptionIfAGivenAceItemIsNotOfTypeAceInterface()
+    public function testSetObjectsThrowsExceptionIfAGivenObjectIsNotOfTypeObjectInFolderDataInterface()
     {
         $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException');
         $this->objectInFolderList->setObjects(array(new \stdClass()));

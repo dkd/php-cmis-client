@@ -10,16 +10,16 @@ namespace Dkd\PhpCmis\DataObjects;
  * file that was distributed with this source code.
  */
 
-use Dkd\PhpCmis\Data\ObjectInFolderDataInterface;
-use Dkd\PhpCmis\Data\ObjectInFolderListInterface;
+use Dkd\PhpCmis\Data\ObjectDataInterface;
+use Dkd\PhpCmis\Data\ObjectListInterface;
 
 /**
- * Object in folder list implementation.
+ * Object list implementation.
  */
-class ObjectInFolderList extends AbstractExtensionData implements ObjectInFolderListInterface
+class ObjectList extends AbstractExtensionData implements ObjectListInterface
 {
     /**
-     * @var ObjectInFolderDataInterface[]
+     * @var ObjectDataInterface[]
      */
     protected $objects = array();
 
@@ -29,13 +29,12 @@ class ObjectInFolderList extends AbstractExtensionData implements ObjectInFolder
     protected $hasMoreItems = false;
 
     /**
-     * @var integer
+     * @var integer|null
      */
     protected $numItems = null;
 
     /**
-     * Returns the total number of the objects in the folder from repository.
-     * It is not a number of objects in response and could be greater as amount of objects properties.
+     * Returns the total number of the objects in the list.
      *
      * @return integer|null the total number of the objects or null if the repository didn't provide the number
      */
@@ -55,9 +54,9 @@ class ObjectInFolderList extends AbstractExtensionData implements ObjectInFolder
     }
 
     /**
-     * Returns the objects in the folder.
+     * Returns the objects
      *
-     * @return ObjectInFolderDataInterface[] the objects in the folder, not null
+     * @return ObjectDataInterface[] the objects in the list, not null
      */
     public function getObjects()
     {
@@ -65,21 +64,21 @@ class ObjectInFolderList extends AbstractExtensionData implements ObjectInFolder
     }
 
     /**
-     * checks input array for ObjectInFolderDataInterface and sets objects
+     * Sets given list of objects
      *
-     * @param ObjectInFolderDataInterface[] $objects
+     * @param ObjectDataInterface[] $objects
      */
     public function setObjects(array $objects)
     {
         foreach ($objects as $object) {
-            $this->checkType('\\Dkd\\PhpCmis\\Data\\ObjectInFolderDataInterface', $object);
+            $this->checkType('\\Dkd\\PhpCmis\\Data\\ObjectDataInterface', $object);
         }
 
         $this->objects = $objects;
     }
 
     /**
-     * Indicates if there are more objects in the folder.
+     * Indicates if there are more objects in the list.
      *
      * @return boolean|null true if there are more objects,
      * false if there are not more objects, or null if the repository didn't provide this flag

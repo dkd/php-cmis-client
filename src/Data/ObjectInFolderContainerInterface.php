@@ -16,6 +16,13 @@ namespace Dkd\PhpCmis\Data;
 interface ObjectInFolderContainerInterface extends ExtensionDataInterface
 {
     /**
+     * Creates new ObjectInFolderContainerInterface object
+     *
+     * @param ObjectInFolderDataInterface $object
+     */
+    public function __construct(ObjectInFolderDataInterface $object);
+
+    /**
      * Returns the object containers of the next level.
      *
      * @return ObjectInFolderContainerInterface[] the child object, not null
