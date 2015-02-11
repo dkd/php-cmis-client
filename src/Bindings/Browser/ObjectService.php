@@ -204,7 +204,8 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      * @param AclInterface $removeAces a list of ACEs that must be removed from the newly created document object,
      * either using the ACL from folderId if specified, or being ignored if no folderId is specified
      * @param ExtensionDataInterface $extension
-     * @return string
+     * @return string|null Returns the new object id or null if the repository sent an empty
+     *      result (which should not happen)
      */
     public function createFolder(
         $repositoryId,
@@ -215,7 +216,45 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         AclInterface $removeAces = null,
         ExtensionDataInterface $extension = null
     ) {
-        // TODO: Implement createFolder() method.
+        $url = $this->getObjectUrl($repositoryId, $folderId);
+        $url->getQuery()->modify(
+            array(
+                Constants::CONTROL_CMISACTION => Constants::CMISACTION_CREATE_FOLDER,
+                Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
+            )
+        );
+
+        $url->getQuery()->modify($this->convertPropertiesToQueryArray($properties));
+
+        if (!empty($policies)) {
+            $url->getQuery()->modify($this->convertPoliciesToQueryArray($policies));
+        }
+
+        if ($addAces !== null) {
+            $url->getQuery()->modify(
+                $this->convertAclToQueryArray(
+                    $addAces,
+                    Constants::CONTROL_ADD_ACE_PRINCIPAL,
+                    Constants::CONTROL_ADD_ACE_PERMISSION
+                )
+            );
+        }
+
+        if ($removeAces !== null) {
+            $url->getQuery()->modify(
+                $this->convertAclToQueryArray(
+                    $removeAces,
+                    Constants::CONTROL_REMOVE_ACE_PRINCIPAL,
+                    Constants::CONTROL_REMOVE_ACE_PERMISSION
+                )
+            );
+        }
+
+        $responseData = $this->post($url)->json();
+
+        $newObject = $this->getJsonConverter()->convertObject($responseData);
+
+        return ($newObject === null) ? null : $newObject->getId();
     }
 
     /**

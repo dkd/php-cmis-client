@@ -30,6 +30,7 @@ use Dkd\PhpCmis\Exception\CmisProxyAuthenticationException;
 use Dkd\PhpCmis\Exception\CmisRuntimeException;
 use Dkd\PhpCmis\Exception\CmisUnauthorizedException;
 use Dkd\PhpCmis\SessionParameter;
+use Guzzle\Stream\StreamInterface;
 use GuzzleHttp\Exception\RequestException;
 use League\Url\Url;
 
@@ -384,14 +385,14 @@ abstract class AbstractBrowserBindingService
      * Performs a POST on an URL, checks the response code and returns the
      * result.
      *
-     * @param Url $url
-     * @param mixed $content
-     * @param array $headers
+     * @param Url $url Request url
+     * @param resource|string|StreamInterface|array $content Entity body data or an array for POST fields and files
+     * @param array $headers Additional header options
      * @return \GuzzleHttp\Message\Response
      * @throws CmisBaseException an more specific exception of this type could be thrown. For more details see
      * @see AbstractBrowserBindingService::convertStatusCode()
      */
-    protected function post(Url $url, $content, array $headers = array())
+    protected function post(Url $url, $content = array(), array $headers = array())
     {
         $headers['body'] = $content;
 

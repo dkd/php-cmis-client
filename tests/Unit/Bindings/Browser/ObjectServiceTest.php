@@ -171,22 +171,25 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         )->setMethods(array('json'))->getMock();
         $responseMock->expects($this->any())->method('json')->willReturn($responseData);
 
-        $dummyObjectData = new ObjectData();
         $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
             array('convertObject')
         )->getMock();
         $dummyObjectData = $this->getMockBuilder('\\Dkd\\PhpCmis\\ObjectData\\ObjectData')->setMethods(
             array('getId')
         )->getMock();
+
+        /** @var  ObjectData|PHPUnit_Framework_MockObject_MockObject $dummyObjectData */
         $dummyObjectData->expects($this->any())->method('getId')->willReturn('foo-id');
-        $jsonConverterMock->expects($this->once())->method('convertObject')->with($responseData)->willReturn(
+        $jsonConverterMock->expects($this->atLeastOnce())->method('convertObject')->with($responseData)->willReturn(
             $dummyObjectData
         );
 
         $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
             array('getJsonConverter')
         )->getMock();
-        $cmisBindingsHelperMock->expects($this->any())->method('getJsonConverter')->willReturn($jsonConverterMock);
+        $cmisBindingsHelperMock->expects($this->atLeastOnce())->method(
+            'getJsonConverter'
+        )->willReturn($jsonConverterMock);
 
         /** @var ObjectService|PHPUnit_Framework_MockObject_MockObject $objectService */
         $objectService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
@@ -195,11 +198,11 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
             array('getObjectUrl', 'post')
         )->getMock();
 
-        $objectService->expects($this->any())->method('getObjectUrl')->with(
+        $objectService->expects($this->atLeastOnce())->method('getObjectUrl')->with(
             $repositoryId,
             $folderId
         )->willReturn(Url::createFromUrl(self::BROWSER_URL_TEST));
-        $objectService->expects($this->any())->method('post')->with(
+        $objectService->expects($this->atLeastOnce())->method('post')->with(
             $expectedUrl,
             array('content' => $contentStream)
         )->willReturn($responseMock);
@@ -253,7 +256,6 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
                 $properties
             ),
             array(
-                // TODO adjust URL when addAces, removeAces and policies are implemented in createDocument
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
                     . '?propertyId[0]=cmis:name&propertyValue[0]=name&cmisaction=createDocument'
@@ -273,6 +275,143 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
                 'folderId',
                 $stream,
                 VersioningState::cast(VersioningState::MAJOR),
+                array('policyOne', 'policyTwo'),
+                $addAcl,
+                $removeAcl
+            )
+        );
+    }
+
+    /**
+     * @dataProvider createFolderDataProvider
+     * @param string $expectedUrl
+     * @param string $repositoryId
+     * @param PropertiesInterface $properties
+     * @param string $folderId
+     * @param string[] $policies
+     * @param AclInterface $addAces
+     * @param AclInterface $removeAces
+     * @param ExtensionDataInterface $extension
+     */
+    public function testCreateFolderCallsPostFunctionWithParameterizedQuery(
+        $expectedUrl,
+        $repositoryId,
+        PropertiesInterface $properties,
+        $folderId,
+        array $policies = array(),
+        AclInterface $addAces = null,
+        AclInterface $removeAces = null,
+        ExtensionDataInterface $extension = null
+    ) {
+        $responseData = array('foo' => 'bar');
+        $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
+        )->setMethods(array('json'))->getMock();
+        $responseMock->expects($this->any())->method('json')->willReturn($responseData);
+
+        $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
+            array('convertObject')
+        )->getMock();
+
+        /** @var  ObjectData|PHPUnit_Framework_MockObject_MockObject $dummyObjectData */
+        $dummyObjectData = $this->getMockBuilder('\\Dkd\\PhpCmis\\ObjectData\\ObjectData')->setMethods(
+            array('getId')
+        )->getMock();
+        $dummyObjectData->expects($this->any())->method('getId')->willReturn('foo-id');
+        $jsonConverterMock->expects($this->atLeastOnce())->method('convertObject')->with($responseData)->willReturn(
+            $dummyObjectData
+        );
+
+        $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
+            array('getJsonConverter')
+        )->getMock();
+        $cmisBindingsHelperMock->expects($this->atLeastOnce())->method(
+            'getJsonConverter'
+        )->willReturn($jsonConverterMock);
+
+        /** @var ObjectService|PHPUnit_Framework_MockObject_MockObject $objectService */
+        $objectService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
+            array($this->getSessionMock(), $cmisBindingsHelperMock)
+        )->setMethods(
+            array('getObjectUrl', 'post')
+        )->getMock();
+
+        $objectService->expects($this->atLeastOnce())->method('getObjectUrl')->with(
+            $repositoryId,
+            $folderId
+        )->willReturn(Url::createFromUrl(self::BROWSER_URL_TEST));
+        $objectService->expects($this->atLeastOnce())->method('post')->with(
+            $expectedUrl
+        )->willReturn($responseMock);
+
+        $this->assertSame(
+            $dummyObjectData->getId(),
+            $objectService->createFolder(
+                $repositoryId,
+                $properties,
+                $folderId,
+                $policies,
+                $addAces,
+                $removeAces,
+                $extension
+            )
+        );
+    }
+
+    /**
+     * Data provider for createFolder
+     *
+     * @return array
+     */
+    public function createFolderDataProvider()
+    {
+        $property = new PropertyString('cmis:name', 'name');
+        $properties = new Properties();
+        $properties->addProperty($property);
+
+        $principal1 = new Principal('principalId1');
+        $ace1 = new AccessControlEntry($principal1, array('permissionValue1', 'permissionValue2'));
+
+        $principal2 = new Principal('principalId2');
+        $ace2 = new AccessControlEntry($principal2, array('permissionValue3', 'permissionValue4'));
+
+        $addAcl = new AccessControlList(array($ace1, $ace2));
+
+        $principal3 = new Principal('principalId3');
+        $ace3 = new AccessControlEntry($principal3, array('permissionValue5', 'permissionValue6'));
+
+        $principal4 = new Principal('principalId4');
+        $ace4 = new AccessControlEntry($principal4, array('permissionValue7', 'permissionValue8'));
+
+        $removeAcl = new AccessControlList(array($ace3, $ace4));
+
+        return array(
+            array(
+                Url::createFromUrl(
+                    self::BROWSER_URL_TEST
+                    . '?propertyId[0]=cmis:name&propertyValue[0]=name&cmisaction=createFolder&succinct=false'
+                ),
+                'repositoryId',
+                $properties,
+                'parentFolderId'
+            ),
+            array(
+                Url::createFromUrl(
+                    self::BROWSER_URL_TEST
+                    . '?propertyId[0]=cmis:name&propertyValue[0]=name&cmisaction=createFolder'
+                    . '&succinct=false'
+                    . '&policy[0]=policyOne&policy[1]=policyTwo'
+                    . '&addACEPrincipal[0]=principalId1'
+                    . '&addACEPermission[0][0]=permissionValue1&addACEPermission[0][1]=permissionValue2'
+                    . '&addACEPrincipal[1]=principalId2'
+                    . '&addACEPermission[1][0]=permissionValue3&addACEPermission[1][1]=permissionValue4'
+                    . '&removeACEPrincipal[0]=principalId3'
+                    . '&removeACEPermission[0][0]=permissionValue5&removeACEPermission[0][1]=permissionValue6'
+                    . '&removeACEPrincipal[1]=principalId4'
+                    . '&removeACEPermission[1][0]=permissionValue7&removeACEPermission[1][1]=permissionValue8'
+                ),
+                'repositoryId',
+                $properties,
+                'parentFolderId',
                 array('policyOne', 'policyTwo'),
                 $addAcl,
                 $removeAcl
