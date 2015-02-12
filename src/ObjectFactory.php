@@ -21,13 +21,21 @@ use Dkd\PhpCmis\Data\ObjectTypeInterface;
 use Dkd\PhpCmis\Data\PolicyInterface;
 use Dkd\PhpCmis\Data\PropertiesInterface;
 use Dkd\PhpCmis\Data\PropertyDataInterface;
+use Dkd\PhpCmis\Data\PropertyInterface;
 use Dkd\PhpCmis\Data\RenditionDataInterface;
 use Dkd\PhpCmis\Data\RepositoryInfoInterface;
 use Dkd\PhpCmis\Data\SecondaryTypeInterface;
+use Dkd\PhpCmis\DataObjects\Document;
 use Dkd\PhpCmis\DataObjects\DocumentType;
+use Dkd\PhpCmis\DataObjects\Folder;
 use Dkd\PhpCmis\DataObjects\FolderType;
+use Dkd\PhpCmis\DataObjects\Item;
 use Dkd\PhpCmis\DataObjects\ItemType;
+use Dkd\PhpCmis\DataObjects\Policy;
 use Dkd\PhpCmis\DataObjects\PolicyType;
+use Dkd\PhpCmis\DataObjects\Property;
+use Dkd\PhpCmis\DataObjects\PropertyId;
+use Dkd\PhpCmis\DataObjects\Relationship;
 use Dkd\PhpCmis\DataObjects\RelationshipType;
 use Dkd\PhpCmis\DataObjects\SecondaryType;
 use Dkd\PhpCmis\Definitions\DocumentTypeDefinitionInterface;
@@ -38,6 +46,7 @@ use Dkd\PhpCmis\Definitions\PropertyDefinitionInterface;
 use Dkd\PhpCmis\Definitions\RelationshipTypeDefinitionInterface;
 use Dkd\PhpCmis\Definitions\SecondaryTypeDefinitionInterface;
 use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
+use Dkd\PhpCmis\Enum\BaseTypeId;
 use Dkd\PhpCmis\Enum\Cardinality;
 use Dkd\PhpCmis\Enum\Updatability;
 use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
@@ -115,13 +124,33 @@ class ObjectFactory implements ObjectFactoryInterface
     }
 
     /**
+     * Convert given ObjectData to a high level API object
+     *
      * @param ObjectDataInterface $objectData
      * @param OperationContextInterface $context
      * @return CmisObjectInterface
+     * @throws CmisRuntimeException
      */
     public function convertObject(ObjectDataInterface $objectData, OperationContextInterface $context)
     {
-        // TODO: Implement convertObject() method.
+        $type = $this->getTypeFromObjectData($objectData);
+        $baseTypeId = $objectData->getBaseTypeId();
+
+        if ($baseTypeId->equals(BaseTypeId::CMIS_DOCUMENT)) {
+            return new Document($this->session, $type, $context, $objectData);
+        } elseif ($baseTypeId->equals(BaseTypeId::CMIS_FOLDER)) {
+            return new Folder($this->session, $type, $context, $objectData);
+        } elseif ($baseTypeId->equals(BaseTypeId::CMIS_POLICY)) {
+            return new Policy($this->session, $type, $context, $objectData);
+        } elseif ($baseTypeId->equals(BaseTypeId::CMIS_RELATIONSHIP)) {
+            return new Relationship($this->session, $type, $context, $objectData);
+        } elseif ($baseTypeId->equals(BaseTypeId::CMIS_ITEM)) {
+            return new Item($this->session, $type, $context, $objectData);
+        } elseif ($baseTypeId->equals(BaseTypeId::CMIS_SECONDARY)) {
+            throw new CmisRuntimeException('Secondary type is used as object type: ' . $baseTypeId);
+        } else {
+            throw new CmisRuntimeException('Unsupported base type: ' . $baseTypeId);
+        }
     }
 
     /**
@@ -134,6 +163,94 @@ class ObjectFactory implements ObjectFactoryInterface
     }
 
     /**
+     * Convert Properties in Properties instance to a list of PropertyInterface objects
+     *
+     * @param ObjectTypeInterface $objectType
+     * @param SecondaryTypeInterface[] $secondaryTypes
+     * @param PropertiesInterface $properties
+     * @return PropertyInterface[]
+     * @throws CmisInvalidArgumentException
+     */
+    public function convertPropertiesDataToPropertyList(
+        ObjectTypeInterface $objectType,
+        array $secondaryTypes,
+        PropertiesInterface $properties
+    ) {
+        if ($objectType->getPropertyDefinitions() === null) {
+            throw new CmisInvalidArgumentException('Object type has no property definitions!');
+        }
+        if (count($properties->getProperties()) === 0) {
+            throw new CmisInvalidArgumentException('Properties must be set');
+        }
+
+        // Iterate trough properties and convert them to Property objects
+        $result = array();
+        foreach ($properties->getProperties() as $propertyKey => $propertyData) {
+            // find property definition
+            $apiProperty = $this->convertProperty($objectType, $secondaryTypes, $propertyData);
+            $result[$propertyKey] = $apiProperty;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Convert PropertyData into a property API object
+     *
+     * @param ObjectTypeInterface $objectType
+     * @param SecondaryTypeInterface[] $secondaryTypes
+     * @param PropertyDataInterface $propertyData
+     * @return PropertyInterface
+     * @throws CmisRuntimeException
+     */
+    protected function convertProperty(
+        ObjectTypeInterface $objectType,
+        array $secondaryTypes,
+        PropertyDataInterface $propertyData
+    ) {
+        $definition = $objectType->getPropertyDefinition($propertyData->getId());
+
+        // search secondary types
+        if ($definition === null && !empty($secondaryTypes)) {
+            foreach ($secondaryTypes as $secondaryType) {
+                $propertyDefinitions = $secondaryType->getPropertyDefinitions();
+                if (!empty($propertyDefinitions)) {
+                    $definition = $secondaryType->getPropertyDefinition($propertyData->getId());
+                    if ($definition !== null) {
+                        break;
+                    }
+                }
+            }
+        }
+
+        // the type might have changed -> reload type definitions
+        if ($definition === null) {
+            $reloadedObjectType = $this->session->getTypeDefinition($objectType->getId(), false);
+            $definition = $reloadedObjectType->getPropertyDefinition($propertyData->getId());
+
+            if ($definition === null && !empty($secondaryTypes)) {
+                foreach ($secondaryTypes as $secondaryType) {
+                    $reloadedSecondaryType = $this->session->getTypeDefinition($secondaryType->getId(), false);
+                    $propertyDefinitions = $reloadedSecondaryType->getPropertyDefinitions();
+                    if (!empty($propertyDefinitions)) {
+                        $definition = $reloadedSecondaryType->getPropertyDefinition($propertyData->getId());
+                        if ($definition !== null) {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        if ($definition === null) {
+            // property without definition
+            throw new CmisRuntimeException(sprintf('Property "%s" doesn\'t exist!', $propertyData->getId()));
+        }
+
+        return $this->createProperty($definition, $propertyData->getValues());
+    }
+
+    /**
      * Convert properties to their property data objects and put them into a Properties object
      *
      * @param mixed[] $properties
@@ -141,6 +258,7 @@ class ObjectFactory implements ObjectFactoryInterface
      * @param SecondaryTypeInterface[] $secondaryTypes
      * @param Updatability[] $updatabilityFilter
      * @return PropertiesInterface
+     * @throws CmisInvalidArgumentException
      */
     public function convertProperties(
         array $properties,
@@ -182,6 +300,17 @@ class ObjectFactory implements ObjectFactoryInterface
         $propertyList = array();
 
         foreach ($properties as $propertyId => $propertyValue) {
+            $value = $propertyValue;
+
+            if ($value instanceof PropertyInterface) {
+                if ($value->getId() !== $propertyId) {
+                    throw new CmisInvalidArgumentException(
+                        sprintf('Property id mismatch: "%s" != "%s"', $propertyId, $value->getId())
+                    );
+                }
+                $value = ($value->isMultiValued()) ? $value->getValues() : $value->getFirstValue();
+            }
+
             $definition = $type->getPropertyDefinition($propertyId);
 
             if ($definition === null && !empty($allSecondaryTypes)) {
@@ -205,13 +334,13 @@ class ObjectFactory implements ObjectFactoryInterface
                 continue;
             }
 
-            if (is_array($propertyValue)) {
+            if (is_array($value)) {
                 if (!$definition->getCardinality()->equals(Cardinality::MULTI)) {
                     throw new CmisInvalidArgumentException(
                         sprintf('Property "%s" is not a multi value property but multiple values given!', $propertyId)
                     );
                 }
-                $values = $propertyValue;
+                $values = $value;
             } else {
                 if (!$definition->getCardinality()->equals(Cardinality::SINGLE)) {
                     throw new CmisInvalidArgumentException(
@@ -219,7 +348,7 @@ class ObjectFactory implements ObjectFactoryInterface
                     );
                 }
                 $values = array();
-                $values[] = $propertyValue;
+                $values[] = $value;
             }
 
             $propertyList[] = $this->getBindingsObjectFactory()->createPropertyData($definition, $values);
@@ -363,22 +492,36 @@ class ObjectFactory implements ObjectFactoryInterface
     }
 
     /**
+     * Create a public API Property that contains the property definition and values.
+     *
      * @param PropertyDefinitionInterface $type
      * @param array $values
-     * @return PropertyInterface
+     * @return Property
      */
     public function createProperty(PropertyDefinitionInterface $type, array $values)
     {
-        // TODO: Implement createProperty() method.
+        return new Property($type, $values);
     }
 
     /**
+     * Try to determined what object type the given objectData belongs to and return that type.
+     *
      * @param ObjectDataInterface $objectData
-     * @return ObjectTypeInterface
+     * @return ObjectTypeInterface|null The object type or <code>null</code> if type could not be determined
      */
     public function getTypeFromObjectData(ObjectDataInterface $objectData)
     {
-        // TODO: Implement getTypeFromObjectData() method.
+        if ($objectData->getProperties() === null || count($objectData->getProperties()->getProperties()) === 0) {
+            return null;
+        }
+
+        $typeProperty = $objectData->getProperties()->getProperties()[PropertyIds::OBJECT_TYPE_ID];
+
+        if (!$typeProperty instanceof PropertyId) {
+            return null;
+        }
+
+        return $this->session->getTypeDefinition($typeProperty->getFirstValue());
     }
 
     /**

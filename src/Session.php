@@ -667,12 +667,21 @@ class Session implements SessionInterface
      * Gets the definition of a type.
      *
      * @param string $typeId the ID of the type
+     * @param boolean $useCache specifies if the type definition should be first looked up in the type definition
+     *     cache, if it is set to <code>false</code> or the type definition is not in the cache, the type definition is
+     *     loaded from the repository
      * @return ObjectTypeInterface the type definition
      * @throws CmisObjectNotFoundException - if a type with the given type ID doesn't exist
      */
-    public function getTypeDefinition($typeId)
+    public function getTypeDefinition($typeId, $useCache = true)
     {
-        // TODO: Implement getTypeDefinition() method.
+        // TODO: Implement cache!
+        $typeDefinition = $this->getBinding()->getRepositoryService()->getTypeDefinition(
+            $this->getRepositoryId(),
+            $typeId
+        );
+
+        return $this->convertTypeDefinition($typeDefinition);
     }
 
     /**

@@ -20,6 +20,7 @@ use Dkd\PhpCmis\Data\ObjectDataInterface;
 use Dkd\PhpCmis\Data\ObjectIdInterface;
 use Dkd\PhpCmis\Data\ObjectTypeInterface;
 use Dkd\PhpCmis\Data\PolicyInterface;
+use Dkd\PhpCmis\Data\PropertyInterface;
 use Dkd\PhpCmis\Data\RelationshipInterface;
 use Dkd\PhpCmis\Data\SecondaryTypeInterface;
 use Dkd\PhpCmis\Definitions\PropertyDefinitionInterface;
@@ -34,7 +35,6 @@ use Dkd\PhpCmis\Exception\IllegalStateException;
 use Dkd\PhpCmis\ObjectFactoryInterface;
 use Dkd\PhpCmis\OperationContextInterface;
 use Dkd\PhpCmis\PropertyIds;
-use Dkd\PhpCmis\PropertyInterface;
 use Dkd\PhpCmis\RenditionInterface;
 use Dkd\PhpCmis\SessionInterface;
 
@@ -148,10 +148,10 @@ abstract class AbstractCmisObject implements CmisObjectInterface
                     }
                 }
 
-                $this->properties = $objectFactory->convertProperties(
-                    $properties,
+                $this->properties = $objectFactory->convertPropertiesDataToPropertyList(
                     $objectType,
-                    $secondaryTypes
+                    $secondaryTypes,
+                    $objectData->getProperties()
                 );
                 $this->extensions[(string) ExtensionLevel::cast(
                     ExtensionLevel::PROPERTIES

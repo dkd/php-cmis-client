@@ -20,6 +20,7 @@ use Dkd\PhpCmis\Data\ObjectTypeInterface;
 use Dkd\PhpCmis\Data\PolicyInterface;
 use Dkd\PhpCmis\Data\PropertiesInterface;
 use Dkd\PhpCmis\Data\PropertyDataInterface;
+use Dkd\PhpCmis\Data\PropertyInterface;
 use Dkd\PhpCmis\Data\RenditionDataInterface;
 use Dkd\PhpCmis\Data\RepositoryInfoInterface;
 use Dkd\PhpCmis\Data\SecondaryTypeInterface;
@@ -74,6 +75,20 @@ interface ObjectFactoryInterface
      * @return string[]
      */
     public function convertPolicies($policies);
+
+    /**
+     * Convert Properties in Properties instance to a list of PropertyInterface objects
+     *
+     * @param ObjectTypeInterface $objectType
+     * @param SecondaryTypeInterface[] $secondaryTypes
+     * @param PropertiesInterface $properties
+     * @return PropertyInterface[]
+     */
+    public function convertPropertiesDataToPropertyList(
+        ObjectTypeInterface $objectType,
+        array $secondaryTypes,
+        PropertiesInterface $properties
+    );
 
     /**
      * Convert properties to their property data objects and put them into a Properties object
@@ -156,7 +171,7 @@ interface ObjectFactoryInterface
 
     /**
      * @param ObjectDataInterface $objectData
-     * @return ObjectTypeInterface
+     * @return ObjectTypeInterface|null
      */
     public function getTypeFromObjectData(ObjectDataInterface $objectData);
 
