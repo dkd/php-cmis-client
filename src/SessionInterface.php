@@ -19,6 +19,8 @@ use Dkd\PhpCmis\Data\DocumentInterface;
 use Dkd\PhpCmis\Data\FolderInterface;
 use Dkd\PhpCmis\Data\ObjectIdInterface;
 use Dkd\PhpCmis\Data\ObjectTypeInterface;
+use Dkd\PhpCmis\Data\PolicyInterface;
+use Dkd\PhpCmis\Data\RelationshipInterface;
 use Dkd\PhpCmis\Data\RepositoryInfoInterface;
 use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
 use Dkd\PhpCmis\Enum\AclPropagation;
@@ -52,13 +54,11 @@ interface SessionInterface
      * Applies ACL changes to an object and dependent objects. Only direct ACEs can be added and removed.
      *
      * @param ObjectIdInterface $objectId the ID the object
-     * @param AceInterface[] $addAces list of ACEs to be added or <code>null</code> if no ACEs should be added
+     * @param AceInterface[] $addAces of ACEs to be added or <code>null</code> if no ACEs should be added
      * @param AceInterface[] $removeAces list of ACEs to be removed or <code>null</code> if no ACEs should be removed
      * @param AclPropagation $aclPropagation value that defines the propagation of the ACE changes;
-     * <code>null</code> is equal to AclPropagation.REPOSITORYDETERMINED
+     *      <code>null</code> is equal to AclPropagation.REPOSITORYDETERMINED
      * @return AclInterface the new ACL of the object
-     *
-     * @api cmis 1.0
      */
     public function applyAcl(
         ObjectIdInterface $objectId,
@@ -106,13 +106,19 @@ interface SessionInterface
      * @param ObjectIdInterface $folderId
      * @param StreamInterface $contentStream
      * @param VersioningState $versioningState
+     * @param PolicyInterface[] $policies
+     * @param AceInterface[] $addAces
+     * @param AceInterface[] $removeAces
      * @return ObjectIdInterface the object ID of the new document
      */
     public function createDocument(
         array $properties,
         ObjectIdInterface $folderId,
-        StreamInterface $contentStream,
-        VersioningState $versioningState
+        StreamInterface $contentStream = null,
+        VersioningState $versioningState = null,
+        array $policies = array(),
+        array $addAces = array(),
+        array $removeAces = array()
     );
 
     /**
@@ -185,19 +191,19 @@ interface SessionInterface
      * Creates a new operation context object with the given properties.
      *
      * @param string[] $filter the property filter, a comma separated string of query names or "*" for all
-     * properties or <code>null</code> to let the repository determine a set of properties
+     *      properties or <code>null</code> to let the repository determine a set of properties
      * @param boolean $includeAcls indicates whether ACLs should be included or not
      * @param boolean $includeAllowableActions indicates whether Allowable Actions should be included or not
      * @param boolean $includePolicies indicates whether policies should be included or not
      * @param IncludeRelationships $includeRelationships enum that indicates if and which
-     * relationships should be includes
+     *      relationships should be includes
      * @param string[] $renditionFilter the rendition filter or <code>null</code> for no renditions
      * @param boolean $includePathSegments indicates whether path segment or the relative path segment should
-     * be included or not
+     *      be included or not
      * @param string $orderBy the object order, a comma-separated list of query names and the ascending
      * modifier "ASC" or the descending modifier "DESC" for each query name
      * @param boolean $cacheEnabled flag that indicates if the object cache should be used
-     * @param integer $maxItemsPerPage the max items per batch
+     * @param integer $maxItemsPerPage the max items per page/batch
      * @return OperationContextInterface the newly created operation context object
      */
     public function createOperationContext(
@@ -238,10 +244,10 @@ interface SessionInterface
      * `SELECT d.cmis:name,s.SecondaryStringProp FROM cmis:document AS d JOIN MySecondaryType AS s ON
      * d.cmis:objectId=s.cmis:objectId WHERE d.cmis:name LIKE ? ORDER BY d.cmis:name,s.SecondaryIntegerProp`
      *
-     * @param string[] $selectPropertyIds the property IDs in the SELECT statement, if <code>null</code>
-     * all properties are selected
+     * @param string[] $selectPropertyIds the property IDs in the SELECT statement,
+     *      if <code>null</code> all properties are selected
      * @param string[] $fromTypes a Map of type aliases (keys) and type IDs (values), the Map must contain
-     * exactly one primary type and zero or more secondary types
+     *      exactly one primary type and zero or more secondary types
      * @param string $whereClause an optional WHERE clause with placeholders ('?'), see QueryStatement for details
      * @param string[] $orderByPropertyIds an optional list of properties IDs for the ORDER BY clause
      * @return QueryStatementInterface a new query statement object
@@ -280,7 +286,7 @@ interface SessionInterface
      *
      * @param ObjectIdInterface $objectId the ID of the object
      * @param bool $allVersions if this object is a document this parameter defines
-     * if only this version or all versions should be deleted
+     *      if only this version or all versions should be deleted
      * @return void
      */
     public function delete(ObjectIdInterface $objectId, $allVersions = true);
@@ -297,9 +303,9 @@ interface SessionInterface
      * Fetches the ACL of an object from the repository.
      *
      * @param ObjectIdInterface $objectId the ID the object
-     * @param boolean $onlyBasicPermissions if true the repository should express the ACL only with the basic
-     * permissions defined in the CMIS specification; if false the repository can express the ACL with
-     * basic and repository specific permissions
+     * @param boolean $onlyBasicPermissions if <code>true</code> the repository should express the ACL only with the
+     *      basic permissions defined in the CMIS specification; if <code>false</code> the repository can express the
+     *      ACL with basic and repository specific permissions
      * @return AclInterface the ACL of the object
      */
     public function getAcl(ObjectIdInterface $objectId, $onlyBasicPermissions);
@@ -307,7 +313,7 @@ interface SessionInterface
     /**
      * Returns the underlying binding object.
      *
-     * @return CmisBindingInterface the binding object, not null
+     * @return CmisBindingInterface the binding object
      */
     public function getBinding();
 
@@ -323,7 +329,7 @@ interface SessionInterface
      * Returns the content changes.
      *
      * @param string $changeLogToken the change log token to start from or <code>null</code> to start from
-     * the first available event in the repository
+     *      the first available event in the repository
      * @param boolean $includeProperties indicates whether changed properties should be included in the result or not
      * @param integer $maxNumItems maximum numbers of events
      * @param OperationContextInterface $context the OperationContext
@@ -341,16 +347,17 @@ interface SessionInterface
      *
      * @param ObjectIdInterface $docId the ID of the document
      * @param string $streamId the stream ID
-     * @param integer $offset the offset of the stream or null to read the stream from the beginning
+     * @param integer $offset the offset of the stream or <code>null</code> to read the stream from the beginning
      * @param integer $length the maximum length of the stream or <code>null</code> to read to the end of the stream
-     * @return StreamInterface|null the content stream or <code>null</code> if the document has no content stream
+     * @return StreamInterface|null the content stream or <code>null</code> if the
+     *      document has no content stream
      */
     public function getContentStream(ObjectIdInterface $docId, $streamId = null, $offset = null, $length = null);
 
     /**
      * Returns the current default operation parameters for filtering, paging and caching.
      *
-     * @return OperationContextInterface the default operation context, not null
+     * @return OperationContextInterface the default operation context
      */
     public function getDefaultContext();
 
@@ -368,8 +375,8 @@ interface SessionInterface
      * Returns the latest version in a version series.
      *
      * @param ObjectIdInterface $objectId the document ID of an arbitrary version in the version series
-     * @param boolean $major if true the latest major version will be returned,
-     * otherwise the very last version will be returned
+     * @param boolean $major if <code>true</code> the latest major version will be returned,
+     *      otherwise the very last version will be returned
      * @param OperationContextInterface $context the OperationContext to use
      * @return DocumentInterface the latest document version
      */
@@ -411,7 +418,7 @@ interface SessionInterface
     /**
      * Gets a factory object that provides methods to create the objects used by this API.
      *
-     * @return ObjectFactoryInterface the repository info, not null
+     * @return ObjectFactoryInterface the repository info
      */
     public function getObjectFactory();
 
@@ -436,7 +443,7 @@ interface SessionInterface
     /**
      * Returns the repository info of the repository associated with this session.
      *
-     * @return RepositoryInfoInterface the repository info, not null
+     * @return RepositoryInfoInterface the repository info
      */
     public function getRepositoryInfo();
 
@@ -444,7 +451,7 @@ interface SessionInterface
      * Gets the root folder of the repository with the given OperationContext.
      *
      * @param OperationContextInterface $context
-     * @return FolderInterface the root folder object, not null
+     * @return FolderInterface the root folder object
      */
     public function getRootFolder(OperationContextInterface $context = null);
 
@@ -453,7 +460,7 @@ interface SessionInterface
      *
      * @param string $typeId the type ID or <code>null</code> to request the base types
      * @param boolean $includePropertyDefinitions indicates whether the property definitions should be included or not
-     * @return ObjectTypeInterface[] the type iterator, not null
+     * @return ObjectTypeInterface[] the type iterator
      * @throws CmisObjectNotFoundException - if a type with the given type ID doesn't exist
      */
     public function getTypeChildren($typeId, $includePropertyDefinitions);
@@ -498,8 +505,8 @@ interface SessionInterface
      *
      * @param string $typeId the ID of the object type
      * @param string $where the WHERE part of the query
-     * @param boolean $searchAllVersions specifies whether non-latest document versions should be
-     * included or not, true searches all document versions, false only searches latest document versions
+     * @param boolean $searchAllVersions specifies whether non-latest document versions should be included or not,
+     *      <code>true</code> searches all document versions, <code>false</code> only searches latest document versions
      * @param OperationContextInterface $context the operation context to use
      * @return CmisObjectInterface[]
      */
@@ -537,7 +544,7 @@ interface SessionInterface
      * Sets the current session parameters for filtering, paging and caching.
      *
      * @param OperationContextInterface $context the OperationContext to be used for the session;
-     * if null, a default context is used
+     *      if null, a default context is used
      * @return void
      */
     public function setDefaultContext(OperationContextInterface $context);

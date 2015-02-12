@@ -34,8 +34,6 @@ class SessionFactory implements SessionFactoryInterface
         Cache $typeDefinitionCache = null
     ) {
         $session = new Session($parameters, $objectFactory, $cache, $typeDefinitionCache);
-        $session->connect();
-
         return $session;
     }
 

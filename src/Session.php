@@ -11,6 +11,7 @@ namespace Dkd\PhpCmis;
  */
 
 use Dkd\PhpCmis\Bindings\CmisBindingInterface;
+use Dkd\PhpCmis\Bindings\CmisBindingsHelper;
 use Dkd\PhpCmis\CmisObject\CmisObjectInterface;
 use Dkd\PhpCmis\Data\AceInterface;
 use Dkd\PhpCmis\Data\AclInterface;
@@ -19,16 +20,21 @@ use Dkd\PhpCmis\Data\DocumentInterface;
 use Dkd\PhpCmis\Data\FolderInterface;
 use Dkd\PhpCmis\Data\ObjectIdInterface;
 use Dkd\PhpCmis\Data\ObjectTypeInterface;
-use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
-use GuzzleHttp\Stream\StreamInterface;
+use Dkd\PhpCmis\Data\PolicyInterface;
+use Dkd\PhpCmis\Data\RelationshipInterface;
 use Dkd\PhpCmis\Data\RepositoryInfoInterface;
+use Dkd\PhpCmis\DataObjects\ObjectId;
+use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
 use Dkd\PhpCmis\Enum\AclPropagation;
 use Dkd\PhpCmis\Enum\IncludeRelationships;
 use Dkd\PhpCmis\Enum\RelationshipDirection;
 use Dkd\PhpCmis\Enum\VersioningState;
+use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
 use Dkd\PhpCmis\Exception\CmisObjectNotFoundException;
+use Dkd\PhpCmis\Exception\IllegalStateException;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\Cache;
+use GuzzleHttp\Stream\StreamInterface;
 
 /**
  * Class Session
@@ -38,14 +44,34 @@ use Doctrine\Common\Cache\Cache;
 class Session implements SessionInterface
 {
     /**
+     * @var CmisBindingInterface
+     */
+    protected $binding;
+
+    /**
      * @var Cache
      */
     protected $cache;
 
     /**
-     * @var ObjectFactoryInterface;
+     * @var OperationContextInterface
+     */
+    private $defaultContext;
+
+    /**
+     * @var CmisBindingsHelper
+     */
+    protected $cmisBindingHelper;
+
+    /**
+     * @var ObjectFactoryInterface
      */
     private $objectFactory;
+
+    /**
+     * @var RepositoryInfoInterface
+     */
+    protected $repositoryInfo;
 
     /**
      * @var array
@@ -58,26 +84,54 @@ class Session implements SessionInterface
     protected $typeDefinitionCache;
 
     /**
+     * @var Cache
+     */
+    protected $objectTypeCache;
+
+    /**
      * @param array $parameters
      * @param ObjectFactoryInterface $objectFactory
      * @param Cache $cache
      * @param Cache $typeDefinitionCache
-     * @throws \InvalidArgumentException
+     * @param Cache $objectTypeCache
+     * @param CmisBindingsHelper $cmisBindingHelper
+     * @throws CmisInvalidArgumentException
+     * @throws IllegalStateException
      */
     public function __construct(
         array $parameters,
         ObjectFactoryInterface $objectFactory = null,
         Cache $cache = null,
-        Cache $typeDefinitionCache = null
+        Cache $typeDefinitionCache = null,
+        Cache $objectTypeCache = null,
+        CmisBindingsHelper $cmisBindingHelper = null
     ) {
-        if (!count($parameters)) {
-            throw new \InvalidArgumentException('No parameters provided!', 1408115280);
+        if (empty($parameters)) {
+            throw new CmisInvalidArgumentException('No parameters provided!', 1408115280);
         }
 
         $this->parameters = $parameters;
         $this->objectFactory = $objectFactory === null ? $this->createObjectFactory() : $objectFactory;
         $this->cache = $cache === null ? $this->createCache() : $cache;
-        $this->typeDefinitionCache = $typeDefinitionCache;
+        $this->typeDefinitionCache = $typeDefinitionCache === null ? $this->createCache() : $typeDefinitionCache;
+        $this->objectTypeCache = $objectTypeCache === null ? $this->createCache() : $objectTypeCache;
+        $this->cmisBindingHelper = $cmisBindingHelper === null ? new CmisBindingsHelper() : $cmisBindingHelper;
+
+        $this->defaultContext = new OperationContext();
+        $this->defaultContext->setCacheEnabled(true);
+
+        $this->binding = $this->getCmisBindingHelper()->createBinding(
+            $this->parameters,
+            $this->typeDefinitionCache
+        );
+
+        if (!isset($this->parameters[SessionParameter::REPOSITORY_ID])) {
+            throw new IllegalStateException('Repository ID is not set!');
+        }
+
+        $this->repositoryInfo = $this->getBinding()->getRepositoryService()->getRepositoryInfo(
+            $this->parameters[SessionParameter::REPOSITORY_ID]
+        );
     }
 
     /**
@@ -85,8 +139,7 @@ class Session implements SessionInterface
      * of ObjectFactory.
      *
      * @return ObjectFactoryInterface
-     *
-     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
      */
     protected function createObjectFactory()
     {
@@ -105,7 +158,7 @@ class Session implements SessionInterface
 
             return $objectFactoryClass;
         } catch (\Exception $exception) {
-            throw new \InvalidArgumentException(
+            throw new \RuntimeException(
                 'Unable to create object factory: ' . $exception,
                 1408354120
             );
@@ -128,7 +181,6 @@ class Session implements SessionInterface
      * If no session parameter SessionParameter::CACHE_CLASS is defined, the default Cache implementation will be used.
      *
      * @return Cache
-     *
      * @throws \InvalidArgumentException
      */
     protected function createCache()
@@ -141,12 +193,12 @@ class Session implements SessionInterface
             }
 
             if (!($cache instanceof Cache)) {
-                throw new \RuntimeException('Class does not implement \Doctrine\Common\Cache\Cache!', 1408354124);
+                throw new \RuntimeException('Class does not implement \\Doctrine\\Common\\Cache\\Cache!', 1408354124);
             }
 
             return $cache;
         } catch (\Exception $exception) {
-            throw new \InvalidArgumentException(
+            throw new CmisInvalidArgumentException(
                 'Unable to create cache: ' . $exception,
                 1408354123
             );
@@ -165,6 +217,8 @@ class Session implements SessionInterface
     }
 
     /**
+     * Get the cache instance
+     *
      * @return Cache
      */
     public function getCache()
@@ -176,10 +230,10 @@ class Session implements SessionInterface
      * Applies ACL changes to an object and dependent objects. Only direct ACEs can be added and removed.
      *
      * @param ObjectIdInterface $objectId the ID the object
-     * @param AceInterface[] $addAces of ACEs to be added or null if no ACEs should be added
-     * @param AceInterface[] $removeAces list of ACEs to be removed or null if no ACEs should be removed
+     * @param AceInterface[] $addAces of ACEs to be added or <code>null</code> if no ACEs should be added
+     * @param AceInterface[] $removeAces list of ACEs to be removed or <code>null</code> if no ACEs should be removed
      * @param AclPropagation $aclPropagation value that defines the propagation of the ACE changes;
-     * null is equal to AclPropagation.REPOSITORYDETERMINED
+     *      <code>null</code> is equal to AclPropagation.REPOSITORYDETERMINED
      * @return AclInterface the new ACL of the object
      */
     public function applyAcl(
@@ -238,15 +292,38 @@ class Session implements SessionInterface
      * @param ObjectIdInterface $folderId
      * @param StreamInterface $contentStream
      * @param VersioningState $versioningState
-     * @return ObjectIdInterface the object ID of the new document
+     * @param PolicyInterface[] $policies
+     * @param AceInterface[] $addAces
+     * @param AceInterface[] $removeAces
+     * @return ObjectIdInterface
+     * @throws CmisInvalidArgumentException Throws exception if given property list is empty
      */
     public function createDocument(
         array $properties,
         ObjectIdInterface $folderId,
-        StreamInterface $contentStream,
-        VersioningState $versioningState
+        StreamInterface $contentStream = null,
+        VersioningState $versioningState = null,
+        array $policies = array(),
+        array $addAces = array(),
+        array $removeAces = array()
     ) {
-        // TODO: Implement createDocument() method.
+        if (empty($properties)) {
+            throw new CmisInvalidArgumentException('Properties must not be empty!');
+        }
+
+        $object = $this->getBinding()->getObjectService()->createDocument(
+            $this->getRepositoryId(),
+            $this->getObjectFactory()->convertProperties($properties),
+            $folderId,
+            $contentStream,
+            $versioningState,
+            $policies,
+            $this->getObjectFactory()->convertAces($addAces),
+            $this->getObjectFactory()->convertAces($removeAces),
+            null
+        );
+
+        return $object;
     }
 
     /**
@@ -321,22 +398,22 @@ class Session implements SessionInterface
      */
     public function createObjectId($id)
     {
-        // TODO: Implement createObjectId() method.
+        return new ObjectId($id);
     }
 
     /**
      * Creates a new operation context object with the given properties.
      *
      * @param string[] $filter the property filter, a comma separated string of query names or "*" for all
-     * properties or null to let the repository determine a set of properties
+     *      properties or <code>null</code> to let the repository determine a set of properties
      * @param boolean $includeAcls indicates whether ACLs should be included or not
      * @param boolean $includeAllowableActions indicates whether Allowable Actions should be included or not
      * @param boolean $includePolicies indicates whether policies should be included or not
      * @param IncludeRelationships $includeRelationships enum that indicates if and which
-     * relationships should be includes
-     * @param string[] $renditionFilter the rendition filter or null for no renditions
+     *      relationships should be includes
+     * @param string[] $renditionFilter the rendition filter or <code>null</code> for no renditions
      * @param boolean $includePathSegments indicates whether path segment or the relative path segment should
-     * be included or not
+     *      be included or not
      * @param string $orderBy the object order, a comma-separated list of query names and the ascending
      * modifier "ASC" or the descending modifier "DESC" for each query name
      * @param boolean $cacheEnabled flag that indicates if the object cache should be used
@@ -385,9 +462,10 @@ class Session implements SessionInterface
      * `SELECT d.cmis:name,s.SecondaryStringProp FROM cmis:document AS d JOIN MySecondaryType AS s ON
      * d.cmis:objectId=s.cmis:objectId WHERE d.cmis:name LIKE ? ORDER BY d.cmis:name,s.SecondaryIntegerProp`
      *
-     * @param string[] $selectPropertyIds the property IDs in the SELECT statement, if null all properties are selected
+     * @param string[] $selectPropertyIds the property IDs in the SELECT statement,
+     *      if <code>null</code> all properties are selected
      * @param string[] $fromTypes a Map of type aliases (keys) and type IDs (values), the Map must contain
-     * exactly one primary type and zero or more secondary types
+     *      exactly one primary type and zero or more secondary types
      * @param string $whereClause an optional WHERE clause with placeholders ('?'), see QueryStatement for details
      * @param string[] $orderByPropertyIds an optional list of properties IDs for the ORDER BY clause
      * @return QueryStatementInterface a new query statement object
@@ -433,7 +511,7 @@ class Session implements SessionInterface
      *
      * @param ObjectIdInterface $objectId the ID of the object
      * @param bool $allVersions if this object is a document this parameter defines
-     * if only this version or all versions should be deleted
+     *      if only this version or all versions should be deleted
      * @return void
      */
     public function delete(ObjectIdInterface $objectId, $allVersions = true)
@@ -456,9 +534,9 @@ class Session implements SessionInterface
      * Fetches the ACL of an object from the repository.
      *
      * @param ObjectIdInterface $objectId the ID the object
-     * @param boolean $onlyBasicPermissions if true the repository should express the ACL only with the basic
-     * permissions defined in the CMIS specification; if false the repository can express the ACL with
-     * basic and repository specific permissions
+     * @param boolean $onlyBasicPermissions if <code>true</code> the repository should express the ACL only with the
+     *      basic permissions defined in the CMIS specification; if <code>false</code> the repository can express the
+     *      ACL with basic and repository specific permissions
      * @return AclInterface the ACL of the object
      */
     public function getAcl(ObjectIdInterface $objectId, $onlyBasicPermissions)
@@ -469,11 +547,11 @@ class Session implements SessionInterface
     /**
      * Returns the underlying binding object.
      *
-     * @return CmisBindingInterface the binding object, not null
+     * @return CmisBindingInterface the binding object
      */
     public function getBinding()
     {
-        // TODO: Implement getBinding() method.
+        return $this->binding;
     }
 
     /**
@@ -488,10 +566,18 @@ class Session implements SessionInterface
     }
 
     /**
+     * @return CmisBindingsHelper
+     */
+    protected function getCmisBindingHelper()
+    {
+        return $this->cmisBindingHelper;
+    }
+
+    /**
      * Returns the content changes.
      *
-     * @param string $changeLogToken the change log token to start from or null to start from
-     * the first available event in the repository
+     * @param string $changeLogToken the change log token to start from or <code>null</code> to start from
+     *      the first available event in the repository
      * @param boolean $includeProperties indicates whether changed properties should be included in the result or not
      * @param integer $maxNumItems maximum numbers of events
      * @param OperationContextInterface $context the OperationContext
@@ -511,10 +597,10 @@ class Session implements SessionInterface
      *
      * @param ObjectIdInterface $docId the ID of the document
      * @param string $streamId the stream ID
-     * @param int $offset the offset of the stream or null to read the stream from the beginning
-     * @param int $length the maximum length of the stream or null to read to the end of the stream
-     * @return StreamInterface|null the content stream or null if the
-     * document has no content stream
+     * @param integer $offset the offset of the stream or <code>null</code> to read the stream from the beginning
+     * @param integer $length the maximum length of the stream or <code>null</code> to read to the end of the stream
+     * @return StreamInterface|null the content stream or <code>null</code> if the
+     *      document has no content stream
      */
     public function getContentStream(ObjectIdInterface $docId, $streamId = null, $offset = null, $length = null)
     {
@@ -524,7 +610,7 @@ class Session implements SessionInterface
     /**
      * Returns the current default operation parameters for filtering, paging and caching.
      *
-     * @return OperationContextInterface the default operation context, not null
+     * @return OperationContextInterface the default operation context
      */
     public function getDefaultContext()
     {
@@ -537,7 +623,7 @@ class Session implements SessionInterface
      * In contrast to the repository info, this change log token is *not cached*.
      * This method requests the token from the repository every single time it is called.
      *
-     * @return string|null the latest change log token or null if the repository doesn't provide one
+     * @return string|null the latest change log token or <code>null</code> if the repository doesn't provide one
      */
     public function getLatestChangeLogToken()
     {
@@ -548,8 +634,8 @@ class Session implements SessionInterface
      * Returns the latest version in a version series.
      *
      * @param ObjectIdInterface $objectId the document ID of an arbitrary version in the version series
-     * @param boolean $major if true the latest major version will be returned,
-     * otherwise the very last version will be returned
+     * @param boolean $major if <code>true</code> the latest major version will be returned,
+     *      otherwise the very last version will be returned
      * @param OperationContextInterface $context the OperationContext to use
      * @return DocumentInterface the latest document version
      */
@@ -573,13 +659,31 @@ class Session implements SessionInterface
 
     /**
      * @param ObjectIdInterface $objectId the object ID
-     * @param OperationContextInterface $context the OperationContext to use
+     * @param OperationContextInterface|null $context the OperationContext to use
      * @return CmisObjectInterface the requested object
      * @throws CmisObjectNotFoundException - if an object with the given ID doesn't exist
      */
     public function getObject(ObjectIdInterface $objectId, OperationContextInterface $context = null)
     {
-        // TODO: Implement getObject() method.
+        if ($context === null) {
+            $context = $this->getDefaultContext();
+        }
+
+        // TODO ADD CACHE
+
+        $objectData = $this->getBinding()->getObjectService()->getObject(
+            $this->getRepositoryInfo()->getId(),
+            $objectId,
+            $context->getQueryFilterString(),
+            $context->isIncludeAllowableActions(),
+            $context->getIncludeRelationships(),
+            $context->getRenditionFilterString(),
+            $context->isIncludePolicies(),
+            $context->isIncludeAcls(),
+            null
+        );
+
+        return $this->getObjectFactory()->convertObject($objectData, $context);
     }
 
     /**
@@ -602,7 +706,7 @@ class Session implements SessionInterface
     /**
      * Gets a factory object that provides methods to create the objects used by this API.
      *
-     * @return ObjectFactoryInterface the repository info, not null
+     * @return ObjectFactoryInterface the repository info
      */
     public function getObjectFactory()
     {
@@ -632,18 +736,28 @@ class Session implements SessionInterface
     /**
      * Returns the repository info of the repository associated with this session.
      *
-     * @return RepositoryInfoInterface the repository info, not null
+     * @return RepositoryInfoInterface the repository info
      */
     public function getRepositoryInfo()
     {
-        // TODO: Implement getRepositoryInfo() method.
+        return $this->repositoryInfo;
+    }
+
+    /**
+     * Returns the repository id.
+     *
+     * @return string the repository id
+     */
+    public function getRepositoryId()
+    {
+        return $this->getRepositoryInfo()->getId();
     }
 
     /**
      * Gets the root folder of the repository with the given OperationContext.
      *
      * @param OperationContextInterface $context
-     * @return FolderInterface the root folder object, not null
+     * @return FolderInterface the root folder object
      */
     public function getRootFolder(OperationContextInterface $context = null)
     {
@@ -653,9 +767,9 @@ class Session implements SessionInterface
     /**
      * Gets the type children of a type.
      *
-     * @param string $typeId the type ID or null to request the base types
+     * @param string $typeId the type ID or <code>null</code> to request the base types
      * @param boolean $includePropertyDefinitions indicates whether the property definitions should be included or not
-     * @return ObjectTypeInterface[] the type iterator, not null
+     * @return ObjectTypeInterface[] the type iterator
      * @throws CmisObjectNotFoundException - if a type with the given type ID doesn't exist
      */
     public function getTypeChildren($typeId, $includePropertyDefinitions)
@@ -687,7 +801,7 @@ class Session implements SessionInterface
     /**
      * Gets the type descendants of a type.
      *
-     * @param string $typeId the type ID or null to request the base types
+     * @param string $typeId the type ID or <code>null</code> to request the base types
      * @param integer $depth indicates whether the property definitions should be included or not
      * @param boolean $includePropertyDefinitions the tree depth, must be greater than 0 or -1 for infinite depth
      * @return TreeInterface A tree that contains ObjectTypeInterface objects
@@ -704,7 +818,7 @@ class Session implements SessionInterface
      *
      * @param string $statement the query statement (CMIS query language)
      * @param boolean $searchAllVersions specifies whether non-latest document versions should be included or not,
-     * true searches all document versions, false only searches latest document versions
+     *      <code>true</code> searches all document versions, <code>false</code> only searches latest document versions
      * @param OperationContextInterface $context the operation context to use
      * @return QueryResultInterface[]
      */
@@ -718,8 +832,8 @@ class Session implements SessionInterface
      *
      * @param string $typeId the ID of the object type
      * @param string $where the WHERE part of the query
-     * @param boolean $searchAllVersions specifies whether non-latest document versions should be
-     * included or not, true searches all document versions, false only searches latest document versions
+     * @param boolean $searchAllVersions specifies whether non-latest document versions should be included or not,
+     *      <code>true</code> searches all document versions, <code>false</code> only searches latest document versions
      * @param OperationContextInterface $context the operation context to use
      * @return CmisObjectInterface[]
      */
@@ -769,12 +883,12 @@ class Session implements SessionInterface
      * Sets the current session parameters for filtering, paging and caching.
      *
      * @param OperationContextInterface $context the OperationContext to be used for the session;
-     * if null, a default context is used
+     *      if null, a default context is used
      * @return void
      */
     public function setDefaultContext(OperationContextInterface $context)
     {
-        // TODO: Implement setDefaultContext() method.
+        $this->defaultContext = $context;
     }
 
     /**
@@ -786,5 +900,19 @@ class Session implements SessionInterface
     public function updateType(TypeDefinitionInterface $type)
     {
         // TODO: Implement updateType() method.
+    }
+
+    /**
+     * Converts a type definition into an object type. If the object type is
+     * cached, it returns the cached object. Otherwise it creates an object type
+     * object and puts it into the cache.
+     *
+     * @param TypeDefinitionInterface $typeDefinition
+     * @return ObjectTypeInterface
+     */
+    private function convertTypeDefinition(TypeDefinitionInterface $typeDefinition)
+    {
+        // @TODO: Implement cache. See Java Implementation for example
+        return $this->getObjectFactory()->convertTypeDefinition($typeDefinition);
     }
 }
