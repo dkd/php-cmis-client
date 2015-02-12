@@ -251,6 +251,7 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
      * @param AceInterface[] $removeAces A list of ACEs that MUST be removed from the newly-created document object,
      *     either using the ACL from folderId if specified, or being ignored if no folderId is specified.
      * @return ObjectIdInterface The id of the newly-created document.
+     * @throws CmisRuntimeException
      */
     protected function copyViaClient(
         ObjectIdInterface $targetFolderId,
@@ -271,14 +272,17 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
         $allPropertiesContext->setIncludeRelationships(IncludeRelationships::cast(IncludeRelationships::NONE));
         $allPropertiesContext->setRenditionFilterString(Constants::RENDITION_NONE);
 
-        /** @var DocumentInterface $allPropertiesDocument */
         $allPropertiesDocument = $this->getSession()->getObject($this, $allPropertiesContext);
+        if (! $allPropertiesDocument instanceof DocumentInterface) {
+            throw new CmisRuntimeException('Returned object is not of expected type DocumentInterface');
+        }
 
         foreach ($allPropertiesDocument->getProperties() as $property) {
             if (Updatability::cast(Updatability::READWRITE)->equals($property->getDefinition()->getUpdatability())
                 || Updatability::cast(Updatability::ONCREATE)->equals($property->getDefinition()->getUpdatability())
             ) {
-                $newProperties[$property->getId()] = $property->getValue();
+                $newProperties[$property->getId()] = $property->isMultiValued() ? $property->getValues(
+                ) : $property->getFirstValue();
             }
         }
 

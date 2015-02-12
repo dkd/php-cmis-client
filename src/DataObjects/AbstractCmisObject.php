@@ -554,7 +554,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
             return null;
         }
 
-        return $property->getValue();
+        return $property->isMultiValued() ? $property->getValues() : $property->getFirstValue();
     }
 
     /**

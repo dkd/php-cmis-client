@@ -31,6 +31,7 @@ use Dkd\PhpCmis\Enum\RelationshipDirection;
 use Dkd\PhpCmis\Enum\VersioningState;
 use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
 use Dkd\PhpCmis\Exception\CmisObjectNotFoundException;
+use Dkd\PhpCmis\Exception\CmisRuntimeException;
 use Dkd\PhpCmis\Exception\IllegalStateException;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\Cache;
@@ -311,7 +312,7 @@ class Session implements SessionInterface
             throw new CmisInvalidArgumentException('Properties must not be empty!');
         }
 
-        $object = $this->getBinding()->getObjectService()->createDocument(
+        $objectId = $this->getBinding()->getObjectService()->createDocument(
             $this->getRepositoryId(),
             $this->getObjectFactory()->convertProperties($properties),
             $folderId,
@@ -323,7 +324,7 @@ class Session implements SessionInterface
             null
         );
 
-        return $object;
+        return $this->createObjectId($objectId);
     }
 
     /**
@@ -367,7 +368,21 @@ class Session implements SessionInterface
         array $addAces = array(),
         array $removeAces = array()
     ) {
-        // TODO: Implement createFolder() method.
+        if (empty($properties)) {
+            throw new CmisInvalidArgumentException('Properties must not be empty!');
+        }
+
+        $objectId = $this->getBinding()->getObjectService()->createFolder(
+            $this->getRepositoryId(),
+            $this->getObjectFactory()->convertProperties($properties),
+            $folderId->getId(),
+            $policies,
+            $this->getObjectFactory()->convertAces($addAces),
+            $this->getObjectFactory()->convertAces($removeAces),
+            null
+        );
+
+        return $this->createObjectId($objectId);
     }
 
     /**
@@ -614,7 +629,7 @@ class Session implements SessionInterface
      */
     public function getDefaultContext()
     {
-        // TODO: Implement getDefaultContext() method.
+        return $this->defaultContext;
     }
 
     /**
@@ -758,10 +773,22 @@ class Session implements SessionInterface
      *
      * @param OperationContextInterface $context
      * @return FolderInterface the root folder object
+     * @throws CmisRuntimeException
      */
     public function getRootFolder(OperationContextInterface $context = null)
     {
-        // TODO: Implement getRootFolder() method.
+        $rootFolderId = $this->getRepositoryInfo()->getRootFolderId();
+
+        $rootFolder = $this->getObject(
+            new ObjectId($rootFolderId),
+            $context === null ? $this->getDefaultContext() : $context
+        );
+
+        if (!($rootFolder instanceof FolderInterface)) {
+            throw new CmisRuntimeException('Root folder object is not a folder!', 1423735889);
+        }
+
+        return $rootFolder;
     }
 
     /**

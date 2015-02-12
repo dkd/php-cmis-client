@@ -81,7 +81,7 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
             $removeAces
         );
 
-        $this->getNewlyCreatedObject($newObjectId, $context);
+        return $this->getNewlyCreatedObject($newObjectId, $context);
     }
 
     /**
@@ -131,7 +131,7 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
             $removeAces
         );
 
-        $this->getNewlyCreatedObject($newObjectId, $context);
+        return $this->getNewlyCreatedObject($newObjectId, $context);
     }
 
     /**
@@ -156,7 +156,7 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
     ) {
         $newObjectId = $this->getSession()->createFolder($properties, $this, $policies, $addAces, $removeAces);
 
-        $this->getNewlyCreatedObject($newObjectId, $context);
+        return $this->getNewlyCreatedObject($newObjectId, $context);
     }
 
     /**
@@ -180,7 +180,7 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
     ) {
         $newObjectId = $this->getSession()->createItem($properties, $this, $policies, $addAces, $removeAces);
 
-        $this->getNewlyCreatedObject($newObjectId, $context);
+        return $this->getNewlyCreatedObject($newObjectId, $context);
     }
 
     /**
@@ -204,7 +204,7 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
     ) {
         $newObjectId = $this->getSession()->createPolicy($properties, $this, $policies, $addAces, $removeAces);
 
-        $this->getNewlyCreatedObject($newObjectId, $context);
+        return  $this->getNewlyCreatedObject($newObjectId, $context);
     }
 
     /**

@@ -10,7 +10,6 @@ namespace Dkd\PhpCmis\Data;
  * file that was distributed with this source code.
  */
 
-use Dkd\PhpCmis\DataObjects\PolicyIdList;
 use Dkd\PhpCmis\Enum\BaseTypeId;
 
 /**
