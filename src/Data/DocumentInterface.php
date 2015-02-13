@@ -101,8 +101,8 @@ interface DocumentInterface extends FileableCmisObjectInterface, DocumentPropert
      *     was set to <code>null</code>
      */
     public function copy(
-        ObjectIdInterface $targetFolderId,
-        $properties = array(),
+        ObjectIdInterface $targetFolderId = null,
+        array $properties = array(),
         VersioningState $versioningState = null,
         array $policies = array(),
         array $addAces = array(),

@@ -290,19 +290,38 @@ class Session implements SessionInterface
     /**
      * Creates a new document. The stream in contentStream is consumed but not closed by this method.
      *
-     * @param string[] $properties
-     * @param ObjectIdInterface $folderId
-     * @param StreamInterface $contentStream
-     * @param VersioningState $versioningState
-     * @param PolicyInterface[] $policies
-     * @param AceInterface[] $addAces
-     * @param AceInterface[] $removeAces
-     * @return ObjectIdInterface
-     * @throws CmisInvalidArgumentException Throws exception if given property list is empty
+     * @param string[] $properties The property values that MUST be applied to the newly-created document object.
+     * @param ObjectIdInterface $folderId If specified, the identifier for the folder that MUST be the parent folder
+     *      for the newly-created document object. This parameter MUST be specified if the repository does NOT
+     *      support the optional "unfiling" capability.
+     * @param StreamInterface $contentStream The content stream that MUST be stored for the newly-created document
+     *      object. The method of passing the contentStream to the server and the encoding mechanism will be specified
+     *      by each specific binding. MUST be required if the type requires it.
+     * @param VersioningState $versioningState An enumeration specifying what the versioning state of the newly-created
+     *     object MUST be. Valid values are:
+     *      <code>none</code>
+     *          (default, if the object-type is not versionable) The document MUST be created as a non-versionable
+     *          document.
+     *     <code>checkedout</code>
+     *          The document MUST be created in the checked-out state. The checked-out document MAY be
+     *          visible to other users.
+     *     <code>major</code>
+     *          (default, if the object-type is versionable) The document MUST be created as a major version.
+     *     <code>minor</code>
+     *          The document MUST be created as a minor version.
+     * @param PolicyInterface[] $policies A list of policy ids that MUST be applied to the newly-created
+     *      document object.
+     * @param AceInterface[] $addAces A list of ACEs that MUST be added to the newly-created document object,
+     *      either using the ACL from folderId if specified, or being applied if no folderId is specified.
+     * @param AceInterface[] $removeAces A list of ACEs that MUST be removed from the newly-created document
+     *      object, either using the ACL from folderId if specified, or being ignored if no folderId is specified.
+     * @return ObjectIdInterface the object ID of the new document
+     * @throws CmisInvalidArgumentException Throws an <code>CmisInvalidArgumentException</code> if empty
+     *      property list is given
      */
     public function createDocument(
         array $properties,
-        ObjectIdInterface $folderId,
+        ObjectIdInterface $folderId = null,
         StreamInterface $contentStream = null,
         VersioningState $versioningState = null,
         array $policies = array(),
@@ -331,20 +350,40 @@ class Session implements SessionInterface
     /**
      * Creates a new document from a source document.
      *
-     * @param ObjectIdInterface $source
-     * @param string[] $properties
-     * @param ObjectIdInterface $folderId
-     * @param VersioningState $versioningState
-     * @param PolicyInterface[] $policies
-     * @param AceInterface[] $addAces
-     * @param AceInterface[] $removeAces
+     * @param ObjectIdInterface $source The identifier for the source document.
+     * @param string[] $properties The property values that MUST be applied to the object. This list of properties
+     *      SHOULD only contain properties whose values diﬀer from the source document.
+     * @param ObjectIdInterface $folderId If specified, the identifier for the folder that MUST be the parent folder
+     *      for the newly-created document object. This parameter MUST be specified if the repository does NOT
+     *      support the optional "unfiling" capability.
+     * @param StreamInterface $contentStream The content stream that MUST be stored for the newly-created document
+     *      object. The method of passing the contentStream to the server and the encoding mechanism will be specified
+     *      by each specific binding. MUST be required if the type requires it.
+     * @param VersioningState $versioningState An enumeration specifying what the versioning state of the newly-created
+     *     object MUST be. Valid values are:
+     *      <code>none</code>
+     *          (default, if the object-type is not versionable) The document MUST be created as a non-versionable
+     *          document.
+     *     <code>checkedout</code>
+     *          The document MUST be created in the checked-out state. The checked-out document MAY be
+     *          visible to other users.
+     *     <code>major</code>
+     *          (default, if the object-type is versionable) The document MUST be created as a major version.
+     *     <code>minor</code>
+     *          The document MUST be created as a minor version.
+     * @param PolicyInterface[] $policies A list of policy ids that MUST be applied to the newly-created
+     *      document object.
+     * @param AceInterface[] $addAces A list of ACEs that MUST be added to the newly-created document object,
+     *      either using the ACL from folderId if specified, or being applied if no folderId is specified.
+     * @param AceInterface[] $removeAces A list of ACEs that MUST be removed from the newly-created document
+     *      object, either using the ACL from folderId if specified, or being ignored if no folderId is specified.
      * @return ObjectIdInterface the object ID of the new document
      */
     public function createDocumentFromSource(
         ObjectIdInterface $source,
-        array $properties,
-        ObjectIdInterface $folderId,
-        VersioningState $versioningState,
+        array $properties = array(),
+        ObjectIdInterface $folderId = null,
+        VersioningState $versioningState = null,
         array $policies = array(),
         array $addAces = array(),
         array $removeAces = array()

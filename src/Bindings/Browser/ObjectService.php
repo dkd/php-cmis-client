@@ -119,7 +119,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         );
 
         if ($versioningState !== null) {
-            $url->getQuery()->modify(array(Constants::PARAM_VERSIONIG_STATE => (string) $versioningState));
+            $url->getQuery()->modify(array(Constants::PARAM_VERSIONING_STATE => (string) $versioningState));
         }
 
         if ($addAces !== null) {

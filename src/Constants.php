@@ -193,7 +193,7 @@ class Constants
     const PARAM_TYPE_ID = 'typeId';
     const PARAM_UNFILE_OBJECTS = 'unfileObjects';
     const PARAM_VERSION_SERIES_ID = 'versionSeries';
-    const PARAM_VERSIONIG_STATE = 'versioningState';
+    const PARAM_VERSIONING_STATE = 'versioningState';
     const PARAM_Q = 'q';
     const PARAM_STATEMENT = 'statement';
     const PARAM_SEARCH_ALL_VERSIONS = 'searchAllVersions';

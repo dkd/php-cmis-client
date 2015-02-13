@@ -56,9 +56,9 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
         $this->getBinding()->getObjectService()->appendContentStream(
             $this->getRepositoryId(),
             $newObjectId,
-            $changeToken,
             $this->getObjectFactory()->convertContentStream($contentStream),
-            $isLastChunk
+            $isLastChunk,
+            $changeToken
         );
 
         if ($refresh) {
@@ -125,7 +125,7 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
             $objectFactory->convertProperties(
                 $properties,
                 $this->getObjectType(),
-                $this->getSecondaryTypes(),
+                (array) $this->getSecondaryTypes(),
                 $updatability
             ),
             $objectFactory->convertContentStream($contentStream),
@@ -193,8 +193,8 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
      *     set to <code>null</code>
      */
     public function copy(
-        ObjectIdInterface $targetFolderId,
-        $properties = array(),
+        ObjectIdInterface $targetFolderId = null,
+        array $properties = array(),
         VersioningState $versioningState = null,
         array $policies = array(),
         array $addAces = array(),
@@ -254,8 +254,8 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
      * @throws CmisRuntimeException
      */
     protected function copyViaClient(
-        ObjectIdInterface $targetFolderId,
-        $properties = array(),
+        ObjectIdInterface $targetFolderId = null,
+        array $properties = array(),
         VersioningState $versioningState = null,
         array $policies = array(),
         array $addAces = array(),
@@ -356,8 +356,7 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
             $this->getId(),
             $this->getVersionSeriesId(),
             $context->getQueryFilterString(),
-            $context->isIncludeAllowableActions(),
-            null
+            $context->isIncludeAllowableActions()
         );
 
         $objectFactory = $this->getSession()->getObjectFactory();
