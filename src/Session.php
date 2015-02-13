@@ -356,9 +356,6 @@ class Session implements SessionInterface
      * @param ObjectIdInterface $folderId If specified, the identifier for the folder that MUST be the parent folder
      *      for the newly-created document object. This parameter MUST be specified if the repository does NOT
      *      support the optional "unfiling" capability.
-     * @param StreamInterface $contentStream The content stream that MUST be stored for the newly-created document
-     *      object. The method of passing the contentStream to the server and the encoding mechanism will be specified
-     *      by each specific binding. MUST be required if the type requires it.
      * @param VersioningState $versioningState An enumeration specifying what the versioning state of the newly-created
      *     object MUST be. Valid values are:
      *      <code>none</code>

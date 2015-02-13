@@ -61,6 +61,7 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
      * @param OperationContextInterface|null $context
      * @return DocumentInterface|null the new folder object or <code>null</code> if the parameter <code>context</code>
      *     was set to <code>null</code>
+     * @throws CmisRuntimeException Exception is thrown if the created object is not a document
      */
     public function createDocument(
         array $properties,
@@ -81,7 +82,13 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
             $removeAces
         );
 
-        return $this->getNewlyCreatedObject($newObjectId, $context);
+        $document = $this->getNewlyCreatedObject($newObjectId, $context);
+
+        if (!$document instanceof DocumentInterface) {
+            throw new CmisRuntimeException('Newly created object is not a document! New id: ' . $document->getId());
+        }
+
+        return $document;
     }
 
     /**
@@ -111,6 +118,7 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
      * @param OperationContextInterface|null $context
      * @return DocumentInterface|null the new folder object or <code>null</code> if the parameter <code>context</code>
      *     was set to <code>null</code>
+     * @throws CmisRuntimeException Exception is thrown if the created object is not a document
      */
     public function createDocumentFromSource(
         ObjectIdInterface $source,
@@ -131,7 +139,13 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
             $removeAces
         );
 
-        return $this->getNewlyCreatedObject($newObjectId, $context);
+        $document = $this->getNewlyCreatedObject($newObjectId, $context);
+
+        if (!$document instanceof DocumentInterface) {
+            throw new CmisRuntimeException('Newly created object is not a document! New id: ' . $document->getId());
+        }
+
+        return $document;
     }
 
     /**
@@ -146,6 +160,7 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
      * @param OperationContextInterface|null $context
      * @return FolderInterface|null the new folder object or <code>null</code> if the parameter <code>context</code>
      *     was set to <code>null</code>
+     * @throws CmisRuntimeException Exception is thrown if the created object is not a folder
      */
     public function createFolder(
         array $properties,
@@ -156,7 +171,13 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
     ) {
         $newObjectId = $this->getSession()->createFolder($properties, $this, $policies, $addAces, $removeAces);
 
-        return $this->getNewlyCreatedObject($newObjectId, $context);
+        $folder = $this->getNewlyCreatedObject($newObjectId, $context);
+
+        if (!$folder instanceof FolderInterface) {
+            throw new CmisRuntimeException('Newly created object is not a folder! New id: ' . $folder->getId());
+        }
+
+        return $folder;
     }
 
     /**
@@ -170,6 +191,7 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
      *     using the ACL from folderId if specified, or being ignored if no folderId is specified.
      * @param OperationContextInterface|null $context
      * @return ItemInterface|null the new item object
+     * @throws CmisRuntimeException Exception is thrown if the created object is not a item
      */
     public function createItem(
         array $properties,
@@ -180,7 +202,13 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
     ) {
         $newObjectId = $this->getSession()->createItem($properties, $this, $policies, $addAces, $removeAces);
 
-        return $this->getNewlyCreatedObject($newObjectId, $context);
+        $item = $this->getNewlyCreatedObject($newObjectId, $context);
+
+        if (!$item instanceof ItemInterface) {
+            throw new CmisRuntimeException('Newly created object is not a item! New id: ' . $item->getId());
+        }
+
+        return $item;
     }
 
     /**
@@ -194,6 +222,7 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
      *     either using the ACL from folderId if specified, or being ignored if no folderId is specified.
      * @param OperationContextInterface|null $context
      * @return PolicyInterface|null the new policy object
+     * @throws CmisRuntimeException Exception is thrown if the created object is not a policy
      */
     public function createPolicy(
         array $properties,
@@ -204,7 +233,13 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
     ) {
         $newObjectId = $this->getSession()->createPolicy($properties, $this, $policies, $addAces, $removeAces);
 
-        return  $this->getNewlyCreatedObject($newObjectId, $context);
+        $policy = $this->getNewlyCreatedObject($newObjectId, $context);
+
+        if (!$policy instanceof PolicyInterface) {
+            throw new CmisRuntimeException('Newly created object is not a policy! New id: ' . $policy->getId());
+        }
+
+        return $policy;
     }
 
     /**

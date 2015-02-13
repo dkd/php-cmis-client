@@ -150,7 +150,7 @@ class VersioningService extends AbstractBrowserBindingService implements Version
      * @param string $objectId
      * @param string $versionSeriesId
      * @param boolean $major
-     * @param string $filter|null
+     * @param string|null $filter
      * @param ExtensionDataInterface|null $extension
      * @return PropertiesInterface
      */

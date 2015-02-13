@@ -191,6 +191,7 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
      * @param OperationContextInterface $context
      * @return DocumentInterface the new document object or <code>null</code> if the parameter <code>context</code> was
      *     set to <code>null</code>
+     * @throws CmisRuntimeException Exception is thrown if the created object is not a document
      */
     public function copy(
         ObjectIdInterface $targetFolderId = null,
@@ -222,7 +223,13 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
             );
         }
 
-        return $this->getNewlyCreatedObject($newObjectId, $context);
+        $document = $this->getNewlyCreatedObject($newObjectId, $context);
+
+        if (!$document instanceof DocumentInterface) {
+            throw new CmisRuntimeException('Newly created object is not a document! New id: ' . $document->getId());
+        }
+
+        return $document;
     }
 
     /**

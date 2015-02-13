@@ -267,12 +267,7 @@ abstract class AbstractFileableCmisObject extends AbstractCmisObject implements 
         }
 
         // get the new object
-        $object = $this->getSession()->getObject($objectId, $context);
-        if (!$object instanceof Document) {
-            throw new CmisRuntimeException('Newly created object is not a document! New id: ' . $objectId->getId());
-        }
-
-        return $object;
+        return $this->getSession()->getObject($objectId, $context);
     }
 
     /**

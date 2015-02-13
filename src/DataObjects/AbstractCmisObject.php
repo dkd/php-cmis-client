@@ -51,7 +51,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
     protected $objectType;
 
     /**
-     * @var SecondaryTypeInterface[]|null
+     * @var null|SecondaryTypeInterface[]
      */
     protected $secondaryTypes;
 
@@ -141,19 +141,19 @@ abstract class AbstractCmisObject implements CmisObjectInterface
             if ($objectData->getProperties() !== null) {
                 // get secondary types
                 $properties = $objectData->getProperties()->getProperties();
-                $secondaryTypes = array();
                 if (isset($properties[PropertyIds::SECONDARY_OBJECT_TYPE_IDS])) {
+                    $this->secondaryTypes = array();
                     foreach ($properties[PropertyIds::SECONDARY_OBJECT_TYPE_IDS]->getValues() as $secondaryTypeId) {
                         $type = $this->getSession()->getTypeDefinition($secondaryTypeId);
                         if ($type instanceof SecondaryTypeInterface) {
-                            $secondaryTypes[] = $type;
+                            $this->secondaryTypes[] = $type;
                         }
                     }
                 }
 
                 $this->properties = $objectFactory->convertPropertiesDataToPropertyList(
                     $objectType,
-                    $secondaryTypes,
+                    $this->secondaryTypes,
                     $objectData->getProperties()
                 );
                 $this->extensions[(string) ExtensionLevel::cast(
@@ -317,10 +317,10 @@ abstract class AbstractCmisObject implements CmisObjectInterface
     }
 
     /**
-     * Updates the provided properties.  If the repository created a new object, for example a new version,
+     * Updates the provided properties. If the repository created a new object, for example a new version,
      * the object ID of the new object is returned. Otherwise the object ID of the current object is returned.
      *
-     * @param array $properties the properties to update
+     * @param mixed[] $properties the properties to update
      * @param boolean $refresh true if this object should be refresh after the update, false if not
      * @return CmisObjectInterface|null the object ID of the updated object - can return null in case of a repository
      *     failure

@@ -138,7 +138,7 @@ class JsonConverter extends AbstractDataConverter
 
     /**
      * @param array $data The JSON that contains the repository info
-     * @return RepositoryInfoInterface|null
+     * @return null|RepositoryInfoBrowserBinding
      */
     public function convertRepositoryInfo(array $data = null)
     {
@@ -152,7 +152,7 @@ class JsonConverter extends AbstractDataConverter
     /**
      * @param RepositoryInfoBrowserBinding $object
      * @param array $data
-     * @return RepositoryInfoInterface
+     * @return RepositoryInfoBrowserBinding
      */
     protected function setRepositoryInfoValues(RepositoryInfoBrowserBinding $object, $data)
     {
@@ -981,7 +981,7 @@ class JsonConverter extends AbstractDataConverter
 
     /**
      * @param array $data
-     * @return array
+     * @return ObjectDataInterface[]
      */
     public function convertObjects(array $data = null)
     {
@@ -1091,7 +1091,7 @@ class JsonConverter extends AbstractDataConverter
      *
      * @param array $data
      * @param array $extensions
-     * @return PropertiesInterface[]
+     * @return PropertiesInterface
      * @throws \Exception
      */
     public function convertSuccinctProperties(array $data = null, $extensions = array())
