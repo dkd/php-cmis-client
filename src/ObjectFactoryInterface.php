@@ -71,10 +71,12 @@ interface ObjectFactoryInterface
     public function convertObject(ObjectDataInterface $objectData, OperationContextInterface $context);
 
     /**
+     * Converts a list of Policy objects into a list of there string representations
+     *
      * @param PolicyInterface[] $policies
      * @return string[]
      */
-    public function convertPolicies($policies);
+    public function convertPolicies(array $policies);
 
     /**
      * Convert Properties in Properties instance to a list of PropertyInterface objects

@@ -154,12 +154,22 @@ class ObjectFactory implements ObjectFactoryInterface
     }
 
     /**
+     * Converts a list of Policy objects into a list of there string representations
+     *
      * @param PolicyInterface[] $policies
      * @return string[]
      */
-    public function convertPolicies($policies)
+    public function convertPolicies(array $policies)
     {
-        // TODO: Implement convertPolicies() method.
+        $result = array();
+
+        foreach ($policies as $policy) {
+            if ($policy->getId() !== null) {
+                $result[] = $policy->getId();
+            }
+        }
+
+        return $result;
     }
 
     /**

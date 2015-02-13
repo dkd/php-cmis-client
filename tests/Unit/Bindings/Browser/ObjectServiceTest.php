@@ -11,7 +11,6 @@ namespace Dkd\PhpCmis\Test\Unit\Bindings\Browser;
  */
 
 use Dkd\PhpCmis\Bindings\Browser\ObjectService;
-use Dkd\PhpCmis\Bindings\CmisBindingsHelper;
 use Dkd\PhpCmis\Constants;
 use Dkd\PhpCmis\Data\AclInterface;
 use Dkd\PhpCmis\Data\ExtensionDataInterface;
@@ -146,7 +145,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
      * @param $expectedUrl
      * @param $repositoryId
      * @param PropertiesInterface $properties
-     * @param null $folderId
+     * @param string|null $folderId
      * @param StreamInterface $contentStream
      * @param VersioningState $versioningState
      * @param array $policies

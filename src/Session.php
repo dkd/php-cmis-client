@@ -18,6 +18,7 @@ use Dkd\PhpCmis\Data\AclInterface;
 use Dkd\PhpCmis\Data\BulkUpdateObjectIdAndChangeTokenInterface;
 use Dkd\PhpCmis\Data\DocumentInterface;
 use Dkd\PhpCmis\Data\FolderInterface;
+use Dkd\PhpCmis\Data\ObjectDataInterface;
 use Dkd\PhpCmis\Data\ObjectIdInterface;
 use Dkd\PhpCmis\Data\ObjectTypeInterface;
 use Dkd\PhpCmis\Data\PolicyInterface;
@@ -315,10 +316,10 @@ class Session implements SessionInterface
         $objectId = $this->getBinding()->getObjectService()->createDocument(
             $this->getRepositoryId(),
             $this->getObjectFactory()->convertProperties($properties),
-            $folderId,
+            $folderId->getId(),
             $contentStream,
             $versioningState,
-            $policies,
+            $this->getObjectFactory()->convertPolicies($policies),
             $this->getObjectFactory()->convertAces($addAces),
             $this->getObjectFactory()->convertAces($removeAces),
             null
@@ -376,7 +377,7 @@ class Session implements SessionInterface
             $this->getRepositoryId(),
             $this->getObjectFactory()->convertProperties($properties),
             $folderId->getId(),
-            $policies,
+            $this->getObjectFactory()->convertPolicies($policies),
             $this->getObjectFactory()->convertAces($addAces),
             $this->getObjectFactory()->convertAces($removeAces),
             null
@@ -697,6 +698,10 @@ class Session implements SessionInterface
             $context->isIncludeAcls(),
             null
         );
+
+        if (! $objectData instanceof ObjectDataInterface) {
+            throw new CmisObjectNotFoundException('Could not find object for given id.');
+        }
 
         return $this->getObjectFactory()->convertObject($objectData, $context);
     }

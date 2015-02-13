@@ -81,19 +81,19 @@ interface ObjectServiceInterface
      * @param string $repositoryId the identifier for the repository
      * @param PropertiesInterface $properties the property values that must be applied to the newly
      *      created document object
-     * @param string $folderId if specified, the identifier for the folder that must be the parent folder
-     *      for the newly created document object
-     * @param StreamInterface $contentStream the content stream that must be stored for the newly
+     * @param string|null $folderId if specified, the identifier for the folder that must be the parent
+     *      folder for the newly created document object
+     * @param StreamInterface|null $contentStream the content stream that must be stored for the newly
      *      created document object
-     * @param VersioningState $versioningState specifies what the versioning state of the newly created object
+     * @param VersioningState|null  $versioningState specifies what the versioning state of the newly created object
      *      must be (default is VersioningState::MAJOR)
      * @param string[] $policies a list of policy IDs that must be applied to the newly created document object
-     * @param AclInterface $addAces a list of ACEs that must be added to the newly created document object,
+     * @param AclInterface|null  $addAces a list of ACEs that must be added to the newly created document object,
      *      either using the ACL from folderId if specified, or being applied if no folderId is specified
-     * @param AclInterface $removeAces a list of ACEs that must be removed from the newly created document object,
+     * @param AclInterface|null  $removeAces a list of ACEs that must be removed from the newly created document object,
      *      either using the ACL from folderId if specified, or being ignored if no folderId is specified
-     * @param ExtensionDataInterface $extension
-     * @return ObjectIdInterface|null Returns the new object id or null if the repository sent an empty
+     * @param ExtensionDataInterface|null  $extension
+     * @return string|null Returns the new object id or null if the repository sent an empty
      *      result (which should not happen)
      */
     public function createDocument(

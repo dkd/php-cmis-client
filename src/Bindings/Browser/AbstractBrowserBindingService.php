@@ -550,7 +550,7 @@ abstract class AbstractBrowserBindingService
     /**
      * Converts a policies array into an array that can be used for the CMIS request
      *
-     * @param array $policies
+     * @param string[] $policies A list of policy string representations
      * @return array
      */
     protected function convertPoliciesToQueryArray(array $policies)
