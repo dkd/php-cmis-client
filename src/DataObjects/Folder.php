@@ -377,12 +377,14 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
 
         $parents = $this->getParents($this->getSession()->getDefaultContext());
 
-        if (empty($parents)) {
+        // return the first element of the array
+        $parent = reset($parents);
+
+        if (!$parent instanceof FolderInterface) {
             return null;
         }
 
-        // return the first element of the array
-        return reset($parents);
+        return $parent;
     }
 
     /**
