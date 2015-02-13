@@ -86,10 +86,13 @@ abstract class AbstractCmisObject implements CmisObjectInterface
     protected $relationships = array();
 
     /**
-     * Array of extension elements. The key is the string representation of <code>ExtensionLevel</code>
+     * A list that contains a list of <code>CmisExtensionElementInterface</code> identified by
+     * <code>ExtensionLevel</code>. The key is the string representation of <code>ExtensionLevel</code> and the value
+     * the array of <code>CmisExtensionElementInterface</code>
      *
      * @see ExtensionLevel
-     * @var CmisExtensionElementInterface[]
+     * @see CmisExtensionElementInterface
+     * @var array[]
      */
     protected $extensions = array();
 
@@ -129,7 +132,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
         $this->objectType = $objectType;
         $this->secondaryTypes = null;
         $this->creationContext = clone $context;
-        $this->refreshTimestamp = round(microtime(true) * 1000);
+        $this->refreshTimestamp = (integer) round(microtime(true) * 1000);
 
         if ($objectData !== null) {
             $objectFactory = $this->getObjectFactory();
@@ -345,7 +348,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
             $this->getObjectFactory()->convertProperties(
                 $properties,
                 $this->getObjectType(),
-                $this->getSecondaryTypes(),
+                (array) $this->getSecondaryTypes(),
                 $updatability
             ),
             $changeToken
@@ -573,7 +576,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
      *
      * @param string $id the ID of the property
      * @return ObjectTypeInterface[]|null a list of object types that define the given property or null
-     *         if the property couldn't be found in the object types that are attached to this object
+     *         if the property could not be found in the object types that are attached to this object
      */
     public function findObjectType($id)
     {
@@ -585,13 +588,13 @@ abstract class AbstractCmisObject implements CmisObjectInterface
 
         if ($this->getSecondaryTypes() !== null) {
             foreach ($this->getSecondaryTypes() as $secondaryType) {
-                if ($secondaryType->getPropertyDefinition($id)) {
+                if ($secondaryType->getPropertyDefinition($id) !== null) {
                     $result[] = $secondaryType;
                 }
             }
         }
 
-        return (empty($result)) ? null : $result;
+        return empty($result) ? null : $result;
     }
 
     /**
@@ -770,11 +773,13 @@ abstract class AbstractCmisObject implements CmisObjectInterface
      * Returns the extensions for the given level.
      *
      * @param ExtensionLevel $level the level
-     * @return CmisExtensionElementInterface[] the extensions at that level or null if there no extensions
+     * @return array[]|null A list of <code>CmisExtensionElementInterface</code> at the requested level or
+     *      <code>null</code> if there are no extensions for the requested level
+     * @see CmisExtensionElementInterface
      */
     public function getExtensions(ExtensionLevel $level)
     {
-        if (empty($this->extensions[(string) $level])) {
+        if (!isset($this->extensions[(string) $level])) {
             return null;
         }
 

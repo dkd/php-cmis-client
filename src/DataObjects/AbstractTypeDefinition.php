@@ -409,7 +409,8 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
     /**
      * Returns the property definitions for the given id of this type.
      *
-     * {@inheritdoc}
+     * @param string $id id of the property
+     * @return PropertyDefinitionInterface|null the property definition
      */
     public function getPropertyDefinition($id)
     {

@@ -78,7 +78,7 @@ interface CmisObjectInterface extends ObjectIdInterface, CmisObjectPropertiesInt
     /**
      * Returns the extensions for the given level.
      * @param ExtensionLevel $level the level
-     * @return CmisExtensionElementInterface[] the extensions at that level or null if there no extensions
+     * @return array[] A list of CmisExtensionElementInterface at that level or null if there no extensions
      */
     public function getExtensions(ExtensionLevel $level);
 
@@ -179,7 +179,7 @@ interface CmisObjectInterface extends ObjectIdInterface, CmisObjectPropertiesInt
      * Returns all permissions for the given principal from the ACL.
      *
      * @param string $principalId the principal ID
-     * @return string the set of permissions for this user, or an empty set if principal is not in the ACL
+     * @return string[] the set of permissions for this user, or an empty set if principal is not in the ACL
      * @throws IllegalStateException if the ACL hasn't been fetched or provided by the repository
      */
     public function getPermissionsForPrincipal($principalId);
