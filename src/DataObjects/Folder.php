@@ -84,7 +84,9 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
 
         $document = $this->getNewlyCreatedObject($newObjectId, $context);
 
-        if (!$document instanceof DocumentInterface) {
+        if ($document === null) {
+            return null;
+        } elseif (!$document instanceof DocumentInterface) {
             throw new CmisRuntimeException('Newly created object is not a document! New id: ' . $document->getId());
         }
 
@@ -141,7 +143,9 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
 
         $document = $this->getNewlyCreatedObject($newObjectId, $context);
 
-        if (!$document instanceof DocumentInterface) {
+        if ($document === null) {
+            return null;
+        } elseif (!$document instanceof DocumentInterface) {
             throw new CmisRuntimeException('Newly created object is not a document! New id: ' . $document->getId());
         }
 
@@ -173,7 +177,9 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
 
         $folder = $this->getNewlyCreatedObject($newObjectId, $context);
 
-        if (!$folder instanceof FolderInterface) {
+        if ($folder === null) {
+            return null;
+        } elseif (!$folder instanceof FolderInterface) {
             throw new CmisRuntimeException('Newly created object is not a folder! New id: ' . $folder->getId());
         }
 
@@ -204,7 +210,9 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
 
         $item = $this->getNewlyCreatedObject($newObjectId, $context);
 
-        if (!$item instanceof ItemInterface) {
+        if ($item === null) {
+            return null;
+        } elseif (!$item instanceof ItemInterface) {
             throw new CmisRuntimeException('Newly created object is not a item! New id: ' . $item->getId());
         }
 
@@ -235,7 +243,9 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
 
         $policy = $this->getNewlyCreatedObject($newObjectId, $context);
 
-        if (!$policy instanceof PolicyInterface) {
+        if ($policy === null) {
+            return null;
+        } elseif (!$policy instanceof PolicyInterface) {
             throw new CmisRuntimeException('Newly created object is not a policy! New id: ' . $policy->getId());
         }
 

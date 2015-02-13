@@ -225,7 +225,9 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
 
         $document = $this->getNewlyCreatedObject($newObjectId, $context);
 
-        if (!$document instanceof DocumentInterface) {
+        if ($document === null) {
+            return null;
+        } elseif (!$document instanceof DocumentInterface) {
             throw new CmisRuntimeException('Newly created object is not a document! New id: ' . $document->getId());
         }
 
