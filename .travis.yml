@@ -23,7 +23,7 @@ script:
     echo "Running unit tests";
     mkdir -p build/logs;
     if [[ $TRAVIS_PHP_VERSION == '5.6' ]]; then PHPUNIT_FLAGS="--coverage-clover build/logs/clover.xml"; else PHPUNIT_FLAGS=""; fi ;
-    php vendor/bin/phpunit --colors -c tests/phpunit.xml $PHPUNIT_FLAGS ;
+    php vendor/bin/phpunit --colors $PHPUNIT_FLAGS ;
 
 after_script:
   - >

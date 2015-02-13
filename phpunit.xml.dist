@@ -1,12 +1,12 @@
-<phpunit bootstrap="./bootstrap.php">
+<phpunit bootstrap="./tests/bootstrap.php">
     <testsuites>
         <testsuite name="Unit Tests">
-            <directory suffix="Test.php">./Unit/</directory>
+            <directory suffix="Test.php">./tests/Unit/</directory>
         </testsuite>
     </testsuites>
     <filter>
         <whitelist addUncoveredFilesFromWhitelist="true" processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">../src</directory>
+            <directory suffix=".php">./src</directory>
         </whitelist>
     </filter>
 </phpunit>
