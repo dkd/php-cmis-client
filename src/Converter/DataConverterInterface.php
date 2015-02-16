@@ -17,12 +17,12 @@ use Dkd\PhpCmis\Data\PropertyDataInterface;
 use Dkd\PhpCmis\Data\RenditionDataInterface;
 use Dkd\PhpCmis\Data\RepositoryCapabilitiesInterface;
 use Dkd\PhpCmis\Data\RepositoryInfoInterface;
+use Dkd\PhpCmis\DataObjects\ObjectInFolderData;
 use Dkd\PhpCmis\DataObjects\PolicyIdList;
 use Dkd\PhpCmis\Definitions\PropertyDefinitionInterface;
 use Dkd\PhpCmis\Definitions\TypeDefinitionContainerInterface;
 use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
 use Dkd\PhpCmis\Definitions\TypeDefinitionListInterface;
-use Dkd\PhpCmis\RenditionInterface;
 
 /**
  * This file is part of php-cmis-lib.
@@ -328,7 +328,7 @@ interface DataConverterInterface
      * Convert given input data to a ObjectInFolder object
      *
      * @param array $data
-     * @return ObjectInFolderListInterface
+     * @return ObjectInFolderData|null
      */
     public function convertObjectInFolder(array $data = null);
 

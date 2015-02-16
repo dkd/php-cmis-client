@@ -522,7 +522,7 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
      * Converts a binding container into an API container.
      *
      * @param ObjectInFolderContainerInterface[] $bindingContainerList
-     * @param OperationContextInterface|null $context
+     * @param OperationContextInterface $context
      * @return TreeInterface[]
      */
     private function convertBindingContainer(array $bindingContainerList, OperationContextInterface $context)

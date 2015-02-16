@@ -419,6 +419,9 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
 
     /**
      * Returns the property definitions of this type.
+     *
+     * @return PropertyDefinitionInterface[]|null the property definitions or
+     *      null if the property definitions were not requested
      */
     public function getPropertyDefinitions()
     {

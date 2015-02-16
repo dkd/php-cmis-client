@@ -335,7 +335,7 @@ class Session implements SessionInterface
         $objectId = $this->getBinding()->getObjectService()->createDocument(
             $this->getRepositoryId(),
             $this->getObjectFactory()->convertProperties($properties),
-            $folderId->getId(),
+            $folderId === null ? null : $folderId->getId(),
             $contentStream,
             $versioningState,
             $this->getObjectFactory()->convertPolicies($policies),
@@ -725,7 +725,7 @@ class Session implements SessionInterface
 
         $objectData = $this->getBinding()->getObjectService()->getObject(
             $this->getRepositoryInfo()->getId(),
-            $objectId,
+            $objectId->getId(),
             $context->getQueryFilterString(),
             $context->isIncludeAllowableActions(),
             $context->getIncludeRelationships(),

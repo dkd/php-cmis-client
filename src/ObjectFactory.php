@@ -134,6 +134,9 @@ class ObjectFactory implements ObjectFactoryInterface
     public function convertObject(ObjectDataInterface $objectData, OperationContextInterface $context)
     {
         $type = $this->getTypeFromObjectData($objectData);
+        if ($type === null) {
+            throw new CmisRuntimeException('Could not get type from object data.');
+        }
         $baseTypeId = $objectData->getBaseTypeId();
 
         if ($baseTypeId->equals(BaseTypeId::CMIS_DOCUMENT)) {

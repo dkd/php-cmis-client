@@ -586,8 +586,9 @@ abstract class AbstractCmisObject implements CmisObjectInterface
             $result[] = $this->getObjectType();
         }
 
-        if ($this->getSecondaryTypes() !== null) {
-            foreach ($this->getSecondaryTypes() as $secondaryType) {
+        $secondaryTypes = $this->getSecondaryTypes();
+        if ($secondaryTypes !== null) {
+            foreach ($secondaryTypes as $secondaryType) {
                 if ($secondaryType->getPropertyDefinition($id) !== null) {
                     $result[] = $secondaryType;
                 }
