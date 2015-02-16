@@ -331,7 +331,6 @@ abstract class AbstractCmisObject implements CmisObjectInterface
             throw new CmisInvalidArgumentException('Properties must not be empty!');
         }
 
-        $newObjectId = null;
         $objectId = $this->getId();
         $changeToken = $this->getChangeToken();
 
