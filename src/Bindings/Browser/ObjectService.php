@@ -35,13 +35,12 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      * The stream in contentStream is consumed but not closed by this method.
      *
      * @param string $repositoryId the identifier for the repository
-     * @param string $objectId the identifier for the object. The repository might return a different/new object id
-     * @param StreamInterface $contentStream the content stream to append
-     * @param boolean $isLastChunk indicates if this content stream is the last chunk
-     * @param string $changeToken (optional) the last change token of this object that the client received.
-     *      The repository might return a new change token (default is null)
+     * @param string $objectId The identifier for the object. The repository might return a different/new object id
+     * @param StreamInterface $contentStream The content stream to append
+     * @param boolean $isLastChunk Indicates if this content stream is the last chunk
+     * @param string $changeToken|null The last change token of this object that the client received.
+     *      The repository might return a new change token (default is <code>null</code>)
      * @param ExtensionDataInterface|null $extension
-     * @return void
      */
     public function appendContentStream(
         $repositoryId,
@@ -88,7 +87,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      * @param StreamInterface|null $contentStream the content stream that must be stored for the newly
      *      created document object
      * @param VersioningState|null  $versioningState specifies what the versioning state of the newly created object
-     *      must be (default is VersioningState::MAJOR)
+     *      must be (default is <code>VersioningState::MAJOR</code>)
      * @param string[] $policies a list of policy IDs that must be applied to the newly created document object
      * @param AclInterface|null  $addAces a list of ACEs that must be added to the newly created document object,
      *      either using the ACL from folderId if specified, or being applied if no folderId is specified
@@ -162,18 +161,18 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      * @param string $repositoryId the identifier for the repository
      * @param string $sourceId the identifier for the source document
      * @param PropertiesInterface $properties the property values that must be applied to the newly
-     * created document object
+     *      created document object
      * @param string $folderId if specified, the identifier for the folder that must be the parent folder for the
-     * newly created document object
-     * @param VersioningState $versioningState specifies what the versioning state of the newly created object
-     * must be (default is VersioningState::MAJOR)
+     *      newly created document object
+     * @param VersioningState|null $versioningState specifies what the versioning state of the newly created object
+     *      must be (default is <code>VersioningState::MAJOR</code>)
      * @param string[] $policies a list of policy IDs that must be applied to the newly created document object
-     * @param AclInterface $addAces a list of ACEs that must be added to the newly created document object,
-     * either using the ACL from folderId if specified, or being applied if no folderId is specified
-     * @param AclInterface $removeAces a list of ACEs that must be removed from the newly created document object,
-     * either using the ACL from folderId if specified, or being ignored if no folderId is specified
-     * @param ExtensionDataInterface $extension
-     * @return string
+     * @param AclInterface|null $addAces a list of ACEs that must be added to the newly created document object,
+     *      either using the ACL from folderId if specified, or being applied if no folderId is specified
+     * @param AclInterface|null $removeAces a list of ACEs that must be removed from the newly created document object,
+     *      either using the ACL from folderId if specified, or being ignored if no folderId is specified
+     * @param ExtensionDataInterface|null $extension
+     * @return string The id of the newly-created document.
      */
     public function createDocumentFromSource(
         $repositoryId,
@@ -195,16 +194,16 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      *
      * @param string $repositoryId the identifier for the repository
      * @param PropertiesInterface $properties the property values that must be applied to the newly
-     * created document object
+     *      created document object
      * @param string $folderId if specified, the identifier for the folder that must be the parent folder for the
-     * newly created document object
+     *      newly created document object
      * @param string[] $policies a list of policy IDs that must be applied to the newly created document object
-     * @param AclInterface $addAces a list of ACEs that must be added to the newly created document object,
-     * either using the ACL from folderId if specified, or being applied if no folderId is specified
-     * @param AclInterface $removeAces a list of ACEs that must be removed from the newly created document object,
-     * either using the ACL from folderId if specified, or being ignored if no folderId is specified
-     * @param ExtensionDataInterface $extension
-     * @return string|null Returns the new object id or null if the repository sent an empty
+     * @param AclInterface|null $addAces a list of ACEs that must be added to the newly created document object,
+     *      either using the ACL from folderId if specified, or being applied if no folderId is specified
+     * @param AclInterface|null $removeAces a list of ACEs that must be removed from the newly created document object,
+     *      either using the ACL from folderId if specified, or being ignored if no folderId is specified
+     * @param ExtensionDataInterface|null $extension
+     * @return string|null Returns the new object id or <code>null</code> if the repository sent an empty
      *      result (which should not happen)
      */
     public function createFolder(
@@ -260,18 +259,18 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
     /**
      * Creates an item object of the specified type (given by the cmis:objectTypeId property).
      *
-     * @param string $repositoryId the identifier for the repository
-     * @param PropertiesInterface $properties the property values that must be applied to the newly
-     * created document object
-     * @param string $folderId if specified, the identifier for the folder that must be the parent folder for the
-     * newly created document object
-     * @param string[] $policies a list of policy IDs that must be applied to the newly created document object
-     * @param AclInterface $addAces a list of ACEs that must be added to the newly created document object,
-     * either using the ACL from folderId if specified, or being applied if no folderId is specified
-     * @param AclInterface $removeAces a list of ACEs that must be removed from the newly created document object,
-     * either using the ACL from folderId if specified, or being ignored if no folderId is specified
-     * @param ExtensionDataInterface $extension
-     * @return string
+     * @param string $repositoryId The identifier for the repository
+     * @param PropertiesInterface $properties The property values that must be applied to the newly
+     *      created document object
+     * @param string|null $folderId If specified, the identifier for the folder that must be the parent folder for the
+     *      newly created document object
+     * @param string[] $policies A list of policy IDs that must be applied to the newly created document object
+     * @param AclInterface|null $addAces A list of ACEs that must be added to the newly created document object,
+     *      either using the ACL from folderId if specified, or being applied if no folderId is specified
+     * @param AclInterface|null $removeAces A list of ACEs that must be removed from the newly created document object,
+     *      either using the ACL from folderId if specified, or being ignored if no folderId is specified
+     * @param ExtensionDataInterface|null $extension
+     * @return string The id of the newly-created item.
      */
     public function createItem(
         $repositoryId,
@@ -288,18 +287,18 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
     /**
      * Creates a policy object of the specified type (given by the cmis:objectTypeId property).
      *
-     * @param string $repositoryId the identifier for the repository
-     * @param PropertiesInterface $properties the property values that must be applied to the newly
-     * created document object
-     * @param string $folderId if specified, the identifier for the folder that must be the parent folder for the
-     * newly created document object
-     * @param string[] $policies a list of policy IDs that must be applied to the newly created document object
-     * @param AclInterface $addAces a list of ACEs that must be added to the newly created document object,
-     * either using the ACL from folderId if specified, or being applied if no folderId is specified
-     * @param AclInterface $removeAces a list of ACEs that must be removed from the newly created document object,
-     * either using the ACL from folderId if specified, or being ignored if no folderId is specified
-     * @param ExtensionDataInterface $extension
-     * @return string
+     * @param string $repositoryId The identifier for the repository
+     * @param PropertiesInterface $properties The property values that must be applied to the newly
+     *      created document object
+     * @param string|null $folderId If specified, the identifier for the folder that must be the parent folder for the
+     *      newly created document object
+     * @param string[] $policies A list of policy IDs that must be applied to the newly created document object
+     * @param AclInterface|null $addAces A list of ACEs that must be added to the newly created document object,
+     *      either using the ACL from folderId if specified, or being applied if no folderId is specified
+     * @param AclInterface|null $removeAces A list of ACEs that must be removed from the newly created document object,
+     *      either using the ACL from folderId if specified, or being ignored if no folderId is specified
+     * @param ExtensionDataInterface|null $extension
+     * @return string The id of the newly-created policy.
      */
     public function createPolicy(
         $repositoryId,
@@ -318,13 +317,13 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      *
      * @param string $repositoryId the identifier for the repository
      * @param PropertiesInterface $properties the property values that must be applied to the newly
-     * created document object
+     *      created document object
      * @param string[] $policies a list of policy IDs that must be applied to the newly created document object
-     * @param AclInterface $addAces a list of ACEs that must be added to the newly created document object,
-     * either using the ACL from folderId if specified, or being applied if no folderId is specified
-     * @param AclInterface $removeAces a list of ACEs that must be removed from the newly created document object,
-     * either using the ACL from folderId if specified, or being ignored if no folderId is specified
-     * @param ExtensionDataInterface $extension
+     * @param AclInterface|null $addAces a list of ACEs that must be added to the newly created document object,
+     *      either using the ACL from folderId if specified, or being applied if no folderId is specified
+     * @param AclInterface|null $removeAces a list of ACEs that must be removed from the newly created document object,
+     *      either using the ACL from folderId if specified, or being ignored if no folderId is specified
+     * @param ExtensionDataInterface|null $extension
      * @return string
      */
     public function createRelationship(
@@ -343,10 +342,9 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      *
      * @param string $repositoryId the identifier for the repository
      * @param string $objectId the identifier for the object. The repository might return a different/new object id
-     * @param string $changeToken the last change token of this object that the client received. The repository might
-     *      return a new change token (default is null)
-     * @param ExtensionDataInterface $extension
-     * @return void
+     * @param string $changeToken|null the last change token of this object that the client received.
+     *      The repository might return a new change token (default is <code>null</code>)
+     * @param ExtensionDataInterface|null $extension
      */
     public function deleteContentStream(
         $repositoryId,
@@ -362,10 +360,9 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      *
      * @param string $repositoryId the identifier for the repository
      * @param string $objectId the identifier for the object
-     * @param boolean $allVersions If true then delete all versions of the document, otherwise delete only the document
-     *      object specified (default is true)
-     * @param ExtensionDataInterface $extension
-     * @return void
+     * @param boolean $allVersions If <code>true</code> then delete all versions of the document, otherwise delete only
+     *      the document object specified (default is <code>true</code>)
+     * @param ExtensionDataInterface|null $extension
      */
     public function deleteObject(
         $repositoryId,
@@ -381,13 +378,14 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      *
      * @param string $repositoryId the identifier for the repository
      * @param string $folderId the identifier for the folder
-     * @param boolean $allVersions If true then delete all versions of the document, otherwise delete only the
-     *      document object specified (default is true)
-     * @param UnfileObject $unfileObjects defines how the repository must process file-able child- or
-     *      descendant-objects (default is UnfileObject.DELETE)
-     * @param boolean $continueOnFailure If true, then the repository should continue attempting to perform this
-     *      operation even if deletion of a child- or descendant-object in the specified folder cannot be deleted
-     * @param ExtensionDataInterface $extension
+     * @param boolean $allVersions If <code>true</code> then delete all versions of the document, otherwise delete only
+     *      the document object specified (default is <code>true</code>)
+     * @param UnfileObject|null $unfileObjects defines how the repository must process file-able child- or
+     *      descendant-objects (default is <code>UnfileObject::DELETE</code>)
+     * @param boolean $continueOnFailure If <code>true</code>, then the repository should continue attempting to
+     *      perform this operation even if deletion of a child- or descendant-object in the specified folder cannot
+     *      be deleted
+     * @param ExtensionDataInterface|null $extension
      * @return array Returns a list of object ids that could not be deleted
      */
     public function deleteTree(
@@ -406,7 +404,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      *
      * @param string $repositoryId the identifier for the repository
      * @param string $objectId the identifier for the object
-     * @param ExtensionDataInterface $extension
+     * @param ExtensionDataInterface|null $extension
      * @return AllowableActionsInterface
      */
     public function getAllowableActions($repositoryId, $objectId, ExtensionDataInterface $extension = null)
@@ -423,7 +421,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      * @param string $streamId
      * @param integer $offset
      * @param integer $length
-     * @param ExtensionDataInterface $extension
+     * @param ExtensionDataInterface|null $extension
      * @return StreamInterface
      */
     public function getContentStream(
@@ -442,18 +440,19 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      *
      * @param string $repositoryId the identifier for the repository
      * @param string $objectId the identifier for the object
-     * @param string $filter a comma-separated list of query names that defines which properties
-     *      must be returned by the repository (default is repository specific)
-     * @param boolean $includeAllowableActions if true, then the repository must return the allowable
-     *      actions for the object (default is false)
-     * @param IncludeRelationships $includeRelationships indicates what relationships in which the object
-     *      participates must be returned (default is IncludeRelationships.NONE)
+     * @param string|null $filter a comma-separated list of query names that defines which properties must be
+     *      returned by the repository (default is repository specific)
+     * @param boolean $includeAllowableActions if <code>true</code>, then the repository must return the allowable
+     *      actions for the object (default is <code>false</code>)
+     * @param IncludeRelationships|null $includeRelationships indicates what relationships in which the objects
+     *      participate must be returned (default is <code>IncludeRelationships::NONE</code>)
      * @param string $renditionFilter indicates what set of renditions the repository must return whose kind
      *      matches this filter (default is "cmis:none")
-     * @param boolean $includePolicyIds if true, then the repository must return the policy ids for
-     *      the object (default is false)
-     * @param boolean $includeAcl if true, then the repository must return the ACL for the object (default is false)
-     * @param ExtensionDataInterface $extension
+     * @param boolean $includePolicyIds if <code>true</code>, then the repository must return the policy ids for
+     *      the object (default is <code>false</code>)
+     * @param boolean $includeAcl if <code>true</code>, then the repository must return the ACL for the object
+     *      (default is <code>false</code>)
+     * @param ExtensionDataInterface|null $extension
      * @return ObjectDataInterface|null Returns object of type ObjectDataInterface or null if the repository response
      *     was empty
      */
@@ -463,7 +462,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         $filter = null,
         $includeAllowableActions = false,
         IncludeRelationships $includeRelationships = null,
-        $renditionFilter = null,
+        $renditionFilter = Constants::RENDITION_NONE,
         $includePolicyIds = false,
         $includeAcl = false,
         ExtensionDataInterface $extension = null
@@ -493,29 +492,30 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      *
      * @param string $repositoryId the identifier for the repository
      * @param string $path the path to the object
-     * @param string $filter a comma-separated list of query names that defines which properties
-     *      must be returned by the repository (default is repository specific)
-     * @param boolean $includeAllowableActions if true, then the repository must return the allowable
-     *      actions for the object (default is false)
-     * @param IncludeRelationships $includeRelationships indicates what relationships in which the object
-     *      participates must be returned (default is IncludeRelationships.NONE)
+     * @param string|null $filter a comma-separated list of query names that defines which properties must be
+     *      returned by the repository (default is repository specific)
+     * @param boolean $includeAllowableActions if <code>true</code>, then the repository must return the allowable
+     *      actions for the object (default is <code>false</code>)
+     * @param IncludeRelationships|null $includeRelationships indicates what relationships in which the objects
+     *      participate must be returned (default is <code>IncludeRelationships::NONE</code>)
      * @param string $renditionFilter indicates what set of renditions the repository must return whose kind
      *      matches this filter (default is "cmis:none")
-     * @param boolean $includePolicyIds if true, then the repository must return the policy ids for
-     *      the object (default is false)
-     * @param boolean $includeAcl if true, then the repository must return the ACL for the object (default is false)
-     * @param ExtensionDataInterface $extension
+     * @param boolean $includePolicyIds if <code>true</code>, then the repository must return the policy ids for
+     *      the object (default is <code>false</code>)
+     * @param boolean $includeAcl if <code>true</code>, then the repository must return the ACL for the object
+     *      (default is <code>false</code>)
+     * @param ExtensionDataInterface|null $extension
      * @return ObjectDataInterface
      */
     public function getObjectByPath(
         $repositoryId,
         $path,
-        $filter,
-        $includeAllowableActions,
-        IncludeRelationships $includeRelationships,
-        $renditionFilter,
-        $includePolicyIds,
-        $includeAcl,
+        $filter = null,
+        $includeAllowableActions = false,
+        IncludeRelationships $includeRelationships = null,
+        $renditionFilter = Constants::RENDITION_NONE,
+        $includePolicyIds = false,
+        $includeAcl = false,
         ExtensionDataInterface $extension = null
     ) {
         // TODO: Implement getObjectByPath() method.
@@ -526,9 +526,9 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      *
      * @param string $repositoryId the identifier for the repository
      * @param string $objectId the identifier for the object
-     * @param string $filter a comma-separated list of query names that defines which properties
-     *      must be returned by the repository (default is repository specific)
-     * @param ExtensionDataInterface $extension
+     * @param string|null $filter a comma-separated list of query names that defines which properties must be
+     *      returned by the repository (default is repository specific)
+     * @param ExtensionDataInterface|null $extension
      * @return PropertiesInterface
      */
     public function getProperties(
@@ -548,9 +548,11 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      * @param string $objectId the identifier for the object
      * @param string $renditionFilter indicates what set of renditions the repository must return whose kind
      *      matches this filter (default is "cmis:none")
-     * @param integer $maxItems
-     * @param integer $skipCount
-     * @param ExtensionDataInterface $extension
+     * @param integer|null $maxItems the maximum number of items to return in a response
+     *       (default is repository specific)
+     * @param integer $skipCount number of potential results that the repository MUST skip/page over before
+     *      returning any results (default is 0)
+     * @param ExtensionDataInterface|null $extension
      * @return RenditionDataInterface[]
      */
     public function getRenditions(
@@ -558,7 +560,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         $objectId,
         $renditionFilter = Constants::RENDITION_NONE,
         $maxItems = null,
-        $skipCount = null,
+        $skipCount = 0,
         ExtensionDataInterface $extension = null
     ) {
         // TODO: Implement getRenditions() method.
@@ -571,8 +573,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      * @param string $objectId the identifier for the object. The repository might return a different/new object id
      * @param string $targetFolderId the identifier for the target folder
      * @param string $sourceFolderId the identifier for the source folder
-     * @param ExtensionDataInterface $extension
-     * @return void
+     * @param ExtensionDataInterface|null $extension
      */
     public function moveObject(
         $repositoryId,
@@ -587,16 +588,16 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
     /**
      * Sets the content stream for the specified document object.
      *
-     * @param string $repositoryId the identifier for the repository
-     * @param string $objectId the identifier for the object. The repository might return a different/new object id
-     * @param StreamInterface $contentStream the content stream
-     * @param boolean $overwriteFlag (optional) If true, then the repository must replace the existing content stream
-     *      for the object (if any) with the input content stream. If If false, then the repository must only set the
-     *      input content stream for the object if the object currently does not have a content stream (default is true)
-     * @param string $changeToken the last change token of this object that the client received.
-     *      The repository might return a new change token (default is null)
-     * @param ExtensionDataInterface $extension
-     * @return void
+     * @param string $repositoryId The identifier for the repository
+     * @param string $objectId The identifier for the object. The repository might return a different/new object id
+     * @param StreamInterface $contentStream The content stream
+     * @param boolean $overwriteFlag If <code>true</code>, then the repository must replace the existing content stream
+     *      for the object (if any) with the input content stream. If <code>false</code>, then the repository must
+     *      only set the input content stream for the object if the object currently does not have a content stream
+     *      (default is <code>true</code>)
+     * @param string|null $changeToken The last change token of this object that the client received.
+     *      The repository might return a new change token (default is <code>null</code>)
+     * @param ExtensionDataInterface|null $extension
      */
     public function setContentStream(
         $repositoryId,
@@ -612,13 +613,12 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
     /**
      * Updates properties of the specified object.
      *
-     * @param string $repositoryId the identifier for the repository
-     * @param string $objectId the identifier for the object. The repository might return a different/new object id
-     * @param PropertiesInterface $properties the updated property values that must be applied to the object
-     * @param string $changeToken (optional) the last change token of this object that the client received.
-     * The repository might return a new change token (default is null)
-     * @param ExtensionDataInterface $extension
-     * @return void
+     * @param string $repositoryId The identifier for the repository
+     * @param string $objectId The identifier for the object. The repository might return a different/new object id
+     * @param PropertiesInterface $properties The updated property values that must be applied to the object
+     * @param string|null $changeToken The last change token of this object that the client received.
+     *      The repository might return a new change token (default is <code>null</code>)
+     * @param ExtensionDataInterface|null $extension
      */
     public function updateProperties(
         $repositoryId,

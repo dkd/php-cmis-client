@@ -37,7 +37,8 @@ class ObjectInFolderList extends AbstractExtensionData implements ObjectInFolder
      * Returns the total number of the objects in the folder from repository.
      * It is not a number of objects in response and could be greater as amount of objects properties.
      *
-     * @return integer|null the total number of the objects or null if the repository didn't provide the number
+     * @return integer|null the total number of the objects or <code>null</code> if the repository didn't provide
+     *      the number
      */
     public function getNumItems()
     {
@@ -57,7 +58,7 @@ class ObjectInFolderList extends AbstractExtensionData implements ObjectInFolder
     /**
      * Returns the objects in the folder.
      *
-     * @return ObjectInFolderDataInterface[] the objects in the folder, not null
+     * @return ObjectInFolderDataInterface[] the objects in the folder, not <code>null</code>
      */
     public function getObjects()
     {
@@ -81,8 +82,9 @@ class ObjectInFolderList extends AbstractExtensionData implements ObjectInFolder
     /**
      * Indicates if there are more objects in the folder.
      *
-     * @return boolean|null true if there are more objects,
-     * false if there are not more objects, or null if the repository didn't provide this flag
+     * @return boolean|null <code>true</code> if there are more objects,
+     *      <code>false</code> if there are not more objects, or <code>null</code> if the repository didn't provide
+     *      this flag
      */
     public function hasMoreItems()
     {

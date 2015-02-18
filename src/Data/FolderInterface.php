@@ -166,11 +166,11 @@ interface FolderInterface extends FileableCmisObjectInterface, FolderPropertiesI
      *     <code>false</code>, delete only the document versions referenced in the tree. The repository MUST ignore the
      *     value of this parameter when this service is invoked on any non-document objects or non-versionable document
      *     objects.
-     * @param UnfileObject $unfile An enumeration specifying how the repository MUST process ﬁle-able child- or
+     * @param UnfileObject $unfile An enumeration specifying how the repository MUST process file-able child- or
      *     descendant-objects.
      * @param boolean $continueOnFailure If <code>true</code>, then the repository SHOULD continue attempting to
      *     perform this operation even if deletion of a child- or descendant-object in the specified folder cannot be
-     *     deleted. If <code>false</code> (default), then the repository SHOULD abort this method when it fails to
+     *     deleted. If <code>false</code>, then the repository SHOULD abort this method when it fails to
      *     delete a single child object or descendant object.
      * @return string[] A list of identifiers of objects in the folder tree that were not deleted.
      */
@@ -205,7 +205,7 @@ interface FolderInterface extends FileableCmisObjectInterface, FolderPropertiesI
     /**
      * Gets the parent folder object.
      *
-     * @return FolderInterface|null the parent folder object or null if the folder is the root folder.
+     * @return FolderInterface|null the parent folder object or <code>null</code> if the folder is the root folder.
      */
     public function getFolderParent();
 
@@ -220,7 +220,7 @@ interface FolderInterface extends FileableCmisObjectInterface, FolderPropertiesI
      *      Return only objects that are children of the folder and descendants up to <value> levels deep.
      *    -1
      *      Return ALL descendant objects at all depth levels in the CMIS hierarchy.
-     *      The default value is repository speciﬁc and SHOULD be at least 2 or -1.
+     *      The default value is repository specific and SHOULD be at least 2 or -1.
      * @param OperationContextInterface|null $context
      * @return TreeInterface A tree that contains FileableCmisObject objects
      * @see FileableCmisObject FileableCmisObject contained in returned TreeInterface

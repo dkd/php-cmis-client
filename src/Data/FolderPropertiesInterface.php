@@ -25,10 +25,10 @@ interface FolderPropertiesInterface
     public function getAllowedChildObjectTypes();
 
     /**
-     * Returns the parent id or null if the folder is the root folder (CMIS property cmis:parentId).
+     * Returns the parent id or <code>null</code> if the folder is the root folder (CMIS property cmis:parentId).
      *
-     * @return string|null the property value or null if the property hasn't been requested, hasn't been provided
-     * by the repository, or the folder is the root folder
+     * @return string|null the property value or <code>null</code> if the property hasn't been requested, hasn't
+     *      been provided by the repository, or the folder is the root folder
      */
     public function getParentId();
 }

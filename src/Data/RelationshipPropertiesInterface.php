@@ -18,7 +18,7 @@ interface RelationshipPropertiesInterface
     /**
      * Returns the source ID of this CMIS relationship (CMIS property cmis:sourceId).
      *
-     * @return ObjectIdInterface the source ID or null if the property hasn't been requested,
+     * @return ObjectIdInterface the source ID or <code>null</code> if the property hasn't been requested,
      * hasn't been provided by the repository, or the property value isn't set
      */
     public function getSourceId();

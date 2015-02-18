@@ -321,9 +321,10 @@ abstract class AbstractCmisObject implements CmisObjectInterface
      * the object ID of the new object is returned. Otherwise the object ID of the current object is returned.
      *
      * @param mixed[] $properties the properties to update
-     * @param boolean $refresh true if this object should be refresh after the update, false if not
-     * @return CmisObjectInterface|null the object ID of the updated object - can return null in case of a repository
-     *     failure
+     * @param boolean $refresh <code>true</code> if this object should be refresh after the update,
+     *      <code>false</code> if not
+     * @return CmisObjectInterface|null the object ID of the updated object - can return <code>null</code> in case
+     *      of a repository failure
      */
     public function updateProperties(array $properties, $refresh = true)
     {
@@ -375,11 +376,11 @@ abstract class AbstractCmisObject implements CmisObjectInterface
      * If the repository created a new object, for example a new version, the object id of the
      * new object is returned. Otherwise the object id of the current object is returned.
      *
-     * @param string $newName the new name, not null or empty
+     * @param string $newName the new name, not <code>null</code> or empty
      * @param boolean $refresh <code>true</code> if this object should be refresh after the update,
      *     <code>false</code> if not
-     * @return CmisObjectInterface|null the object ID of the updated object - can return null in case of a repository
-     *     failure
+     * @return CmisObjectInterface|null the object ID of the updated object - can return <code>null</code> in case of
+     *     a repository failure
      */
     public function rename($newName, $refresh = true)
     {
@@ -400,7 +401,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
     /**
      * Returns the base type of this CMIS object (object type identified by cmis:baseTypeId).
      *
-     * @return ObjectTypeInterface the base type of the object or null if the property cmis:baseTypeId
+     * @return ObjectTypeInterface the base type of the object or <code>null</code> if the property cmis:baseTypeId
      *         hasn't been requested or hasn't been provided by the repository
      */
     public function getBaseType()
@@ -416,7 +417,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
     /**
      * Returns the base type of this CMIS object (object type identified by cmis:baseTypeId).
      *
-     * @return BaseTypeId|null the base type of the object or null if the property
+     * @return BaseTypeId|null the base type of the object or <code>null</code> if the property
      *         cmis:baseTypeId hasn't been requested or hasn't been provided by the repository
      */
     public function getBaseTypeId()
@@ -432,7 +433,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
     /**
      * Returns the change token (CMIS property cmis:changeToken).
      *
-     * @return string the change token of the object or null if the property hasn't been requested or
+     * @return string the change token of the object or <code>null</code> if the property hasn't been requested or
      *         hasn't been provided or isn't supported by the repository
      */
     public function getChangeToken()
@@ -443,7 +444,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
     /**
      * Returns the user who created this CMIS object (CMIS property cmis:createdBy).
      *
-     * @return string the creator of the object or null if the property hasn't been requested or hasn't
+     * @return string the creator of the object or <code>null</code> if the property hasn't been requested or hasn't
      *         been provided by the repository
      */
     public function getCreatedBy()
@@ -454,7 +455,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
     /**
      * Returns the timestamp when this CMIS object has been created (CMIS property cmis:creationDate).
      *
-     * @return \DateTime|null the creation time of the object or null if the property hasn't been
+     * @return \DateTime|null the creation time of the object or <code>null</code> if the property hasn't been
      *         requested or hasn't been provided by the repository
      */
     public function getCreationDate()
@@ -475,7 +476,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
     /**
      * Returns the timestamp when this CMIS object has been modified (CMIS property cmis:lastModificationDate).
      *
-     * @return \DateTime|null the last modification date of the object or null if the property hasn't been
+     * @return \DateTime|null the last modification date of the object or <code>null</code> if the property hasn't been
      *         requested or hasn't been provided by the repository
      */
     public function getLastModificationDate()
@@ -486,7 +487,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
     /**
      * Returns the user who modified this CMIS object (CMIS property cmis:lastModifiedBy).
      *
-     * @return string|null the last modifier of the object or null if the property hasn't
+     * @return string|null the last modifier of the object or <code>null</code> if the property hasn't
      *         been requested or hasn't been provided by the repository
      */
     public function getLastModifiedBy()
@@ -497,7 +498,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
     /**
      * Returns the name of this CMIS object (CMIS property cmis:name).
      *
-     * @return string|null the name of the object or null if the property hasn't been requested
+     * @return string|null the name of the object or <code>null</code> if the property hasn't been requested
      *         or hasn't been provided by the repository
      */
     public function getName()
@@ -508,7 +509,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
     /**
      * Returns the description of this CMIS object (CMIS property cmis:description).
      *
-     * @return string|null the description of the object or null if the property hasn't been requested,
+     * @return string|null the description of the object or <code>null</code> if the property hasn't been requested,
      *         hasn't been provided by the repository, or the property value isn't set
      */
     public function getDescription()
@@ -530,7 +531,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
      * Returns a property.
      *
      * @param string $id the ID of the property
-     * @return PropertyInterface|null the property or null if the property hasn't been requested or
+     * @return PropertyInterface|null the property or <code>null</code> if the property hasn't been requested or
      *         hasn't been provided by the repository
      */
     public function getProperty($id)
@@ -546,7 +547,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
      * Returns the value of a property.
      *
      * @param string $id the ID of the property
-     * @return mixed the property value or null if the property hasn't been requested,
+     * @return mixed the property value or <code>null</code> if the property hasn't been requested,
      *         hasn't been provided by the repository, or the property value isn't set
      */
     public function getPropertyValue($id)
@@ -562,7 +563,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
     /**
      * Returns the secondary types of this CMIS object (object types identified by cmis:secondaryObjectTypeIds).
      *
-     * @return SecondaryTypeInterface[]|null the secondary types of the object or null if the property
+     * @return SecondaryTypeInterface[]|null the secondary types of the object or <code>null</code> if the property
      *         cmis:secondaryObjectTypeIds hasn't been requested or hasn't been provided by the repository
      */
     public function getSecondaryTypes()
@@ -574,7 +575,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
      * Returns a list of primary and secondary object types that define the given property.
      *
      * @param string $id the ID of the property
-     * @return ObjectTypeInterface[]|null a list of object types that define the given property or null
+     * @return ObjectTypeInterface[]|null a list of object types that define the given property or <code>null</code>
      *         if the property could not be found in the object types that are attached to this object
      */
     public function findObjectType($id)

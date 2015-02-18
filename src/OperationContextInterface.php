@@ -134,8 +134,8 @@ interface OperationContextInterface
     /**
      * Sets the current filter.
      *
-     * @param string $propertyFilter a comma separated string of query names or "*" for all properties or null
-     * to let the repository determine a set of properties
+     * @param string $propertyFilter a comma separated string of query names or "*" for all properties or
+     *      <code>null</code> to let the repository determine a set of properties
      */
     public function setFilterString($propertyFilter);
 

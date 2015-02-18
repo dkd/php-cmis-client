@@ -94,8 +94,6 @@ interface SessionInterface
 
     /**
      * Clears all cached data.
-     *
-     * @return void
      */
     public function clear();
 
@@ -103,12 +101,12 @@ interface SessionInterface
      * Creates a new document. The stream in contentStream is consumed but not closed by this method.
      *
      * @param string[] $properties The property values that MUST be applied to the newly-created document object.
-     * @param ObjectIdInterface $folderId If specified, the identiﬁer for the folder that MUST be the parent folder
+     * @param ObjectIdInterface $folderId If specified, the identifier for the folder that MUST be the parent folder
      *      for the newly-created document object. This parameter MUST be specified if the repository does NOT
-     *      support the optional "unﬁling" capability.
+     *      support the optional "unfiling" capability.
      * @param StreamInterface $contentStream The content stream that MUST be stored for the newly-created document
      *      object. The method of passing the contentStream to the server and the encoding mechanism will be specified
-     *      by each speciﬁc binding. MUST be required if the type requires it.
+     *      by each specific binding. MUST be required if the type requires it.
      * @param VersioningState $versioningState An enumeration specifying what the versioning state of the newly-created
      *     object MUST be. Valid values are:
      *      <code>none</code>
@@ -142,12 +140,12 @@ interface SessionInterface
     /**
      * Creates a new document from a source document.
      *
-     * @param ObjectIdInterface $source The identiﬁer for the source document.
+     * @param ObjectIdInterface $source The identifier for the source document.
      * @param string[] $properties The property values that MUST be applied to the object. This list of properties
-     *      SHOULD only contain properties whose values diﬀer from the source document.
-     * @param ObjectIdInterface $folderId If specified, the identiﬁer for the folder that MUST be the parent folder
+     *      SHOULD only contain properties whose values differ from the source document.
+     * @param ObjectIdInterface $folderId If specified, the identifier for the folder that MUST be the parent folder
      *      for the newly-created document object. This parameter MUST be specified if the repository does NOT
-     *      support the optional "unﬁling" capability.
+     *      support the optional "unfiling" capability.
      * @param VersioningState $versioningState An enumeration specifying what the versioning state of the newly-created
      *     object MUST be. Valid values are:
      *      <code>none</code>
@@ -230,7 +228,7 @@ interface SessionInterface
      * @param boolean $includeAcls indicates whether ACLs should be included or not
      * @param boolean $includeAllowableActions indicates whether Allowable Actions should be included or not
      * @param boolean $includePolicies indicates whether policies should be included or not
-     * @param IncludeRelationships $includeRelationships enum that indicates if and which
+     * @param IncludeRelationships|null $includeRelationships enum that indicates if and which
      *      relationships should be includes
      * @param string[] $renditionFilter the rendition filter or <code>null</code> for no renditions
      * @param boolean $includePathSegments indicates whether path segment or the relative path segment should
@@ -322,7 +320,6 @@ interface SessionInterface
      * @param ObjectIdInterface $objectId the ID of the object
      * @param bool $allVersions if this object is a document this parameter defines
      *      if only this version or all versions should be deleted
-     * @return void
      */
     public function delete(ObjectIdInterface $objectId, $allVersions = true);
 
@@ -424,7 +421,7 @@ interface SessionInterface
     /**
      * Get the current locale to be used for this session.
      *
-     * @return \Locale the current locale, may be null
+     * @return \Locale the current locale, may be <code>null</code>
      */
     public function getLocale();
 
@@ -529,7 +526,7 @@ interface SessionInterface
      *
      * @param string $statement the query statement (CMIS query language)
      * @param boolean $searchAllVersions specifies whether non-latest document versions should be included or not,
-     * true searches all document versions, false only searches latest document versions
+     *      <code>true</code> searches all document versions, <code>false</code> only searches latest document versions
      * @param OperationContextInterface $context the operation context to use
      * @return QueryResultInterface[]
      */
@@ -551,7 +548,6 @@ interface SessionInterface
      * Removes the given object from the cache.
      *
      * @param ObjectIdInterface $objectId
-     * @return void
      */
     public function removeObjectFromCache(ObjectIdInterface $objectId);
 
@@ -561,7 +557,6 @@ interface SessionInterface
      *
      * @param ObjectIdInterface $objectId the ID the object
      * @param ObjectIdInterface[] $policyIds the IDs of the policies to be removed
-     * @return void
      */
     public function removePolicy(ObjectIdInterface $objectId, array $policyIds);
 
@@ -580,7 +575,6 @@ interface SessionInterface
      *
      * @param OperationContextInterface $context the OperationContext to be used for the session;
      *      if null, a default context is used
-     * @return void
      */
     public function setDefaultContext(OperationContextInterface $context);
 

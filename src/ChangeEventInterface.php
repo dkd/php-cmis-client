@@ -25,7 +25,7 @@ interface ChangeEventInterface extends Data\ChangeEventInfoInterface
     /**
      * Gets the ID of the object.
      *
-     * @return string the object ID, not null
+     * @return string the object ID, not <code>null</code>
      */
     public function getObjectId();
 

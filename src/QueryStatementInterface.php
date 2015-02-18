@@ -10,6 +10,8 @@ namespace Dkd\PhpCmis;
  * file that was distributed with this source code.
  */
 
+use Dkd\PhpCmis\Data\ObjectIdInterface;
+use Dkd\PhpCmis\Data\ObjectTypeInterface;
 use Dkd\PhpCmis\Definitions\PropertyDefinitionInterface;
 
 /**
@@ -20,8 +22,8 @@ interface QueryStatementInterface
     /**
      * Executes the query.
      *
-     * @param boolean $searchAllVersions  true if all document versions should be included in the search results,
-     * false if only the latest document versions should be included in the search results
+     * @param boolean $searchAllVersions <code>true</code> if all document versions should be included in the search
+     *      results, <code>false</code> if only the latest document versions should be included in the search results
      * @param OperationContextInterface $context the operation context to use
      * @return QueryResultInterface[]
      */
@@ -32,7 +34,6 @@ interface QueryStatementInterface
      *
      * @param integer $parameterIndex the parameter index (one-based)
      * @param boolean $bool the boolean
-     * @return void
      */
     public function setBoolean($parameterIndex, $bool);
 
@@ -41,7 +42,6 @@ interface QueryStatementInterface
      *
      * @param integer $parameterIndex the parameter index (one-based)
      * @param \DateTime $dateTime the DateTime value as DateTime object
-     * @return void
      */
     public function setDateTime($parameterIndex, $dateTime);
 
@@ -50,7 +50,6 @@ interface QueryStatementInterface
      *
      * @param integer $parameterIndex the parameter index (one-based)
      * @param \DateTime $dateTime the DateTime value as DateTime object
-     * @return void
      */
     public function setDateTimeTimestamp($parameterIndex, $dateTime);
 
@@ -59,7 +58,6 @@ interface QueryStatementInterface
      *
      * @param integer $parameterIndex the parameter index (one-based)
      * @param ObjectIdInterface $id the object ID
-     * @return void
      */
     public function setId($parameterIndex, ObjectIdInterface $id);
 
@@ -68,7 +66,6 @@ interface QueryStatementInterface
      *
      * @param integer $parameterIndex the parameter index (one-based)
      * @param integer $number the value to be set as number
-     * @return void
      */
     public function setNumber($parameterIndex, $number);
 
@@ -77,7 +74,6 @@ interface QueryStatementInterface
      *
      * @param integer $parameterIndex the parameter index (one-based)
      * @param PropertyDefinitionInterface $propertyDefinition
-     * @return void
      */
     public function setProperty($parameterIndex, PropertyDefinitionInterface $propertyDefinition);
 
@@ -86,7 +82,6 @@ interface QueryStatementInterface
      *
      * @param integer $parameterIndex the parameter index (one-based)
      * @param string $string the string
-     * @return void
      */
     public function setString($parameterIndex, $string);
 
@@ -116,7 +111,6 @@ interface QueryStatementInterface
      *
      * @param integer $parameterIndex the parameter index (one-based)
      * @param string $string the CONTAINS string
-     * @return void
      */
     public function setStringContains($parameterIndex, $string);
 
@@ -126,7 +120,6 @@ interface QueryStatementInterface
      *
      * @param integer $parameterIndex the parameter index (one-based)
      * @param $string
-     * @return void
      */
     public function setStringLike($parameterIndex, $string);
 
@@ -135,7 +128,6 @@ interface QueryStatementInterface
      *
      * @param integer $parameterIndex the parameter index (one-based)
      * @param ObjectTypeInterface $type the object type
-     * @return void
      */
     public function setType($parameterIndex, ObjectTypeInterface $type);
 
@@ -144,7 +136,6 @@ interface QueryStatementInterface
      *
      * @param integer $parameterIndex the parameter index (one-based)
      * @param string $uri the URI
-     * @return void
      */
     public function setUri($parameterIndex, $uri);
 

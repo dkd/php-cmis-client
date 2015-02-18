@@ -18,7 +18,7 @@ interface PolicyPropertiesInterface
     /**
      * Returns the policy text of this CMIS policy (CMIS property cmis:policyText).
      *
-     * @return string|null the policy text or null if the property hasn't been requested,
+     * @return string|null the policy text or <code>null</code> if the property hasn't been requested,
      * hasn't been provided by the repository, or the property value isn't set
      */
     public function getPolicyText();

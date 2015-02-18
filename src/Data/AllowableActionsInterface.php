@@ -20,7 +20,7 @@ interface AllowableActionsInterface extends ExtensionDataInterface
     /**
      * Returns the Allowable Actions that are set.
      *
-     * @return Action[] the Allowable Actions that are set, not null
+     * @return Action[] the Allowable Actions that are set, not <code>null</code>
      */
     public function getAllowableActions();
 }

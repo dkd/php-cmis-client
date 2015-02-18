@@ -18,14 +18,14 @@ interface ContentStreamHashInterface extends ExtensionDataInterface
     /**
      * Returns the hash algorithm.
      *
-     * @return string|null the hash algorithm or null if the property value is invalid
+     * @return string|null the hash algorithm or <code>null</code> if the property value is invalid
      */
     public function getAlgorithm();
 
     /**
      * Returns the hash value.
      *
-     * @return string|null the hash value or null if the property value is invalid
+     * @return string|null the hash value or <code>null</code> if the property value is invalid
      */
     public function getHash();
 

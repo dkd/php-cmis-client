@@ -18,14 +18,15 @@ interface ObjectParentDataInterface extends ExtensionDataInterface
     /**
      * Returns the parent object.
      *
-     * @return ObjectDataInterface the parent object, not null
+     * @return ObjectDataInterface the parent object, not <code>null</code>
      */
     public function getObject();
 
     /**
      * Returns the relative path segment of the child object relative to the parent object.
      *
-     * @return string|null the relative path segment or null if the relative path segment has not been requested
+     * @return string|null the relative path segment or <code>null</code> if the relative path segment has not
+     *      been requested
      */
     public function getRelativePathSegment();
 }

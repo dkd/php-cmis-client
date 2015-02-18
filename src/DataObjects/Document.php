@@ -39,9 +39,10 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
      *
      * @param StreamInterface $contentStream the content stream
      * @param boolean $isLastChunk indicates if this stream is the last chunk of the content
-     * @param boolean $refresh if this parameter is set to true, this object will be refreshed after the
+     * @param boolean $refresh if this parameter is set to <code>true</code>, this object will be refreshed after the
      * content stream has been appended
-     * @return ObjectIdInterface|null the updated object ID, or null if the repository did not return an object ID
+     * @return ObjectIdInterface|null the updated object ID, or <code>null</code> if the repository did not return
+     *      an object ID
      * @throws CmisNotSupportedException
      */
     public function appendContentStream(StreamInterface $contentStream, $isLastChunk, $refresh = true)
@@ -166,7 +167,8 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
     /**
      * Creates a copy of this document, including content.
      *
-     * @param ObjectIdInterface $targetFolderId the ID of the target folder, null to create an unfiled document
+     * @param ObjectIdInterface $targetFolderId the ID of the target folder, <code>null</code> to create an unfiled
+     *      document
      * @param array $properties The property values that MUST be applied to the object. This list of properties SHOULD
      *     only contain properties whose values differ from the source document. The array key is the property name
      *     the value is the property value.
@@ -237,7 +239,8 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
     /**
      * Copies the document manually. The content is streamed from the repository and back.
      *
-     * @param ObjectIdInterface $targetFolderId the ID of the target folder, null to create an unfiled document
+     * @param ObjectIdInterface $targetFolderId the ID of the target folder, <code>null</code> to create an unfiled
+     *      document
      * @param array $properties The property values that MUST be applied to the object. This list of properties SHOULD
      *     only contain properties whose values differ from the source document. The array key is the property name
      *     the value is the property value.
@@ -322,7 +325,8 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
      *
      * @param boolean $refresh if this parameter is set to <code>true</code>, this object will be refreshed after the
      *     content stream has been deleted
-     * @return DocumentInterface|null the updated document, or null if the repository did not return an object ID
+     * @return DocumentInterface|null the updated document, or <code>null</code> if the repository did not return
+     *      an object ID
      */
     public function deleteContentStream($refresh = true)
     {
@@ -389,9 +393,10 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
      * This is usually a rendition of the document.
      *
      * @param string $streamId the stream ID
-     * @param integer $offset the offset of the stream or null to read the stream from the beginning
-     * @param integer $length the maximum length of the stream or null to read to the end of the stream
-     * @return StreamInterface|null the content stream, or null if no content is associated with this stream ID
+     * @param integer $offset the offset of the stream or <code>null</code> to read the stream from the beginning
+     * @param integer $length the maximum length of the stream or <code>null</code> to read to the end of the stream
+     * @return StreamInterface|null the content stream, or <code>null</code> if no content is associated with this
+     *      stream ID
      */
     public function getContentStream($streamId = null, $offset = null, $length = null)
     {
@@ -401,8 +406,8 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
     /**
      * Fetches the latest major or minor version of this document using the given OperationContext.
      *
-     * @param boolean $major if true the latest major version will be returned,
-     * otherwise the very last version will be returned
+     * @param boolean $major if <code>true</code> the latest major version will be returned,
+     *      otherwise the very last version will be returned
      * @param OperationContextInterface|null $context
      * @return DocumentInterface the latest document object
      */
@@ -419,11 +424,12 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
      * The stream in contentStream is consumed but not closed by this method.
      *
      * @param StreamInterface $contentStream the content stream
-     * @param boolean $overwrite if this parameter is set to false and the document already has content,
-     * the repository throws a CmisContentAlreadyExistsException
-     * @param boolean $refresh if this parameter is set to true, this object will be refreshed
-     * after the new content has been set
-     * @return ObjectIdInterface|null the updated object ID, or null if the repository did not return an object ID
+     * @param boolean $overwrite if this parameter is set to <code>false</code> and the document already has content,
+     *      the repository throws a CmisContentAlreadyExistsException
+     * @param boolean $refresh if this parameter is set to <code>true</code>, this object will be refreshed
+     *      after the new content has been set
+     * @return ObjectIdInterface|null the updated object ID, or <code>null</code> if the repository did not return
+     *      an object ID
      */
     public function setContentStream(StreamInterface $contentStream, $overwrite, $refresh = true)
     {
@@ -452,8 +458,8 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
     /**
      * Returns the checkin comment (CMIS property cmis:checkinComment).
      *
-     * @return string|null the checkin comment of this version or null if the property hasn't been requested,
-     * hasn't been provided by the repository, or the property value isn't set
+     * @return string|null the checkin comment of this version or <code>null</code> if the property hasn't
+     *      been requested, hasn't been provided by the repository, or the property value isn't set
      */
     public function getCheckinComment()
     {
@@ -461,11 +467,11 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
     }
 
     /**
-     * Returns the content stream filename or null if the document has no content
+     * Returns the content stream filename or <code>null</code> if the document has no content
      * (CMIS property cmis:contentStreamFileName).
      *
-     * @return string|null the content stream filename of this document or null if the property hasn't been requested,
-     * hasn't been provided by the repository, or the document has no content
+     * @return string|null the content stream filename of this document or <code>null</code> if the property hasn't
+     *      been requested, hasn't been provided by the repository, or the document has no content
      */
     public function getContentStreamFileName()
     {
@@ -473,10 +479,11 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
     }
 
     /**
-     * Returns the content hashes or null if the document has no content (CMIS property cmis:contentStreamHash).
+     * Returns the content hashes or <code>null</code> if the document has no content
+     * (CMIS property cmis:contentStreamHash).
      *
-     * @return ContentStreamHashInterface[]|null the list of content hashes or null if the property hasn't been
-     * requested, hasn't been provided by the repository, or the document has no content
+     * @return ContentStreamHashInterface[]|null the list of content hashes or <code>null</code> if the property
+     *      hasn't been requested, hasn't been provided by the repository, or the document has no content
      */
     public function getContentStreamHashes()
     {
@@ -486,10 +493,11 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
     }
 
     /**
-     * Returns the content stream ID or null if the document has no content (CMIS property cmis:contentStreamId).
+     * Returns the content stream ID or <code>null</code> if the document has no content
+     * (CMIS property cmis:contentStreamId).
      *
-     * @return string|null the content stream ID of this document or null if the property hasn't been requested,
-     * hasn't been provided by the repository, or the document has no content
+     * @return string|null the content stream ID of this document or <code>null</code> if the property hasn't
+     *      been requested, hasn't been provided by the repository, or the document has no content
      */
     public function getContentStreamId()
     {
@@ -509,11 +517,11 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
     }
 
     /**
-     * Returns the content stream MIME type or null if the document has no content
+     * Returns the content stream MIME type or <code>null</code> if the document has no content
      * (CMIS property cmis:contentStreamMimeType).
      *
-     * @return string|null the content stream MIME type of this document or null if the property hasn't been requested,
-     * hasn't been provided by the repository, or the document has no content
+     * @return string|null the content stream MIME type of this document or <code>null</code> if the property hasn't
+     *      been requested, hasn't been provided by the repository, or the document has no content
      */
     public function getContentStreamMimeType()
     {
@@ -523,8 +531,8 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
     /**
      * Returns the version label (CMIS property cmis:versionLabel).
      *
-     * @return string|null the version label of the document or null if the property hasn't been requested,
-     * hasn't been provided by the repository, or the property value isn't set
+     * @return string|null the version label of the document or <code>null</code> if the property hasn't been requested,
+     *      hasn't been provided by the repository, or the property value isn't set
      */
     public function getVersionLabel()
     {
@@ -534,8 +542,8 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
     /**
      * Returns the user who checked out this version series (CMIS property cmis:versionSeriesCheckedOutBy).
      *
-     * @return string|null the user who checked out this version series or null if the property hasn't been requested,
-     * hasn't been provided by the repository, or the property value isn't set
+     * @return string|null the user who checked out this version series or <code>null</code> if the property hasn't
+     *      been requested, hasn't been provided by the repository, or the property value isn't set
      */
     public function getVersionSeriesCheckedOutBy()
     {
@@ -546,7 +554,7 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
      * Returns the PWC ID of this version series (CMIS property cmis:versionSeriesCheckedOutId).
      * Some repositories provided this value only to the user who checked out the version series.
      *
-     * @return string|null the PWC ID of this version series or null if the property hasn't been requested,
+     * @return string|null the PWC ID of this version series or <code>null</code> if the property hasn't been requested,
      * hasn't been provided by the repository, or the property value isn't set
      */
     public function getVersionSeriesCheckedOutId()
@@ -557,8 +565,8 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
     /**
      * Returns the version series ID (CMIS property cmis:versionSeriesId).
      *
-     * @return string|null the version series ID of the document or null if the property hasn't been requested,
-     * hasn't been provided by the repository, or the property value isn't set
+     * @return string|null the version series ID of the document or <code>null</code> if the property hasn't
+     *      been requested, hasn't been provided by the repository, or the property value isn't set
      */
     public function getVersionSeriesId()
     {
@@ -566,10 +574,10 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
     }
 
     /**
-     * Returns true if this document is immutable (CMIS property cmis:isImmutable).
+     * Returns <code>true</code> if this document is immutable (CMIS property cmis:isImmutable).
      *
-     * @return boolean|null the immutable flag of the document or null if the property hasn't been requested,
-     * hasn't been provided by the repository, or the property value isn't set
+     * @return boolean|null the immutable flag of the document or <code>null</code> if the property hasn't
+     *      been requested, hasn't been provided by the repository, or the property value isn't set
      */
     public function isImmutable()
     {
@@ -577,10 +585,10 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
     }
 
     /**
-     * Returns true if this document is the latest version (CMIS property cmis:isLatestVersion).
+     * Returns <code>true</code> if this document is the latest version (CMIS property cmis:isLatestVersion).
      *
-     * @return boolean|null the latest version flag of the document or null if the property hasn't been requested,
-     * hasn't been provided by the repository, or the property value isn't set
+     * @return boolean|null the latest version flag of the document or <code>null</code> if the property hasn't
+     *      been requested, hasn't been provided by the repository, or the property value isn't set
      */
     public function isLatestMajorVersion()
     {
@@ -588,10 +596,10 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
     }
 
     /**
-     * Returns true if this document is the latest version (CMIS property cmis:isLatestVersion).
+     * Returns <code>true</code> if this document is the latest version (CMIS property cmis:isLatestVersion).
      *
-     * @return boolean|null the latest version flag of the document or null if the property hasn't been requested,
-     * hasn't been provided by the repository, or the property value isn't set
+     * @return boolean|null the latest version flag of the document or <code>null</code> if the property hasn't
+     *      been requested, hasn't been provided by the repository, or the property value isn't set
      */
     public function isLatestVersion()
     {
@@ -599,10 +607,10 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
     }
 
     /**
-     * Returns true if this document is a major version (CMIS property cmis:isMajorVersion).
+     * Returns <code>true</code> if this document is a major version (CMIS property cmis:isMajorVersion).
      *
-     * @return boolean|null the major version flag of the document or null if the property hasn't been requested,
-     * hasn't been provided by the repository, or the property value isn't set
+     * @return boolean|null the major version flag of the document or <code>null</code> if the property hasn't
+     *      been requested, hasn't been provided by the repository, or the property value isn't set
      */
     public function isMajorVersion()
     {
@@ -610,9 +618,9 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
     }
 
     /**
-     * Returns true if this document is the PWC (CMIS property cmis:isPrivateWorkingCopy).
+     * Returns <code>true</code> if this document is the PWC (CMIS property cmis:isPrivateWorkingCopy).
      *
-     * @return boolean|null the PWC flag of the document or null if the property hasn't been requested,
+     * @return boolean|null the PWC flag of the document or <code>null</code> if the property hasn't been requested,
      * hasn't been provided by the repository, or the property value isn't set
      */
     public function isPrivateWorkingCopy()
@@ -621,10 +629,10 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
     }
 
     /**
-     * Returns true if this version series is checked out (CMIS property cmis:isVersionSeriesCheckedOut).
+     * Returns <code>true</code> if this version series is checked out (CMIS property cmis:isVersionSeriesCheckedOut).
      *
-     * @return boolean|null the version series checked out flag of the document or null if the property hasn't been
-     * requested, hasn't been provided by the repository, or the property value isn't set
+     * @return boolean|null the version series checked out flag of the document or <code>null</code> if the property
+     *      hasn't been requested, hasn't been provided by the repository, or the property value isn't set
      */
     public function isVersionSeriesCheckedOut()
     {

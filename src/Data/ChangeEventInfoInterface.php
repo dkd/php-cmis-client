@@ -20,14 +20,14 @@ interface ChangeEventInfoInterface extends ExtensionDataInterface
     /**
      * Returns when the change took place.
      *
-     * @return \DateTime the timespamp of the change, not null
+     * @return \DateTime the timespamp of the change, not <code>null</code>
      */
     public function getChangeTime();
 
     /**
      * Returns the change event type.
      *
-     * @return ChangeType the change event type, not null
+     * @return ChangeType the change event type, not <code>null</code>
      */
     public function getChangeType();
 }

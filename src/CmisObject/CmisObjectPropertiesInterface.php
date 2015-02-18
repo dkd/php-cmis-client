@@ -31,7 +31,7 @@ interface CmisObjectPropertiesInterface
      * Returns a list of primary and secondary object types that define the given property.
      *
      * @param string $id the ID of the property
-     * @return ObjectTypeInterface[]|null a list of object types that define the given property or null
+     * @return ObjectTypeInterface[]|null a list of object types that define the given property or <code>null</code>
      *         if the property couldn't be found in the object types that are attached to this object
      */
     public function findObjectType($id);
@@ -39,7 +39,7 @@ interface CmisObjectPropertiesInterface
     /**
      * Returns the base type of this CMIS object (object type identified by cmis:baseTypeId).
      *
-     * @return ObjectTypeInterface the base type of the object or null if the property cmis:baseTypeId
+     * @return ObjectTypeInterface the base type of the object or <code>null</code> if the property cmis:baseTypeId
      *         hasn't been requested or hasn't been provided by the repository
      */
     public function getBaseType();
@@ -47,7 +47,7 @@ interface CmisObjectPropertiesInterface
     /**
      * Returns the base type of this CMIS object (object type identified by cmis:baseTypeId).
      *
-     * @return BaseTypeId|null the base type of the object or null if the property
+     * @return BaseTypeId|null the base type of the object or <code>null</code> if the property
      *         cmis:baseTypeId hasn't been requested or hasn't been provided by the repository
      */
     public function getBaseTypeId();
@@ -55,7 +55,7 @@ interface CmisObjectPropertiesInterface
     /**
      * Returns the change token (CMIS property cmis:changeToken).
      *
-     * @return string the change token of the object or null if the property hasn't been requested or
+     * @return string the change token of the object or <code>null</code> if the property hasn't been requested or
      *         hasn't been provided or isn't supported by the repository
      */
     public function getChangeToken();
@@ -63,7 +63,7 @@ interface CmisObjectPropertiesInterface
     /**
      * Returns the user who created this CMIS object (CMIS property cmis:createdBy).
      *
-     * @return string the creator of the object or null if the property hasn't been requested or hasn't
+     * @return string the creator of the object or <code>null</code> if the property hasn't been requested or hasn't
      *         been provided by the repository
      */
     public function getCreatedBy();
@@ -71,7 +71,7 @@ interface CmisObjectPropertiesInterface
     /**
      * Returns the timestamp when this CMIS object has been created (CMIS property cmis:creationDate).
      *
-     * @return \DateTime|null the creation time of the object or null if the property hasn't been
+     * @return \DateTime|null the creation time of the object or <code>null</code> if the property hasn't been
      *         requested or hasn't been provided by the repository
      */
     public function getCreationDate();
@@ -79,7 +79,7 @@ interface CmisObjectPropertiesInterface
     /**
      * Returns the description of this CMIS object (CMIS property cmis:description).
      *
-     * @return string|null the description of the object or null if the property hasn't been requested,
+     * @return string|null the description of the object or <code>null</code> if the property hasn't been requested,
      *         hasn't been provided by the repository, or the property value isn't set
      */
     public function getDescription();
@@ -87,7 +87,7 @@ interface CmisObjectPropertiesInterface
     /**
      * Returns the timestamp when this CMIS object has been modified (CMIS property cmis:lastModificationDate).
      *
-     * @return \DateTime|null the last modification date of the object or null if the property hasn't been
+     * @return \DateTime|null the last modification date of the object or <code>null</code> if the property hasn't been
      *         requested or hasn't been provided by the repository
      */
     public function getLastModificationDate();
@@ -95,7 +95,7 @@ interface CmisObjectPropertiesInterface
     /**
      * Returns the user who modified this CMIS object (CMIS property cmis:lastModifiedBy).
      *
-     * @return string|null the last modifier of the object or null if the property hasn't
+     * @return string|null the last modifier of the object or <code>null</code> if the property hasn't
      *         been requested or hasn't been provided by the repository
      */
     public function getLastModifiedBy();
@@ -103,7 +103,7 @@ interface CmisObjectPropertiesInterface
     /**
      * Returns the name of this CMIS object (CMIS property cmis:name).
      *
-     * @return string|null the name of the object or null if the property hasn't been requested
+     * @return string|null the name of the object or <code>null</code> if the property hasn't been requested
      *         or hasn't been provided by the repository
      */
     public function getName();
@@ -119,7 +119,7 @@ interface CmisObjectPropertiesInterface
      * Returns a property.
      *
      * @param string $id the ID of the property
-     * @return PropertyInterface|null the property or null if the property hasn't been requested or
+     * @return PropertyInterface|null the property or <code>null</code> if the property hasn't been requested or
      *         hasn't been provided by the repository
      */
     public function getProperty($id);
@@ -128,7 +128,7 @@ interface CmisObjectPropertiesInterface
      * Returns the value of a property.
      *
      * @param string $id the ID of the property
-     * @return mixed the property value or null if the property hasn't been requested,
+     * @return mixed the property value or <code>null</code> if the property hasn't been requested,
      *         hasn't been provided by the repository, or the property value isn't set
      */
     public function getPropertyValue($id);

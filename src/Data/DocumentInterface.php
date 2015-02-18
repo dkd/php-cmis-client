@@ -29,7 +29,8 @@ interface DocumentInterface extends FileableCmisObjectInterface, DocumentPropert
      * @param boolean $isLastChunk indicates if this stream is the last chunk of the content
      * @param boolean $refresh when set to <code>false</code> this object will not be refreshed after the content
      *     stream has been appended.
-     * @return ObjectIdInterface the updated object ID, or null if the repository did not return an object ID
+     * @return ObjectIdInterface the updated object ID, or <code>null</code> if the repository did not return an
+     *      object ID
      */
     public function appendContentStream(StreamInterface $contentStream, $isLastChunk, $refresh = true);
 
@@ -75,7 +76,8 @@ interface DocumentInterface extends FileableCmisObjectInterface, DocumentPropert
     /**
      * Creates a copy of this document, including content.
      *
-     * @param ObjectIdInterface $targetFolderId the ID of the target folder, null to create an unfiled document
+     * @param ObjectIdInterface $targetFolderId the ID of the target folder, <code>null</code> to create
+     *      an unfiled document
      * @param array $properties The property values that MUST be applied to the object. This list of properties SHOULD
      *     only contain properties whose values differ from the source document.
      * @param VersioningState $versioningState An enumeration specifying what the versioning state of the newly-created
@@ -120,7 +122,8 @@ interface DocumentInterface extends FileableCmisObjectInterface, DocumentPropert
      *
      * @param boolean $refresh if this parameter is set to <code>true</code>, this object will be refreshed after the
      *     content stream has been deleted
-     * @return DocumentInterface|null the updated document, or null if the repository did not return an object ID
+     * @return DocumentInterface|null the updated document, or <code>null</code> if the repository did not return
+     *      an object ID
      */
     public function deleteContentStream($refresh = true);
 
@@ -139,16 +142,17 @@ interface DocumentInterface extends FileableCmisObjectInterface, DocumentPropert
      * This is usually a rendition of the document.
      *
      * @param string $streamId the stream ID
-     * @param integer $offset the offset of the stream or null to read the stream from the beginning
-     * @param integer $length the maximum length of the stream or null to read to the end of the stream
-     * @return StreamInterface|null the content stream, or null if no content is associated with this stream ID
+     * @param integer $offset the offset of the stream or <code>null</code> to read the stream from the beginning
+     * @param integer $length the maximum length of the stream or <code>null</code> to read to the end of the stream
+     * @return StreamInterface|null the content stream, or <code>null</code> if no content is associated with this
+     *      stream ID
      */
     public function getContentStream($streamId = null, $offset = null, $length = null);
 
     /**
      * Fetches the latest major or minor version of this document using the given OperationContext.
      *
-     * @param boolean $major if true the latest major version will be returned,
+     * @param boolean $major if <code>true</code> the latest major version will be returned,
      * otherwise the very last version will be returned
      * @param OperationContextInterface|null $context
      * @return DocumentInterface the latest document object
@@ -161,11 +165,12 @@ interface DocumentInterface extends FileableCmisObjectInterface, DocumentPropert
      * The stream in contentStream is consumed but not closed by this method.
      *
      * @param StreamInterface $contentStream the content stream
-     * @param boolean $overwrite if this parameter is set to false and the document already has content,
+     * @param boolean $overwrite if this parameter is set to <code>false</code> and the document already has content,
      * the repository throws a CmisContentAlreadyExistsException
-     * @param boolean $refresh if this parameter is set to true, this object will be refreshed
+     * @param boolean $refresh if this parameter is set to <code>true</code>, this object will be refreshed
      * after the new content has been set
-     * @return ObjectIdInterface|null the updated object ID, or null if the repository did not return an object ID
+     * @return ObjectIdInterface|null the updated object ID, or <code>null</code> if the repository did not return
+     *      an object ID
      */
     public function setContentStream(StreamInterface $contentStream, $overwrite, $refresh = true);
 }

@@ -25,7 +25,7 @@ interface RenditionDataInterface extends ExtensionDataInterface
     /**
      * Returns the size of the rendition in bytes, if available.
      *
-     * @return integer|null the size of the rendition in bytes, may be null
+     * @return integer|null the size of the rendition in bytes, may be <code>null</code>
      */
     public function getLength();
 
@@ -40,21 +40,21 @@ interface RenditionDataInterface extends ExtensionDataInterface
      * Returns the kind of the rendition.
      * The CMIS specification only defines the kind cmis:thumbnail, but a repository can provide other kinds.
      *
-     * @return string|null the rendition kind, may be null
+     * @return string|null the rendition kind, may be <code>null</code>
      */
     public function getKind();
 
     /**
      * Returns the MIME type of the rendition.
      *
-     * @return string the MIME type, should not be null
+     * @return string the MIME type, should not be <code>null</code>
      */
     public function getMimeType();
 
     /**
      * Returns the object id of the rendition document if the rendition is a stand-alone document.
      *
-     * @return string|null the rendition document ID, may be null
+     * @return string|null the rendition document ID, may be <code>null</code>
      */
     public function getRenditionDocumentId();
 
@@ -63,7 +63,7 @@ interface RenditionDataInterface extends ExtensionDataInterface
      *
      * The stream ID is required to fetch the content of the rendition.
      *
-     * @return string the stream ID, not null
+     * @return string the stream ID, not <code>null</code>
      */
     public function getStreamId();
 

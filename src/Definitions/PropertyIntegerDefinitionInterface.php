@@ -18,14 +18,14 @@ interface PropertyIntegerDefinitionInterface extends PropertyDefinitionInterface
     /**
      * Returns the maximum value of this integer.
      *
-     * @return integer|null the maximum value or null if no limit is specified
+     * @return integer|null the maximum value or <code>null</code> if no limit is specified
      */
     public function getMaxValue();
 
     /**
      * Returns the minimum value of this integer.
      *
-     * @return integer|null the minimum value or null if no limit is specified
+     * @return integer|null the minimum value or <code>null</code> if no limit is specified
      */
     public function getMinValue();
 }

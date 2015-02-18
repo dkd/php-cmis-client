@@ -38,7 +38,6 @@ abstract class AbstractExtensionData implements ExtensionDataInterface
      * Sets the list of top-level extension elements.
      *
      * @param CmisExtensionElementInterface[] $extensions
-     * @return void
      */
     public function setExtensions(array $extensions)
     {
@@ -54,8 +53,8 @@ abstract class AbstractExtensionData implements ExtensionDataInterface
      *
      * @param string $expectedType the expected object type (class name)
      * @param mixed $value The value that has to be checked
-     * @param boolean $nullAllowed Is null allowed as value?
-     * @return boolean returns true if the given value is instance of expected type
+     * @param boolean $nullAllowed Is <code>null</code> allowed as value?
+     * @return boolean returns <code>true</code> if the given value is instance of expected type
      */
     protected function checkType($expectedType, $value, $nullAllowed = false)
     {

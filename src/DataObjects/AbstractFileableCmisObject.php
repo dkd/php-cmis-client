@@ -223,8 +223,7 @@ abstract class AbstractFileableCmisObject extends AbstractCmisObject implements 
             $this->getRepositoryId(),
             $objectId,
             $folderId->getId(),
-            $allVersions,
-            null
+            $allVersions
         );
 
         // remove object form cache
@@ -271,7 +270,8 @@ abstract class AbstractFileableCmisObject extends AbstractCmisObject implements 
     }
 
     /**
-     * Ensures that the context is set. If the given context is null the session default context will be returned.
+     * Ensures that the context is set. If the given context is <code>null</code> the session default context will
+     * be returned.
      *
      * @param OperationContextInterface|null $context
      *

@@ -23,7 +23,8 @@ interface CmisExtensionElementInterface
      * The attributes must follow the XML rules for attributes.
      * Don't rely on attributes because the Browser binding does not support attributes!
      *
-     * @return array the extension attributes or null if the attributes are not set or not supported by the binding
+     * @return array the extension attributes or <code>null</code> if the attributes are not set or not supported by
+     *      the binding
      */
     public function getAttributes();
 
@@ -47,7 +48,8 @@ interface CmisExtensionElementInterface
      * The namespace must follow the XML rules for namespaces.
      * Don't rely on namespaces because the Browser binding does not support namespaces!
      *
-     * @return string the extension namespace or null if the namespace is not set or not supported by the binding
+     * @return string the extension namespace or <code>null</code> if the namespace is not set or not supported by
+     *      the binding
      */
     public function getNameSpace();
 

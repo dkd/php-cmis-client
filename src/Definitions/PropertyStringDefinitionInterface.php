@@ -18,7 +18,8 @@ interface PropertyStringDefinitionInterface extends PropertyDefinitionInterface
     /**
      * Returns the maximum length of the string.
      *
-     * @return integer|null the maximum string length in characters or null if the the length is not limited
+     * @return integer|null the maximum string length in characters or <code>null</code> if the the length is
+     *      not limited
      */
     public function getMaxLength();
 }

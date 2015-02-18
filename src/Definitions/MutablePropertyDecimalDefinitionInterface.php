@@ -22,21 +22,21 @@ interface MutablePropertyDecimalDefinitionInterface extends
     /**
      * Sets the maximum value of this decimal.
      *
-     * @param float $maxValue the maximum value or null if no limit is specified
+     * @param float $maxValue the maximum value or <code>null</code> if no limit is specified
      */
     public function setMaxValue($maxValue);
 
     /**
      * Sets the minimum value of this decimal.
      *
-     * @param float $minValue the minimum value or null if no limit is specified
+     * @param float $minValue the minimum value or <code>null</code> if no limit is specified
      */
     public function setMinValue($minValue);
 
     /**
      * Sets the precision of this decimal.
      *
-     * @param DecimalPrecision $decimalPrecision the precision or null if the decimal supports any value
+     * @param DecimalPrecision $decimalPrecision the precision or <code>null</code> if the decimal supports any value
      */
     public function setPrecision(DecimalPrecision $decimalPrecision = null);
 }

@@ -84,8 +84,6 @@ class CmisBinding implements CmisBindingInterface
 
     /**
      * Clears all caches of the current CMIS binding session.
-     *
-     * @return void
      */
     public function clearAllCaches()
     {
@@ -97,7 +95,6 @@ class CmisBinding implements CmisBindingInterface
      * Clears all caches of the current CMIS binding session that are related to the given repository.
      *
      * @param string $repositoryId
-     * @return void
      */
     public function clearRepositoryCache($repositoryId)
     {
@@ -107,8 +104,6 @@ class CmisBinding implements CmisBindingInterface
 
     /**
      * Releases all resources assigned to this binding instance.
-     *
-     * @return void
      */
     public function close()
     {

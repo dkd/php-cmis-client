@@ -20,7 +20,8 @@ interface MutablePropertyStringDefinitionInterface extends
     /**
      * Sets the max length of the string.
      *
-     * @param integer $maxLength the max string length in characters or null if the the length is not limited
+     * @param integer $maxLength the max string length in characters or <code>null</code> if the the length is not
+     *      limited
      */
     public function setMaxLength($maxLength);
 }

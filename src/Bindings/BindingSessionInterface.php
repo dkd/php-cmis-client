@@ -43,7 +43,6 @@ interface BindingSessionInterface
      *
      * @param string $key
      * @param mixed $value
-     * @return void
      */
     public function put($key, $value);
 
@@ -51,7 +50,6 @@ interface BindingSessionInterface
      * Removes a session value.
      *
      * @param string $key
-     * @return void
      */
     public function remove($key);
 }

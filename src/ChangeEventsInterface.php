@@ -18,21 +18,21 @@ interface ChangeEventsInterface
     /**
      * Returns the change event list.
      *
-     * @return ChangeEventInterface[] the list of change events, not null
+     * @return ChangeEventInterface[] the list of change events, not <code>null</code>
      */
     public function getChangeEvents();
 
     /**
      * Indicates whether are more change events or not.
      *
-     * @return boolean true is there are more change events, false otherwise
+     * @return boolean <code>true</code> is there are more change events, <code>false</code> otherwise
      */
     public function getHasMoreItems();
 
     /**
      * Returns the change log token if available.
      *
-     * @return string|null the latest change log token or null if it is not available.
+     * @return string|null the latest change log token or <code>null</code> if it is not available.
      */
     public function getLatestChangeLogToken();
 

@@ -21,42 +21,44 @@ interface ObjectDataInterface extends ExtensionDataInterface
     /**
      * Returns the access control list.
      *
-     * @return AclInterface|null the access control list or null if the access control list is unknown
+     * @return AclInterface|null the access control list or <code>null</code> if the access control list is unknown
      */
     public function getAcl();
 
     /**
      * Returns the allowable actions.
      *
-     * @return AllowableActionsInterface|null the allowable actions or null if the allowable actions are unknown
+     * @return AllowableActionsInterface|null the allowable actions or <code>null</code> if the allowable actions
+     *      are unknown
      */
     public function getAllowableActions();
 
     /**
      * Returns the base object type.
      *
-     * @return BaseTypeId|null the base object type or null if the base object type is unknown
+     * @return BaseTypeId|null the base object type or <code>null</code> if the base object type is unknown
      */
     public function getBaseTypeId();
 
     /**
      * Returns the change event infos.
      *
-     * @return ChangeEventInfoInterface|null the change event infos or null if the infos are unknown
+     * @return ChangeEventInfoInterface|null the change event infos or <code>null</code> if the infos are unknown
      */
     public function getChangeEventInfo();
 
     /**
      * Returns the object ID.
      *
-     * @return string|null the object ID or null if the object ID is unknown
+     * @return string|null the object ID or <code>null</code> if the object ID is unknown
      */
     public function getId();
 
     /**
      * Returns the IDs of the applied policies.
      *
-     * @return PolicyIdListInterface|null the policy IDs or null if no policies are applied or the IDs are unknown
+     * @return PolicyIdListInterface|null the policy IDs or <code>null</code> if no policies are applied or the IDs
+     *      are unknown
      */
     public function getPolicyIds();
 
@@ -64,28 +66,29 @@ interface ObjectDataInterface extends ExtensionDataInterface
      * Returns the object properties.
      * The properties can be incomplete if a property filter was used.
      *
-     * @return PropertiesInterface|null the properties or null if no properties are known
+     * @return PropertiesInterface|null the properties or <code>null</code> if no properties are known
      */
     public function getProperties();
 
     /**
      * Returns the relationships from and to this object.
      *
-     * @return ObjectDataInterface[] the list of relationship objects, not null
+     * @return ObjectDataInterface[] the list of relationship objects, not <code>null</code>
      */
     public function getRelationships();
 
     /**
      * Returns the renditions of this object.
      *
-     * @return RenditionDataInterface[] the list of renditions, not null
+     * @return RenditionDataInterface[] the list of renditions, not <code>null</code>
      */
     public function getRenditions();
 
     /**
      * Returns if the access control list reflects the exact permission set in the repository.
      *
-     * @return boolean|null true - exact; false - not exact, other permission constraints exist; null - unknown
+     * @return boolean|null <code>true</code> - exact; <code>false</code> - not exact, other permission
+     *      constraints exist; <code>null</code> - unknown
      */
     public function isExactAcl();
 }

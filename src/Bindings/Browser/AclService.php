@@ -23,21 +23,21 @@ class AclService extends AbstractBrowserBindingService implements AclServiceInte
     /**
      * Adds or removes the given ACEs to or from the ACL of the object.
      *
-     * @param string $repositoryId
-     * @param string $objectId
-     * @param AclInterface $addAces
-     * @param AclInterface $removeAces
-     * @param AclPropagation $aclPropagation
-     * @param ExtensionDataInterface $extension
+     * @param string $repositoryId The identifier for the repository.
+     * @param string $objectId The identifier of the object.
+     * @param AclInterface|null $addAces The ACEs to be added.
+     * @param AclInterface|null $removeAces The ACEs to be removed.
+     * @param AclPropagation|null $aclPropagation Specifies how ACEs should be handled.
+     * @param ExtensionDataInterface|null $extension
      * @return AclInterface the ACL of the object
      */
     public function applyAcl(
         $repositoryId,
         $objectId,
-        AclInterface $addAces,
-        AclInterface $removeAces,
-        AclPropagation $aclPropagation,
-        ExtensionDataInterface $extension
+        AclInterface $addAces = null,
+        AclInterface $removeAces = null,
+        AclPropagation $aclPropagation = null,
+        ExtensionDataInterface $extension = null
     ) {
         // TODO: Implement applyAcl() method.
     }
@@ -45,14 +45,23 @@ class AclService extends AbstractBrowserBindingService implements AclServiceInte
     /**
      * Get the ACL currently applied to the specified object.
      *
-     * @param string $repositoryId
-     * @param string $objectId
-     * @param boolean $onlyBasicPermissions
-     * @param ExtensionDataInterface $extension
+     * @param string $repositoryId The identifier for the repository.
+     * @param string $objectId The identifier of the object.
+     * @param boolean $onlyBasicPermissions The repository SHOULD make a best effort to fully express the native
+     *      security applied to the object.
+     *      <code>true</code> indicates that the client requests that the returned ACL be expressed using
+     *      only the CMIS basic permissions.
+     *      <code>false</code> indicates that the server may respond using either solely CMIS basic permissions,
+     *      or repository specific permissions or some combination of both.
+     * @param ExtensionDataInterface|null $extension
      * @return AclInterface the ACL of the object
      */
-    public function getAcl($repositoryId, $objectId, $onlyBasicPermissions, ExtensionDataInterface $extension)
-    {
+    public function getAcl(
+        $repositoryId,
+        $objectId,
+        $onlyBasicPermissions = true,
+        ExtensionDataInterface $extension = null
+    ) {
         // TODO: Implement getAcl() method.
     }
 }

@@ -31,7 +31,7 @@ class ObjectParentData extends AbstractExtensionData implements ObjectParentData
     /**
      * Returns the object at this level.
      *
-     * @return ObjectDataInterface the object, not null
+     * @return ObjectDataInterface the object, not <code>null</code>
      */
     public function getObject()
     {
@@ -51,7 +51,7 @@ class ObjectParentData extends AbstractExtensionData implements ObjectParentData
     /**
      * Returns the relative path segment of the object in the folder.
      *
-     * @return string|null the path segment or null if the path segment has not been requested
+     * @return string|null the path segment or <code>null</code> if the path segment has not been requested
      */
     public function getRelativePathSegment()
     {

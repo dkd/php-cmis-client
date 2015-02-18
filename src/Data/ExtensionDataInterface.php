@@ -26,7 +26,6 @@ interface ExtensionDataInterface
      * Sets the list of top-level extension elements.
      *
      * @param CmisExtensionElementInterface[] $extensions
-     * @return void
      */
     public function setExtensions(array $extensions);
 }

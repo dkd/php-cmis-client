@@ -20,14 +20,14 @@ interface MutablePropertyIntegerDefinitionInterface extends
     /**
      * Sets the maximum value of this integer.
      *
-     * @param integer $maxValue the maximum value or null if no limit is specified
+     * @param integer $maxValue the maximum value or <code>null</code> if no limit is specified
      */
     public function setMaxValue($maxValue);
 
     /**
      * Sets the minimum value of this integer.
      *
-     * @param integer $minValue the minimum value or null if no limit is specified
+     * @param integer $minValue the minimum value or <code>null</code> if no limit is specified
      */
     public function setMinValue($minValue);
 }

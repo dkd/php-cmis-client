@@ -33,7 +33,6 @@ interface PrincipalInterface extends ExtensionDataInterface
      * Sets the principal ID
      *
      * @param string $id
-     * @return void
      */
     public function setId($id);
 }

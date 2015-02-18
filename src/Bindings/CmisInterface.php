@@ -89,8 +89,6 @@ interface CmisInterface
 
     /**
      * Clears all caches of the current session.
-     *
-     * @return void
      */
     public function clearAllCaches();
 
@@ -99,14 +97,11 @@ interface CmisInterface
      * repository.
      *
      * @param string $repositoryId the repository id
-     * @return void
      */
     public function clearRepositoryCache($repositoryId);
 
     /**
      * Releases all resources assigned to this instance.
-     *
-     * @return void
      */
     public function close();
 }

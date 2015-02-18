@@ -158,7 +158,7 @@ interface ObjectFactoryInterface
      * @param string $filename
      * @param integer $length
      * @param string $mimeType
-     * @param mixed $stream  @TODO define datatype
+     * @param mixed $stream @TODO define datatype
      * @param boolean $partial
      * @return StreamInterface
      */
@@ -180,7 +180,6 @@ interface ObjectFactoryInterface
     /**
      * @param SessionInterface $session
      * @param string[] $parameters
-     * @return void
      */
     public function initialize(SessionInterface $session, $parameters = array());
 }

@@ -35,7 +35,6 @@ class RepositoryUrlCache
      * @param string $repositoryId
      * @param string $repositoryUrl
      * @param string $rootUrl
-     * @return void
      */
     public function addRepository($repositoryId, $repositoryUrl, $rootUrl)
     {

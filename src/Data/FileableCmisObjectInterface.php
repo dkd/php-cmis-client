@@ -23,7 +23,6 @@ interface FileableCmisObjectInterface extends CmisObjectInterface
      *
      * @param ObjectIdInterface $folderId
      * @param boolean $allVersions
-     * @return void
      */
     public function addToFolder(ObjectIdInterface $folderId, $allVersions);
 
@@ -63,7 +62,6 @@ interface FileableCmisObjectInterface extends CmisObjectInterface
      * Removes this object from a folder.
      *
      * @param ObjectIdInterface $folderId the object ID of the folder from which this object should be removed
-     * @return void
      */
     public function removeFromFolder(ObjectIdInterface $folderId);
 }

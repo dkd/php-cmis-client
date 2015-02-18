@@ -18,7 +18,7 @@ interface BulkUpdateObjectIdAndChangeTokenInterface extends ExtensionDataInterfa
     /**
      * Returns the change token of the object.
      *
-     * @return string the change token or null if the repository does not support change tokens
+     * @return string the change token or <code>null</code> if the repository does not support change tokens
      */
     public function getChangeToken();
 
@@ -32,7 +32,7 @@ interface BulkUpdateObjectIdAndChangeTokenInterface extends ExtensionDataInterfa
     /**
      * Returns the new object ID if the repository created a new object during the update.
      *
-     * @return string the new object ID or null if no new object has been created
+     * @return string the new object ID or <code>null</code> if no new object has been created
      */
     public function getNewId();
 }

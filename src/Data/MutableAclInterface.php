@@ -30,9 +30,9 @@ interface MutableAclInterface extends AclInterface
     /**
      * Set whether this ACL expresses all permissions of the object.
      *
-     * @param boolean $isExact {@code true} if the ACL expresses the exact permission set,
-     *         {@code false} if there are other permission rules that cannot be
-     *         expressed through ACEs, and {@code null} if this in unknown (the
+     * @param boolean $isExact <code>true</code> if the ACL expresses the exact permission set,
+     *         <code>false</code> if there are other permission rules that cannot be
+     *         expressed through ACEs, and <code>null</code> if this in unknown (the
      *         repository did not provide this information)
      */
     public function setIsExact($isExact);

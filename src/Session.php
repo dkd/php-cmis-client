@@ -279,8 +279,6 @@ class Session implements SessionInterface
 
     /**
      * Clears all cached data.
-     *
-     * @return void
      */
     public function clear()
     {
@@ -352,7 +350,7 @@ class Session implements SessionInterface
      *
      * @param ObjectIdInterface $source The identifier for the source document.
      * @param string[] $properties The property values that MUST be applied to the object. This list of properties
-     *      SHOULD only contain properties whose values diﬀer from the source document.
+     *      SHOULD only contain properties whose values differ from the source document.
      * @param ObjectIdInterface $folderId If specified, the identifier for the folder that MUST be the parent folder
      *      for the newly-created document object. This parameter MUST be specified if the repository does NOT
      *      support the optional "unfiling" capability.
@@ -461,7 +459,7 @@ class Session implements SessionInterface
      * @param boolean $includeAcls indicates whether ACLs should be included or not
      * @param boolean $includeAllowableActions indicates whether Allowable Actions should be included or not
      * @param boolean $includePolicies indicates whether policies should be included or not
-     * @param IncludeRelationships $includeRelationships enum that indicates if and which
+     * @param IncludeRelationships|null $includeRelationships enum that indicates if and which
      *      relationships should be includes
      * @param string[] $renditionFilter the rendition filter or <code>null</code> for no renditions
      * @param boolean $includePathSegments indicates whether path segment or the relative path segment should
@@ -564,7 +562,6 @@ class Session implements SessionInterface
      * @param ObjectIdInterface $objectId the ID of the object
      * @param bool $allVersions if this object is a document this parameter defines
      *      if only this version or all versions should be deleted
-     * @return void
      */
     public function delete(ObjectIdInterface $objectId, $allVersions = true)
     {
@@ -702,7 +699,7 @@ class Session implements SessionInterface
     /**
      * Get the current locale to be used for this session.
      *
-     * @return \Locale the current locale, may be null
+     * @return \Locale the current locale, may be <code>null</code>
      */
     public function getLocale()
     {
@@ -914,7 +911,6 @@ class Session implements SessionInterface
      * Removes the given object from the cache.
      *
      * @param ObjectIdInterface $objectId
-     * @return void
      */
     public function removeObjectFromCache(ObjectIdInterface $objectId)
     {
@@ -927,7 +923,6 @@ class Session implements SessionInterface
      *
      * @param ObjectIdInterface $objectId the ID the object
      * @param ObjectIdInterface[] $policyIds the IDs of the policies to be removed
-     * @return void
      */
     public function removePolicy(ObjectIdInterface $objectId, array $policyIds)
     {
@@ -952,7 +947,6 @@ class Session implements SessionInterface
      *
      * @param OperationContextInterface $context the OperationContext to be used for the session;
      *      if null, a default context is used
-     * @return void
      */
     public function setDefaultContext(OperationContextInterface $context)
     {

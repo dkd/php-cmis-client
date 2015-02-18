@@ -20,21 +20,21 @@ interface TypeMutabilityInterface extends ExtensionDataInterface
     /**
      * Indicates if a sub type of this type can be created.
      *
-     * @return boolean true if a sub type can be created, false otherwise
+     * @return boolean <code>true</code> if a sub type can be created, <code>false</code> otherwise
      */
     public function canCreate();
 
     /**
      * Indicates if this type can be deleted.
      *
-     * @return boolean true if this type can be deleted, false otherwise
+     * @return boolean <code>true</code> if this type can be deleted, <code>false</code> otherwise
      */
     public function canDelete();
 
     /**
      * Indicates if this type can be updated.
      *
-     * @return boolean true if this type can be updated, false otherwise
+     * @return boolean <code>true</code> if this type can be updated, <code>false</code> otherwise
      */
     public function canUpdate();
 }

@@ -40,7 +40,7 @@ interface ExtensionFeatureInterface extends ExtensionDataInterface
     /**
      * Returns the unique feature ID.
      *
-     * @return string the feature ID, not null
+     * @return string the feature ID, not <code>null</code>
      */
     public function getId();
 

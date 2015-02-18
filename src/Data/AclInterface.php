@@ -18,16 +18,16 @@ interface AclInterface extends ExtensionDataInterface
     /**
      * Returns the list of Access Control Entries (ACEs).
      *
-     * @return AceInterface[] the list of ACEs, not {@code null}
+     * @return AceInterface[] the list of ACEs, not <code>null</code>
      */
     public function getAces();
 
     /**
      * Indicates whether this ACL expresses all permissions of the object.
      *
-     * @return bool {@code true} if the ACL expresses the exact permission set,
-     *         {@code false} if there are other permission rules that cannot be
-     *         expressed through ACEs, and {@code null} if this in unknown (the
+     * @return bool <code>true</code> if the ACL expresses the exact permission set,
+     *         <code>false</code> if there are other permission rules that cannot be
+     *         expressed through ACEs, and <code>null</code> if this in unknown (the
      *         repository did not provide this information)
      */
     public function isExact();

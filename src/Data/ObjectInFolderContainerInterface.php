@@ -25,14 +25,14 @@ interface ObjectInFolderContainerInterface extends ExtensionDataInterface
     /**
      * Returns the object containers of the next level.
      *
-     * @return ObjectInFolderContainerInterface[] the child object, not null
+     * @return ObjectInFolderContainerInterface[] the child object, not <code>null</code>
      */
     public function getChildren();
 
     /**
      * Returns the object at this level.
      *
-     * @return ObjectInFolderDataInterface the object, not null
+     * @return ObjectInFolderDataInterface the object, not <code>null</code>
      */
     public function getObject();
 }

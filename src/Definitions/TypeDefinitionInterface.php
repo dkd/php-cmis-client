@@ -42,7 +42,7 @@ interface TypeDefinitionInterface extends ExtensionDataInterface
     /**
      * Returns the type ID.
      *
-     * @return string the type ID, not null
+     * @return string the type ID, not <code>null</code>
      */
     public function getId();
 
@@ -63,7 +63,7 @@ interface TypeDefinitionInterface extends ExtensionDataInterface
     /**
      * Returns the parent type ID.
      *
-     * @return string|null the parent type ID or null if the type is a base type
+     * @return string|null the parent type ID or <code>null</code> if the type is a base type
      */
     public function getParentTypeId();
 
@@ -100,56 +100,63 @@ interface TypeDefinitionInterface extends ExtensionDataInterface
     /**
      * Returns if objects of this type are controllable by ACLs.
      *
-     * @return boolean|null true if objects are controllable by ACLs;
-     * false if objects are not controllable by ACLs; null - unknown (noncompliant repository)
+     * @return boolean|null <code>true</code> if objects are controllable by ACLs;
+     *      <code>false</code> if objects are not controllable by ACLs;
+     *      <code>null</code> - unknown (noncompliant repository)
      */
     public function isControllableAcl();
 
     /**
      * Returns if objects of this type are controllable by policies.
      *
-     * @return boolean|null true if objects are controllable by policies;
-     * false if objects are not controllable by policies; null - unknown (noncompliant repository)
+     * @return boolean|null <code>true</code> if objects are controllable by policies;
+     *      <code>false</code> if objects are not controllable by policies;
+     *      <code>null</code> - unknown (noncompliant repository)
      */
     public function isControllablePolicy();
 
     /**
      * Returns if an object of this type can be created.
      *
-     * @return boolean|null true if an object of this type can be created;
-     * false if creation of objects of this type is not possible; null - unknown (noncompliant repository)
+     * @return boolean|null <code>true</code> if an object of this type can be created;
+     *      <code>false</code> if creation of objects of this type is not possible;
+     *      <code>null</code> - unknown (noncompliant repository)
      */
     public function isCreatable();
 
     /**
      * Returns if an object of this type can be filed.
      *
-     * @return boolean|null true if an object of this type can be filed;
-     * false if an object of this type cannot be filed; null - unknown (noncompliant repository)
+     * @return boolean|null <code>true</code> if an object of this type can be filed;
+     *      <code>false</code> if an object of this type cannot be filed;
+     *      <code>null</code> - unknown (noncompliant repository)
      */
     public function isFileable();
 
     /**
      * Returns if this type is full text indexed.
      *
-     * @return boolean|null true if this type is full text indexed;
-     * false if this type is not full text indexed; null - unknown (noncompliant repository)
+     * @return boolean|null <code>true</code> if this type is full text indexed;
+     *      <code>false</code> if this type is not full text indexed;
+     *      <code>null</code> - unknown (noncompliant repository)
      */
     public function isFulltextIndexed();
 
     /**
      * Returns if this type is included in queries that query the super type.
      *
-     * @return boolean|null true if this type is included;
-     * false if this type is not included; null - unknown (noncompliant repository)
+     * @return boolean|null <code>true</code> if this type is included;
+     *      <code>false</code> if this type is not included;
+     *      <code>null</code> - unknown (noncompliant repository)
      */
     public function isIncludedInSupertypeQuery();
 
     /**
      * Returns if this type is queryable.
      *
-     * @return boolean|null true if this type is queryable;
-     * false if this type is not queryable; null - unknown (noncompliant repository)
+     * @return boolean|null <code>true</code> if this type is queryable;
+     *      <code>false</code> if this type is not queryable;
+     *      <code>null</code> - unknown (noncompliant repository)
      */
     public function isQueryable();
 }

@@ -70,7 +70,6 @@ class ObjectFactory implements ObjectFactoryInterface
      *
      * @param SessionInterface $session
      * @param string[] $parameters
-     * @return void
      */
     public function initialize(SessionInterface $session, $parameters = array())
     {
@@ -389,7 +388,7 @@ class ObjectFactory implements ObjectFactoryInterface
     }
 
     /**
-     * Get a value from an array. Return null if the key does not exist in the array.
+     * Get a value from an array. Return <code>null</code> if the key does not exist in the array.
      *
      * @param integer|string $needle
      * @param mixed $haystack

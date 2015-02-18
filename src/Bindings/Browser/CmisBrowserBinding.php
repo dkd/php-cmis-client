@@ -186,8 +186,6 @@ class CmisBrowserBinding implements CmisInterface
 
     /**
      * Clears all caches of the current session.
-     *
-     * @return void
      */
     public function clearAllCaches()
     {
@@ -199,7 +197,6 @@ class CmisBrowserBinding implements CmisInterface
      * repository.
      *
      * @param string $repositoryId the repository id
-     * @return void
      */
     public function clearRepositoryCache($repositoryId)
     {
@@ -208,8 +205,6 @@ class CmisBrowserBinding implements CmisInterface
 
     /**
      * Releases all resources assigned to this instance.
-     *
-     * @return void
      */
     public function close()
     {

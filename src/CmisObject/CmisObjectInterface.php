@@ -49,15 +49,14 @@ interface CmisObjectInterface extends ObjectIdInterface, CmisObjectPropertiesInt
     /**
      * Applies the provided policies and refreshes this object afterwards.
      * @param ObjectIdInterface[] $policyIds
-     * @return void
      */
     public function applyPolicies(array $policyIds);
 
     /**
      * Deletes this object
      * @param boolean $allVersions if this object is a document this parameter defines whether only this
-     * version (false) or all versions (true ) should be deleted, the parameter is ignored for all other object types
-     * @return void
+     *      version (<code>false</code>) or all versions (<code>true</code>) should be deleted, the parameter is
+     *      ignored for all other object types
      */
     public function delete($allVersions);
 
@@ -78,7 +77,7 @@ interface CmisObjectInterface extends ObjectIdInterface, CmisObjectPropertiesInt
     /**
      * Returns the extensions for the given level.
      * @param ExtensionLevel $level the level
-     * @return array[] A list of CmisExtensionElementInterface at that level or null if there no extensions
+     * @return array[] A list of CmisExtensionElementInterface at that level or <code>null</code> if there no extensions
      */
     public function getExtensions(ExtensionLevel $level);
 
@@ -114,7 +113,6 @@ interface CmisObjectInterface extends ObjectIdInterface, CmisObjectPropertiesInt
     /**
      * Reloads this object from the repository.
      *
-     * @return void
      * @throws CmisObjectNotFoundException - if the object doesn't exist anymore in the repository
      */
     public function refresh();
@@ -123,7 +121,6 @@ interface CmisObjectInterface extends ObjectIdInterface, CmisObjectPropertiesInt
      * Reloads the data from the repository if the last refresh did not occur within durationInMillis.
      *
      * @param integer $durationInMillis
-     * @return void
      * @throws CmisObjectNotFoundException - if the object doesn't exist anymore in the repository
      */
     public function refreshIfOld($durationInMillis);
@@ -141,7 +138,6 @@ interface CmisObjectInterface extends ObjectIdInterface, CmisObjectPropertiesInt
      * Removes the provided policies and refreshes this object afterwards.
      *
      * @param ObjectIdInterface[] $policyIds
-     * @return void
      */
     public function removePolicy(array $policyIds);
 
@@ -150,10 +146,11 @@ interface CmisObjectInterface extends ObjectIdInterface, CmisObjectPropertiesInt
      * If the repository created a new object, for example a new version, the object id of the
      * new object is returned. Otherwise the object id of the current object is returned.
      *
-     * @param string $newName the new name, not null or empty
-     * @param boolean $refresh true if this object should be refresh after the update, false if not
-     * @return CmisObjectInterface|null the object ID of the updated object - can return null in case of a repository
-     *     failure
+     * @param string $newName the new name, not <code>null</code> or empty
+     * @param boolean $refresh <code>true</code> if this object should be refresh after the update,
+     *      <code>false</code> if not
+     * @return CmisObjectInterface|null the object ID of the updated object - can return <code>null</code> in case
+     *      of a repository failure
      */
     public function rename($newName, $refresh);
 
@@ -169,9 +166,10 @@ interface CmisObjectInterface extends ObjectIdInterface, CmisObjectPropertiesInt
      * the object ID of the new object is returned. Otherwise the object ID of the current object is returned.
      *
      * @param array $properties the properties to update
-     * @param boolean $refresh true if this object should be refresh after the update, false if not
-     * @return CmisObjectInterface|null the object ID of the updated object - can return null in case of a repository
-     *     failure
+     * @param boolean $refresh <code>true</code> if this object should be refresh after the update,
+     *      <code>false</code> if not
+     * @return CmisObjectInterface|null the object ID of the updated object - can return <code>null</code> in case
+     *     of a repository failure
      */
     public function updateProperties(array $properties, $refresh);
 

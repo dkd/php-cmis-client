@@ -259,11 +259,11 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
      *     <code>false</code>, delete only the document versions referenced in the tree. The repository MUST ignore the
      *     value of this parameter when this service is invoked on any non-document objects or non-versionable document
      *     objects.
-     * @param UnfileObject $unfile An enumeration specifying how the repository MUST process ﬁle-able child- or
+     * @param UnfileObject $unfile An enumeration specifying how the repository MUST process file-able child- or
      *     descendant-objects.
      * @param boolean $continueOnFailure If <code>true</code>, then the repository SHOULD continue attempting to
      *     perform this operation even if deletion of a child- or descendant-object in the specified folder cannot be
-     *     deleted. If <code>false</code> (default), then the repository SHOULD abort this method when it fails to
+     *     deleted. If <code>false</code>, then the repository SHOULD abort this method when it fails to
      *     delete a single child object or descendant object.
      * @return string[] A list of identifiers of objects in the folder tree that were not deleted.
      */
@@ -377,7 +377,7 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
     /**
      * Gets the parent folder object.
      *
-     * @return FolderInterface|null the parent folder object or null if the folder is the root folder.
+     * @return FolderInterface|null the parent folder object or <code>null</code> if the folder is the root folder.
      */
     public function getFolderParent()
     {
@@ -408,7 +408,7 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
      *      Return only objects that are children of the folder and descendants up to <value> levels deep.
      *    -1
      *      Return ALL descendant objects at all depth levels in the CMIS hierarchy.
-     *      The default value is repository speciﬁc and SHOULD be at least 2 or -1.
+     *      The default value is repository specific and SHOULD be at least 2 or -1.
      * @param OperationContextInterface|null $context
      * @return TreeInterface A tree that contains FileableCmisObject objects
      * @see FileableCmisObject FileableCmisObject contained in returned TreeInterface
@@ -485,10 +485,10 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
 
     /**
      * Returns the list of the allowed object types in this folder (CMIS property cmis:allowedChildObjectTypeIds).
-     * If the list is empty or null all object types are allowed.
+     * If the list is empty or <code>null</code> all object types are allowed.
      *
-     * @return ObjectTypeInterface[] the property value or null if the property hasn't been requested, hasn't been
-     *     provided by the repository, or the property value isn't set
+     * @return ObjectTypeInterface[] the property value or <code>null</code> if the property hasn't been requested,
+     *     hasn't been provided by the repository, or the property value isn't set
      */
     public function getAllowedChildObjectTypes()
     {
@@ -507,10 +507,10 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
     }
 
     /**
-     * Returns the parent id or null if the folder is the root folder (CMIS property cmis:parentId).
+     * Returns the parent id or <code>null</code> if the folder is the root folder (CMIS property cmis:parentId).
      *
-     * @return string|null the property value or null if the property hasn't been requested, hasn't been provided
-     * by the repository, or the folder is the root folder
+     * @return string|null the property value or <code>null</code> if the property hasn't been requested, hasn't
+     *      been provided by the repository, or the folder is the root folder
      */
     public function getParentId()
     {

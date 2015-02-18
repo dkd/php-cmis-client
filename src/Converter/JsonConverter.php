@@ -931,8 +931,8 @@ class JsonConverter extends AbstractDataConverter
 
         /**
          * A client MAY add the query parameter succinct (HTTP GET) or the control succinct (HTTP POST) with the
-         * value "true" to a request. If this is set, the repository MUST return properties in a succinct format.
-         * That is, whenever the repository renders an object or a query result, it MUST populate the
+         * value <code>true</code> to a request. If this is set, the repository MUST return properties in a succinct
+         * format. That is, whenever the repository renders an object or a query result, it MUST populate the
          * succinctProperties value and MUST NOT populate the properties value.
          *
          * @see http://docs.oasis-open.org/cmis/CMIS/v1.1/os/CMIS-v1.1-os.html#x1-552027r554

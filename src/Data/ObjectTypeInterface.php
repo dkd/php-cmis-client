@@ -21,7 +21,8 @@ interface ObjectTypeInterface extends TypeDefinitionInterface
     /**
      * Gets the types base type, if the type is a derived (non-base) type.
      *
-     * @return ObjectTypeInterface|null the base type this type is derived from, or null if it is a base type
+     * @return ObjectTypeInterface|null the base type this type is derived from, or <code>null</code> if it is
+     *      a base type
      */
     public function getBaseType();
 
@@ -44,14 +45,15 @@ interface ObjectTypeInterface extends TypeDefinitionInterface
     /**
      * Gets the types parent type, if the type is a derived (non-base) type.
      *
-     * @return ObjectTypeInterface|null the parent type from which this type is derived, or null if it is a base type
+     * @return ObjectTypeInterface|null the parent type from which this type is derived, or <code>null</code> if it is
+     *      a base type
      */
     public function getParentType();
 
     /**
      * Indicates whether this is base object type or not.
      *
-     * @return boolean true if this type is a base type, false if this type is a derived type
+     * @return boolean <code>true</code> if this type is a base type, <code>false</code> if this type is a derived type
      */
     public function isBaseType();
 }

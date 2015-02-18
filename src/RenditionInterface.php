@@ -10,6 +10,7 @@ namespace Dkd\PhpCmis;
  * file that was distributed with this source code.
  */
 
+use Dkd\PhpCmis\Data\DocumentInterface;
 use GuzzleHttp\Stream\StreamInterface;
 use Dkd\PhpCmis\Data\RenditionDataInterface;
 
@@ -21,7 +22,7 @@ interface RenditionInterface extends RenditionDataInterface
     /**
      * Returns the content stream of the rendition.
      *
-     * @return StreamInterface the content stream of the rendition or null if the rendition has no content
+     * @return StreamInterface the content stream of the rendition or <code>null</code> if the rendition has no content
      */
     public function getContentStream();
 
@@ -43,7 +44,7 @@ interface RenditionInterface extends RenditionDataInterface
      * Returns the rendition document using the provides OperationContext if the rendition is a stand-alone document.
      *
      * @param OperationContextInterface $context
-     * @return DocumentInterface|null the rendition document or null if there is no rendition document
+     * @return DocumentInterface|null the rendition document or <code>null</code> if there is no rendition document
      */
     public function getRenditionDocument(OperationContextInterface $context = null);
 
