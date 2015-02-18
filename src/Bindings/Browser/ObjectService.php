@@ -38,7 +38,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      * @param string $objectId The identifier for the object. The repository might return a different/new object id
      * @param StreamInterface $contentStream The content stream to append
      * @param boolean $isLastChunk Indicates if this content stream is the last chunk
-     * @param string $changeToken|null The last change token of this object that the client received.
+     * @param string|null $changeToken The last change token of this object that the client received.
      *      The repository might return a new change token (default is <code>null</code>)
      * @param ExtensionDataInterface|null $extension
      */
@@ -342,7 +342,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      *
      * @param string $repositoryId the identifier for the repository
      * @param string $objectId the identifier for the object. The repository might return a different/new object id
-     * @param string $changeToken|null the last change token of this object that the client received.
+     * @param string|null $changeToken the last change token of this object that the client received.
      *      The repository might return a new change token (default is <code>null</code>)
      * @param ExtensionDataInterface|null $extension
      */

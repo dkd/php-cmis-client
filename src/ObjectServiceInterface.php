@@ -15,7 +15,6 @@ use Dkd\PhpCmis\Data\AllowableActionsInterface;
 use Dkd\PhpCmis\Data\BulkUpdateObjectIdAndChangeTokenInterface;
 use Dkd\PhpCmis\Data\ExtensionDataInterface;
 use Dkd\PhpCmis\Data\ObjectDataInterface;
-use Dkd\PhpCmis\Data\ObjectIdInterface;
 use Dkd\PhpCmis\Data\PropertiesInterface;
 use Dkd\PhpCmis\Data\RenditionDataInterface;
 use Dkd\PhpCmis\Enum\IncludeRelationships;
@@ -115,7 +114,7 @@ interface ObjectServiceInterface
      * @param string $sourceId The identifier for the source document
      * @param PropertiesInterface $properties The property values that must be applied to the newly
      *      created document object
-     * @param string $folderId|null If specified, the identifier for the folder that must be the parent folder for the
+     * @param string|null $folderId If specified, the identifier for the folder that must be the parent folder for the
      *      newly created document object
      * @param VersioningState|null $versioningState Specifies what the versioning state of the newly created object
      *      must be (default is <code>VersioningState::MAJOR</code>)
@@ -460,7 +459,7 @@ interface ObjectServiceInterface
      *      for the object (if any) with the input content stream. If <code>false</code>, then the repository must only
      *      set the input content stream for the object if the object currently does not have a content stream
      *      (default is <code>true</code>)
-     * @param string $changeToken|null The last change token of this object that the client received.
+     * @param string|null $changeToken The last change token of this object that the client received.
      *      The repository might return a new change token (default is <code>null</code>)
      * @param ExtensionDataInterface|null $extension
      */
