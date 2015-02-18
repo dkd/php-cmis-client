@@ -32,7 +32,7 @@ class RelationshipTypeTest extends \PHPUnit_Framework_TestCase
     protected $relationshipType;
 
     /**
-     * @var ObjectTypeDefinitionInterface
+     * @var ObjectTypeInterface
      */
     protected $objectTypeDefinitionMock;
 
@@ -51,7 +51,7 @@ class RelationshipTypeTest extends \PHPUnit_Framework_TestCase
             $this->objectTypeDefinitionMock
         );
 
-        $this->relationshipType = new RelationshipType($this->sessionMock, new RelationshipTypeDefinition());
+        $this->relationshipType = new RelationshipType($this->sessionMock, new RelationshipTypeDefinition('typeId'));
     }
 
     public function testConstructorSetsSession()
@@ -64,7 +64,7 @@ class RelationshipTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructorCallsInitializeMethod()
     {
-        $relationshipTypeDefinition = new RelationshipTypeDefinition();
+        $relationshipTypeDefinition = new RelationshipTypeDefinition('typeId');
 
         /**
          * @var RelationshipType|PHPUnit_Framework_MockObject_MockObject

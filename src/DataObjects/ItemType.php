@@ -12,6 +12,8 @@ namespace Dkd\PhpCmis\DataObjects;
 
 use Dkd\PhpCmis\Data\ItemTypeInterface;
 use Dkd\PhpCmis\Definitions\ItemTypeDefinitionInterface;
+use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
+use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
 use Dkd\PhpCmis\SessionInterface;
 
 /**
@@ -19,19 +21,29 @@ use Dkd\PhpCmis\SessionInterface;
  */
 class ItemType extends ItemTypeDefinition implements ItemTypeInterface
 {
-
-    use ObjectTypeHelperTrait {
-        ObjectTypeHelperTrait::__construct as private objectTypeConstructor;
-    }
+    use ObjectTypeHelperTrait;
 
     /**
+     * Constructor of the object type. This constructor MUST call the parent constructor of the type definition
+     * and MUST all the <code>ObjectTypeHelperTrait::objectTypeConstructor</code>
+     *
      * @param SessionInterface $session
      * @param ItemTypeDefinitionInterface $typeDefinition
+     * @throws CmisInvalidArgumentException Exception is thrown if invalid TypeDefinition is given
      */
     public function __construct(
         SessionInterface $session,
-        ItemTypeDefinitionInterface $typeDefinition
+        TypeDefinitionInterface $typeDefinition
     ) {
+        if (!$typeDefinition instanceof ItemTypeDefinitionInterface) {
+            throw new CmisInvalidArgumentException(
+                sprintf(
+                    'Type definition must be instance of ItemTypeDefinitionInterface but is "%s"',
+                    get_class($typeDefinition)
+                )
+            );
+        }
+        parent::__construct($typeDefinition->getId());
         $this->objectTypeConstructor($session, $typeDefinition);
     }
 }

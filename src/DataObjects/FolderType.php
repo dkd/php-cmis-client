@@ -12,6 +12,8 @@ namespace Dkd\PhpCmis\DataObjects;
 
 use Dkd\PhpCmis\Data\FolderTypeInterface;
 use Dkd\PhpCmis\Definitions\FolderTypeDefinitionInterface;
+use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
+use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
 use Dkd\PhpCmis\SessionInterface;
 
 /**
@@ -19,18 +21,29 @@ use Dkd\PhpCmis\SessionInterface;
  */
 class FolderType extends FolderTypeDefinition implements FolderTypeInterface
 {
-    use ObjectTypeHelperTrait {
-        ObjectTypeHelperTrait::__construct as private objectTypeConstructor;
-    }
+    use ObjectTypeHelperTrait;
 
     /**
+     * Constructor of the object type. This constructor MUST call the parent constructor of the type definition
+     * and MUST all the <code>ObjectTypeHelperTrait::objectTypeConstructor</code>
+     *
      * @param SessionInterface $session
      * @param FolderTypeDefinitionInterface $typeDefinition
+     * @throws CmisInvalidArgumentException Exception is thrown if invalid TypeDefinition is given
      */
     public function __construct(
         SessionInterface $session,
-        FolderTypeDefinitionInterface $typeDefinition
+        TypeDefinitionInterface $typeDefinition
     ) {
+        if (!$typeDefinition instanceof FolderTypeDefinitionInterface) {
+            throw new CmisInvalidArgumentException(
+                sprintf(
+                    'Type definition must be instance of FolderTypeDefinitionInterface but is "%s"',
+                    get_class($typeDefinition)
+                )
+            );
+        }
+        parent::__construct($typeDefinition->getId());
         $this->objectTypeConstructor($session, $typeDefinition);
     }
 }

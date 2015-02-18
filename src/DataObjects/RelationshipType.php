@@ -13,6 +13,8 @@ namespace Dkd\PhpCmis\DataObjects;
 use Dkd\PhpCmis\Data\ObjectTypeInterface;
 use Dkd\PhpCmis\Data\RelationshipTypeInterface;
 use Dkd\PhpCmis\Definitions\RelationshipTypeDefinitionInterface;
+use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
+use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
 use Dkd\PhpCmis\SessionInterface;
 
 /**
@@ -20,9 +22,7 @@ use Dkd\PhpCmis\SessionInterface;
  */
 class RelationshipType extends RelationshipTypeDefinition implements RelationshipTypeInterface
 {
-    use ObjectTypeHelperTrait {
-        ObjectTypeHelperTrait::__construct as private objectTypeConstructor;
-    }
+    use ObjectTypeHelperTrait;
 
     /**
      * @var ObjectTypeInterface[]|null
@@ -35,16 +35,29 @@ class RelationshipType extends RelationshipTypeDefinition implements Relationshi
     protected $allowedTargetTypes;
 
     /**
+     * Constructor of the object type. This constructor MUST call the parent constructor of the type definition
+     * and MUST all the <code>ObjectTypeHelperTrait::objectTypeConstructor</code>
+     *
      * @param SessionInterface $session
      * @param RelationshipTypeDefinitionInterface $typeDefinition
+     * @throws CmisInvalidArgumentException Exception is thrown if invalid TypeDefinition is given
      */
     public function __construct(
         SessionInterface $session,
-        RelationshipTypeDefinitionInterface $typeDefinition
+        TypeDefinitionInterface $typeDefinition
     ) {
-        $this->objectTypeConstructor($session, $typeDefinition);
+        if (!$typeDefinition instanceof RelationshipTypeDefinitionInterface) {
+            throw new CmisInvalidArgumentException(
+                sprintf(
+                    'Type definition must be instance of RelationshipTypeDefinitionInterface but is "%s"',
+                    get_class($typeDefinition)
+                )
+            );
+        }
+        parent::__construct($typeDefinition->getId());
         $this->setAllowedSourceTypeIds($typeDefinition->getAllowedSourceTypeIds());
         $this->setAllowedTargetTypeIds($typeDefinition->getAllowedTargetTypeIds());
+        $this->objectTypeConstructor($session, $typeDefinition);
     }
 
     /**

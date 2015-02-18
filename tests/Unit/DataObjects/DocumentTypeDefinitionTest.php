@@ -26,12 +26,12 @@ class DocumentTypeDefinitionTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->documentTypeDefinition = new DocumentTypeDefinition();
+        $this->documentTypeDefinition = new DocumentTypeDefinition('typeId');
     }
 
     public function testInitializeMethodThrowsExceptionIfInvalidTypeGiven()
     {
-        $relationshipTypeDefinition = new RelationshipTypeDefinition();
+        $relationshipTypeDefinition = new RelationshipTypeDefinition('typeId');
         $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException');
         $this->documentTypeDefinition->initialize($relationshipTypeDefinition);
     }
@@ -41,7 +41,7 @@ class DocumentTypeDefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function testInitializeMethodCopiesPropertyValuesFromGivenTypeDefinition()
     {
-        $dummyTypeDefinition = new DocumentTypeDefinition();
+        $dummyTypeDefinition = new DocumentTypeDefinition('typeId');
         $dummyTypeDefinition->setIsVersionable(true);
         $dummyTypeDefinition->setContentStreamAllowed(ContentStreamAllowed::cast(ContentStreamAllowed::ALLOWED));
 

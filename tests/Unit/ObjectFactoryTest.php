@@ -119,27 +119,27 @@ class ObjectFactoryTest extends \PHPUnit_Framework_TestCase
         return array(
             array(
                 '\\Dkd\\PhpCmis\\DataObjects\\DocumentType',
-                new \Dkd\PhpCmis\DataObjects\DocumentTypeDefinition()
+                new \Dkd\PhpCmis\DataObjects\DocumentTypeDefinition('typeId')
             ),
             array(
                 '\\Dkd\\PhpCmis\\DataObjects\\FolderType',
-                new \Dkd\PhpCmis\DataObjects\FolderTypeDefinition()
+                new \Dkd\PhpCmis\DataObjects\FolderTypeDefinition('typeId')
             ),
             array(
                 '\\Dkd\\PhpCmis\\DataObjects\\RelationshipType',
-                new \Dkd\PhpCmis\DataObjects\RelationshipTypeDefinition()
+                new \Dkd\PhpCmis\DataObjects\RelationshipTypeDefinition('typeId')
             ),
             array(
                 '\\Dkd\\PhpCmis\\DataObjects\\PolicyType',
-                new \Dkd\PhpCmis\DataObjects\PolicyTypeDefinition()
+                new \Dkd\PhpCmis\DataObjects\PolicyTypeDefinition('typeId')
             ),
             array(
                 '\\Dkd\\PhpCmis\\DataObjects\\ItemType',
-                new \Dkd\PhpCmis\DataObjects\ItemTypeDefinition()
+                new \Dkd\PhpCmis\DataObjects\ItemTypeDefinition('typeId')
             ),
             array(
                 '\\Dkd\\PhpCmis\\DataObjects\\SecondaryType',
-                new \Dkd\PhpCmis\DataObjects\SecondaryTypeDefinition()
+                new \Dkd\PhpCmis\DataObjects\SecondaryTypeDefinition('typeId')
             )
         );
     }

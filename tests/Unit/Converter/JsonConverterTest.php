@@ -19,7 +19,10 @@ use Dkd\PhpCmis\DataObjects\AllowableActions;
 use Dkd\PhpCmis\DataObjects\ChangeEventInfo;
 use Dkd\PhpCmis\DataObjects\CmisExtensionElement;
 use Dkd\PhpCmis\DataObjects\CreatablePropertyTypes;
+use Dkd\PhpCmis\DataObjects\DocumentTypeDefinition;
 use Dkd\PhpCmis\DataObjects\ExtensionFeature;
+use Dkd\PhpCmis\DataObjects\FolderTypeDefinition;
+use Dkd\PhpCmis\DataObjects\ItemTypeDefinition;
 use Dkd\PhpCmis\DataObjects\NewTypeSettableAttributes;
 use Dkd\PhpCmis\DataObjects\ObjectData;
 use Dkd\PhpCmis\DataObjects\ObjectInFolderContainer;
@@ -30,6 +33,7 @@ use Dkd\PhpCmis\DataObjects\ObjectParentData;
 use Dkd\PhpCmis\DataObjects\PermissionDefinition;
 use Dkd\PhpCmis\DataObjects\PermissionMapping;
 use Dkd\PhpCmis\DataObjects\PolicyIdList;
+use Dkd\PhpCmis\DataObjects\PolicyTypeDefinition;
 use Dkd\PhpCmis\DataObjects\Principal;
 use Dkd\PhpCmis\DataObjects\Properties;
 use Dkd\PhpCmis\DataObjects\PropertyBoolean;
@@ -40,9 +44,12 @@ use Dkd\PhpCmis\DataObjects\PropertyId;
 use Dkd\PhpCmis\DataObjects\PropertyInteger;
 use Dkd\PhpCmis\DataObjects\PropertyString;
 use Dkd\PhpCmis\DataObjects\PropertyUri;
+use Dkd\PhpCmis\DataObjects\RelationshipTypeDefinition;
 use Dkd\PhpCmis\DataObjects\RenditionData;
 use Dkd\PhpCmis\DataObjects\RepositoryCapabilities;
 use Dkd\PhpCmis\DataObjects\RepositoryInfoBrowserBinding;
+use Dkd\PhpCmis\DataObjects\SecondaryTypeDefinition;
+use Dkd\PhpCmis\DataObjects\TypeMutability;
 use Dkd\PhpCmis\Enum\AclPropagation;
 use Dkd\PhpCmis\Enum\Action;
 use Dkd\PhpCmis\Enum\BaseTypeId;
@@ -55,6 +62,7 @@ use Dkd\PhpCmis\Enum\CapabilityQuery;
 use Dkd\PhpCmis\Enum\CapabilityRenditions;
 use Dkd\PhpCmis\Enum\ChangeType;
 use Dkd\PhpCmis\Enum\CmisVersion;
+use Dkd\PhpCmis\Enum\ContentStreamAllowed;
 use Dkd\PhpCmis\Enum\PropertyType;
 use Dkd\PhpCmis\Enum\SupportedPermissions;
 use Dkd\PhpCmis\Test\Unit\ReflectionHelperTrait;
@@ -330,7 +338,6 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
         return $result;
     }
 
-
     public function testConvertAclCapabilitiesReturnsNullIfEmptyArrayGiven()
     {
         $this->assertNull($this->jsonConverter->convertAclCapabilities(array()));
@@ -364,6 +371,161 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedAclCapabilities, $result);
 
         return $result;
+    }
+
+    public function testConvertTypeDefinitionReturnsNullIfEmptyArrayGiven()
+    {
+        $this->assertNull($this->jsonConverter->convertTypeDefinition(array()));
+    }
+
+    public function testConvertTypeDefinitionThrowsExceptionIfDataDoesNotContainTypeId()
+    {
+        $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException');
+        $this->assertNull($this->jsonConverter->convertTypeDefinition(array('foo' => 'bar')));
+    }
+
+    public function testConvertTypeDefinitionThrowsExceptionIfDataDoesNotContainValidBaseTypeId()
+    {
+        $this->setExpectedException('\\Dkd\\Enumeration\\Exception\\InvalidEnumerationValueException');
+        $this->assertNull($this->jsonConverter->convertTypeDefinition(array(JSONConstants::JSON_TYPE_ID => 'bar')));
+    }
+
+    /**
+     * @dataProvider convertTypeDefinitionDataProvider
+     * @param $expectedTypeObject
+     * @param $data
+     */
+    public function testConvertTypeDefinitionConvertsArrayToTypeDefinitionObject($expectedTypeObject, $data)
+    {
+        $result = $this->jsonConverter->convertTypeDefinition($data);
+        $this->assertInstanceOf(get_class($expectedTypeObject), $result);
+    }
+
+    /**
+     * @depends testConvertTypeDefinitionConvertsArrayToTypeDefinitionObject
+     * @dataProvider convertTypeDefinitionDataProvider
+     * @param $expectedTypeObject
+     * @param $data
+     */
+    public function testConvertTypeDefinitionConvertsArrayToTypeDefinitionObjectAndPopulatesData(
+        $expectedTypeObject,
+        $data
+    ) {
+        $result = $this->jsonConverter->convertTypeDefinition($data);
+        $this->assertEquals($expectedTypeObject, $result);
+    }
+
+    public function convertTypeDefinitionDataProvider()
+    {
+        $folderTypeDefinition = new FolderTypeDefinition('cmis:folder');
+        $folderTypeDefinition->setBaseTypeId(BaseTypeId::cast(BaseTypeId::CMIS_FOLDER));
+
+        $typeMutability = new TypeMutability();
+        $typeMutability->setCanCreate(true);
+        $typeMutability->setCanUpdate(true);
+        $typeMutability->setCanDelete(true);
+        $documentTypeDefinition = new DocumentTypeDefinition('cmis:document');
+        $documentTypeDefinition->setBaseTypeId(BaseTypeId::cast(BaseTypeId::CMIS_DOCUMENT));
+        $documentTypeDefinition->setContentStreamAllowed(ContentStreamAllowed::cast(ContentStreamAllowed::ALLOWED));
+        $documentTypeDefinition->setDescription('description');
+        $documentTypeDefinition->setDisplayName('displayName');
+        $documentTypeDefinition->setIsControllableACL(true);
+        $documentTypeDefinition->setIsVersionable(true);
+        $documentTypeDefinition->setIsControllablePolicy(true);
+        $documentTypeDefinition->setIsCreatable(true);
+        $documentTypeDefinition->setIsFileable(true);
+        $documentTypeDefinition->setIsFulltextIndexed(true);
+        $documentTypeDefinition->setIsIncludedInSupertypeQuery(true);
+        $documentTypeDefinition->setIsQueryable(true);
+        $documentTypeDefinition->setLocalName('localName');
+        $documentTypeDefinition->setLocalNamespace('localNamespace');
+        $documentTypeDefinition->setParentTypeId('parentTypeId');
+        $documentTypeDefinition->setQueryName('queryName');
+        $documentTypeDefinition->setTypeMutability($typeMutability);
+
+        $relationshipTypeDefinition = new RelationshipTypeDefinition('cmis:relationship');
+        $relationshipTypeDefinition->setBaseTypeId(BaseTypeId::cast(BaseTypeId::CMIS_RELATIONSHIP));
+        $relationshipTypeDefinition->setAllowedSourceTypeIds(array('foo'));
+        $relationshipTypeDefinition->setAllowedTargetTypeIds(array('bar'));
+
+        $policyTypeDefinition = new PolicyTypeDefinition('cmis:policy');
+        $policyTypeDefinition->setBaseTypeId(BaseTypeId::cast(BaseTypeId::CMIS_POLICY));
+
+        $itemTypeDefinition = new ItemTypeDefinition('cmis:item');
+        $itemTypeDefinition->setBaseTypeId(BaseTypeId::cast(BaseTypeId::CMIS_ITEM));
+
+        $secondaryTypeDefinition = new SecondaryTypeDefinition('cmis:secondary');
+        $secondaryTypeDefinition->setBaseTypeId(BaseTypeId::cast(BaseTypeId::CMIS_SECONDARY));
+
+        return array(
+            'Folder type definition' => array(
+                $folderTypeDefinition,
+                array(
+                    JSONConstants::JSON_TYPE_ID => 'cmis:folder',
+                    JSONConstants::JSON_TYPE_BASE_ID => BaseTypeId::CMIS_FOLDER
+                )
+            ),
+            'Document type definition' => array(
+                $documentTypeDefinition,
+                array(
+                    JSONConstants::JSON_TYPE_ID => 'cmis:document',
+                    JSONConstants::JSON_TYPE_BASE_ID => BaseTypeId::CMIS_DOCUMENT,
+                    JSONConstants::JSON_TYPE_CONTENTSTREAM_ALLOWED => ContentStreamAllowed::ALLOWED,
+                    JSONConstants::JSON_TYPE_DESCRIPTION => 'description',
+                    JSONConstants::JSON_TYPE_DISPLAYNAME => 'displayName',
+                    JSONConstants::JSON_TYPE_LOCALNAME => 'localName',
+                    JSONConstants::JSON_TYPE_LOCALNAMESPACE => 'localNamespace',
+                    JSONConstants::JSON_TYPE_PARENT_ID => 'parentTypeId',
+                    JSONConstants::JSON_TYPE_QUERYNAME => 'queryName',
+                    JSONConstants::JSON_TYPE_CONTROLABLE_ACL => true,
+                    JSONConstants::JSON_TYPE_VERSIONABLE => true,
+                    JSONConstants::JSON_TYPE_CONTROLABLE_POLICY => true,
+                    JSONConstants::JSON_TYPE_CREATABLE => true,
+                    JSONConstants::JSON_TYPE_FILEABLE => true,
+                    JSONConstants::JSON_TYPE_FULLTEXT_INDEXED => true,
+                    JSONConstants::JSON_TYPE_INCLUDE_IN_SUPERTYPE_QUERY => true,
+                    JSONConstants::JSON_TYPE_QUERYABLE => true,
+                    JSONConstants::JSON_TYPE_TYPE_MUTABILITY => array(
+                        JSONConstants::JSON_TYPE_TYPE_MUTABILITY_UPDATE => true,
+                        JSONConstants::JSON_TYPE_TYPE_MUTABILITY_CREATE => true,
+                        JSONConstants::JSON_TYPE_TYPE_MUTABILITY_DELETE => true
+                    ),
+                    JSONConstants::JSON_TYPE_PROPERTY_DEFINITIONS => array(
+                        array()
+                    )
+                )
+            ),
+            'Relationship type definition' => array(
+                $relationshipTypeDefinition,
+                array(
+                    JSONConstants::JSON_TYPE_ID => 'cmis:relationship',
+                    JSONConstants::JSON_TYPE_BASE_ID => 'cmis:relationship',
+                    JSONConstants::JSON_TYPE_ALLOWED_SOURCE_TYPES => array('foo', false, null, ''),
+                    JSONConstants::JSON_TYPE_ALLOWED_TARGET_TYPES => array('bar', false, null, ''),
+                )
+            ),
+            'Policy type definition' => array(
+                $policyTypeDefinition,
+                array(
+                    JSONConstants::JSON_TYPE_ID => 'cmis:policy',
+                    JSONConstants::JSON_TYPE_BASE_ID => 'cmis:policy'
+                )
+            ),
+            'Item type definition' => array(
+                $itemTypeDefinition,
+                array(
+                    JSONConstants::JSON_TYPE_ID => 'cmis:item',
+                    JSONConstants::JSON_TYPE_BASE_ID => 'cmis:item'
+                )
+            ),
+            'Secondary type definition' => array(
+                $secondaryTypeDefinition,
+                array(
+                    JSONConstants::JSON_TYPE_ID => 'cmis:secondary',
+                    JSONConstants::JSON_TYPE_BASE_ID => 'cmis:secondary'
+                )
+            )
+        );
     }
 
     public function testConvertPropertiesReturnsNullIfEmptyDataGiven()

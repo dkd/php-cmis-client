@@ -12,6 +12,8 @@ namespace Dkd\PhpCmis\DataObjects;
 
 use Dkd\PhpCmis\Data\DocumentTypeInterface;
 use Dkd\PhpCmis\Definitions\DocumentTypeDefinitionInterface;
+use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
+use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
 use Dkd\PhpCmis\SessionInterface;
 
 /**
@@ -19,18 +21,27 @@ use Dkd\PhpCmis\SessionInterface;
  */
 class DocumentType extends DocumentTypeDefinition implements DocumentTypeInterface
 {
-    use ObjectTypeHelperTrait {
-        ObjectTypeHelperTrait::__construct as private objectTypeConstructor;
-    }
+    use ObjectTypeHelperTrait;
 
     /**
+     * Constructor of the object type. This constructor MUST call the parent constructor of the type definition
+     * and MUST all the <code>ObjectTypeHelperTrait::objectTypeConstructor</code>
+     *
      * @param SessionInterface $session
      * @param DocumentTypeDefinitionInterface $typeDefinition
+     * @throws CmisInvalidArgumentException Throws exception if invalid type definition is given
      */
-    public function __construct(
-        SessionInterface $session,
-        DocumentTypeDefinitionInterface $typeDefinition
-    ) {
+    public function __construct(SessionInterface $session, TypeDefinitionInterface $typeDefinition)
+    {
+        if (!$typeDefinition instanceof DocumentTypeDefinitionInterface) {
+            throw new CmisInvalidArgumentException(
+                sprintf(
+                    'Type definition must be instance of DocumentTypeDefinitionInterface but is "%s"',
+                    get_class($typeDefinition)
+                )
+            );
+        }
+        parent::__construct($typeDefinition->getId());
         $this->objectTypeConstructor($session, $typeDefinition);
     }
 }

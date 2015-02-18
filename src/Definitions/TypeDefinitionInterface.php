@@ -78,8 +78,7 @@ interface TypeDefinitionInterface extends ExtensionDataInterface
     /**
      * Returns the property definitions of this type.
      *
-     * @return PropertyDefinitionInterface[]|null the property definitions or
-     * null if the property definitions were not requested
+     * @return PropertyDefinitionInterface[] the property definitions
      */
     public function getPropertyDefinitions();
 

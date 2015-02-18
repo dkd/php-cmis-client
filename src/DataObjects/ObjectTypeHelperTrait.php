@@ -37,10 +37,12 @@ trait ObjectTypeHelperTrait
     protected $session;
 
     /**
+     * Helper method for construction of the object type. This method MUST be called by the object types constructor!
+     *
      * @param SessionInterface $session
      * @param TypeDefinitionInterface $typeDefinition
      */
-    public function __construct(
+    public function objectTypeConstructor(
         SessionInterface $session,
         TypeDefinitionInterface $typeDefinition
     ) {
@@ -49,6 +51,8 @@ trait ObjectTypeHelperTrait
     }
 
     /**
+     * Get the session that is related to the type
+     *
      * @return SessionInterface
      */
     public function getSession()
@@ -82,6 +86,7 @@ trait ObjectTypeHelperTrait
     public function isBaseType()
     {
         $baseTypeId = $this->getParentTypeId();
+
         return empty($baseTypeId);
     }
 

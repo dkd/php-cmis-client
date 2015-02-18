@@ -22,12 +22,12 @@ class RelationshipTypeDefinitionTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->relationshipTypeDefinition = new RelationshipTypeDefinition();
+        $this->relationshipTypeDefinition = new RelationshipTypeDefinition('typeId');
     }
 
     public function testInitializeMethodThrowsExceptionIfInvalidTypeGiven()
     {
-        $relationshipTypeDefinition = new DocumentTypeDefinition();
+        $relationshipTypeDefinition = new DocumentTypeDefinition('typeId');
         $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException');
         $this->relationshipTypeDefinition->initialize($relationshipTypeDefinition);
     }
@@ -37,7 +37,7 @@ class RelationshipTypeDefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function testInitializeMethodCopiesPropertyValuesFromGivenTypeDefinition()
     {
-        $dummyTypeDefinition = new RelationshipTypeDefinition();
+        $dummyTypeDefinition = new RelationshipTypeDefinition('typeId');
         $dummyTypeDefinition->setAllowedTargetTypeIds(array('foo'));
         $dummyTypeDefinition->setAllowedSourceTypeIds(array('bar'));
 

@@ -10,6 +10,7 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  * file that was distributed with this source code.
  */
 
+use Dkd\PhpCmis\DataObjects\ItemType;
 use Dkd\PhpCmis\Definitions\ItemTypeDefinitionInterface;
 use PHPUnit_Framework_MockObject_MockObject;
 
@@ -27,11 +28,10 @@ class ItemTypeTest extends \PHPUnit_Framework_TestCase
          */
         $itemTypeDefinition = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\Definitions\\MutableItemTypeDefinitionInterface'
-        )->getMockForAbstractClass();
-
-        $itemType = $this->getMockBuilder('\\Dkd\\PhpCmis\\DataObjects\\ItemType')->setConstructorArgs(
-            array($sessionMock, $itemTypeDefinition)
-        )->getMock();
+        )->setMethods(array('getId'))->getMockForAbstractClass();
+        $itemTypeDefinition->expects($this->any())->method('getId')->willReturn('typeId');
+        $itemTypeDefinition->expects($this->any())->method('getPropertyDefinitions')->willReturn(array());
+        $itemType = new ItemType($sessionMock, $itemTypeDefinition);
 
         $this->assertAttributeSame($sessionMock, 'session', $itemType);
     }
@@ -48,7 +48,12 @@ class ItemTypeTest extends \PHPUnit_Framework_TestCase
          */
         $itemTypeDefinition = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\Definitions\\MutableItemTypeDefinitionInterface'
-        )->getMockForAbstractClass();
+        )->setMethods(array('getId'))->getMockForAbstractClass();
+        $itemTypeDefinition->expects($this->any())->method('getId')->willReturn('typeId');
+
+        /**
+         * @var ItemType|PHPUnit_Framework_MockObject_MockObject $itemType
+         */
         $itemType = $this->getMockBuilder('\\Dkd\\PhpCmis\\DataObjects\\ItemType')->setMethods(
             array('initialize')
         )->disableOriginalConstructor()->getMock();

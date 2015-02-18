@@ -10,6 +10,7 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  * file that was distributed with this source code.
  */
 
+use Dkd\PhpCmis\DataObjects\FolderType;
 use Dkd\PhpCmis\Definitions\FolderTypeDefinitionInterface;
 use PHPUnit_Framework_MockObject_MockObject;
 
@@ -27,11 +28,10 @@ class FolderTypeTest extends \PHPUnit_Framework_TestCase
          */
         $folderTypeDefinition = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\Definitions\\MutableFolderTypeDefinitionInterface'
-        )->getMockForAbstractClass();
-
-        $folderType = $this->getMockBuilder('\\Dkd\\PhpCmis\\DataObjects\\FolderType')->setConstructorArgs(
-            array($sessionMock, $folderTypeDefinition)
-        )->getMock();
+        )->setMethods(array('getId'))->getMockForAbstractClass();
+        $folderTypeDefinition->expects($this->any())->method('getId')->willReturn('typeId');
+        $folderTypeDefinition->expects($this->any())->method('getPropertyDefinitions')->willReturn(array());
+        $folderType = new FolderType($sessionMock, $folderTypeDefinition);
 
         $this->assertAttributeSame($sessionMock, 'session', $folderType);
     }
@@ -48,7 +48,12 @@ class FolderTypeTest extends \PHPUnit_Framework_TestCase
          */
         $folderTypeDefinition = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\Definitions\\MutableFolderTypeDefinitionInterface'
-        )->getMockForAbstractClass();
+        )->setMethods(array('getId'))->getMockForAbstractClass();
+        $folderTypeDefinition->expects($this->any())->method('getId')->willReturn('typeId');
+
+        /**
+         * @var FolderType|PHPUnit_Framework_MockObject_MockObject $folderType
+         */
         $folderType = $this->getMockBuilder('\\Dkd\\PhpCmis\\DataObjects\\FolderType')->setMethods(
             array('initialize')
         )->disableOriginalConstructor()->getMock();

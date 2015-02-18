@@ -73,6 +73,8 @@ use Dkd\PhpCmis\DataObjects\RepositoryCapabilities;
 use Dkd\PhpCmis\DataObjects\RepositoryInfoBrowserBinding;
 use Dkd\PhpCmis\DataObjects\SecondaryTypeDefinition;
 use Dkd\PhpCmis\DataObjects\TypeMutability;
+use Dkd\PhpCmis\Definitions\MutableDocumentTypeDefinitionInterface;
+use Dkd\PhpCmis\Definitions\MutableRelationshipTypeDefinitionInterface;
 use Dkd\PhpCmis\Definitions\PropertyDefinitionInterface;
 use Dkd\PhpCmis\Definitions\TypeDefinitionContainerInterface;
 use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
@@ -596,6 +598,7 @@ class JsonConverter extends AbstractDataConverter
      *
      * @param array $data
      * @return TypeDefinitionInterface|null
+     * @throws CmisInvalidArgumentException
      */
     public function convertTypeDefinition(array $data = null)
     {
@@ -603,22 +606,24 @@ class JsonConverter extends AbstractDataConverter
             return null;
         }
 
-        $id = null;
-        if (!empty($data[JSONConstants::JSON_TYPE_ID])) {
-            $id = $data[JSONConstants::JSON_TYPE_ID];
+        if (empty($data[JSONConstants::JSON_TYPE_ID])) {
+            throw new CmisInvalidArgumentException('Id of type definition is empty but must not be empty!');
         }
-        $baseType = BaseTypeId::cast($data[JSONConstants::JSON_TYPE_BASE_ID]);
+        $typeDefinition = $this->getTypeDefinitionByBaseTypeId(
+            isset($data[JSONConstants::JSON_TYPE_BASE_ID]) ? $data[JSONConstants::JSON_TYPE_BASE_ID] : '',
+            $data[JSONConstants::JSON_TYPE_ID]
+        );
 
-        if ($baseType->equals(BaseTypeId::cast(BaseTypeId::CMIS_FOLDER))) {
-            $result = new FolderTypeDefinition();
-        } elseif ($baseType->equals(BaseTypeId::cast(BaseTypeId::CMIS_DOCUMENT))) {
-            $result = new DocumentTypeDefinition();
-            $result->setContentStreamAllowed(
-                ContentStreamAllowed::cast($data[JSONConstants::JSON_TYPE_CONTENTSTREAM_ALLOWED])
-            );
-            $result->setIsVersionable((boolean) $data[JSONConstants::JSON_TYPE_VERSIONABLE]);
-        } elseif ($baseType->equals(BaseTypeId::cast(BaseTypeId::CMIS_RELATIONSHIP))) {
-            $result = new RelationshipTypeDefinition();
+        if ($typeDefinition instanceof MutableDocumentTypeDefinitionInterface) {
+            if (!empty($data[JSONConstants::JSON_TYPE_CONTENTSTREAM_ALLOWED])) {
+                $typeDefinition->setContentStreamAllowed(
+                    ContentStreamAllowed::cast($data[JSONConstants::JSON_TYPE_CONTENTSTREAM_ALLOWED])
+                );
+            }
+            if (isset($data[JSONConstants::JSON_TYPE_VERSIONABLE])) {
+                $typeDefinition->setIsVersionable((boolean) $data[JSONConstants::JSON_TYPE_VERSIONABLE]);
+            }
+        } elseif ($typeDefinition instanceof MutableRelationshipTypeDefinitionInterface) {
             if (isset($data[JSONConstants::JSON_TYPE_ALLOWED_SOURCE_TYPES])
                 && is_array($data[JSONConstants::JSON_TYPE_ALLOWED_SOURCE_TYPES])
             ) {
@@ -629,7 +634,7 @@ class JsonConverter extends AbstractDataConverter
                         $allowedSourceTypeIds[] = $allowedSourceTypeId;
                     }
                 }
-                $result->setAllowedSourceTypeIds($allowedSourceTypeIds);
+                $typeDefinition->setAllowedSourceTypeIds($allowedSourceTypeIds);
             }
             if (isset($data[JSONConstants::JSON_TYPE_ALLOWED_TARGET_TYPES])
                 && is_array($data[JSONConstants::JSON_TYPE_ALLOWED_TARGET_TYPES])
@@ -641,63 +646,50 @@ class JsonConverter extends AbstractDataConverter
                         $allowedTargetTypeIds[] = $allowedTargetTypeId;
                     }
                 }
-                $result->setAllowedTargetTypeIds($allowedTargetTypeIds);
+                $typeDefinition->setAllowedTargetTypeIds($allowedTargetTypeIds);
             }
-        } elseif ($baseType->equals(BaseTypeId::cast(BaseTypeId::CMIS_POLICY))) {
-            $result = new PolicyTypeDefinition();
-        } elseif ($baseType->equals(BaseTypeId::cast(BaseTypeId::CMIS_ITEM))) {
-            $result = new ItemTypeDefinition();
-        } elseif ($baseType->equals(BaseTypeId::cast(BaseTypeId::CMIS_SECONDARY))) {
-            $result = new SecondaryTypeDefinition();
-        } else {
-            // this could only happen if a new baseType is added to the enumeration and not implemented here.
-            throw new CmisInvalidArgumentException(
-                sprintf('The given type definition "%s" could not be converted.', $baseType)
-            );
         }
 
-        $result->setBaseTypeId($baseType);
-        $result->setId($id);
         if (isset($data[JSONConstants::JSON_TYPE_DESCRIPTION])) {
-            $result->setDescription((string) $data[JSONConstants::JSON_TYPE_DESCRIPTION]);
+            $typeDefinition->setDescription((string) $data[JSONConstants::JSON_TYPE_DESCRIPTION]);
         }
         if (isset($data[JSONConstants::JSON_TYPE_DISPLAYNAME])) {
-            $result->setDisplayName((string) $data[JSONConstants::JSON_TYPE_DISPLAYNAME]);
+            $typeDefinition->setDisplayName((string) $data[JSONConstants::JSON_TYPE_DISPLAYNAME]);
         }
         if (isset($data[JSONConstants::JSON_TYPE_CONTROLABLE_ACL])) {
-            $result->setIsControllableACL((boolean) $data[JSONConstants::JSON_TYPE_CONTROLABLE_ACL]);
+            $typeDefinition->setIsControllableACL((boolean) $data[JSONConstants::JSON_TYPE_CONTROLABLE_ACL]);
         }
         if (isset($data[JSONConstants::JSON_TYPE_CONTROLABLE_POLICY])) {
-            $result->setIsControllablePolicy((boolean) $data[JSONConstants::JSON_TYPE_CONTROLABLE_POLICY]);
+            $typeDefinition->setIsControllablePolicy((boolean) $data[JSONConstants::JSON_TYPE_CONTROLABLE_POLICY]);
         }
         if (isset($data[JSONConstants::JSON_TYPE_CREATABLE])) {
-            $result->setIsCreatable((boolean) $data[JSONConstants::JSON_TYPE_CREATABLE]);
+            $typeDefinition->setIsCreatable((boolean) $data[JSONConstants::JSON_TYPE_CREATABLE]);
         }
         if (isset($data[JSONConstants::JSON_TYPE_FILEABLE])) {
-            $result->setIsFileable((boolean) $data[JSONConstants::JSON_TYPE_FILEABLE]);
+            $typeDefinition->setIsFileable((boolean) $data[JSONConstants::JSON_TYPE_FILEABLE]);
         }
         if (isset($data[JSONConstants::JSON_TYPE_FULLTEXT_INDEXED])) {
-            $result->setIsFulltextIndexed((boolean) $data[JSONConstants::JSON_TYPE_FULLTEXT_INDEXED]);
+            $typeDefinition->setIsFulltextIndexed((boolean) $data[JSONConstants::JSON_TYPE_FULLTEXT_INDEXED]);
         }
         if (isset($data[JSONConstants::JSON_TYPE_INCLUDE_IN_SUPERTYPE_QUERY])) {
-            $result->setIsIncludedInSupertypeQuery(
+            $typeDefinition->setIsIncludedInSupertypeQuery(
                 (boolean) $data[JSONConstants::JSON_TYPE_INCLUDE_IN_SUPERTYPE_QUERY]
             );
         }
         if (isset($data[JSONConstants::JSON_TYPE_QUERYABLE])) {
-            $result->setIsQueryable((boolean) $data[JSONConstants::JSON_TYPE_QUERYABLE]);
+            $typeDefinition->setIsQueryable((boolean) $data[JSONConstants::JSON_TYPE_QUERYABLE]);
         }
         if (isset($data[JSONConstants::JSON_TYPE_LOCALNAME])) {
-            $result->setLocalName((string) $data[JSONConstants::JSON_TYPE_LOCALNAME]);
+            $typeDefinition->setLocalName((string) $data[JSONConstants::JSON_TYPE_LOCALNAME]);
         }
         if (isset($data[JSONConstants::JSON_TYPE_LOCALNAMESPACE])) {
-            $result->setLocalNamespace((string) $data[JSONConstants::JSON_TYPE_LOCALNAMESPACE]);
+            $typeDefinition->setLocalNamespace((string) $data[JSONConstants::JSON_TYPE_LOCALNAMESPACE]);
         }
         if (isset($data[JSONConstants::JSON_TYPE_PARENT_ID])) {
-            $result->setParentTypeId((string) $data[JSONConstants::JSON_TYPE_PARENT_ID]);
+            $typeDefinition->setParentTypeId((string) $data[JSONConstants::JSON_TYPE_PARENT_ID]);
         }
         if (isset($data[JSONConstants::JSON_TYPE_QUERYNAME])) {
-            $result->setQueryName((string) $data[JSONConstants::JSON_TYPE_QUERYNAME]);
+            $typeDefinition->setQueryName((string) $data[JSONConstants::JSON_TYPE_QUERYNAME]);
         }
 
         if (isset($data[JSONConstants::JSON_TYPE_TYPE_MUTABILITY])
@@ -724,6 +716,7 @@ class JsonConverter extends AbstractDataConverter
             $typeMutability->setExtensions(
                 $this->convertExtension($typeMutabilityData, JSONConstants::getTypeTypeMutabilityKeys())
             );
+            $typeDefinition->setTypeMutability($typeMutability);
         }
 
         if (isset($data[JSONConstants::JSON_TYPE_PROPERTY_DEFINITIONS])
@@ -733,15 +726,53 @@ class JsonConverter extends AbstractDataConverter
                 if (is_array($propertyDefinitionData)) {
                     $propertyDefinition = $this->convertPropertyDefinition($propertyDefinitionData);
                     if ($propertyDefinition !== null) {
-                        $result->addPropertyDefinition($propertyDefinition);
+                        $typeDefinition->addPropertyDefinition($propertyDefinition);
                     }
                 }
             }
         }
 
-        $result->setExtensions($this->convertExtension($data, JSONConstants::getTypeKeys()));
+        $typeDefinition->setExtensions($this->convertExtension($data, JSONConstants::getTypeKeys()));
 
-        return $result;
+        return $typeDefinition;
+    }
+
+    /**
+     * @param string $baseTypeIdString
+     * @param string $typeId
+     * @return TypeDefinitionInterface
+     * @throws CmisInvalidArgumentException Exception is thrown if the base type exists in the BaseTypeId enumeration
+     *      but is not implemented here. This could only happen if the base type enumeration is extended which requires
+     *      a CMIS specification change.
+     */
+    protected function getTypeDefinitionByBaseTypeId($baseTypeIdString, $typeId)
+    {
+        $baseTypeId = BaseTypeId::cast($baseTypeIdString);
+
+        if ($baseTypeId->equals(BaseTypeId::cast(BaseTypeId::CMIS_FOLDER))) {
+            $baseType = new FolderTypeDefinition($typeId);
+        } elseif ($baseTypeId->equals(BaseTypeId::cast(BaseTypeId::CMIS_DOCUMENT))) {
+            $baseType = new DocumentTypeDefinition($typeId);
+        } elseif ($baseTypeId->equals(BaseTypeId::cast(BaseTypeId::CMIS_RELATIONSHIP))) {
+            $baseType = new RelationshipTypeDefinition($typeId);
+        } elseif ($baseTypeId->equals(BaseTypeId::cast(BaseTypeId::CMIS_POLICY))) {
+            $baseType = new PolicyTypeDefinition($typeId);
+        } elseif ($baseTypeId->equals(BaseTypeId::cast(BaseTypeId::CMIS_ITEM))) {
+            $baseType = new ItemTypeDefinition($typeId);
+        } elseif ($baseTypeId->equals(BaseTypeId::cast(BaseTypeId::CMIS_SECONDARY))) {
+            $baseType = new SecondaryTypeDefinition($typeId);
+        } else {
+            // @codeCoverageIgnoreStart
+            // this could only happen if a new baseType is added to the enumeration and not implemented here.
+            throw new CmisInvalidArgumentException(
+                sprintf('The given type definition "%s" could not be converted.', $baseTypeId)
+            );
+            // @codeCoverageIgnoreEnd
+        }
+
+        $baseType->setBaseTypeId($baseTypeId);
+
+        return $baseType;
     }
 
     /**

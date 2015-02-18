@@ -14,6 +14,7 @@ use Dkd\PhpCmis\Definitions\PropertyDefinitionInterface;
 use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
 use Dkd\PhpCmis\Definitions\TypeMutabilityInterface;
 use Dkd\PhpCmis\Enum\BaseTypeId;
+use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
 
 /**
  * Abstract type definition data implementation.
@@ -96,9 +97,9 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
     protected $isControllablePolicy;
 
     /**
-     * @var PropertyDefinitionInterface[]|null
+     * @var PropertyDefinitionInterface[]
      */
-    protected $propertyDefinitions;
+    protected $propertyDefinitions = array();
 
     /**
      * @var TypeMutabilityInterface
@@ -106,13 +107,21 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
     protected $typeMutability;
 
     /**
+     * @param string $id The type definition id
+     */
+    public function __construct($id)
+    {
+        if (empty($id)) {
+            throw new CmisInvalidArgumentException('Id must not be empty!');
+        }
+        $this->setId($id);
+    }
+
+    /**
      * @param TypeDefinitionInterface $typeDefinition
      */
     public function initialize(TypeDefinitionInterface $typeDefinition)
     {
-        if ($typeDefinition->getId() !== null) {
-            $this->setId($typeDefinition->getId());
-        }
         if ($typeDefinition->getLocalName() !== null) {
             $this->setLocalName($typeDefinition->getLocalName());
         }
@@ -155,9 +164,7 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
         if ($typeDefinition->isControllablePolicy() !== null) {
             $this->setIsControllablePolicy($typeDefinition->isControllablePolicy());
         }
-        if ($typeDefinition->getPropertyDefinitions() !== null) {
-            $this->setPropertyDefinitions($typeDefinition->getPropertyDefinitions());
-        }
+        $this->setPropertyDefinitions($typeDefinition->getPropertyDefinitions());
         if ($typeDefinition->getTypeMutability() !== null) {
             $this->setTypeMutability($typeDefinition->getTypeMutability());
         }
@@ -168,6 +175,8 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
 
     /**
      * Returns the type ID.
+     *
+     * @return string
      */
     public function getId()
     {
@@ -184,6 +193,8 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
 
     /**
      * Returns the local name.
+     *
+     * @return string
      */
     public function getLocalName()
     {
@@ -200,6 +211,8 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
 
     /**
      * Returns the local namespace.
+     *
+     * @return string
      */
     public function getLocalNamespace()
     {
@@ -216,6 +229,8 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
 
     /**
      * Returns the query name
+     *
+     * @return string
      */
     public function getQueryName()
     {
@@ -232,6 +247,8 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
 
     /**
      * Returns the display name.
+     *
+     * @return string
      */
     public function getDisplayName()
     {
@@ -248,6 +265,8 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
 
     /**
      * Returns the property description.
+     *
+     * @return string
      */
     public function getDescription()
     {
@@ -264,6 +283,8 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
 
     /**
      * Returns the base object type ID.
+     *
+     * @return BaseTypeId
      */
     public function getBaseTypeId()
     {
@@ -280,6 +301,8 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
 
     /**
      * Returns the parent type ID.
+     *
+     * @return string
      */
     public function getParentTypeId()
     {
@@ -296,6 +319,8 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
 
     /**
      * Returns if an object of this type can be created.
+     *
+     * @return boolean
      */
     public function isCreatable()
     {
@@ -312,6 +337,8 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
 
     /**
      * Returns if an object of this type can be filed.
+     *
+     * @return boolean
      */
     public function isFileable()
     {
@@ -328,6 +355,8 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
 
     /**
      * Returns if this type is queryable.
+     *
+     * @return boolean
      */
     public function isQueryable()
     {
@@ -344,6 +373,8 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
 
     /**
      * Returns if this type is included in queries that query the super type.
+     *
+     * @return boolean
      */
     public function isIncludedInSupertypeQuery()
     {
@@ -360,6 +391,8 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
 
     /**
      * Returns if this type is full text indexed.
+     *
+     * @return boolean
      */
     public function isFulltextIndexed()
     {
@@ -367,6 +400,8 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
     }
 
     /**
+     * Sets if this type is full text indexed.
+     *
      * @param boolean $isFulltextIndexed
      */
     public function setIsFulltextIndexed($isFulltextIndexed)
@@ -420,8 +455,7 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
     /**
      * Returns the property definitions of this type.
      *
-     * @return PropertyDefinitionInterface[]|null the property definitions or
-     *      null if the property definitions were not requested
+     * @return PropertyDefinitionInterface[] the property definitions
      */
     public function getPropertyDefinitions()
     {
@@ -433,7 +467,6 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
      */
     public function setPropertyDefinitions(array $propertyDefinitions)
     {
-        $this->propertyDefinitions = array();
         foreach ($propertyDefinitions as $propertyDefinition) {
             $this->addPropertyDefinition($propertyDefinition);
         }
@@ -449,6 +482,8 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
 
     /**
      * Returns type mutability flags.
+     *
+     * @return TypeMutabilityInterface
      */
     public function getTypeMutability()
     {

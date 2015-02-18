@@ -10,6 +10,7 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  * file that was distributed with this source code.
  */
 
+use Dkd\PhpCmis\DataObjects\PolicyType;
 use Dkd\PhpCmis\Definitions\PolicyTypeDefinitionInterface;
 use PHPUnit_Framework_MockObject_MockObject;
 
@@ -28,10 +29,9 @@ class PolicyTypeTest extends \PHPUnit_Framework_TestCase
         $policyTypeDefinition = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\Definitions\\PolicyTypeDefinitionInterface'
         )->getMockForAbstractClass();
-
-        $policyType = $this->getMockBuilder('\\Dkd\\PhpCmis\\DataObjects\\PolicyType')->setConstructorArgs(
-            array($sessionMock, $policyTypeDefinition)
-        )->getMock();
+        $policyTypeDefinition->expects($this->any())->method('getId')->willReturn('typeId');
+        $policyTypeDefinition->expects($this->any())->method('getPropertyDefinitions')->willReturn(array());
+        $policyType = new PolicyType($sessionMock, $policyTypeDefinition);
 
         $this->assertAttributeSame($sessionMock, 'session', $policyType);
     }
@@ -48,10 +48,15 @@ class PolicyTypeTest extends \PHPUnit_Framework_TestCase
          */
         $policyTypeDefinition = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\Definitions\\PolicyTypeDefinitionInterface'
-        )->getMockForAbstractClass();
+        )->setMethods(array('getId'))->getMockForAbstractClass();
+        $policyTypeDefinition->expects($this->any())->method('getId')->willReturn('typeId');
 
-        $policyType = $this->getMockBuilder('\\Dkd\\PhpCmis\\DataObjects\\PolicyType')->setMethods(array('initialize'))
-                          ->disableOriginalConstructor()->getMock();
+        /**
+         * @var PolicyType|PHPUnit_Framework_MockObject_MockObject $policyType
+         */
+        $policyType = $this->getMockBuilder('\\Dkd\\PhpCmis\\DataObjects\\PolicyType')->setMethods(
+            array('initialize')
+        )->disableOriginalConstructor()->getMock();
         $policyType->expects($this->once())->method('initialize')->with(
             $policyTypeDefinition
         );

@@ -188,7 +188,7 @@ class ObjectFactory implements ObjectFactoryInterface
         array $secondaryTypes,
         PropertiesInterface $properties
     ) {
-        if ($objectType->getPropertyDefinitions() === null) {
+        if (count($objectType->getPropertyDefinitions()) === 0) {
             throw new CmisInvalidArgumentException('Object type has no property definitions!');
         }
         if (count($properties->getProperties()) === 0) {

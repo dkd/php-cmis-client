@@ -33,9 +33,12 @@ class DocumentTypeDefinition extends AbstractTypeDefinition implements MutableDo
 
     /**
      * Object constructor sets defaults
+     *
+     * @param string $id The type definition id
      */
-    public function __construct()
+    public function __construct($id)
     {
+        parent::__construct($id);
         $this->contentStreamAllowed = ContentStreamAllowed::cast(ContentStreamAllowed::NOTALLOWED);
     }
 

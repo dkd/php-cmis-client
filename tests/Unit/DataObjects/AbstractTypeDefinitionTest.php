@@ -25,7 +25,6 @@ class AbstractTypeDefinitionTest extends \PHPUnit_Framework_TestCase
     protected $abstractTypeDefinition;
 
     protected $stringProperties = array(
-        'id',
         'localName',
         'localNamespace',
         'queryName',
@@ -54,7 +53,7 @@ class AbstractTypeDefinitionTest extends \PHPUnit_Framework_TestCase
     {
         $this->abstractTypeDefinition = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\DataObjects\\AbstractTypeDefinition'
-        )->getMockForAbstractClass();
+        )->setConstructorArgs(array('typeId'))->getMockForAbstractClass();
     }
 
     public function stringPropertyDataProvider()
@@ -215,11 +214,15 @@ class AbstractTypeDefinitionTest extends \PHPUnit_Framework_TestCase
     {
         $dummyTypeDefinition = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\DataObjects\\AbstractTypeDefinition'
-        )->getMockForAbstractClass();
+        )->setConstructorArgs(array('typeId'))->getMockForAbstractClass();
 
         $this->abstractTypeDefinition->initialize($dummyTypeDefinition);
         foreach (array_merge($this->stringProperties, $this->booleanProperties, $this->objectProperties) as $property) {
-            $this->assertAttributeEquals(null, $property, $this->abstractTypeDefinition);
+            if ($property !== 'propertyDefinitions') {
+                $this->assertAttributeEquals(null, $property, $this->abstractTypeDefinition);
+            } else {
+                $this->assertAttributeEmpty($property, $this->abstractTypeDefinition);
+            }
         }
     }
 
@@ -231,7 +234,7 @@ class AbstractTypeDefinitionTest extends \PHPUnit_Framework_TestCase
         /** @var AbstractTypeDefinition|\PHPUnit_Framework_MockObject_MockObject $dummyTypeDefinition */
         $dummyTypeDefinition = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\DataObjects\\AbstractTypeDefinition'
-        )->getMockForAbstractClass();
+        )->setConstructorArgs(array('typeId'))->getMockForAbstractClass();
 
         foreach ($this->stringProperties as $stringProperty) {
             $setterName = 'set' . ucfirst($stringProperty);

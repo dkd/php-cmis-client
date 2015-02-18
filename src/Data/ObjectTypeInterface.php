@@ -10,6 +10,7 @@ namespace Dkd\PhpCmis\Data;
  * file that was distributed with this source code.
  */
 
+use Dkd\PhpCmis\SessionInterface;
 use Dkd\PhpCmis\TreeInterface;
 use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
 
@@ -18,6 +19,15 @@ use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
  */
 interface ObjectTypeInterface extends TypeDefinitionInterface
 {
+    /**
+     * Constructor of the object type. This constructor MUST call the parent constructor of the type definition
+     * and MUST all the <code>ObjectTypeHelperTrait::objectTypeConstructor</code>
+     *
+     * @param SessionInterface $session
+     * @param TypeDefinitionInterface $typeDefinition
+     */
+    public function __construct(SessionInterface $session, TypeDefinitionInterface $typeDefinition);
+
     /**
      * Gets the types base type, if the type is a derived (non-base) type.
      *
