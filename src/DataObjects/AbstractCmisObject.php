@@ -19,7 +19,9 @@ use Dkd\PhpCmis\Data\CmisExtensionElementInterface;
 use Dkd\PhpCmis\Data\ObjectDataInterface;
 use Dkd\PhpCmis\Data\ObjectIdInterface;
 use Dkd\PhpCmis\Data\ObjectTypeInterface;
+use Dkd\PhpCmis\Data\PolicyIdListInterface;
 use Dkd\PhpCmis\Data\PolicyInterface;
+use Dkd\PhpCmis\Data\PropertiesInterface;
 use Dkd\PhpCmis\Data\PropertyInterface;
 use Dkd\PhpCmis\Data\RelationshipInterface;
 use Dkd\PhpCmis\Data\SecondaryTypeInterface;
@@ -107,6 +109,8 @@ abstract class AbstractCmisObject implements CmisObjectInterface
     protected $refreshTimestamp = 0;
 
     /**
+     * Initialize the CMIS Object
+     *
      * @param SessionInterface $session
      * @param ObjectTypeInterface $objectType
      * @param OperationContextInterface $context
@@ -135,75 +139,108 @@ abstract class AbstractCmisObject implements CmisObjectInterface
         $this->refreshTimestamp = (integer) round(microtime(true) * 1000);
 
         if ($objectData !== null) {
-            $objectFactory = $this->getObjectFactory();
-
-            // handle properties
-            if ($objectData->getProperties() !== null) {
-                // get secondary types
-                $properties = $objectData->getProperties()->getProperties();
-                if (isset($properties[PropertyIds::SECONDARY_OBJECT_TYPE_IDS])) {
-                    $this->secondaryTypes = array();
-                    foreach ($properties[PropertyIds::SECONDARY_OBJECT_TYPE_IDS]->getValues() as $secondaryTypeId) {
-                        $type = $this->getSession()->getTypeDefinition($secondaryTypeId);
-                        if ($type instanceof SecondaryTypeInterface) {
-                            $this->secondaryTypes[] = $type;
-                        }
-                    }
-                }
-
-                $this->properties = $objectFactory->convertPropertiesDataToPropertyList(
-                    $objectType,
-                    $this->secondaryTypes,
-                    $objectData->getProperties()
-                );
-                $this->extensions[(string) ExtensionLevel::cast(
-                    ExtensionLevel::PROPERTIES
-                )] = $objectData->getProperties()->getExtensions();
-            }
-
-            // handle allowable actions
-            if ($objectData->getAllowableActions() !== null) {
-                $this->allowableActions = $objectData->getAllowableActions();
-                $this->extensions[(string) ExtensionLevel::cast(
-                    ExtensionLevel::ALLOWABLE_ACTIONS
-                )] = $objectData->getAllowableActions()->getExtensions();
-            }
-
-            // handle renditions
-            foreach ($objectData->getRenditions() as $rendition) {
-                $this->renditions[] = $objectFactory->convertRendition($this->getId(), $rendition);
-            }
-
-            // handle ACL
-            if ($objectData->getAcl() !== null) {
-                $this->acl = $objectData->getAcl();
-                $this->extensions[(string) ExtensionLevel::cast(ExtensionLevel::ACL)] = $objectData->getAcl(
-                )->getExtensions();
-            }
-
-            // handle policies
-            if ($objectData->getPolicyIds() !== null) {
-                foreach ($objectData->getPolicyIds()->getPolicyIds() as $policyId) {
-                    $policy = $this->getSession()->getObject($policyId);
-                    if ($policy instanceof PolicyInterface) {
-                        $this->policies[] = $policy;
-                    }
-                }
-
-                $this->extensions[(string) ExtensionLevel::POLICIES] = $objectData->getPolicyIds()->getExtensions();
-            }
-
-            // handle relationships
-            foreach ($objectData->getRelationships() as $relationshipObjectData) {
-                $relationship = $objectFactory->convertObject($relationshipObjectData, $this->getCreationContext());
-                if ($relationship instanceof RelationshipInterface) {
-                    $this->relationships[] = $relationship;
-                }
-            }
-
-            $this->extensions[(string) ExtensionLevel::OBJECT] = $objectData->getExtensions();
+            $this->initializeObjectData($objectData);
         }
     }
+
+    /**
+     * Handle initialization for objectData
+     *
+     * @param ObjectDataInterface $objectData
+     */
+    private function initializeObjectData(ObjectDataInterface $objectData)
+    {
+        // handle properties
+        if ($objectData->getProperties() !== null) {
+            $this->initializeObjectDataProperties($objectData->getProperties());
+        }
+
+        // handle allowable actions
+        if ($objectData->getAllowableActions() !== null) {
+            $this->allowableActions = $objectData->getAllowableActions();
+            $this->extensions[(string) ExtensionLevel::cast(
+                ExtensionLevel::ALLOWABLE_ACTIONS
+            )] = $objectData->getAllowableActions()->getExtensions();
+        }
+
+        // handle renditions
+        foreach ($objectData->getRenditions() as $rendition) {
+            $this->renditions[] = $this->getObjectFactory()->convertRendition($this->getId(), $rendition);
+        }
+
+        // handle ACL
+        if ($objectData->getAcl() !== null) {
+            $this->acl = $objectData->getAcl();
+            $this->extensions[(string) ExtensionLevel::cast(ExtensionLevel::ACL)] = $objectData->getAcl(
+            )->getExtensions();
+        }
+
+        // handle policies
+        if ($objectData->getPolicyIds() !== null) {
+            $this->initializeObjectDataPolicies($objectData->getPolicyIds());
+        }
+
+        // handle relationships
+        foreach ($objectData->getRelationships() as $relationshipData) {
+            $relationship = $this->getObjectFactory()->convertObject(
+                $relationshipData,
+                $this->getCreationContext()
+            );
+            if ($relationship instanceof RelationshipInterface) {
+                $this->relationships[] = $relationship;
+            }
+        }
+
+        $this->extensions[(string) ExtensionLevel::OBJECT] = $objectData->getExtensions();
+    }
+
+    /**
+     * Handle initialization of properties from the object data
+     *
+     * @param PropertiesInterface $properties
+     */
+    private function initializeObjectDataProperties(PropertiesInterface $properties)
+    {
+        // get secondary types
+        $propertyList = $properties->getProperties();
+        if (isset($propertyList[PropertyIds::SECONDARY_OBJECT_TYPE_IDS])) {
+            $this->secondaryTypes = array();
+            foreach ($propertyList[PropertyIds::SECONDARY_OBJECT_TYPE_IDS]->getValues() as $secondaryTypeId) {
+                $type = $this->getSession()->getTypeDefinition($secondaryTypeId);
+                if ($type instanceof SecondaryTypeInterface) {
+                    $this->secondaryTypes[] = $type;
+                }
+            }
+
+            $this->properties = $this->getObjectFactory()->convertPropertiesDataToPropertyList(
+                $this->getObjectType(),
+                $this->getSecondaryTypes(),
+                $properties
+            );
+        }
+
+        $this->extensions[(string) ExtensionLevel::cast(
+            ExtensionLevel::PROPERTIES
+        )] = $properties->getExtensions();
+    }
+
+    /**
+     * Handle initialization of policies from the object data
+     *
+     * @param PolicyIdListInterface $policies
+     */
+    private function initializeObjectDataPolicies(PolicyIdListInterface $policies)
+    {
+        foreach ($policies->getPolicyIds() as $policyId) {
+            $policy = $this->getSession()->getObject($this->getSession()->createObjectId($policyId));
+            if ($policy instanceof PolicyInterface) {
+                $this->policies[] = $policy;
+            }
+        }
+
+        $this->extensions[(string) ExtensionLevel::POLICIES] = $policies->getExtensions();
+    }
+
 
     /**
      * Returns a list of missing property keys
@@ -247,7 +284,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
      */
     protected function getRepositoryId()
     {
-        return $this->session->getRepositoryInfo()->getId();
+        return $this->getSession()->getRepositoryInfo()->getId();
     }
 
     /**
@@ -365,7 +402,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
             return null;
         }
 
-        return $this->session->getObject(
+        return $this->getSession()->getObject(
             $this->getSession()->createObjectId($newObjectId),
             $this->getCreationContext()
         );
