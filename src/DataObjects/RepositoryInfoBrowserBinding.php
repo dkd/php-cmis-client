@@ -10,11 +10,15 @@ namespace Dkd\PhpCmis\DataObjects;
  * file that was distributed with this source code.
  */
 
+use Dkd\Populate\PopulateTrait;
+
 /**
  * Repository info data implementation including browser binding specific data.
  */
 class RepositoryInfoBrowserBinding extends RepositoryInfo
 {
+    use PopulateTrait;
+
     /**
      * @var string
      */

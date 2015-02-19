@@ -158,33 +158,6 @@ class JsonConverter extends AbstractDataConverter
      */
     protected function setRepositoryInfoValues(RepositoryInfoBrowserBinding $object, $data)
     {
-        if (isset($data[JSONConstants::JSON_REPINFO_ID])) {
-            $object->setId((string) $data[JSONConstants::JSON_REPINFO_ID]);
-        }
-        if (isset($data[JSONConstants::JSON_REPINFO_NAME])) {
-            $object->setName((string) $data[JSONConstants::JSON_REPINFO_NAME]);
-        }
-        if (isset($data[JSONConstants::JSON_REPINFO_DESCRIPTION])) {
-            $object->setDescription((string) $data[JSONConstants::JSON_REPINFO_DESCRIPTION]);
-        }
-        if (isset($data[JSONConstants::JSON_REPINFO_VENDOR])) {
-            $object->setVendorName((string) $data[JSONConstants::JSON_REPINFO_VENDOR]);
-        }
-        if (isset($data[JSONConstants::JSON_REPINFO_PRODUCT])) {
-            $object->setProductName((string) $data[JSONConstants::JSON_REPINFO_PRODUCT]);
-        }
-        if (isset($data[JSONConstants::JSON_REPINFO_PRODUCT_VERSION])) {
-            $object->setProductVersion((string) $data[JSONConstants::JSON_REPINFO_PRODUCT_VERSION]);
-        }
-        if (isset($data[JSONConstants::JSON_REPINFO_ROOT_FOLDER_ID])) {
-            $object->setRootFolderId((string) $data[JSONConstants::JSON_REPINFO_ROOT_FOLDER_ID]);
-        }
-        if (isset($data[JSONConstants::JSON_REPINFO_REPOSITORY_URL])) {
-            $object->setRepositoryUrl((string) $data[JSONConstants::JSON_REPINFO_REPOSITORY_URL]);
-        }
-        if (isset($data[JSONConstants::JSON_REPINFO_ROOT_FOLDER_URL])) {
-            $object->setRootUrl((string) $data[JSONConstants::JSON_REPINFO_ROOT_FOLDER_URL]);
-        }
         if (isset($data[JSONConstants::JSON_REPINFO_CAPABILITIES])
             && is_array($data[JSONConstants::JSON_REPINFO_CAPABILITIES])
         ) {
@@ -192,32 +165,21 @@ class JsonConverter extends AbstractDataConverter
                 $data[JSONConstants::JSON_REPINFO_CAPABILITIES]
             );
             if ($repositoryCapabilities !== null) {
-                $object->setCapabilities(
-                    $repositoryCapabilities
-                );
+                $data[JSONConstants::JSON_REPINFO_CAPABILITIES] = $repositoryCapabilities;
+            } else {
+                unset($data[JSONConstants::JSON_REPINFO_CAPABILITIES]);
             }
         }
+
         if (isset($data[JSONConstants::JSON_REPINFO_ACL_CAPABILITIES])
             && is_array($data[JSONConstants::JSON_REPINFO_ACL_CAPABILITIES])
         ) {
             $aclCapabilities = $this->convertAclCapabilities($data[JSONConstants::JSON_REPINFO_ACL_CAPABILITIES]);
             if ($aclCapabilities !== null) {
-                $object->setAclCapabilities(
-                    $aclCapabilities
-                );
+                $data[JSONConstants::JSON_REPINFO_ACL_CAPABILITIES] = $aclCapabilities;
+            } else {
+                unset($data[JSONConstants::JSON_REPINFO_ACL_CAPABILITIES]);
             }
-        }
-        if (isset($data[JSONConstants::JSON_REPINFO_CHANGE_LOG_TOKEN])) {
-            $object->setLatestChangeLogToken((string) $data[JSONConstants::JSON_REPINFO_CHANGE_LOG_TOKEN]);
-        }
-        if (isset($data[JSONConstants::JSON_REPINFO_CMIS_VERSION_SUPPORTED])) {
-            $object->setCmisVersion(CmisVersion::cast($data[JSONConstants::JSON_REPINFO_CMIS_VERSION_SUPPORTED]));
-        }
-        if (isset($data[JSONConstants::JSON_REPINFO_THIN_CLIENT_URI])) {
-            $object->setThinClientUri((string) $data[JSONConstants::JSON_REPINFO_THIN_CLIENT_URI]);
-        }
-        if (isset($data[JSONConstants::JSON_REPINFO_CHANGES_INCOMPLETE])) {
-            $object->setChangesIncomplete((boolean) $data[JSONConstants::JSON_REPINFO_CHANGES_INCOMPLETE]);
         }
 
         if (isset($data[JSONConstants::JSON_REPINFO_CHANGES_ON_TYPE])
@@ -230,25 +192,40 @@ class JsonConverter extends AbstractDataConverter
                 }
             }
 
-            $object->setChangesOnType($types);
-        }
-
-        if (isset($data[JSONConstants::JSON_REPINFO_PRINCIPAL_ID_ANONYMOUS])) {
-            $object->setPrincipalIdAnonymous((string) $data[JSONConstants::JSON_REPINFO_PRINCIPAL_ID_ANONYMOUS]);
-        }
-        if (isset($data[JSONConstants::JSON_REPINFO_PRINCIPAL_ID_ANYONE])) {
-            $object->setPrincipalIdAnyone((string) $data[JSONConstants::JSON_REPINFO_PRINCIPAL_ID_ANYONE]);
+            $data[JSONConstants::JSON_REPINFO_CHANGES_ON_TYPE] = $types;
         }
 
         if (isset($data[JSONConstants::JSON_REPINFO_EXTENDED_FEATURES])
             && is_array($data[JSONConstants::JSON_REPINFO_EXTENDED_FEATURES])
         ) {
-            $object->setExtensionFeatures(
-                $this->convertExtensionFeatures($data[JSONConstants::JSON_REPINFO_EXTENDED_FEATURES])
+            $data[JSONConstants::JSON_REPINFO_EXTENDED_FEATURES] = $this->convertExtensionFeatures(
+                $data[JSONConstants::JSON_REPINFO_EXTENDED_FEATURES]
+            );
+        }
+
+        if (isset($data[JSONConstants::JSON_REPINFO_CMIS_VERSION_SUPPORTED])) {
+            $data[JSONConstants::JSON_REPINFO_CMIS_VERSION_SUPPORTED] = CmisVersion::cast(
+                $data[JSONConstants::JSON_REPINFO_CMIS_VERSION_SUPPORTED]
             );
         }
 
         $object->setExtensions($this->convertExtension($data, JSONConstants::getRepositoryInfoKeys()));
+
+        $object->populate(
+            $data,
+            array_merge(
+                array_combine(JSONConstants::getRepositoryInfoKeys(), JSONConstants::getRepositoryInfoKeys()),
+                array(
+                    JSONConstants::JSON_REPINFO_DESCRIPTION => 'description',
+                    JSONConstants::JSON_REPINFO_CMIS_VERSION_SUPPORTED => 'cmisVersion',
+                    JSONConstants::JSON_REPINFO_ID => 'id',
+                    JSONConstants::JSON_REPINFO_ROOT_FOLDER_URL => 'rootUrl',
+                    JSONConstants::JSON_REPINFO_NAME => 'name',
+                    JSONConstants::JSON_REPINFO_EXTENDED_FEATURES => 'extensionFeatures'
+                )
+            ),
+            true
+        );
 
         return $object;
     }

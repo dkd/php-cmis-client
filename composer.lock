@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3445730df11f723d1f270904fb9fbef8",
+    "hash": "a30512da3bf3775a1298250c40dfb821",
     "packages": [
         {
             "name": "dkd/enumeration",
@@ -53,6 +53,48 @@
                 "type"
             ],
             "time": "2014-08-28 06:00:06"
+        },
+        {
+            "name": "dkd/php-populate",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dkd/php-populate.git",
+                "reference": "e601789da8c9c10dd5e5e4dec44abc140761de35"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dkd/php-populate/zipball/e601789da8c9c10dd5e5e4dec44abc140761de35",
+                "reference": "e601789da8c9c10dd5e5e4dec44abc140761de35",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "@stable",
+                "squizlabs/php_codesniffer": "@stable"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Dkd\\Populate\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Claus Due",
+                    "email": "info@dkd.de"
+                }
+            ],
+            "description": "Trait for PHP classes, allowing properties to be populated from sources like JSON, via getters but using a single method",
+            "keywords": [
+                "json",
+                "php",
+                "trait"
+            ],
+            "time": "2015-02-12 14:56:05"
         },
         {
             "name": "doctrine/cache",
@@ -4599,7 +4641,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "dkd/php-populate": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
