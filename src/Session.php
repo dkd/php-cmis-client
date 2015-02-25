@@ -560,12 +560,17 @@ class Session implements SessionInterface
      * Deletes an object and, if it is a document, all versions in the version series.
      *
      * @param ObjectIdInterface $objectId the ID of the object
-     * @param bool $allVersions if this object is a document this parameter defines
+     * @param boolean $allVersions if this object is a document this parameter defines
      *      if only this version or all versions should be deleted
      */
     public function delete(ObjectIdInterface $objectId, $allVersions = true)
     {
-        // TODO: Implement delete() method.
+        $this->getBinding()->getObjectService()->deleteObject(
+            $this->getRepositoryId(),
+            $objectId->getId(),
+            $allVersions
+        );
+        $this->removeObjectFromCache($objectId);
     }
 
     /**
@@ -770,7 +775,7 @@ class Session implements SessionInterface
      * Fetches the relationships from or to an object from the repository.
      *
      * @param ObjectIdInterface $objectId
-     * @param bool $includeSubRelationshipTypes
+     * @param boolean $includeSubRelationshipTypes
      * @param RelationshipDirection $relationshipDirection
      * @param ObjectTypeInterface $type
      * @param OperationContextInterface $context

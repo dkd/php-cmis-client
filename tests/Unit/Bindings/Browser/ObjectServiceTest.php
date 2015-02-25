@@ -33,16 +33,15 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
 
     /**
      * @dataProvider getObjectDataProvider
-     * @param $expectedUrl
-     * @param $repositoryId
-     * @param $objectId
-     * @param null $filter
-     * @param bool $includeAllowableActions
-     * @param IncludeRelationships $includeRelationships
-     * @param null $renditionFilter
-     * @param bool $includePolicyIds
-     * @param bool $includeAcl
-     * @param ExtensionDataInterface $extension
+     * @param string $expectedUrl
+     * @param string $repositoryId
+     * @param string $objectId
+     * @param string|null $filter
+     * @param boolean $includeAllowableActions
+     * @param IncludeRelationships|null $includeRelationships
+     * @param string $renditionFilter
+     * @param boolean $includePolicyIds
+     * @param boolean $includeAcl
      */
     public function testGetObjectCallsReadFunctionWithParameterizedQuery(
         $expectedUrl,
@@ -53,8 +52,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         IncludeRelationships $includeRelationships = null,
         $renditionFilter = null,
         $includePolicyIds = false,
-        $includeAcl = false,
-        ExtensionDataInterface $extension = null
+        $includeAcl = false
     ) {
         $responseData = array('foo' => 'bar');
         $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
@@ -142,16 +140,15 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
 
     /**
      * @dataProvider createDocumentDataProvider
-     * @param $expectedUrl
-     * @param $repositoryId
+     * @param string $expectedUrl
+     * @param string $repositoryId
      * @param PropertiesInterface $properties
      * @param string|null $folderId
-     * @param StreamInterface $contentStream
-     * @param VersioningState $versioningState
-     * @param array $policies
-     * @param AclInterface $addAces
-     * @param AclInterface $removeAces
-     * @param ExtensionDataInterface $extension
+     * @param StreamInterface|null $contentStream
+     * @param VersioningState|null  $versioningState
+     * @param string[] $policies
+     * @param AclInterface|null $addAces
+     * @param AclInterface|null $removeAces
      */
     public function testCreateDocumentCallsPostFunctionWithParameterizedQuery(
         $expectedUrl,
@@ -162,8 +159,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         VersioningState $versioningState = null,
         array $policies = array(),
         AclInterface $addAces = null,
-        AclInterface $removeAces = null,
-        ExtensionDataInterface $extension = null
+        AclInterface $removeAces = null
     ) {
         $responseData = array('foo' => 'bar');
         $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
@@ -216,8 +212,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
                 $versioningState,
                 $policies,
                 $addAces,
-                $removeAces,
-                $extension
+                $removeAces
             )
         );
     }
@@ -290,7 +285,6 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
      * @param string[] $policies
      * @param AclInterface $addAces
      * @param AclInterface $removeAces
-     * @param ExtensionDataInterface $extension
      */
     public function testCreateFolderCallsPostFunctionWithParameterizedQuery(
         $expectedUrl,
@@ -299,8 +293,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $folderId,
         array $policies = array(),
         AclInterface $addAces = null,
-        AclInterface $removeAces = null,
-        ExtensionDataInterface $extension = null
+        AclInterface $removeAces = null
     ) {
         $responseData = array('foo' => 'bar');
         $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
@@ -350,8 +343,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
                 $folderId,
                 $policies,
                 $addAces,
-                $removeAces,
-                $extension
+                $removeAces
             )
         );
     }
@@ -416,5 +408,75 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
                 $removeAcl
             )
         );
+    }
+
+    /**
+     * @dataProvider deleteObjectDataProvider
+     * @param string $expectedUrl
+     * @param string $repositoryId
+     * @param string $objectId
+     * @param boolean $allVersions
+     */
+    public function testDeleteObjectCallsPostFunctionWithParameterizedQuery(
+        $expectedUrl,
+        $repositoryId,
+        $objectId,
+        $allVersions = true
+    ) {
+        $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
+        )->getMock();
+
+        $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->getMock();
+
+        /** @var ObjectService|PHPUnit_Framework_MockObject_MockObject $objectService */
+        $objectService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
+            array($this->getSessionMock(), $cmisBindingsHelperMock)
+        )->setMethods(
+            array('getObjectUrl', 'post')
+        )->getMock();
+
+        $objectService->expects($this->atLeastOnce())->method('getObjectUrl')->with(
+            $repositoryId,
+            $objectId
+        )->willReturn(Url::createFromUrl(self::BROWSER_URL_TEST));
+        $objectService->expects($this->atLeastOnce())->method('post')->with(
+            $expectedUrl
+        )->willReturn($responseMock);
+
+        $objectService->deleteObject(
+            $repositoryId,
+            $objectId,
+            $allVersions
+        );
+    }
+
+    /**
+     * Data provider for deleteObject
+     *
+     * @return array
+     */
+    public function deleteObjectDataProvider()
+    {
+        return array(
+            array(
+                Url::createFromUrl(
+                    self::BROWSER_URL_TEST
+                    . '?cmisaction=delete&allVersions=true'
+                ),
+                'repositoryId',
+                'objectId',
+                true
+            ),
+            array(
+                Url::createFromUrl(
+                    self::BROWSER_URL_TEST
+                    . '?cmisaction=delete&allVersions=false'
+                ),
+                'repositoryId',
+                'objectId',
+                false
+            )
+        );
+
     }
 }

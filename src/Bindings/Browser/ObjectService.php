@@ -86,12 +86,12 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      *      folder for the newly created document object
      * @param StreamInterface|null $contentStream the content stream that must be stored for the newly
      *      created document object
-     * @param VersioningState|null  $versioningState specifies what the versioning state of the newly created object
+     * @param VersioningState|null $versioningState specifies what the versioning state of the newly created object
      *      must be (default is <code>VersioningState::MAJOR</code>)
      * @param string[] $policies a list of policy IDs that must be applied to the newly created document object
      * @param AclInterface|null  $addAces a list of ACEs that must be added to the newly created document object,
      *      either using the ACL from folderId if specified, or being applied if no folderId is specified
-     * @param AclInterface|null  $removeAces a list of ACEs that must be removed from the newly created document object,
+     * @param AclInterface|null $removeAces a list of ACEs that must be removed from the newly created document object,
      *      either using the ACL from folderId if specified, or being ignored if no folderId is specified
      * @param ExtensionDataInterface|null  $extension
      * @return string|null Returns the new object id or null if the repository sent an empty
@@ -370,7 +370,15 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         $allVersions = true,
         ExtensionDataInterface $extension = null
     ) {
-        // TODO: Implement deleteObject() method.
+        $url = $this->getObjectUrl($repositoryId, $objectId);
+        $url->getQuery()->modify(
+            array(
+                Constants::CONTROL_CMISACTION => Constants::CMISACTION_DELETE,
+                Constants::PARAM_ALL_VERSIONS => $allVersions ? 'true' : 'false',
+            )
+        );
+
+        $this->post($url);
     }
 
     /**
