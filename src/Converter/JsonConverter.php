@@ -27,6 +27,7 @@ use Dkd\PhpCmis\Data\PropertyDataInterface;
 use Dkd\PhpCmis\Data\RenditionDataInterface;
 use Dkd\PhpCmis\Data\RepositoryCapabilitiesInterface;
 use Dkd\PhpCmis\Data\RepositoryInfoInterface;
+use Dkd\PhpCmis\DataObjects\AbstractTypeDefinition;
 use Dkd\PhpCmis\DataObjects\AccessControlEntry;
 use Dkd\PhpCmis\DataObjects\AccessControlList;
 use Dkd\PhpCmis\DataObjects\AclCapabilities;
@@ -75,6 +76,7 @@ use Dkd\PhpCmis\DataObjects\SecondaryTypeDefinition;
 use Dkd\PhpCmis\DataObjects\TypeMutability;
 use Dkd\PhpCmis\Definitions\MutableDocumentTypeDefinitionInterface;
 use Dkd\PhpCmis\Definitions\MutableRelationshipTypeDefinitionInterface;
+use Dkd\PhpCmis\Definitions\MutableTypeDefinitionInterface;
 use Dkd\PhpCmis\Definitions\PropertyDefinitionInterface;
 use Dkd\PhpCmis\Definitions\TypeDefinitionContainerInterface;
 use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
@@ -564,114 +566,27 @@ class JsonConverter extends AbstractDataConverter
         if (empty($data[JSONConstants::JSON_TYPE_ID])) {
             throw new CmisInvalidArgumentException('Id of type definition is empty but must not be empty!');
         }
+        $baseTypeId = '';
+        if (isset($data[JSONConstants::JSON_TYPE_BASE_ID])) {
+            $baseTypeId = $data[JSONConstants::JSON_TYPE_BASE_ID];
+            unset($data[JSONConstants::JSON_TYPE_BASE_ID]);
+        }
+
+        /** @var MutableTypeDefinitionInterface|AbstractTypeDefinition $typeDefinition */
         $typeDefinition = $this->getTypeDefinitionByBaseTypeId(
-            isset($data[JSONConstants::JSON_TYPE_BASE_ID]) ? $data[JSONConstants::JSON_TYPE_BASE_ID] : '',
+            $baseTypeId,
             $data[JSONConstants::JSON_TYPE_ID]
         );
 
-        if ($typeDefinition instanceof MutableDocumentTypeDefinitionInterface) {
-            if (!empty($data[JSONConstants::JSON_TYPE_CONTENTSTREAM_ALLOWED])) {
-                $typeDefinition->setContentStreamAllowed(
-                    ContentStreamAllowed::cast($data[JSONConstants::JSON_TYPE_CONTENTSTREAM_ALLOWED])
-                );
-            }
-            if (isset($data[JSONConstants::JSON_TYPE_VERSIONABLE])) {
-                $typeDefinition->setIsVersionable((boolean) $data[JSONConstants::JSON_TYPE_VERSIONABLE]);
-            }
-        } elseif ($typeDefinition instanceof MutableRelationshipTypeDefinitionInterface) {
-            if (isset($data[JSONConstants::JSON_TYPE_ALLOWED_SOURCE_TYPES])
-                && is_array($data[JSONConstants::JSON_TYPE_ALLOWED_SOURCE_TYPES])
-            ) {
-                $allowedSourceTypeIds = array();
-                foreach ($data[JSONConstants::JSON_TYPE_ALLOWED_SOURCE_TYPES] as $allowedSourceTypeId) {
-                    $allowedSourceTypeId = (string) $allowedSourceTypeId;
-                    if (!empty($allowedSourceTypeId)) {
-                        $allowedSourceTypeIds[] = $allowedSourceTypeId;
-                    }
-                }
-                $typeDefinition->setAllowedSourceTypeIds($allowedSourceTypeIds);
-            }
-            if (isset($data[JSONConstants::JSON_TYPE_ALLOWED_TARGET_TYPES])
-                && is_array($data[JSONConstants::JSON_TYPE_ALLOWED_TARGET_TYPES])
-            ) {
-                $allowedTargetTypeIds = array();
-                foreach ($data[JSONConstants::JSON_TYPE_ALLOWED_TARGET_TYPES] as $allowedTargetTypeId) {
-                    $allowedTargetTypeId = (string) $allowedTargetTypeId;
-                    if (!empty($allowedTargetTypeId)) {
-                        $allowedTargetTypeIds[] = $allowedTargetTypeId;
-                    }
-                }
-                $typeDefinition->setAllowedTargetTypeIds($allowedTargetTypeIds);
-            }
-        }
+        $data = $this->convertTypeDefinitionSpecificData($data, $typeDefinition);
 
-        if (isset($data[JSONConstants::JSON_TYPE_DESCRIPTION])) {
-            $typeDefinition->setDescription((string) $data[JSONConstants::JSON_TYPE_DESCRIPTION]);
-        }
-        if (isset($data[JSONConstants::JSON_TYPE_DISPLAYNAME])) {
-            $typeDefinition->setDisplayName((string) $data[JSONConstants::JSON_TYPE_DISPLAYNAME]);
-        }
-        if (isset($data[JSONConstants::JSON_TYPE_CONTROLABLE_ACL])) {
-            $typeDefinition->setIsControllableACL((boolean) $data[JSONConstants::JSON_TYPE_CONTROLABLE_ACL]);
-        }
-        if (isset($data[JSONConstants::JSON_TYPE_CONTROLABLE_POLICY])) {
-            $typeDefinition->setIsControllablePolicy((boolean) $data[JSONConstants::JSON_TYPE_CONTROLABLE_POLICY]);
-        }
-        if (isset($data[JSONConstants::JSON_TYPE_CREATABLE])) {
-            $typeDefinition->setIsCreatable((boolean) $data[JSONConstants::JSON_TYPE_CREATABLE]);
-        }
-        if (isset($data[JSONConstants::JSON_TYPE_FILEABLE])) {
-            $typeDefinition->setIsFileable((boolean) $data[JSONConstants::JSON_TYPE_FILEABLE]);
-        }
-        if (isset($data[JSONConstants::JSON_TYPE_FULLTEXT_INDEXED])) {
-            $typeDefinition->setIsFulltextIndexed((boolean) $data[JSONConstants::JSON_TYPE_FULLTEXT_INDEXED]);
-        }
-        if (isset($data[JSONConstants::JSON_TYPE_INCLUDE_IN_SUPERTYPE_QUERY])) {
-            $typeDefinition->setIsIncludedInSupertypeQuery(
-                (boolean) $data[JSONConstants::JSON_TYPE_INCLUDE_IN_SUPERTYPE_QUERY]
+        if (isset($data[JSONConstants::JSON_TYPE_TYPE_MUTABILITY])) {
+            $data[JSONConstants::JSON_TYPE_TYPE_MUTABILITY] = $this->convertTypeMutability(
+                $data[JSONConstants::JSON_TYPE_TYPE_MUTABILITY]
             );
-        }
-        if (isset($data[JSONConstants::JSON_TYPE_QUERYABLE])) {
-            $typeDefinition->setIsQueryable((boolean) $data[JSONConstants::JSON_TYPE_QUERYABLE]);
-        }
-        if (isset($data[JSONConstants::JSON_TYPE_LOCALNAME])) {
-            $typeDefinition->setLocalName((string) $data[JSONConstants::JSON_TYPE_LOCALNAME]);
-        }
-        if (isset($data[JSONConstants::JSON_TYPE_LOCALNAMESPACE])) {
-            $typeDefinition->setLocalNamespace((string) $data[JSONConstants::JSON_TYPE_LOCALNAMESPACE]);
-        }
-        if (isset($data[JSONConstants::JSON_TYPE_PARENT_ID])) {
-            $typeDefinition->setParentTypeId((string) $data[JSONConstants::JSON_TYPE_PARENT_ID]);
-        }
-        if (isset($data[JSONConstants::JSON_TYPE_QUERYNAME])) {
-            $typeDefinition->setQueryName((string) $data[JSONConstants::JSON_TYPE_QUERYNAME]);
-        }
-
-        if (isset($data[JSONConstants::JSON_TYPE_TYPE_MUTABILITY])
-            && is_array($data[JSONConstants::JSON_TYPE_TYPE_MUTABILITY])
-        ) {
-            $typeMutabilityData = $data[JSONConstants::JSON_TYPE_TYPE_MUTABILITY];
-            $typeMutability = new TypeMutability();
-            if (isset($typeMutabilityData[JSONConstants::JSON_TYPE_TYPE_MUTABILITY_CREATE])) {
-                $typeMutability->setCanCreate(
-                    (boolean) $typeMutabilityData[JSONConstants::JSON_TYPE_TYPE_MUTABILITY_CREATE]
-                );
+            if ($data[JSONConstants::JSON_TYPE_TYPE_MUTABILITY] === null) {
+                unset($data[JSONConstants::JSON_TYPE_TYPE_MUTABILITY]);
             }
-            if (isset($typeMutabilityData[JSONConstants::JSON_TYPE_TYPE_MUTABILITY_UPDATE])) {
-                $typeMutability->setCanUpdate(
-                    (boolean) $typeMutabilityData[JSONConstants::JSON_TYPE_TYPE_MUTABILITY_UPDATE]
-                );
-            }
-            if (isset($typeMutabilityData[JSONConstants::JSON_TYPE_TYPE_MUTABILITY_DELETE])) {
-                $typeMutability->setCanDelete(
-                    (boolean) $typeMutabilityData[JSONConstants::JSON_TYPE_TYPE_MUTABILITY_DELETE]
-                );
-            }
-
-            $typeMutability->setExtensions(
-                $this->convertExtension($typeMutabilityData, JSONConstants::getTypeTypeMutabilityKeys())
-            );
-            $typeDefinition->setTypeMutability($typeMutability);
         }
 
         if (isset($data[JSONConstants::JSON_TYPE_PROPERTY_DEFINITIONS])
@@ -686,6 +601,20 @@ class JsonConverter extends AbstractDataConverter
                 }
             }
         }
+        unset($data[JSONConstants::JSON_TYPE_PROPERTY_DEFINITIONS]);
+
+        $typeDefinition->populate(
+            $data,
+            array_merge(
+                array_combine(JSONConstants::getTypeKeys(), JSONConstants::getTypeKeys()),
+                array(
+                    JSONConstants::JSON_TYPE_PARENT_ID => 'parentTypeId',
+                    JSONConstants::JSON_TYPE_ALLOWED_TARGET_TYPES => 'allowedTargetTypeIds',
+                    JSONConstants::JSON_TYPE_ALLOWED_SOURCE_TYPES => 'allowedSourceTypeIds',
+                )
+            ),
+            true
+        );
 
         $typeDefinition->setExtensions($this->convertExtension($data, JSONConstants::getTypeKeys()));
 
@@ -693,9 +622,90 @@ class JsonConverter extends AbstractDataConverter
     }
 
     /**
+     * Convert specific type definition data so it can be populated to the type definition
+     *
+     * @param MutableTypeDefinitionInterface $typeDefinition The type definition to set the data to
+     * @param array $data The data that contains the values that should be applied to the object
+     * @return MutableTypeDefinitionInterface The type definition with the specific data applied
+     */
+    private function convertTypeDefinitionSpecificData(array $data, MutableTypeDefinitionInterface $typeDefinition)
+    {
+        if ($typeDefinition instanceof MutableDocumentTypeDefinitionInterface) {
+            if (!empty($data[JSONConstants::JSON_TYPE_CONTENTSTREAM_ALLOWED])) {
+                $data[JSONConstants::JSON_TYPE_CONTENTSTREAM_ALLOWED] = ContentStreamAllowed::cast(
+                    $data[JSONConstants::JSON_TYPE_CONTENTSTREAM_ALLOWED]
+                );
+            }
+        } elseif ($typeDefinition instanceof MutableRelationshipTypeDefinitionInterface) {
+            if (isset($data[JSONConstants::JSON_TYPE_ALLOWED_SOURCE_TYPES])
+                && is_array($data[JSONConstants::JSON_TYPE_ALLOWED_SOURCE_TYPES])
+            ) {
+                $allowedSourceTypeIds = array();
+                foreach ($data[JSONConstants::JSON_TYPE_ALLOWED_SOURCE_TYPES] as $allowedSourceTypeId) {
+                    $allowedSourceTypeId = (string) $allowedSourceTypeId;
+                    if (!empty($allowedSourceTypeId)) {
+                        $allowedSourceTypeIds[] = $allowedSourceTypeId;
+                    }
+                }
+                $data[JSONConstants::JSON_TYPE_ALLOWED_SOURCE_TYPES] = $allowedSourceTypeIds;
+            }
+            if (isset($data[JSONConstants::JSON_TYPE_ALLOWED_TARGET_TYPES])
+                && is_array($data[JSONConstants::JSON_TYPE_ALLOWED_TARGET_TYPES])
+            ) {
+                $allowedTargetTypeIds = array();
+                foreach ($data[JSONConstants::JSON_TYPE_ALLOWED_TARGET_TYPES] as $allowedTargetTypeId) {
+                    $allowedTargetTypeId = (string) $allowedTargetTypeId;
+                    if (!empty($allowedTargetTypeId)) {
+                        $allowedTargetTypeIds[] = $allowedTargetTypeId;
+                    }
+                }
+                $data[JSONConstants::JSON_TYPE_ALLOWED_TARGET_TYPES] = $allowedTargetTypeIds;
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * Convert an array to a type mutability object
+     *
+     * @param array $data The data that should be populated to the object
+     * @return TypeMutability|null Returns the type mutability object or <code>null</code> if empty array is given
+     */
+    public function convertTypeMutability(array $data = null)
+    {
+        if (empty($data)) {
+            return null;
+        }
+        $typeMutability = new TypeMutability();
+        $typeMutability->populate(
+            $data,
+            array_combine(
+                JSONConstants::getTypeTypeMutabilityKeys(),
+                array_map(
+                    function ($key) {
+                        // add a prefix "can" to all keys as this are the property names
+                        return 'can' . ucfirst($key);
+                    },
+                    JSONConstants::getTypeTypeMutabilityKeys()
+                )
+            ),
+            true
+        );
+
+        $typeMutability->setExtensions(
+            $this->convertExtension($data, JSONConstants::getTypeTypeMutabilityKeys())
+        );
+
+        return $typeMutability;
+    }
+
+    /**
+     * Get a type definition object by its base type id
+     *
      * @param string $baseTypeIdString
      * @param string $typeId
-     * @return TypeDefinitionInterface
+     * @return MutableTypeDefinitionInterface
      * @throws CmisInvalidArgumentException Exception is thrown if the base type exists in the BaseTypeId enumeration
      *      but is not implemented here. This could only happen if the base type enumeration is extended which requires
      *      a CMIS specification change.
@@ -732,7 +742,7 @@ class JsonConverter extends AbstractDataConverter
 
     /**
      * @param array $data
-     * @return PropertyDefinitionInterface
+     * @return PropertyDefinitionInterface|null
      */
     public function convertPropertyDefinition(array $data = null)
     {
