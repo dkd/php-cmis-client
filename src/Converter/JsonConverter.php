@@ -240,184 +240,162 @@ class JsonConverter extends AbstractDataConverter
             return null;
         }
 
-        $repositoryCapabilities = new RepositoryCapabilities();
         if (isset($data[JSONConstants::JSON_CAP_CONTENT_STREAM_UPDATABILITY])) {
-            $repositoryCapabilities->setContentStreamUpdatesCapability(
-                CapabilityContentStreamUpdates::cast($data[JSONConstants::JSON_CAP_CONTENT_STREAM_UPDATABILITY])
+            $data[JSONConstants::JSON_CAP_CONTENT_STREAM_UPDATABILITY] = CapabilityContentStreamUpdates::cast(
+                $data[JSONConstants::JSON_CAP_CONTENT_STREAM_UPDATABILITY]
             );
         }
         if (isset($data[JSONConstants::JSON_CAP_CHANGES])) {
-            $repositoryCapabilities->setChangesCapability(
-                CapabilityChanges::cast($data[JSONConstants::JSON_CAP_CHANGES])
-            );
+            $data[JSONConstants::JSON_CAP_CHANGES] = CapabilityChanges::cast($data[JSONConstants::JSON_CAP_CHANGES]);
         }
         if (isset($data[JSONConstants::JSON_CAP_RENDITIONS])) {
-            $repositoryCapabilities->setRenditionsCapability(
-                CapabilityRenditions::cast($data[JSONConstants::JSON_CAP_RENDITIONS])
-            );
-        }
-        if (isset($data[JSONConstants::JSON_CAP_GET_DESCENDANTS])) {
-            $repositoryCapabilities->setSupportsGetDescendants(
-                (boolean) $data[JSONConstants::JSON_CAP_GET_DESCENDANTS]
-            );
-        }
-        if (isset($data[JSONConstants::JSON_CAP_GET_FOLDER_TREE])) {
-            $repositoryCapabilities->setSupportsGetFolderTree((boolean) $data[JSONConstants::JSON_CAP_GET_FOLDER_TREE]);
-        }
-        if (isset($data[JSONConstants::JSON_CAP_MULTIFILING])) {
-            $repositoryCapabilities->setSupportsMultifiling((boolean) $data[JSONConstants::JSON_CAP_MULTIFILING]);
-        }
-        if (isset($data[JSONConstants::JSON_CAP_UNFILING])) {
-            $repositoryCapabilities->setSupportsUnfiling((boolean) $data[JSONConstants::JSON_CAP_UNFILING]);
-        }
-        if (isset($data[JSONConstants::JSON_CAP_VERSION_SPECIFIC_FILING])) {
-            $repositoryCapabilities->setSupportsVersionSpecificFiling(
-                (boolean) $data[JSONConstants::JSON_CAP_VERSION_SPECIFIC_FILING]
-            );
-        }
-        if (isset($data[JSONConstants::JSON_CAP_PWC_SEARCHABLE])) {
-            $repositoryCapabilities->setSupportsPwcSearchable((boolean) $data[JSONConstants::JSON_CAP_PWC_SEARCHABLE]);
-        }
-        if (isset($data[JSONConstants::JSON_CAP_PWC_UPDATABLE])) {
-            $repositoryCapabilities->setSupportsPwcUpdatable((boolean) $data[JSONConstants::JSON_CAP_PWC_UPDATABLE]);
-        }
-        if (isset($data[JSONConstants::JSON_CAP_ALL_VERSIONS_SEARCHABLE])) {
-            $repositoryCapabilities->setSupportsAllVersionsSearchable(
-                (boolean) $data[JSONConstants::JSON_CAP_ALL_VERSIONS_SEARCHABLE]
+            $data[JSONConstants::JSON_CAP_RENDITIONS] = CapabilityRenditions::cast(
+                $data[JSONConstants::JSON_CAP_RENDITIONS]
             );
         }
         if (isset($data[JSONConstants::JSON_CAP_ORDER_BY])) {
-            $repositoryCapabilities->setOrderByCapability(
-                CapabilityOrderBy::cast($data[JSONConstants::JSON_CAP_ORDER_BY])
+            $data[JSONConstants::JSON_CAP_ORDER_BY] = CapabilityOrderBy::cast(
+                $data[JSONConstants::JSON_CAP_ORDER_BY]
             );
         }
         if (isset($data[JSONConstants::JSON_CAP_QUERY])) {
-            $repositoryCapabilities->setQueryCapability(CapabilityQuery::cast($data[JSONConstants::JSON_CAP_QUERY]));
+            $data[JSONConstants::JSON_CAP_QUERY] = CapabilityQuery::cast($data[JSONConstants::JSON_CAP_QUERY]);
         }
         if (isset($data[JSONConstants::JSON_CAP_JOIN])) {
-            $repositoryCapabilities->setJoinCapability(CapabilityJoin::cast($data[JSONConstants::JSON_CAP_JOIN]));
+            $data[JSONConstants::JSON_CAP_JOIN] = CapabilityJoin::cast($data[JSONConstants::JSON_CAP_JOIN]);
         }
         if (isset($data[JSONConstants::JSON_CAP_ACL])) {
-            $repositoryCapabilities->setAclCapability(CapabilityAcl::cast($data[JSONConstants::JSON_CAP_ACL]));
+            $data[JSONConstants::JSON_CAP_ACL] = CapabilityAcl::cast($data[JSONConstants::JSON_CAP_ACL]);
         }
 
-        if (isset($data[JSONConstants::JSON_CAP_CREATABLE_PROPERTY_TYPES])
-            && is_array($data[JSONConstants::JSON_CAP_CREATABLE_PROPERTY_TYPES])
-        ) {
-            $creatablePropertyTypes = new CreatablePropertyTypes();
-            $creatablePropertyTypesData = $data[JSONConstants::JSON_CAP_CREATABLE_PROPERTY_TYPES];
-
-            if (isset($creatablePropertyTypesData[JSONConstants::JSON_CAP_CREATABLE_PROPERTY_TYPES_CANCREATE])
-                && is_array($creatablePropertyTypesData[JSONConstants::JSON_CAP_CREATABLE_PROPERTY_TYPES_CANCREATE])
-            ) {
-                $canCreate = array();
-
-                foreach ($creatablePropertyTypesData[JSONConstants::JSON_CAP_CREATABLE_PROPERTY_TYPES_CANCREATE] as $canCreateItem) {
-                    try {
-                        $canCreate[] = PropertyType::cast($canCreateItem);
-                    } catch (InvalidEnumerationValueException $exception) {
-                        // ignore invalid types
-                    }
-                }
-
-                $creatablePropertyTypes->setCanCreate($canCreate);
-            }
-
-            $creatablePropertyTypes->setExtensions(
-                $this->convertExtension(
-                    $creatablePropertyTypesData,
-                    JSONConstants::getCapabilityCreatablePropertyKeys()
-                )
+        if (isset($data[JSONConstants::JSON_CAP_CREATABLE_PROPERTY_TYPES])) {
+            $data[JSONConstants::JSON_CAP_CREATABLE_PROPERTY_TYPES] = $this->convertCreatablePropertyTypes(
+                $data[JSONConstants::JSON_CAP_CREATABLE_PROPERTY_TYPES]
             );
-
-            $repositoryCapabilities->setCreatablePropertyTypes($creatablePropertyTypes);
+            if ($data[JSONConstants::JSON_CAP_CREATABLE_PROPERTY_TYPES] === null) {
+                unset($data[JSONConstants::JSON_CAP_CREATABLE_PROPERTY_TYPES]);
+            }
         }
 
-        if (isset($data[JSONConstants::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES])
-            && is_array($data[JSONConstants::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES])
-        ) {
-            $newTypeSettableAttributesData = $data[JSONConstants::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES];
-            $newTypeSettableAttributes = new NewTypeSettableAttributes();
-
-            if (isset($newTypeSettableAttributesData[JSONConstants::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES_ID])) {
-                $newTypeSettableAttributes->setCanSetId(
-                    (boolean) $newTypeSettableAttributesData[JSONConstants::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES_ID]
-                );
-            }
-            if (isset($newTypeSettableAttributesData[JSONConstants::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES_LOCALNAME])) {
-                $newTypeSettableAttributes->setCanSetLocalName(
-                    (boolean) $newTypeSettableAttributesData[JSONConstants::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES_LOCALNAME]
-                );
-            }
-            if (isset($newTypeSettableAttributesData[JSONConstants::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES_LOCALNAMESPACE])) {
-                $newTypeSettableAttributes->setCanSetLocalNamespace(
-                    (boolean) $newTypeSettableAttributesData[JSONConstants::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES_LOCALNAMESPACE]
-                );
-            }
-            if (isset($newTypeSettableAttributesData[JSONConstants::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES_DISPLAYNAME])) {
-                $newTypeSettableAttributes->setCanSetDisplayName(
-                    (boolean) $newTypeSettableAttributesData[JSONConstants::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES_DISPLAYNAME]
-                );
-            }
-            if (isset($newTypeSettableAttributesData[JSONConstants::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES_QUERYNAME])) {
-                $newTypeSettableAttributes->setCanSetQueryName(
-                    (boolean) $newTypeSettableAttributesData[JSONConstants::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES_QUERYNAME]
-                );
-            }
-            if (isset($newTypeSettableAttributesData[JSONConstants::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES_DESCRIPTION])) {
-                $newTypeSettableAttributes->setCanSetDescription(
-                    (boolean) $newTypeSettableAttributesData[JSONConstants::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES_DESCRIPTION]
-                );
-            }
-            if (isset($newTypeSettableAttributesData[JSONConstants::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES_CREATEABLE])) {
-                $newTypeSettableAttributes->setCanSetCreatable(
-                    (boolean) $newTypeSettableAttributesData[JSONConstants::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES_CREATEABLE]
-                );
-            }
-            if (isset($newTypeSettableAttributesData[JSONConstants::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES_FILEABLE])) {
-                $newTypeSettableAttributes->setCanSetFileable(
-                    (boolean) $newTypeSettableAttributesData[JSONConstants::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES_FILEABLE]
-                );
-            }
-            if (isset($newTypeSettableAttributesData[JSONConstants::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES_QUERYABLE])) {
-                $newTypeSettableAttributes->setCanSetQueryable(
-                    (boolean) $newTypeSettableAttributesData[JSONConstants::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES_QUERYABLE]
-                );
-            }
-            if (isset($newTypeSettableAttributesData[JSONConstants::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES_FULLTEXTINDEXED])) {
-                $newTypeSettableAttributes->setCanSetFulltextIndexed(
-                    (boolean) $newTypeSettableAttributesData[JSONConstants::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES_FULLTEXTINDEXED]
-                );
-            }
-            if (isset($newTypeSettableAttributesData[JSONConstants::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES_INCLUDEDINSUPERTYTPEQUERY])) {
-                $newTypeSettableAttributes->setCanSetIncludedInSupertypeQuery(
-                    (boolean) $newTypeSettableAttributesData[JSONConstants::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES_INCLUDEDINSUPERTYTPEQUERY]
-                );
-            }
-            if (isset($newTypeSettableAttributesData[JSONConstants::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES_CONTROLABLEPOLICY])) {
-                $newTypeSettableAttributes->setCanSetControllablePolicy(
-                    (boolean) $newTypeSettableAttributesData[JSONConstants::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES_CONTROLABLEPOLICY]
-                );
-            }
-            if (isset($newTypeSettableAttributesData[JSONConstants::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES_CONTROLABLEACL])) {
-                $newTypeSettableAttributes->setCanSetControllableAcl(
-                    (boolean) $newTypeSettableAttributesData[JSONConstants::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES_CONTROLABLEACL]
-                );
-            }
-
-            $newTypeSettableAttributes->setExtensions(
-                $this->convertExtension(
-                    $newTypeSettableAttributesData,
-                    JSONConstants::getCapabilityNewTypeSettableAttributeKeys()
-                )
+        if (isset($data[JSONConstants::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES])) {
+            $data[JSONConstants::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES] = $this->convertNewTypeSettableAttributes(
+                $data[JSONConstants::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES]
             );
-
-            $repositoryCapabilities->setNewTypeSettableAttributes($newTypeSettableAttributes);
+            if ($data[JSONConstants::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES] === null) {
+                unset($data[JSONConstants::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES]);
+            }
         }
 
+        $repositoryCapabilities = new RepositoryCapabilities();
         $repositoryCapabilities->setExtensions($this->convertExtension($data, JSONConstants::getCapabilityKeys()));
 
+        $repositoryCapabilities->populate(
+            $data,
+            array_merge(
+                array_combine(JSONConstants::getCapabilityKeys(), JSONConstants::getCapabilityKeys()),
+                array(
+                    JSONConstants::JSON_CAP_CONTENT_STREAM_UPDATABILITY => 'contentStreamUpdatesCapability',
+                    JSONConstants::JSON_CAP_CHANGES => 'changesCapability',
+                    JSONConstants::JSON_CAP_RENDITIONS => 'renditionsCapability',
+                    JSONConstants::JSON_CAP_GET_DESCENDANTS => 'supportsGetDescendants',
+                    JSONConstants::JSON_CAP_GET_FOLDER_TREE => 'supportsGetFolderTree',
+                    JSONConstants::JSON_CAP_MULTIFILING => 'supportsMultifiling',
+                    JSONConstants::JSON_CAP_UNFILING => 'supportsUnfiling',
+                    JSONConstants::JSON_CAP_VERSION_SPECIFIC_FILING => 'supportsVersionSpecificFiling',
+                    JSONConstants::JSON_CAP_PWC_SEARCHABLE => 'supportsPwcSearchable',
+                    JSONConstants::JSON_CAP_PWC_UPDATABLE => 'supportsPwcUpdatable',
+                    JSONConstants::JSON_CAP_ALL_VERSIONS_SEARCHABLE => 'supportsAllVersionsSearchable',
+                    JSONConstants::JSON_CAP_ORDER_BY => 'orderByCapability',
+                    JSONConstants::JSON_CAP_QUERY => 'queryCapability',
+                    JSONConstants::JSON_CAP_JOIN => 'joinCapability',
+                    JSONConstants::JSON_CAP_ACL => 'aclCapability',
+                    JSONConstants::JSON_CAP_CREATABLE_PROPERTY_TYPES => 'creatablePropertyTypes',
+                    JSONConstants::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES => 'newTypeSettableAttributes'
+                )
+            ),
+            true
+        );
+
         return $repositoryCapabilities;
+    }
+
+    /**
+     * Create NewTypeSettableAttributes object and populate given data to it
+     *
+     * @param string[]|null $data
+     * @return NewTypeSettableAttributes|null Returns object or <code>null</code> if given data is empty
+     */
+    public function convertNewTypeSettableAttributes(array $data = null)
+    {
+        if (empty($data)) {
+            return null;
+        }
+        $object = new NewTypeSettableAttributes();
+
+        $object->populate(
+            $data,
+            array_combine(
+                JSONConstants::getCapabilityNewTypeSettableAttributeKeys(),
+                array_map(
+                    function ($key) {
+                        // add a prefix "canSet" to all keys as this are the property names
+                        return 'canSet' . ucfirst($key);
+                    },
+                    JSONConstants::getCapabilityNewTypeSettableAttributeKeys()
+                )
+            ),
+            true
+        );
+
+        $object->setExtensions(
+            $this->convertExtension(
+                $data,
+                JSONConstants::getCapabilityNewTypeSettableAttributeKeys()
+            )
+        );
+
+        return $object;
+    }
+
+    /**
+     * Create CreatablePropertyTypes object and populate given data to it
+     *
+     * @param array $data The data that should be populated to the CreatablePropertyTypes object
+     * @return CreatablePropertyTypes|null Returns a CreatablePropertyTypes object or <code>null</code> if empty data
+     *      is given.
+     */
+    public function convertCreatablePropertyTypes(array $data = null)
+    {
+        if (empty($data)) {
+            return null;
+        }
+
+        $object = new CreatablePropertyTypes();
+
+        if (isset($data[JSONConstants::JSON_CAP_CREATABLE_PROPERTY_TYPES_CANCREATE])
+            && is_array($data[JSONConstants::JSON_CAP_CREATABLE_PROPERTY_TYPES_CANCREATE])
+        ) {
+            $canCreate = array();
+
+            foreach ($data[JSONConstants::JSON_CAP_CREATABLE_PROPERTY_TYPES_CANCREATE] as $canCreateItem) {
+                try {
+                    $canCreate[] = PropertyType::cast($canCreateItem);
+                } catch (InvalidEnumerationValueException $exception) {
+                    // ignore invalid types
+                }
+            }
+
+            $object->setCanCreate($canCreate);
+        }
+
+        $object->setExtensions(
+            $this->convertExtension(
+                $data,
+                JSONConstants::getCapabilityCreatablePropertyKeys()
+            )
+        );
+
+        return $object;
     }
 
     /**

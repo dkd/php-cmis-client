@@ -17,8 +17,6 @@ use Dkd\Populate\PopulateTrait;
  */
 class RepositoryInfoBrowserBinding extends RepositoryInfo
 {
-    use PopulateTrait;
-
     /**
      * @var string
      */

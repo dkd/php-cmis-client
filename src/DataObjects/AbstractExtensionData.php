@@ -13,12 +13,16 @@ namespace Dkd\PhpCmis\DataObjects;
 use Dkd\PhpCmis\Data\CmisExtensionElementInterface;
 use Dkd\PhpCmis\Data\ExtensionDataInterface;
 use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
+use Dkd\Populate\PopulateInterface;
+use Dkd\Populate\PopulateTrait;
 
 /**
  * Holds extension data either set by the CMIS repository or the client.
  */
-abstract class AbstractExtensionData implements ExtensionDataInterface
+abstract class AbstractExtensionData implements ExtensionDataInterface, PopulateInterface
 {
+    use PopulateTrait;
+
     /**
      * @var CmisExtensionElementInterface[]
      */
