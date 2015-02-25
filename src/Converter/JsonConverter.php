@@ -1033,10 +1033,12 @@ class JsonConverter extends AbstractDataConverter
                 );
             }
 
-            if (is_array($propertyData[JSONConstants::JSON_PROPERTY_VALUE])) {
-                $propertyValues = $propertyData[JSONConstants::JSON_PROPERTY_VALUE];
-            } else {
+            if (empty($propertyData[JSONConstants::JSON_PROPERTY_VALUE])) {
+                $propertyValues = array();
+            } elseif (!is_array($propertyData[JSONConstants::JSON_PROPERTY_VALUE])) {
                 $propertyValues = array($propertyData[JSONConstants::JSON_PROPERTY_VALUE]);
+            } else {
+                $propertyValues = $propertyData[JSONConstants::JSON_PROPERTY_VALUE];
             }
 
             if ($propertyType->equals(PropertyType::cast(PropertyType::STRING))) {

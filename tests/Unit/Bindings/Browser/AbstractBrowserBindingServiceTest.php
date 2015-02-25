@@ -718,6 +718,51 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         );
     }
 
+    public function testGetTypeDefinitionInternalThrowsExceptionIfRepositoryIdIsEmpty()
+    {
+        $repositoryId = null;
+        $typeId = 'typeId';
+
+        $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->getMock();
+
+        /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
+        $binding = $this->getMockBuilder(
+            self::CLASS_TO_TEST
+        )->setConstructorArgs(array($this->getSessionMock(), $cmisBindingsHelperMock))->getMockForAbstractClass();
+
+        $this->setExpectedException(
+            '\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException',
+            'Repository id must not be empty!'
+        );
+
+        $this->getMethod(self::CLASS_TO_TEST, 'getTypeDefinitionInternal')->invokeArgs(
+            $binding,
+            array($repositoryId, $typeId)
+        );
+    }
+
+    public function testGetTypeDefinitionInternalThrowsExceptionIfTypeIdIsEmpty()
+    {
+        $repositoryId = 'repositoryId';
+        $typeId = null;
+
+        $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->getMock();
+
+        /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
+        $binding = $this->getMockBuilder(
+            self::CLASS_TO_TEST
+        )->setConstructorArgs(array($this->getSessionMock(), $cmisBindingsHelperMock))->getMockForAbstractClass();
+
+        $this->setExpectedException(
+            '\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException',
+            'Type id must not be empty!'
+        );
+        $this->getMethod(self::CLASS_TO_TEST, 'getTypeDefinitionInternal')->invokeArgs(
+            $binding,
+            array($repositoryId, $typeId)
+        );
+    }
+
     public function testGetRepositoriesInternalThrowsExceptionIfRequestDoesNotReturnValidJson()
     {
         $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
@@ -1065,7 +1110,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         );
     }
 
-    public function testConvertPoliciesToQueryArrayConvertsPoliciesIntoAnArray()
+    public function testConvertPolicyIdArrayToQueryArrayConvertsPoliciesArrayIntoAnQueryArray()
     {
         $sessionMock = $this->getSessionMock();
 
@@ -1088,7 +1133,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
 
         $this->assertEquals(
             $expectedArray,
-            $this->getMethod(self::CLASS_TO_TEST, 'convertPoliciesToQueryArray')->invokeArgs(
+            $this->getMethod(self::CLASS_TO_TEST, 'convertPolicyIdArrayToQueryArray')->invokeArgs(
                 $binding,
                 array($policies)
             )

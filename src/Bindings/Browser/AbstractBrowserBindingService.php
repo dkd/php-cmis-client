@@ -416,9 +416,18 @@ abstract class AbstractBrowserBindingService
      * @param string $repositoryId
      * @param string $typeId
      * @return TypeDefinitionInterface|null
+     * @throws CmisInvalidArgumentException if repository id or type id is <code>null</code>
      */
     protected function getTypeDefinitionInternal($repositoryId, $typeId)
     {
+        if (empty($repositoryId)) {
+            throw new CmisInvalidArgumentException('Repository id must not be empty!');
+        }
+
+        if (empty($typeId)) {
+            throw new CmisInvalidArgumentException('Type id must not be empty!');
+        }
+
         // build URL
         $url = $this->getRepositoryUrl($repositoryId, Constants::SELECTOR_TYPE_DEFINITION);
         $url->getQuery()->modify(array(Constants::PARAM_TYPE_ID => $typeId));
@@ -553,7 +562,7 @@ abstract class AbstractBrowserBindingService
      * @param string[] $policies A list of policy string representations
      * @return array
      */
-    protected function convertPoliciesToQueryArray(array $policies)
+    protected function convertPolicyIdArrayToQueryArray(array $policies)
     {
         $policiesArray = array();
         $policyCounter = 0;
@@ -584,5 +593,56 @@ abstract class AbstractBrowserBindingService
     public function setDateTimeFormat(DateTimeFormat $dateTimeFormat)
     {
         $this->dateTimeFormat = $dateTimeFormat;
+    }
+
+    /**
+     * Appends policies parameters to url
+     *
+     * @param Url $url
+     * @param string[] $policies A list of policy IDs that must be applied to the newly created document object
+     */
+    protected function appendPoliciesToUrl(Url $url, array $policies)
+    {
+        if (!empty($policies)) {
+            $url->getQuery()->modify($this->convertPolicyIdArrayToQueryArray($policies));
+        }
+    }
+
+    /**
+     * Appends addAces parameters to url
+     *
+     * @param Url $url
+     * @param AclInterface|null $addAces A list of ACEs
+     */
+    protected function appendAddAcesToUrl(Url $url, AclInterface $addAces = null)
+    {
+        if ($addAces !== null) {
+            $url->getQuery()->modify(
+                $this->convertAclToQueryArray(
+                    $addAces,
+                    Constants::CONTROL_ADD_ACE_PRINCIPAL,
+                    Constants::CONTROL_ADD_ACE_PERMISSION
+                )
+            );
+        }
+    }
+
+    /**
+     * Appends removeAces parameters to url
+     *
+     * @param Url $url
+     * @param AclInterface|null $removeAces A list of ACEs
+     */
+    protected function appendRemoveAcesToUrl(Url $url, AclInterface $removeAces = null)
+    {
+        if ($removeAces !== null) {
+            $url->getQuery()->modify(
+                $this->convertAclToQueryArray(
+                    $removeAces,
+                    Constants::CONTROL_REMOVE_ACE_PRINCIPAL,
+                    Constants::CONTROL_REMOVE_ACE_PERMISSION
+                )
+            );
+        }
     }
 }

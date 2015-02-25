@@ -94,7 +94,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      * @param AclInterface|null $removeAces a list of ACEs that must be removed from the newly created document object,
      *      either using the ACL from folderId if specified, or being ignored if no folderId is specified
      * @param ExtensionDataInterface|null  $extension
-     * @return string|null Returns the new object id or null if the repository sent an empty
+     * @return string|null Returns the new object id or <code>null</code> if the repository sent an empty
      *      result (which should not happen)
      */
     public function createDocument(
@@ -108,12 +108,17 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         AclInterface $removeAces = null,
         ExtensionDataInterface $extension = null
     ) {
-        $url = $this->getObjectUrl($repositoryId, $folderId);
+        if ($folderId === null) {
+            $url = $this->getRepositoryUrl($repositoryId);
+        } else {
+            $url = $this->getObjectUrl($repositoryId, $folderId);
+        }
+
         $url->getQuery()->modify($this->convertPropertiesToQueryArray($properties));
         $url->getQuery()->modify(
             array(
                 Constants::CONTROL_CMISACTION => Constants::CMISACTION_CREATE_DOCUMENT,
-                Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
+                Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false'
             )
         );
 
@@ -121,29 +126,9 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
             $url->getQuery()->modify(array(Constants::PARAM_VERSIONING_STATE => (string) $versioningState));
         }
 
-        if ($addAces !== null) {
-            $url->getQuery()->modify(
-                $this->convertAclToQueryArray(
-                    $addAces,
-                    Constants::CONTROL_ADD_ACE_PRINCIPAL,
-                    Constants::CONTROL_ADD_ACE_PERMISSION
-                )
-            );
-        }
-
-        if ($removeAces !== null) {
-            $url->getQuery()->modify(
-                $this->convertAclToQueryArray(
-                    $removeAces,
-                    Constants::CONTROL_REMOVE_ACE_PRINCIPAL,
-                    Constants::CONTROL_REMOVE_ACE_PERMISSION
-                )
-            );
-        }
-
-        if (!empty($policies)) {
-            $url->getQuery()->modify($this->convertPoliciesToQueryArray($policies));
-        }
+        $this->appendAddAcesToUrl($url, $addAces);
+        $this->appendRemoveAcesToUrl($url, $removeAces);
+        $this->appendPoliciesToUrl($url, $policies);
 
         $responseData = $this->post(
             $url,
@@ -162,7 +147,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      * @param string $sourceId the identifier for the source document
      * @param PropertiesInterface $properties the property values that must be applied to the newly
      *      created document object
-     * @param string $folderId if specified, the identifier for the folder that must be the parent folder for the
+     * @param string|null $folderId if specified, the identifier for the folder that must be the parent folder for the
      *      newly created document object
      * @param VersioningState|null $versioningState specifies what the versioning state of the newly created object
      *      must be (default is <code>VersioningState::MAJOR</code>)
@@ -172,7 +157,8 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      * @param AclInterface|null $removeAces a list of ACEs that must be removed from the newly created document object,
      *      either using the ACL from folderId if specified, or being ignored if no folderId is specified
      * @param ExtensionDataInterface|null $extension
-     * @return string The id of the newly-created document.
+     * @return string|null Returns the new object id or <code>null</code> if the repository sent an empty
+     *      result (which should not happen)
      */
     public function createDocumentFromSource(
         $repositoryId,
@@ -185,7 +171,34 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         AclInterface $removeAces = null,
         ExtensionDataInterface $extension = null
     ) {
-        // TODO: Implement createDocumentFromSource() method.
+        if ($folderId === null) {
+            $url = $this->getRepositoryUrl($repositoryId);
+        } else {
+            $url = $this->getObjectUrl($repositoryId, $folderId);
+        }
+
+        $url->getQuery()->modify($this->convertPropertiesToQueryArray($properties));
+        $url->getQuery()->modify(
+            array(
+                Constants::CONTROL_CMISACTION => Constants::CMISACTION_CREATE_DOCUMENT_FROM_SOURCE,
+                Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
+                Constants::PARAM_SOURCE_ID => (string) $sourceId
+            )
+        );
+
+        if ($versioningState !== null) {
+            $url->getQuery()->modify(array(Constants::PARAM_VERSIONING_STATE => (string) $versioningState));
+        }
+
+        $this->appendAddAcesToUrl($url, $addAces);
+        $this->appendRemoveAcesToUrl($url, $removeAces);
+        $this->appendPoliciesToUrl($url, $policies);
+
+        $responseData = $this->post($url)->json();
+
+        $newObject = $this->getJsonConverter()->convertObject($responseData);
+
+        return ($newObject === null) ? null : $newObject->getId();
     }
 
     /**
@@ -219,35 +232,15 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         $url->getQuery()->modify(
             array(
                 Constants::CONTROL_CMISACTION => Constants::CMISACTION_CREATE_FOLDER,
-                Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
+                Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false'
             )
         );
 
         $url->getQuery()->modify($this->convertPropertiesToQueryArray($properties));
 
-        if (!empty($policies)) {
-            $url->getQuery()->modify($this->convertPoliciesToQueryArray($policies));
-        }
-
-        if ($addAces !== null) {
-            $url->getQuery()->modify(
-                $this->convertAclToQueryArray(
-                    $addAces,
-                    Constants::CONTROL_ADD_ACE_PRINCIPAL,
-                    Constants::CONTROL_ADD_ACE_PERMISSION
-                )
-            );
-        }
-
-        if ($removeAces !== null) {
-            $url->getQuery()->modify(
-                $this->convertAclToQueryArray(
-                    $removeAces,
-                    Constants::CONTROL_REMOVE_ACE_PRINCIPAL,
-                    Constants::CONTROL_REMOVE_ACE_PERMISSION
-                )
-            );
-        }
+        $this->appendPoliciesToUrl($url, $policies);
+        $this->appendAddAcesToUrl($url, $addAces);
+        $this->appendRemoveAcesToUrl($url, $removeAces);
 
         $responseData = $this->post($url)->json();
 
@@ -270,7 +263,8 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      * @param AclInterface|null $removeAces A list of ACEs that must be removed from the newly created document object,
      *      either using the ACL from folderId if specified, or being ignored if no folderId is specified
      * @param ExtensionDataInterface|null $extension
-     * @return string The id of the newly-created item.
+     * @return string|null Returns the new item id or <code>null</code> if the repository sent an empty
+     *      result (which should not happen)
      */
     public function createItem(
         $repositoryId,
@@ -281,7 +275,30 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         AclInterface $removeAces = null,
         ExtensionDataInterface $extension = null
     ) {
-        // TODO: Implement createItem() method.
+        if ($folderId === null) {
+            $url = $this->getRepositoryUrl($repositoryId);
+        } else {
+            $url = $this->getObjectUrl($repositoryId, $folderId);
+        }
+
+        $url->getQuery()->modify(
+            array(
+                Constants::CONTROL_CMISACTION => Constants::CMISACTION_CREATE_ITEM,
+                Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false'
+            )
+        );
+
+        $url->getQuery()->modify($this->convertPropertiesToQueryArray($properties));
+
+        $this->appendPoliciesToUrl($url, $policies);
+        $this->appendAddAcesToUrl($url, $addAces);
+        $this->appendRemoveAcesToUrl($url, $removeAces);
+
+        $responseData = $this->post($url)->json();
+
+        $newObject = $this->getJsonConverter()->convertObject($responseData);
+
+        return ($newObject === null) ? null : $newObject->getId();
     }
 
     /**
@@ -461,8 +478,8 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      * @param boolean $includeAcl if <code>true</code>, then the repository must return the ACL for the object
      *      (default is <code>false</code>)
      * @param ExtensionDataInterface|null $extension
-     * @return ObjectDataInterface|null Returns object of type ObjectDataInterface or null if the repository response
-     *     was empty
+     * @return ObjectDataInterface|null Returns object of type ObjectDataInterface or <code>null</code>
+     *     if the repository response was empty
      */
     public function getObject(
         $repositoryId,
@@ -485,13 +502,13 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
                 Constants::PARAM_POLICY_IDS => $includePolicyIds ? 'true' : 'false',
                 Constants::PARAM_ACL => $includeAcl ? 'true' : 'false',
                 Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
+                Constants::PARAM_DATETIME_FORMAT => (string) $this->getDateTimeFormat()
             )
         );
 
-        // read and parse
         $responseData = $this->read($url)->json();
 
-        // TODO Implement Cache
+        // TODO: Implement Cache
         return $this->getJsonConverter()->convertObject($responseData);
     }
 
@@ -545,7 +562,23 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         $filter = null,
         ExtensionDataInterface $extension = null
     ) {
-        // TODO: Implement getProperties() method.
+        $url = $this->getObjectUrl($repositoryId, $objectId, Constants::SELECTOR_PROPERTIES);
+        $url->getQuery()->modify(
+            array(
+                Constants::PARAM_FILTER => $filter,
+                Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
+                Constants::PARAM_DATETIME_FORMAT => (string) $this->getDateTimeFormat()
+            )
+        );
+
+        $responseData = $this->read($url)->json();
+
+        // TODO: Implement Cache
+        if ($this->getSuccinct()) {
+            return $this->getJsonConverter()->convertSuccinctProperties($responseData);
+        } else {
+            return $this->getJsonConverter()->convertProperties($responseData);
+        }
     }
 
     /**
@@ -582,6 +615,8 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      * @param string $targetFolderId the identifier for the target folder
      * @param string $sourceFolderId the identifier for the source folder
      * @param ExtensionDataInterface|null $extension
+     * @return ObjectDataInterface|null Returns object of type ObjectDataInterface or <code>null</code>
+     *     if the repository response was empty
      */
     public function moveObject(
         $repositoryId,
@@ -590,7 +625,23 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         $sourceFolderId,
         ExtensionDataInterface $extension = null
     ) {
-        // TODO: Implement moveObject() method.
+        $url = $this->getObjectUrl($repositoryId, $objectId);
+        $url->getQuery()->modify(
+            array(
+                Constants::CONTROL_CMISACTION => Constants::CMISACTION_MOVE,
+                Constants::PARAM_TARGET_FOLDER_ID => $targetFolderId,
+                Constants::PARAM_SOURCE_FOLDER_ID => $sourceFolderId,
+                Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false'
+            )
+        );
+
+        $responseData = $this->post($url)->json();
+        $newObject = $this->getJsonConverter()->convertObject($responseData);
+
+        // $objectId was passed by reference. The value is changed here to new object id
+        $objectId = ($newObject === null) ? null : $newObject->getId();
+
+        return $newObject;
     }
 
     /**

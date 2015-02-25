@@ -153,7 +153,8 @@ interface ObjectServiceInterface
      * @param AclInterface|null $removeAces a list of ACEs that must be removed from the newly created document object,
      *      either using the ACL from folderId if specified, or being ignored if no folderId is specified
      * @param ExtensionDataInterface|null $extension
-     * @return string
+     * @return string|null Returns the new object id or <code>null</code> if the repository sent an empty
+     *      result (which should not happen)
      */
     public function createFolder(
         $repositoryId,
@@ -179,7 +180,8 @@ interface ObjectServiceInterface
      * @param AclInterface|null $removeAces A list of ACEs that must be removed from the newly created document object,
      *      either using the ACL from folderId if specified, or being ignored if no folderId is specified
      * @param ExtensionDataInterface|null $extension
-     * @return string The id of the newly-created item.
+     * @return string|null Returns the new item id or <code>null</code> if the repository sent an empty
+     *      result (which should not happen)
      */
     public function createItem(
         $repositoryId,
@@ -440,6 +442,8 @@ interface ObjectServiceInterface
      * @param string $targetFolderId the identifier for the target folder
      * @param string $sourceFolderId the identifier for the source folder
      * @param ExtensionDataInterface|null $extension
+     * @return ObjectDataInterface|null Returns object of type ObjectDataInterface or <code>null</code>
+     *      if the repository response was empty
      */
     public function moveObject(
         $repositoryId,

@@ -373,6 +373,8 @@ class Session implements SessionInterface
      * @param AceInterface[] $removeAces A list of ACEs that MUST be removed from the newly-created document
      *      object, either using the ACL from folderId if specified, or being ignored if no folderId is specified.
      * @return ObjectIdInterface the object ID of the new document
+     * @throws CmisInvalidArgumentException Throws an <code>CmisInvalidArgumentException</code> if empty
+     *      property list is given
      */
     public function createDocumentFromSource(
         ObjectIdInterface $source,
@@ -383,7 +385,23 @@ class Session implements SessionInterface
         array $addAces = array(),
         array $removeAces = array()
     ) {
-        // TODO: Implement createDocumentFromSource() method.
+        if (empty($properties)) {
+            throw new CmisInvalidArgumentException('Properties must not be empty!');
+        }
+
+        $objectId = $this->getBinding()->getObjectService()->createDocumentFromSource(
+            $this->getRepositoryId(),
+            $source->getId(),
+            $this->getObjectFactory()->convertProperties($properties),
+            $folderId === null ? null : $folderId->getId(),
+            $versioningState,
+            $this->getObjectFactory()->convertPolicies($policies),
+            $this->getObjectFactory()->convertAces($addAces),
+            $this->getObjectFactory()->convertAces($removeAces),
+            null
+        );
+
+        return $this->createObjectId($objectId);
     }
 
     /**
@@ -395,6 +413,8 @@ class Session implements SessionInterface
      * @param AceInterface[] $addAces
      * @param AceInterface[] $removeAces
      * @return ObjectIdInterface the object ID of the new folder
+     * @throws CmisInvalidArgumentException Throws an <code>CmisInvalidArgumentException</code> if empty
+     *      property list is given
      */
     public function createFolder(
         array $properties,
@@ -429,6 +449,8 @@ class Session implements SessionInterface
      * @param AceInterface[] $addAces
      * @param AceInterface[] $removeAces
      * @return ObjectIdInterface the object ID of the new item
+     * @throws CmisInvalidArgumentException Throws an <code>CmisInvalidArgumentException</code> if empty
+     *      property list is given
      */
     public function createItem(
         array $properties,
@@ -437,7 +459,21 @@ class Session implements SessionInterface
         array $addAces = array(),
         array $removeAces = array()
     ) {
-        // TODO: Implement createItem() method.
+        if (empty($properties)) {
+            throw new CmisInvalidArgumentException('Properties must not be empty!');
+        }
+
+        $objectId = $this->getBinding()->getObjectService()->createItem(
+            $this->getRepositoryId(),
+            $this->getObjectFactory()->convertProperties($properties),
+            $folderId->getId(),
+            $this->getObjectFactory()->convertPolicies($policies),
+            $this->getObjectFactory()->convertAces($addAces),
+            $this->getObjectFactory()->convertAces($removeAces),
+            null
+        );
+
+        return $this->createObjectId($objectId);
     }
 
     /**
