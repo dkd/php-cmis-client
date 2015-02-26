@@ -111,7 +111,7 @@ use Dkd\PhpCmis\Exception\CmisRuntimeException;
 class JsonConverter extends AbstractDataConverter
 {
     /**
-     * @param array $data
+     * @param array|null $data
      * @return AllowableActions|null
      */
     public function convertAllowableActions(array $data = null)
@@ -141,7 +141,7 @@ class JsonConverter extends AbstractDataConverter
     }
 
     /**
-     * @param array $data The JSON that contains the repository info
+     * @param array|null $data The JSON that contains the repository info
      * @return null|RepositoryInfoBrowserBinding
      */
     public function convertRepositoryInfo(array $data = null)
@@ -233,7 +233,7 @@ class JsonConverter extends AbstractDataConverter
     }
 
     /**
-     * @param array $data
+     * @param array|null $data
      * @return RepositoryCapabilities|null
      */
     public function convertRepositoryCapabilities(array $data = null)
@@ -362,7 +362,7 @@ class JsonConverter extends AbstractDataConverter
     /**
      * Create CreatablePropertyTypes object and populate given data to it
      *
-     * @param array $data The data that should be populated to the CreatablePropertyTypes object
+     * @param array|null $data The data that should be populated to the CreatablePropertyTypes object
      * @return CreatablePropertyTypes|null Returns a CreatablePropertyTypes object or <code>null</code> if empty data
      *      is given.
      */
@@ -401,7 +401,7 @@ class JsonConverter extends AbstractDataConverter
     }
 
     /**
-     * @param array $data
+     * @param array|null $data
      * @param boolean $isExact
      * @return AccessControlList
      */
@@ -460,7 +460,7 @@ class JsonConverter extends AbstractDataConverter
     }
 
     /**
-     * @param array $data
+     * @param array|null $data
      * @return AclCapabilities|null
      */
     public function convertAclCapabilities(array $data = null)
@@ -553,8 +553,8 @@ class JsonConverter extends AbstractDataConverter
     /**
      * Convert an array to a type definition object
      *
-     * @param array $data
-     * @return TypeDefinitionInterface|null
+     * @param array|null $data
+     * @return AbstractTypeDefinition|null
      * @throws CmisInvalidArgumentException
      */
     public function convertTypeDefinition(array $data = null)
@@ -572,7 +572,6 @@ class JsonConverter extends AbstractDataConverter
             unset($data[JSONConstants::JSON_TYPE_BASE_ID]);
         }
 
-        /** @var MutableTypeDefinitionInterface|AbstractTypeDefinition $typeDefinition */
         $typeDefinition = $this->getTypeDefinitionByBaseTypeId(
             $baseTypeId,
             $data[JSONConstants::JSON_TYPE_ID]
@@ -669,7 +668,7 @@ class JsonConverter extends AbstractDataConverter
     /**
      * Convert an array to a type mutability object
      *
-     * @param array $data The data that should be populated to the object
+     * @param array|null $data The data that should be populated to the object
      * @return TypeMutability|null Returns the type mutability object or <code>null</code> if empty array is given
      */
     public function convertTypeMutability(array $data = null)
@@ -705,7 +704,7 @@ class JsonConverter extends AbstractDataConverter
      *
      * @param string $baseTypeIdString
      * @param string $typeId
-     * @return MutableTypeDefinitionInterface
+     * @return FolderTypeDefinition|DocumentTypeDefinition|RelationshipTypeDefinition|PolicyTypeDefinition|ItemTypeDefinition|SecondaryTypeDefinition
      * @throws CmisInvalidArgumentException Exception is thrown if the base type exists in the BaseTypeId enumeration
      *      but is not implemented here. This could only happen if the base type enumeration is extended which requires
      *      a CMIS specification change.
@@ -741,7 +740,7 @@ class JsonConverter extends AbstractDataConverter
     }
 
     /**
-     * @param array $data
+     * @param array|null $data
      * @return PropertyDefinitionInterface|null
      */
     public function convertPropertyDefinition(array $data = null)
@@ -870,7 +869,7 @@ class JsonConverter extends AbstractDataConverter
     /**
      * Converts an object.
      *
-     * @param array $data
+     * @param array|null $data
      * @return null|ObjectData
      */
     public function convertObject(array $data = null)
@@ -976,7 +975,7 @@ class JsonConverter extends AbstractDataConverter
     }
 
     /**
-     * @param array $data
+     * @param array|null $data
      * @return ObjectDataInterface[]
      */
     public function convertObjects(array $data = null)
@@ -1003,7 +1002,7 @@ class JsonConverter extends AbstractDataConverter
     }
 
     /**
-     * @param array $data
+     * @param array|null $data
      * @param array $extensions
      * @return null|Properties
      * @throws CmisRuntimeException
@@ -1087,7 +1086,7 @@ class JsonConverter extends AbstractDataConverter
     /**
      * TODO Add description
      *
-     * @param array $data
+     * @param array|null $data
      * @param array $extensions
      * @return PropertiesInterface
      * @throws \Exception
@@ -1123,7 +1122,7 @@ class JsonConverter extends AbstractDataConverter
     /**
      * Convert given input data to a RenditionData object
      *
-     * @param array $data
+     * @param array|null $data
      * @return null|RenditionData
      */
     public function convertRendition(array $data = null)
@@ -1166,7 +1165,7 @@ class JsonConverter extends AbstractDataConverter
     /**
      * Convert given input data to a list of RenditionData objects
      *
-     * @param array $data
+     * @param array|null $data
      * @return RenditionData[]
      */
     public function convertRenditions(array $data = null)
@@ -1194,7 +1193,7 @@ class JsonConverter extends AbstractDataConverter
     /**
      * Convert given input data to an Extension object
      *
-     * @param array $data
+     * @param array|null $data
      * @param string[] $cmisKeys
      * @return CmisExtensionElement[]
      */
@@ -1235,7 +1234,7 @@ class JsonConverter extends AbstractDataConverter
     /**
      * Convert given input data to an ExtensionFeature object
      *
-     * @param array $data
+     * @param array|null $data
      * @return ExtensionFeature[]
      */
     public function convertExtensionFeatures(array $data = null)
@@ -1280,7 +1279,7 @@ class JsonConverter extends AbstractDataConverter
     /**
      * Converts a list of policy ids.
      *
-     * @param array $data
+     * @param array|null $data
      * @return PolicyIdList List of policy ids
      */
     public function convertPolicyIdList(array $data = null)
@@ -1514,7 +1513,7 @@ class JsonConverter extends AbstractDataConverter
     /**
      * Convert given input data to a TypeChildren object
      *
-     * @param array $data
+     * @param array|null $data
      * @return TypeDefinitionListInterface
      */
     public function convertTypeChildren(array $data = null)
@@ -1525,7 +1524,7 @@ class JsonConverter extends AbstractDataConverter
     /**
      * Convert given input data to a TypeDescendants object
      *
-     * @param array $data
+     * @param array|null $data
      * @return TypeDefinitionContainerInterface
      */
     public function convertTypeDescendants(array $data = null)
@@ -1536,7 +1535,7 @@ class JsonConverter extends AbstractDataConverter
     /**
      * Convert given input data to a ObjectInFolderList object
      *
-     * @param array $data
+     * @param array|null $data
      * @return null|ObjectInFolderList
      */
     public function convertObjectInFolderList(array $data = null)
@@ -1580,7 +1579,7 @@ class JsonConverter extends AbstractDataConverter
     /**
      * Convert given input data to a ObjectInFolderData object
      *
-     * @param array $data
+     * @param array|null $data
      * @return ObjectInFolderData|null
      */
     public function convertObjectInFolder(array $data = null)
@@ -1611,7 +1610,7 @@ class JsonConverter extends AbstractDataConverter
     /**
      * Convert given input data to a list of ObjectParentData objects
      *
-     * @param array $data
+     * @param array|null $data
      * @return ObjectParentData[]
      */
     public function convertObjectParents(array $data = null)
@@ -1636,7 +1635,7 @@ class JsonConverter extends AbstractDataConverter
     /**
      * Convert given input data to a ObjectParentData object
      *
-     * @param array $data
+     * @param array|null $data
      * @return null|ObjectParentData
      */
     public function convertObjectParentData(array $data = null)
@@ -1665,7 +1664,7 @@ class JsonConverter extends AbstractDataConverter
     /**
      * Convert given input data array to a ObjectList object
      *
-     * @param array $data
+     * @param array|null $data
      * @return null|ObjectList
      */
     public function convertObjectList(array $data = null)
@@ -1707,7 +1706,7 @@ class JsonConverter extends AbstractDataConverter
     /**
      * Convert given input data array from query result to a ObjectList object
      *
-     * @param array $data
+     * @param array|null $data
      * @return null|ObjectList
      */
     public function convertQueryResultList(array $data = null)
@@ -1749,7 +1748,7 @@ class JsonConverter extends AbstractDataConverter
     /**
      * Convert given input data array to a ObjectList object
      *
-     * @param array $data
+     * @param array|null $data
      * @return ObjectInFolderContainer[]
      */
     public function convertDescendants(array $data = null)
@@ -1773,7 +1772,7 @@ class JsonConverter extends AbstractDataConverter
     /**
      * Convert given input data array to a ObjectInFolderContainer object
      *
-     * @param array $data
+     * @param array|null $data
      * @return null|ObjectInFolderContainer
      * @throws CmisRuntimeException
      */
