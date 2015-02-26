@@ -495,9 +495,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         $url = $this->getObjectUrl($repositoryId, $objectId, Constants::SELECTOR_OBJECT);
         $url->getQuery()->modify(
             array(
-                Constants::PARAM_FILTER => $filter,
                 Constants::PARAM_ALLOWABLE_ACTIONS => $includeAllowableActions ? 'true' : 'false',
-                Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships,
                 Constants::PARAM_RENDITION_FILTER => $renditionFilter,
                 Constants::PARAM_POLICY_IDS => $includePolicyIds ? 'true' : 'false',
                 Constants::PARAM_ACL => $includeAcl ? 'true' : 'false',
@@ -505,6 +503,14 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
                 Constants::PARAM_DATETIME_FORMAT => (string) $this->getDateTimeFormat()
             )
         );
+
+        if (!empty($filter)) {
+            $url->getQuery()->modify(array(Constants::PARAM_FILTER => (string) $filter));
+        }
+
+        if ($includeRelationships !== null) {
+            $url->getQuery()->modify(array(Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships));
+        }
 
         $responseData = $this->read($url)->json();
 
@@ -547,7 +553,6 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         $url = $this->getPathUrl($repositoryId, $path, Constants::SELECTOR_OBJECT);
         $url->getQuery()->modify(
             array(
-                Constants::PARAM_FILTER => $filter,
                 Constants::PARAM_ALLOWABLE_ACTIONS => $includeAllowableActions ? 'true' : 'false',
                 Constants::PARAM_RENDITION_FILTER => $renditionFilter,
                 Constants::PARAM_POLICY_IDS => $includePolicyIds ? 'true' : 'false',
@@ -556,6 +561,10 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
                 Constants::PARAM_DATETIME_FORMAT => (string) $this->getDateTimeFormat()
             )
         );
+
+        if (!empty($filter)) {
+            $url->getQuery()->modify(array(Constants::PARAM_FILTER => (string) $filter));
+        }
 
         if ($includeRelationships !== null) {
             $url->getQuery()->modify(array(Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships));
@@ -586,11 +595,14 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         $url = $this->getObjectUrl($repositoryId, $objectId, Constants::SELECTOR_PROPERTIES);
         $url->getQuery()->modify(
             array(
-                Constants::PARAM_FILTER => $filter,
                 Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
                 Constants::PARAM_DATETIME_FORMAT => (string) $this->getDateTimeFormat()
             )
         );
+
+        if (!empty($filter)) {
+            $url->getQuery()->modify(array(Constants::PARAM_FILTER => (string) $filter));
+        }
 
         $responseData = $this->read($url)->json();
 

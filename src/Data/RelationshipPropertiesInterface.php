@@ -26,7 +26,7 @@ interface RelationshipPropertiesInterface
     /**
      * Returns the target ID of this CMIS relationship (CMIS property cmis:targetId).
      *
-     * @return ObjectIdInterface the target ID or null if the property hasn't been requested,
+     * @return ObjectIdInterface the target ID or <code>null</code> if the property hasn't been requested,
      * hasn't been provided by the repository, or the property value isn't set
      */
     public function getTargetId();

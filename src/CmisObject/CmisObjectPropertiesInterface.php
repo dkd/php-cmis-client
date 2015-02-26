@@ -136,7 +136,7 @@ interface CmisObjectPropertiesInterface
     /**
      * Returns the secondary types of this CMIS object (object types identified by cmis:secondaryObjectTypeIds).
      *
-     * @return SecondaryTypeInterface[]|null the secondary types of the object or null if the property
+     * @return SecondaryTypeInterface[]|null the secondary types of the object or <code>null</code> if the property
      *         cmis:secondaryObjectTypeIds hasn't been requested or hasn't been provided by the repository
      */
     public function getSecondaryTypes();

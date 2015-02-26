@@ -121,15 +121,30 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
             ),
             array(
                 Url::createFromUrl(
-                    self::BROWSER_URL_TEST . '?filter=filter,123&includeAllowableActions=false'
+                    self::BROWSER_URL_TEST . '?includeAllowableActions=false'
                     . '&includeRelationships=both&renditionFilter=foo:bar&includePolicyIds=false&includeACL=false'
+                    . '&succinct=false&dateTimeFormat=simple'
+                ),
+                'repositoryId',
+                'objectId',
+                null,
+                false,
+                IncludeRelationships::cast(IncludeRelationships::BOTH),
+                'foo:bar',
+                false,
+                false,
+            ),
+            array(
+                Url::createFromUrl(
+                    self::BROWSER_URL_TEST . '?filter=filter,123&includeAllowableActions=false'
+                    . '&renditionFilter=foo:bar&includePolicyIds=false&includeACL=false'
                     . '&succinct=false&dateTimeFormat=simple'
                 ),
                 'repositoryId',
                 'objectId',
                 'filter,123',
                 false,
-                IncludeRelationships::cast(IncludeRelationships::BOTH),
+                null,
                 'foo:bar',
                 false,
                 false,
@@ -650,6 +665,14 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
                 'repositoryId',
                 'objectId',
                 'filter,123'
+            ),
+            array(
+                Url::createFromUrl(
+                    self::BROWSER_URL_TEST
+                    . '?succinct=false&dateTimeFormat=simple'
+                ),
+                'repositoryId',
+                'objectId'
             )
         );
 
@@ -1033,15 +1056,30 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
             ),
             array(
                 Url::createFromUrl(
-                    self::BROWSER_URL_TEST . '?filter=filter,123&includeAllowableActions=false'
+                    self::BROWSER_URL_TEST . '?includeAllowableActions=false'
                     . '&includeRelationships=both&renditionFilter=foo:bar&includePolicyIds=false&includeACL=false'
                     . '&succinct=false&dateTimeFormat=simple'
                 ),
                 'repositoryId',
                 'path/toAnObject',
-                'filter,123',
+                null,
                 false,
                 IncludeRelationships::cast(IncludeRelationships::BOTH),
+                'foo:bar',
+                false,
+                false,
+            ),
+            array(
+                Url::createFromUrl(
+                    self::BROWSER_URL_TEST . '?filter=filter,345&includeAllowableActions=false'
+                    . '&renditionFilter=foo:bar&includePolicyIds=false&includeACL=false'
+                    . '&succinct=false&dateTimeFormat=simple'
+                ),
+                'repositoryId',
+                'path/toAnObject',
+                'filter,345',
+                false,
+                null,
                 'foo:bar',
                 false,
                 false,

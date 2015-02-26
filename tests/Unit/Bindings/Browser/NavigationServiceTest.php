@@ -13,7 +13,6 @@ namespace Dkd\PhpCmis\Test\Unit\Bindings\Browser;
 use Dkd\PhpCmis\Bindings\Browser\NavigationService;
 use Dkd\PhpCmis\Constants;
 use Dkd\PhpCmis\Data\ExtensionDataInterface;
-use Dkd\PhpCmis\Data\ObjectInFolderListInterface;
 use Dkd\PhpCmis\DataObjects\ObjectData;
 use Dkd\PhpCmis\Enum\IncludeRelationships;
 use League\Url\Url;
@@ -36,7 +35,6 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
      * @param boolean $includePathSegment
      * @param integer|null $maxItems
      * @param integer $skipCount
-     * @param ExtensionDataInterface|null $extension
      */
     public function testGetChildrenCallsReadFunctionWithParameterizedQuery(
         $expectedUrl,
@@ -49,8 +47,7 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
         $renditionFilter = Constants::RENDITION_NONE,
         $includePathSegment = false,
         $maxItems = null,
-        $skipCount = 0,
-        ExtensionDataInterface $extension = null
+        $skipCount = 0
     ) {
         $navigationService = $this->getNavigationServiceMockForParameterizedQueryTest(
             $expectedUrl,
@@ -68,8 +65,7 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
             $renditionFilter,
             $includePathSegment,
             $maxItems,
-            $skipCount,
-            $extension
+            $skipCount
         );
     }
 
@@ -96,26 +92,41 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
                 'cmis:none',
                 true,
                 99,
-                0,
-                null
+                0
             ),
             array(
                 Url::createFromUrl(
-                    self::BROWSER_URL_TEST . '?filter=filter,123&orderBy=cmis:objectId&includeAllowableActions=false'
-                    . '&includeRelationships=both&renditionFilter=cmis:none&includePathSegment=false&maxItems=99'
+                    self::BROWSER_URL_TEST . '?orderBy=cmis:objectId&includeAllowableActions=false'
+                    . '&renditionFilter=cmis:none&includePathSegment=false'
+                    . '&skipCount=20&succinct=false&dateTimeFormat=simple'
+                ),
+                'repositoryId',
+                'folderId',
+                null,
+                'cmis:objectId',
+                false,
+                null,
+                'cmis:none',
+                false,
+                null,
+                20
+            ),
+            array(
+                Url::createFromUrl(
+                    self::BROWSER_URL_TEST . '?filter=filter,123&includeAllowableActions=false'
+                    . '&includeRelationships=both&renditionFilter=cmis:none&includePathSegment=false'
                     . '&skipCount=20&succinct=false&dateTimeFormat=simple'
                 ),
                 'repositoryId',
                 'folderId',
                 'filter,123',
-                'cmis:objectId',
+                null,
                 false,
                 IncludeRelationships::cast(IncludeRelationships::BOTH),
                 'cmis:none',
                 false,
-                99,
-                20,
-                null
+                null,
+                20
             )
         );
     }
@@ -132,7 +143,6 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
      * @param string $renditionFilter
      * @param integer|null $maxItems
      * @param integer $skipCount
-     * @param ExtensionDataInterface|null $extension
      */
     public function testGetCheckedOutDocsCallsReadFunctionWithParameterizedQuery(
         $expectedUrl,
@@ -144,8 +154,7 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
         IncludeRelationships $includeRelationships = null,
         $renditionFilter = Constants::RENDITION_NONE,
         $maxItems = null,
-        $skipCount = 0,
-        ExtensionDataInterface $extension = null
+        $skipCount = 0
     ) {
         $navigationService = $this->getNavigationServiceMockForParameterizedQueryTest(
             $expectedUrl,
@@ -162,8 +171,7 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
             $includeRelationships,
             $renditionFilter,
             $maxItems,
-            $skipCount,
-            $extension
+            $skipCount
         );
     }
 
@@ -189,8 +197,22 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
                 IncludeRelationships::cast(IncludeRelationships::NONE),
                 'cmis:none',
                 99,
-                0,
-                null
+                0
+            ),
+            array(
+                Url::createFromUrl(
+                    self::BROWSER_URL_TEST . '?includeAllowableActions=true&renditionFilter=cmis:none'
+                    . '&skipCount=0&succinct=false&dateTimeFormat=simple'
+                ),
+                'repositoryId',
+                'folderId',
+                null,
+                null,
+                true,
+                null,
+                'cmis:none',
+                null,
+                0
             )
         );
     }
@@ -206,7 +228,6 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
      * @param IncludeRelationships|null $includeRelationships
      * @param string $renditionFilter
      * @param boolean $includePathSegment
-     * @param ExtensionDataInterface|null $extension
      */
     public function testGetDescendantsCallsReadFunctionWithParameterizedQuery(
         $expectedUrl,
@@ -217,8 +238,7 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
         $includeAllowableActions = false,
         IncludeRelationships $includeRelationships = null,
         $renditionFilter = Constants::RENDITION_NONE,
-        $includePathSegment = false,
-        ExtensionDataInterface $extension = null
+        $includePathSegment = false
     ) {
         $navigationService = $this->getNavigationServiceMockForParameterizedQueryTest(
             $expectedUrl,
@@ -234,8 +254,7 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
             $includeAllowableActions,
             $includeRelationships,
             $renditionFilter,
-            $includePathSegment,
-            $extension
+            $includePathSegment
         );
     }
 
@@ -260,8 +279,37 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
                 true,
                 IncludeRelationships::cast(IncludeRelationships::NONE),
                 'cmis:none',
+                true
+            ),
+            array(
+                Url::createFromUrl(
+                    self::BROWSER_URL_TEST . '?depth=5&filter=filter,123&includeAllowableActions=true'
+                    . '&includeRelationships=none&renditionFilter=cmis:none&includePathSegment=true'
+                    .'&succinct=false&dateTimeFormat=simple'
+                ),
+                'repositoryId',
+                'folderId',
+                '5',
+                'filter,123',
                 true,
-                null
+                IncludeRelationships::cast(IncludeRelationships::NONE),
+                'cmis:none',
+                true
+            ),
+            array(
+                Url::createFromUrl(
+                    self::BROWSER_URL_TEST . '?depth=5&includeAllowableActions=true'
+                    . '&includeRelationships=none&renditionFilter=cmis:none&includePathSegment=true'
+                    .'&succinct=false&dateTimeFormat=simple'
+                ),
+                'repositoryId',
+                'folderId',
+                '5',
+                null,
+                true,
+                IncludeRelationships::cast(IncludeRelationships::NONE),
+                'cmis:none',
+                true
             )
         );
     }
@@ -272,14 +320,12 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
      * @param string $repositoryId
      * @param string $folderId
      * @param string|null $filter
-     * @param ExtensionDataInterface|null $extension
      */
     public function testGetFolderParentCallsReadFunctionWithParameterizedQuery(
         $expectedUrl,
         $repositoryId,
         $folderId,
-        $filter = null,
-        ExtensionDataInterface $extension = null
+        $filter = null
     ) {
         $navigationService = $this->getNavigationServiceMockForParameterizedQueryTest(
             $expectedUrl,
@@ -290,8 +336,7 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
         $navigationService->getFolderParent(
             $repositoryId,
             $folderId,
-            $filter,
-            $extension
+            $filter
         );
     }
 
@@ -309,8 +354,14 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
                 ),
                 'repositoryId',
                 'folderId',
-                'filter,123',
-                null
+                'filter,123'
+            ),
+            array(
+                Url::createFromUrl(
+                    self::BROWSER_URL_TEST . '?succinct=false&dateTimeFormat=simple'
+                ),
+                'repositoryId',
+                'folderId'
             )
         );
     }
@@ -326,7 +377,6 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
      * @param IncludeRelationships|null $includeRelationships
      * @param string $renditionFilter
      * @param boolean $includePathSegment
-     * @param ExtensionDataInterface|null $extension
      */
     public function testGetFolderTreeCallsReadFunctionWithParameterizedQuery(
         $expectedUrl,
@@ -337,8 +387,7 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
         $includeAllowableActions = false,
         IncludeRelationships $includeRelationships = null,
         $renditionFilter = Constants::RENDITION_NONE,
-        $includePathSegment = false,
-        ExtensionDataInterface $extension = null
+        $includePathSegment = false
     ) {
         $navigationService = $this->getNavigationServiceMockForParameterizedQueryTest(
             $expectedUrl,
@@ -354,8 +403,7 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
             $includeAllowableActions,
             $includeRelationships,
             $renditionFilter,
-            $includePathSegment,
-            $extension
+            $includePathSegment
         );
     }
 
@@ -380,8 +428,22 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
                 true,
                 IncludeRelationships::cast(IncludeRelationships::NONE),
                 'cmis:none',
+                true
+            ),
+            array(
+                Url::createFromUrl(
+                    self::BROWSER_URL_TEST . '?depth=5&includeAllowableActions=true'
+                    . '&renditionFilter=cmis:none&includePathSegment=false'
+                    . '&succinct=false&dateTimeFormat=simple'
+                ),
+                'repositoryId',
+                'folderId',
+                '5',
+                null,
                 true,
-                null
+                null,
+                'cmis:none',
+                false
             )
         );
     }
@@ -396,7 +458,6 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
      * @param IncludeRelationships|null $includeRelationships
      * @param string $renditionFilter
      * @param boolean $includeRelativePathSegment
-     * @param ExtensionDataInterface|null $extension
      */
     public function testGetObjectParentsCallsReadFunctionWithParameterizedQuery(
         $expectedUrl,
@@ -406,8 +467,7 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
         $includeAllowableActions = false,
         IncludeRelationships $includeRelationships = null,
         $renditionFilter = Constants::RENDITION_NONE,
-        $includeRelativePathSegment = false,
-        ExtensionDataInterface $extension = null
+        $includeRelativePathSegment = false
     ) {
         $navigationService = $this->getNavigationServiceMockForParameterizedQueryTest(
             $expectedUrl,
@@ -422,8 +482,7 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
             $includeAllowableActions,
             $includeRelationships,
             $renditionFilter,
-            $includeRelativePathSegment,
-            $extension
+            $includeRelativePathSegment
         );
     }
 
@@ -447,8 +506,21 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
                 true,
                 IncludeRelationships::cast(IncludeRelationships::NONE),
                 'cmis:none',
+                true
+            ),
+            array(
+                Url::createFromUrl(
+                    self::BROWSER_URL_TEST . '?includeAllowableActions=true'
+                    . '&renditionFilter=cmis:none&includeRelativePathSegment=false'
+                    . '&succinct=false&dateTimeFormat=simple'
+                ),
+                'repositoryId',
+                'objectId',
+                null,
                 true,
-                null
+                null,
+                'cmis:none',
+                false
             )
         );
     }
