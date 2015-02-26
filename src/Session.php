@@ -773,7 +773,7 @@ class Session implements SessionInterface
             null
         );
 
-        if (! $objectData instanceof ObjectDataInterface) {
+        if (!$objectData instanceof ObjectDataInterface) {
             throw new CmisObjectNotFoundException('Could not find object for given id.');
         }
 
@@ -790,11 +790,38 @@ class Session implements SessionInterface
      * @param string $path the object path
      * @param OperationContextInterface $context the OperationContext to use
      * @return CmisObjectInterface Returns a CMIS object from the session cache.
-     * @throws CmisObjectNotFoundException - if an object with the given ID doesn't exist
+     * @throws CmisInvalidArgumentException Throws an <code>CmisInvalidArgumentException</code>
+     *      if path is empty.
+     * @throws CmisObjectNotFoundException - if an object with the given path doesn't exist
      */
     public function getObjectByPath($path, OperationContextInterface $context = null)
     {
-        // TODO: Implement getObjectByPath() method.
+        if (empty($path)) {
+            throw new CmisInvalidArgumentException('Path must not be empty.');
+        }
+
+        if ($context === null) {
+            $context = $this->getDefaultContext();
+        }
+
+        $objectData = $this->getBinding()->getObjectService()->getObjectByPath(
+            $this->getRepositoryInfo()->getId(),
+            $path,
+            $context->getQueryFilterString(),
+            $context->isIncludeAllowableActions(),
+            $context->getIncludeRelationships(),
+            $context->getRenditionFilterString(),
+            $context->isIncludePolicies(),
+            $context->isIncludeAcls()
+        );
+
+        if (!$objectData instanceof ObjectDataInterface) {
+            throw new CmisObjectNotFoundException(sprintf('Could not find object for given path "%s".', $path));
+        }
+
+        // TODO: Implement cache!
+
+        return $this->getObjectFactory()->convertObject($objectData, $context);
     }
 
     /**
@@ -1015,7 +1042,7 @@ class Session implements SessionInterface
      */
     private function convertTypeDefinition(TypeDefinitionInterface $typeDefinition)
     {
-        // @TODO: Implement cache. See Java Implementation for example
+        // TODO: Implement cache. See Java Implementation for example
         return $this->getObjectFactory()->convertTypeDefinition($typeDefinition);
     }
 }

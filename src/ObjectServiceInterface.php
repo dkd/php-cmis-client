@@ -379,7 +379,8 @@ interface ObjectServiceInterface
      * @param boolean $includeAcl if <code>true</code>, then the repository must return the ACL for the object
      *      (default is <code>false</code>)
      * @param ExtensionDataInterface|null $extension
-     * @return ObjectDataInterface
+     * @return ObjectDataInterface|null Returns object of type <code>ObjectDataInterface</code> or <code>null</code>
+     *      if the repository response was empty
      */
     public function getObjectByPath(
         $repositoryId,

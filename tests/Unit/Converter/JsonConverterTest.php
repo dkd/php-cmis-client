@@ -65,6 +65,7 @@ use Dkd\PhpCmis\Enum\CmisVersion;
 use Dkd\PhpCmis\Enum\ContentStreamAllowed;
 use Dkd\PhpCmis\Enum\PropertyType;
 use Dkd\PhpCmis\Enum\SupportedPermissions;
+use Dkd\PhpCmis\Test\Unit\FixtureHelperTrait;
 use Dkd\PhpCmis\Test\Unit\ReflectionHelperTrait;
 use GuzzleHttp\Message\MessageFactory;
 use PHPUnit_Framework_MockObject_MockObject;
@@ -72,6 +73,7 @@ use PHPUnit_Framework_MockObject_MockObject;
 class JsonConverterTest extends \PHPUnit_Framework_TestCase
 {
     use ReflectionHelperTrait;
+    use FixtureHelperTrait;
 
     /**
      * @var JsonConverter
@@ -851,31 +853,6 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
         $repositoryInfo->setExtensionFeatures(array($extensionFeature));
 
         return $repositoryInfo;
-    }
-
-    /**
-     * Returns the content of a json fixture as array
-     *
-     * @param string $fixture the path to the json fixture file
-     * @return array|mixed
-     */
-    protected function getResponseFixtureContentAsArray($fixture)
-    {
-        $messageFactory = new MessageFactory();
-        $fixtureFilename = dirname(dirname(dirname(__FILE__))) . '/Fixtures/' . $fixture;
-        if (!file_exists($fixtureFilename)) {
-            $this->fail(sprintf('Fixture "%s" not found!', $fixtureFilename));
-        }
-        $response = $messageFactory->fromMessage(file_get_contents($fixtureFilename));
-
-        $result = array();
-        try {
-            $result = $response->json();
-        } catch (\GuzzleHttp\Exception\ParseException $exception) {
-            $this->fail(sprintf('Fixture "%s" does not contain a valid JSON body!', $fixtureFilename));
-        }
-
-        return $result;
     }
 
     public function testConvertObjectInFolderConvertsArrayToObjectInFolderData()

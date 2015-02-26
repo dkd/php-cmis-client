@@ -81,7 +81,8 @@ class DiscoveryService extends AbstractBrowserBindingService implements Discover
      * @param integer $skipCount number of potential results that the repository MUST skip/page over before
      *      returning any results (default is 0)
      * @param ExtensionDataInterface|null $extension
-     * @return ObjectListInterface
+     * @return ObjectListInterface|null Returns object of type <code>ObjectListInterface</code>
+     *     or <code>null</code> if the repository response was empty
      */
     public function query(
         $repositoryId,
@@ -94,6 +95,30 @@ class DiscoveryService extends AbstractBrowserBindingService implements Discover
         $skipCount = 0,
         ExtensionDataInterface $extension = null
     ) {
-        // TODO: Implement query() method.
+        $url = $this->getRepositoryUrl($repositoryId);
+
+        $url->getQuery()->modify(
+            array(
+                Constants::CONTROL_CMISACTION => Constants::CMISACTION_QUERY,
+                Constants::PARAM_STATEMENT => (string) $statement,
+                Constants::PARAM_SEARCH_ALL_VERSIONS => $searchAllVersions ? 'true' : 'false',
+                Constants::PARAM_ALLOWABLE_ACTIONS => $includeAllowableActions ? 'true' : 'false',
+                Constants::PARAM_RENDITION_FILTER => $renditionFilter,
+                Constants::PARAM_SKIP_COUNT => (string) $skipCount,
+                Constants::PARAM_DATETIME_FORMAT => (string) $this->getDateTimeFormat()
+            )
+        );
+
+        if ($includeRelationships !== null) {
+            $url->getQuery()->modify(array(Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships));
+        }
+
+        if ($maxItems > 0) {
+            $url->getQuery()->modify(array(Constants::PARAM_MAX_ITEMS => (string) $maxItems));
+        }
+
+        $responseData = $this->post($url)->json();
+
+        return $this->getJsonConverter()->convertQueryResultList($responseData);
     }
 }

@@ -80,7 +80,8 @@ interface DiscoveryServiceInterface
      * @param integer $skipCount number of potential results that the repository MUST skip/page over before
      *      returning any results (default is 0)
      * @param ExtensionDataInterface|null $extension
-     * @return ObjectListInterface
+     * @return ObjectListInterface|null Returns object of type <code>ObjectListInterface</code>
+     *     or <code>null</code> if the repository response was empty
      */
     public function query(
         $repositoryId,

@@ -940,4 +940,112 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
             )
         );
     }
+
+    /**
+     * @dataProvider getObjectByPathDataProvider
+     * @param string $expectedUrl
+     * @param string $repositoryId
+     * @param string $path
+     * @param string|null $filter
+     * @param boolean $includeAllowableActions
+     * @param IncludeRelationships|null $includeRelationships
+     * @param string $renditionFilter
+     * @param boolean $includePolicyIds
+     * @param boolean $includeAcl
+     */
+    public function testGetObjectByPathCallsReadFunctionWithParameterizedQuery(
+        $expectedUrl,
+        $repositoryId,
+        $path,
+        $filter = null,
+        $includeAllowableActions = false,
+        IncludeRelationships $includeRelationships = null,
+        $renditionFilter = null,
+        $includePolicyIds = false,
+        $includeAcl = false
+    ) {
+        $responseData = array('foo' => 'bar');
+        $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
+        )->setMethods(array('json'))->getMock();
+        $responseMock->expects($this->once())->method('json')->willReturn($responseData);
+
+        $dummyObjectData = new ObjectData();
+        $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
+            array('convertObject')
+        )->getMock();
+        $jsonConverterMock->expects($this->any())->method('convertObject')->with($responseData)->willReturn(
+            $dummyObjectData
+        );
+
+        $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
+            array('getJsonConverter')
+        )->getMock();
+        $cmisBindingsHelperMock->expects($this->once())->method('getJsonConverter')->willReturn($jsonConverterMock);
+
+        /** @var ObjectService|PHPUnit_Framework_MockObject_MockObject $objectService */
+        $objectService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
+            array($this->getSessionMock(), $cmisBindingsHelperMock)
+        )->setMethods(
+            array('getPathUrl', 'read')
+        )->getMock();
+
+        $objectService->expects($this->once())->method('getPathUrl')->with(
+            $repositoryId,
+            $path,
+            Constants::SELECTOR_OBJECT
+        )->willReturn(Url::createFromUrl(self::BROWSER_URL_TEST));
+        $objectService->expects($this->once())->method('read')->with($expectedUrl)->willReturn($responseMock);
+
+        $objectService->getObjectByPath(
+            $repositoryId,
+            $path,
+            $filter,
+            $includeAllowableActions,
+            $includeRelationships,
+            $renditionFilter,
+            $includePolicyIds,
+            $includeAcl
+        );
+    }
+
+    /**
+     * Data provider for getObjectByPath
+     *
+     * @return array
+     */
+    public function getObjectByPathDataProvider()
+    {
+        return array(
+            array(
+                Url::createFromUrl(
+                    self::BROWSER_URL_TEST . '?filter=filter,123&includeAllowableActions=true'
+                    . '&includeRelationships=none&renditionFilter=foo:bar&includePolicyIds=true&includeACL=true'
+                    . '&succinct=false&dateTimeFormat=simple'
+                ),
+                'repositoryId',
+                'path/toAnObject',
+                'filter,123',
+                true,
+                IncludeRelationships::cast(IncludeRelationships::NONE),
+                'foo:bar',
+                true,
+                true,
+            ),
+            array(
+                Url::createFromUrl(
+                    self::BROWSER_URL_TEST . '?filter=filter,123&includeAllowableActions=false'
+                    . '&includeRelationships=both&renditionFilter=foo:bar&includePolicyIds=false&includeACL=false'
+                    . '&succinct=false&dateTimeFormat=simple'
+                ),
+                'repositoryId',
+                'path/toAnObject',
+                'filter,123',
+                false,
+                IncludeRelationships::cast(IncludeRelationships::BOTH),
+                'foo:bar',
+                false,
+                false,
+            )
+        );
+    }
 }

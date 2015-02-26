@@ -12,12 +12,14 @@ namespace Dkd\PhpCmis\Test\Unit\Bindings\Browser;
 
 use Dkd\PhpCmis\Bindings\BindingSessionInterface;
 use Dkd\PhpCmis\SessionParameter;
+use Dkd\PhpCmis\Test\Unit\FixtureHelperTrait;
 use Dkd\PhpCmis\Test\Unit\ReflectionHelperTrait;
 use PHPUnit_Framework_MockObject_MockObject;
 
 abstract class AbstractBrowserBindingServiceTestCase extends \PHPUnit_Framework_TestCase
 {
     use ReflectionHelperTrait;
+    use FixtureHelperTrait;
 
     const BROWSER_URL_TEST = 'http://foo.bar.baz';
 
