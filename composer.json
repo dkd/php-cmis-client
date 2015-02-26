@@ -16,7 +16,7 @@
     "require": {
         "php": ">=5.4.0",
         "dkd/enumeration": "~0.1",
-        "dkd/php-populate": "@dev",
+        "dkd/php-populate": "~1.0",
         "guzzlehttp/guzzle": "~5.0",
         "guzzlehttp/streams": "~3.0",
         "league/url": "~3.2",
