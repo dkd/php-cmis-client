@@ -207,16 +207,13 @@ class AbstractTypeDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $abstractTypeDefinition->getPropertyDefinition('fooId'));
     }
 
-    /**
-     * @covers \Dkd\PhpCmis\DataObjects\AbstractTypeDefinition::initialize
-     */
-    public function testInitializeMethodCopiesPropertyValuesFromGivenTypeDefinitionButIgnoresNullValues()
+    public function testPopulateWithClonesMethodCopiesPropertyValuesFromGivenTypeDefinitionButIgnoresNullValues()
     {
         $dummyTypeDefinition = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\DataObjects\\AbstractTypeDefinition'
         )->setConstructorArgs(array('typeId'))->getMockForAbstractClass();
 
-        $this->abstractTypeDefinition->initialize($dummyTypeDefinition);
+        $this->abstractTypeDefinition->populateWithClones($dummyTypeDefinition);
         foreach (array_merge($this->stringProperties, $this->booleanProperties, $this->objectProperties) as $property) {
             if ($property !== 'propertyDefinitions') {
                 $this->assertAttributeEquals(null, $property, $this->abstractTypeDefinition);
@@ -226,10 +223,7 @@ class AbstractTypeDefinitionTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    /**
-     * @covers \Dkd\PhpCmis\DataObjects\AbstractTypeDefinition::initialize
-     */
-    public function testInitializeMethodCopiesPropertyValuesFromGivenTypeDefinition()
+    public function testPopulateWithClonesMethodCopiesPropertyValuesFromGivenTypeDefinition()
     {
         /** @var AbstractTypeDefinition|\PHPUnit_Framework_MockObject_MockObject $dummyTypeDefinition */
         $dummyTypeDefinition = $this->getMockBuilder(
@@ -249,7 +243,7 @@ class AbstractTypeDefinitionTest extends \PHPUnit_Framework_TestCase
             $dummyTypeDefinition->$setterName($objectProperty[1]);
         }
 
-        $this->abstractTypeDefinition->initialize($dummyTypeDefinition);
+        $this->abstractTypeDefinition->populateWithClones($dummyTypeDefinition);
 
         $this->assertEquals($dummyTypeDefinition, $this->abstractTypeDefinition);
     }

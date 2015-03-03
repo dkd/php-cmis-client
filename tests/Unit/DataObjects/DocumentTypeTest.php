@@ -11,8 +11,8 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  */
 
 use Dkd\PhpCmis\DataObjects\DocumentType;
+use Dkd\PhpCmis\DataObjects\DocumentTypeDefinition;
 use Dkd\PhpCmis\Definitions\DocumentTypeDefinitionInterface;
-use Dkd\PhpCmis\Enum\ContentStreamAllowed;
 use PHPUnit_Framework_MockObject_MockObject;
 
 class DocumentTypeTest extends \PHPUnit_Framework_TestCase
@@ -27,42 +27,28 @@ class DocumentTypeTest extends \PHPUnit_Framework_TestCase
         /**
          * @var DocumentTypeDefinitionInterface|PHPUnit_Framework_MockObject_MockObject $documentTypeDefinition
          */
-        $documentTypeDefinition = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\Definitions\\DocumentTypeDefinitionInterface'
-        )->getMockForAbstractClass();
-        $documentTypeDefinition->expects($this->any())->method('getId')->willReturn('typeId');
-        $documentTypeDefinition->expects($this->any())->method('getContentStreamAllowed')->willReturn(
-            ContentStreamAllowed::cast(ContentStreamAllowed::ALLOWED)
-        );
-        $documentTypeDefinition->expects($this->any())->method('getPropertyDefinitions')->willReturn(array());
-        $documentTypeDefinition->expects($this->any())->method('isVersionable')->willReturn(false);
+        $documentTypeDefinition = new DocumentTypeDefinition('typeId');
         $documentType = new DocumentType($sessionMock, $documentTypeDefinition);
 
         $this->assertAttributeSame($sessionMock, 'session', $documentType);
     }
 
-    public function testConstructorCallsInitializeMethod()
+    public function testConstructorCallsPopulateMethod()
     {
         /**
          * @var \Dkd\PhpCmis\SessionInterface|PHPUnit_Framework_MockObject_MockObject $sessionMock
          */
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->getMockForAbstractClass();
 
-        /**
-         * @var DocumentTypeDefinitionInterface|PHPUnit_Framework_MockObject_MockObject $documentTypeDefinition
-         */
-        $documentTypeDefinition = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\Definitions\\MutableDocumentTypeDefinitionInterface'
-        )->getMockForAbstractClass();
-        $documentTypeDefinition->expects($this->any())->method('getId')->willReturn('typeId');
+        $documentTypeDefinition = new DocumentTypeDefinition('typeId');
 
         /**
          * @var DocumentType|PHPUnit_Framework_MockObject_MockObject $documentType
          */
         $documentType = $this->getMockBuilder('\\Dkd\\PhpCmis\\DataObjects\\DocumentType')->setMethods(
-            array('initialize')
+            array('populate')
         )->disableOriginalConstructor()->getMock();
-        $documentType->expects($this->once())->method('initialize')->with(
+        $documentType->expects($this->once())->method('populate')->with(
             $documentTypeDefinition
         );
         $documentType->__construct($sessionMock, $documentTypeDefinition);

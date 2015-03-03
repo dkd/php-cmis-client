@@ -29,23 +29,13 @@ class DocumentTypeDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->documentTypeDefinition = new DocumentTypeDefinition('typeId');
     }
 
-    public function testInitializeMethodThrowsExceptionIfInvalidTypeGiven()
-    {
-        $relationshipTypeDefinition = new RelationshipTypeDefinition('typeId');
-        $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException');
-        $this->documentTypeDefinition->initialize($relationshipTypeDefinition);
-    }
-
-    /**
-     * @covers \Dkd\PhpCmis\DataObjects\DocumentTypeDefinition::initialize
-     */
-    public function testInitializeMethodCopiesPropertyValuesFromGivenTypeDefinition()
+    public function testPopulateWithClonesMethodCopiesPropertyValuesFromGivenTypeDefinition()
     {
         $dummyTypeDefinition = new DocumentTypeDefinition('typeId');
         $dummyTypeDefinition->setIsVersionable(true);
         $dummyTypeDefinition->setContentStreamAllowed(ContentStreamAllowed::cast(ContentStreamAllowed::ALLOWED));
 
-        $this->documentTypeDefinition->initialize($dummyTypeDefinition);
+        $this->documentTypeDefinition->populateWithClones($dummyTypeDefinition);
 
         $this->assertEquals($dummyTypeDefinition, $this->documentTypeDefinition);
     }

@@ -11,7 +11,7 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  */
 
 use Dkd\PhpCmis\DataObjects\FolderType;
-use Dkd\PhpCmis\Definitions\FolderTypeDefinitionInterface;
+use Dkd\PhpCmis\DataObjects\FolderTypeDefinition;
 use PHPUnit_Framework_MockObject_MockObject;
 
 class FolderTypeTest extends \PHPUnit_Framework_TestCase
@@ -23,41 +23,28 @@ class FolderTypeTest extends \PHPUnit_Framework_TestCase
          */
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->getMockForAbstractClass();
 
-        /**
-         * @var FolderTypeDefinitionInterface|PHPUnit_Framework_MockObject_MockObject $folderTypeDefinition
-         */
-        $folderTypeDefinition = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\Definitions\\MutableFolderTypeDefinitionInterface'
-        )->setMethods(array('getId'))->getMockForAbstractClass();
-        $folderTypeDefinition->expects($this->any())->method('getId')->willReturn('typeId');
-        $folderTypeDefinition->expects($this->any())->method('getPropertyDefinitions')->willReturn(array());
+        $folderTypeDefinition = new FolderTypeDefinition('typeId');
         $folderType = new FolderType($sessionMock, $folderTypeDefinition);
 
         $this->assertAttributeSame($sessionMock, 'session', $folderType);
     }
 
-    public function testConstructorCallsInitializeMethod()
+    public function testConstructorCallsPopulateMethod()
     {
         /**
          * @var \Dkd\PhpCmis\SessionInterface|PHPUnit_Framework_MockObject_MockObject $sessionMock
          */
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->getMockForAbstractClass();
 
-        /**
-         * @var FolderTypeDefinitionInterface|PHPUnit_Framework_MockObject_MockObject $folderTypeDefinition
-         */
-        $folderTypeDefinition = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\Definitions\\MutableFolderTypeDefinitionInterface'
-        )->setMethods(array('getId'))->getMockForAbstractClass();
-        $folderTypeDefinition->expects($this->any())->method('getId')->willReturn('typeId');
+        $folderTypeDefinition = new FolderTypeDefinition('typeId');
 
         /**
          * @var FolderType|PHPUnit_Framework_MockObject_MockObject $folderType
          */
         $folderType = $this->getMockBuilder('\\Dkd\\PhpCmis\\DataObjects\\FolderType')->setMethods(
-            array('initialize')
+            array('populate')
         )->disableOriginalConstructor()->getMock();
-        $folderType->expects($this->once())->method('initialize')->with(
+        $folderType->expects($this->once())->method('populate')->with(
             $folderTypeDefinition
         );
         $folderType->__construct($sessionMock, $folderTypeDefinition);

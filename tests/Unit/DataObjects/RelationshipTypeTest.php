@@ -62,18 +62,18 @@ class RelationshipTypeTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers \Dkd\PhpCmis\DataObjects\RelationshipType::__construct
      */
-    public function testConstructorCallsInitializeMethod()
+    public function testConstructorCallsPopulateMethod()
     {
         $relationshipTypeDefinition = new RelationshipTypeDefinition('typeId');
 
         /**
-         * @var RelationshipType|PHPUnit_Framework_MockObject_MockObject
+         * @var RelationshipType|PHPUnit_Framework_MockObject_MockObject $relationshipType
          */
         $relationshipType = $this->getMockBuilder('\\Dkd\\PhpCmis\\DataObjects\\RelationshipType')->setMethods(
-            array('initialize')
+            array('populate')
         )->disableOriginalConstructor()->getMock();
 
-        $relationshipType->expects($this->once())->method('initialize')->with(
+        $relationshipType->expects($this->once())->method('populate')->with(
             $relationshipTypeDefinition
         );
         $relationshipType->__construct($this->sessionMock, $relationshipTypeDefinition);

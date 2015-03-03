@@ -35,8 +35,8 @@ class RelationshipType extends RelationshipTypeDefinition implements Relationshi
     protected $allowedTargetTypes;
 
     /**
-     * Constructor of the object type. This constructor MUST call the parent constructor of the type definition
-     * and MUST all the <code>ObjectTypeHelperTrait::objectTypeConstructor</code>
+     * Constructor of the object type. This constructor MUST set the session property to the given session and
+     * call the <code>self::populate</code> method with the given <code>$typeDefinition</code>
      *
      * @param SessionInterface $session
      * @param RelationshipTypeDefinitionInterface $typeDefinition
@@ -54,10 +54,9 @@ class RelationshipType extends RelationshipTypeDefinition implements Relationshi
                 )
             );
         }
+        $this->session = $session;
         parent::__construct($typeDefinition->getId());
-        $this->setAllowedSourceTypeIds($typeDefinition->getAllowedSourceTypeIds());
-        $this->setAllowedTargetTypeIds($typeDefinition->getAllowedTargetTypeIds());
-        $this->objectTypeConstructor($session, $typeDefinition);
+        $this->populate($typeDefinition);
     }
 
     /**

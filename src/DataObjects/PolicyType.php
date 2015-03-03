@@ -24,8 +24,8 @@ class PolicyType extends PolicyTypeDefinition implements PolicyTypeInterface
     use ObjectTypeHelperTrait;
 
     /**
-     * Constructor of the object type. This constructor MUST call the parent constructor of the type definition
-     * and MUST all the <code>ObjectTypeHelperTrait::objectTypeConstructor</code>
+     * Constructor of the object type. This constructor MUST set the session property to the given session and
+     * call the <code>self::populate</code> method with the given <code>$typeDefinition</code>
      *
      * @param SessionInterface $session
      * @param PolicyTypeDefinitionInterface $typeDefinition
@@ -43,7 +43,8 @@ class PolicyType extends PolicyTypeDefinition implements PolicyTypeInterface
                 )
             );
         }
+        $this->session = $session;
         parent::__construct($typeDefinition->getId());
-        $this->objectTypeConstructor($session, $typeDefinition);
+        $this->populate($typeDefinition);
     }
 }

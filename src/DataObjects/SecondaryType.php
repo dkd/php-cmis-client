@@ -24,8 +24,8 @@ class SecondaryType extends SecondaryTypeDefinition implements SecondaryTypeInte
     use ObjectTypeHelperTrait;
 
     /**
-     * Constructor of the object type. This constructor MUST call the parent constructor of the type definition
-     * and MUST all the <code>ObjectTypeHelperTrait::objectTypeConstructor</code>
+     * Constructor of the object type. This constructor MUST set the session property to the given session and
+     * call the <code>self::populate</code> method with the given <code>$typeDefinition</code>
      *
      * @param SessionInterface $session
      * @param SecondaryTypeDefinitionInterface $typeDefinition
@@ -43,7 +43,8 @@ class SecondaryType extends SecondaryTypeDefinition implements SecondaryTypeInte
                 )
             );
         }
+        $this->session = $session;
         parent::__construct($typeDefinition->getId());
-        $this->objectTypeConstructor($session, $typeDefinition);
+        $this->populate($typeDefinition);
     }
 }

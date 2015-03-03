@@ -10,10 +10,12 @@ namespace Dkd\PhpCmis\Data;
  * file that was distributed with this source code.
  */
 
+use Dkd\Populate\PopulateInterface;
+
 /**
  * Holds extension data either set by the CMIS repository or the client.
  */
-interface ExtensionDataInterface
+interface ExtensionDataInterface extends PopulateInterface
 {
     /**
      * Returns the list of top-level extension elements.

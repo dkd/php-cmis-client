@@ -10,11 +10,8 @@ namespace Dkd\PhpCmis\DataObjects;
  * file that was distributed with this source code.
  */
 
-use Dkd\PhpCmis\Definitions\DocumentTypeDefinitionInterface;
 use Dkd\PhpCmis\Definitions\MutableDocumentTypeDefinitionInterface;
-use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
 use Dkd\PhpCmis\Enum\ContentStreamAllowed;
-use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
 
 /**
  * Document type definition.
@@ -40,24 +37,6 @@ class DocumentTypeDefinition extends AbstractTypeDefinition implements MutableDo
     {
         parent::__construct($id);
         $this->contentStreamAllowed = ContentStreamAllowed::cast(ContentStreamAllowed::NOTALLOWED);
-    }
-
-    /**
-     * @param DocumentTypeDefinitionInterface $typeDefinition
-     */
-    public function initialize(TypeDefinitionInterface $typeDefinition)
-    {
-        if (!$typeDefinition instanceof DocumentTypeDefinitionInterface) {
-            throw new CmisInvalidArgumentException(
-                sprintf(
-                    'In instance of RelationshipTypeDefinition was expected but "%s" was given.',
-                    get_class($typeDefinition)
-                )
-            );
-        }
-        parent::initialize($typeDefinition);
-        $this->setIsVersionable($typeDefinition->isVersionable());
-        $this->setContentStreamAllowed($typeDefinition->getContentStreamAllowed());
     }
 
     /**

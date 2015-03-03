@@ -11,6 +11,7 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  */
 
 use Dkd\PhpCmis\DataObjects\PolicyType;
+use Dkd\PhpCmis\DataObjects\PolicyTypeDefinition;
 use Dkd\PhpCmis\Definitions\PolicyTypeDefinitionInterface;
 use PHPUnit_Framework_MockObject_MockObject;
 
@@ -23,41 +24,28 @@ class PolicyTypeTest extends \PHPUnit_Framework_TestCase
          */
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->getMockForAbstractClass();
 
-        /**
-         * @var PolicyTypeDefinitionInterface|PHPUnit_Framework_MockObject_MockObject $policyTypeDefinition
-         */
-        $policyTypeDefinition = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\Definitions\\PolicyTypeDefinitionInterface'
-        )->getMockForAbstractClass();
-        $policyTypeDefinition->expects($this->any())->method('getId')->willReturn('typeId');
-        $policyTypeDefinition->expects($this->any())->method('getPropertyDefinitions')->willReturn(array());
+        $policyTypeDefinition = new PolicyTypeDefinition('typeId');
         $policyType = new PolicyType($sessionMock, $policyTypeDefinition);
 
         $this->assertAttributeSame($sessionMock, 'session', $policyType);
     }
 
-    public function testConstructorCallsInitializeMethod()
+    public function testConstructorCallsPopulateMethod()
     {
         /**
          * @var \Dkd\PhpCmis\SessionInterface|PHPUnit_Framework_MockObject_MockObject $sessionMock
          */
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->getMockForAbstractClass();
 
-        /**
-         * @var PolicyTypeDefinitionInterface|PHPUnit_Framework_MockObject_MockObject $policyTypeDefinition
-         */
-        $policyTypeDefinition = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\Definitions\\PolicyTypeDefinitionInterface'
-        )->setMethods(array('getId'))->getMockForAbstractClass();
-        $policyTypeDefinition->expects($this->any())->method('getId')->willReturn('typeId');
+        $policyTypeDefinition = new PolicyTypeDefinition('typeId');
 
         /**
          * @var PolicyType|PHPUnit_Framework_MockObject_MockObject $policyType
          */
         $policyType = $this->getMockBuilder('\\Dkd\\PhpCmis\\DataObjects\\PolicyType')->setMethods(
-            array('initialize')
+            array('populate')
         )->disableOriginalConstructor()->getMock();
-        $policyType->expects($this->once())->method('initialize')->with(
+        $policyType->expects($this->once())->method('populate')->with(
             $policyTypeDefinition
         );
         $policyType->__construct($sessionMock, $policyTypeDefinition);

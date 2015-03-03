@@ -11,7 +11,7 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  */
 
 use Dkd\PhpCmis\DataObjects\ItemType;
-use Dkd\PhpCmis\Definitions\ItemTypeDefinitionInterface;
+use Dkd\PhpCmis\DataObjects\ItemTypeDefinition;
 use PHPUnit_Framework_MockObject_MockObject;
 
 class ItemTypeTest extends \PHPUnit_Framework_TestCase
@@ -23,41 +23,28 @@ class ItemTypeTest extends \PHPUnit_Framework_TestCase
          */
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->getMockForAbstractClass();
 
-        /**
-         * @var ItemTypeDefinitionInterface|PHPUnit_Framework_MockObject_MockObject $itemTypeDefinition
-         */
-        $itemTypeDefinition = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\Definitions\\MutableItemTypeDefinitionInterface'
-        )->setMethods(array('getId'))->getMockForAbstractClass();
-        $itemTypeDefinition->expects($this->any())->method('getId')->willReturn('typeId');
-        $itemTypeDefinition->expects($this->any())->method('getPropertyDefinitions')->willReturn(array());
+        $itemTypeDefinition = new ItemTypeDefinition('typeId');
         $itemType = new ItemType($sessionMock, $itemTypeDefinition);
 
         $this->assertAttributeSame($sessionMock, 'session', $itemType);
     }
 
-    public function testConstructorCallsInitializeMethod()
+    public function testConstructorCallsPopulateMethod()
     {
         /**
          * @var \Dkd\PhpCmis\SessionInterface|PHPUnit_Framework_MockObject_MockObject $sessionMock
          */
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->getMockForAbstractClass();
 
-        /**
-         * @var ItemTypeDefinitionInterface|PHPUnit_Framework_MockObject_MockObject $itemTypeDefinition
-         */
-        $itemTypeDefinition = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\Definitions\\MutableItemTypeDefinitionInterface'
-        )->setMethods(array('getId'))->getMockForAbstractClass();
-        $itemTypeDefinition->expects($this->any())->method('getId')->willReturn('typeId');
+        $itemTypeDefinition = new ItemTypeDefinition('typeId');
 
         /**
          * @var ItemType|PHPUnit_Framework_MockObject_MockObject $itemType
          */
         $itemType = $this->getMockBuilder('\\Dkd\\PhpCmis\\DataObjects\\ItemType')->setMethods(
-            array('initialize')
+            array('populate')
         )->disableOriginalConstructor()->getMock();
-        $itemType->expects($this->once())->method('initialize')->with(
+        $itemType->expects($this->once())->method('populate')->with(
             $itemTypeDefinition
         );
         $itemType->__construct($sessionMock, $itemTypeDefinition);

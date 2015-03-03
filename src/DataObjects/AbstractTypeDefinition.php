@@ -108,6 +108,7 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
 
     /**
      * @param string $id The type definition id
+     * @throws CmisInvalidArgumentException Exception is thrown if an empty <code>$id</code> is given
      */
     public function __construct($id)
     {
@@ -115,62 +116,6 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
             throw new CmisInvalidArgumentException('Id must not be empty!');
         }
         $this->setId($id);
-    }
-
-    /**
-     * @param TypeDefinitionInterface $typeDefinition
-     */
-    public function initialize(TypeDefinitionInterface $typeDefinition)
-    {
-        if ($typeDefinition->getLocalName() !== null) {
-            $this->setLocalName($typeDefinition->getLocalName());
-        }
-        if ($typeDefinition->getLocalNamespace() !== null) {
-            $this->setLocalNamespace($typeDefinition->getLocalNamespace());
-        }
-        if ($typeDefinition->getQueryName() !== null) {
-            $this->setQueryName($typeDefinition->getQueryName());
-        }
-        if ($typeDefinition->getDisplayName() !== null) {
-            $this->setDisplayName($typeDefinition->getDisplayName());
-        }
-        if ($typeDefinition->getDescription() !== null) {
-            $this->setDescription($typeDefinition->getDescription());
-        }
-        if ($typeDefinition->getBaseTypeId() !== null) {
-            $this->setBaseTypeId($typeDefinition->getBaseTypeId());
-        }
-        if ($typeDefinition->getParentTypeId() !== null) {
-            $this->setParentTypeId($typeDefinition->getParentTypeId());
-        }
-        if ($typeDefinition->isCreatable() !== null) {
-            $this->setIsCreatable($typeDefinition->isCreatable());
-        }
-        if ($typeDefinition->isFileable() !== null) {
-            $this->setIsFileable($typeDefinition->isFileable());
-        }
-        if ($typeDefinition->isQueryable() !== null) {
-            $this->setIsQueryable($typeDefinition->isQueryable());
-        }
-        if ($typeDefinition->isIncludedInSupertypeQuery() !== null) {
-            $this->setIsIncludedInSupertypeQuery($typeDefinition->isIncludedInSupertypeQuery());
-        }
-        if ($typeDefinition->isFulltextIndexed() !== null) {
-            $this->setIsFulltextIndexed($typeDefinition->isFulltextIndexed());
-        }
-        if ($typeDefinition->isControllableAcl() !== null) {
-            $this->setIsControllableAcl($typeDefinition->isControllableAcl());
-        }
-        if ($typeDefinition->isControllablePolicy() !== null) {
-            $this->setIsControllablePolicy($typeDefinition->isControllablePolicy());
-        }
-        $this->setPropertyDefinitions($typeDefinition->getPropertyDefinitions());
-        if ($typeDefinition->getTypeMutability() !== null) {
-            $this->setTypeMutability($typeDefinition->getTypeMutability());
-        }
-        if ($typeDefinition->getTypeMutability() !== null) {
-            $this->setExtensions($typeDefinition->getExtensions());
-        }
     }
 
     /**

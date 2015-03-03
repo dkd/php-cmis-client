@@ -10,7 +10,6 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  * file that was distributed with this source code.
  */
 
-use Dkd\PhpCmis\DataObjects\DocumentTypeDefinition;
 use Dkd\PhpCmis\DataObjects\RelationshipTypeDefinition;
 
 class RelationshipTypeDefinitionTest extends \PHPUnit_Framework_TestCase
@@ -25,23 +24,13 @@ class RelationshipTypeDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->relationshipTypeDefinition = new RelationshipTypeDefinition('typeId');
     }
 
-    public function testInitializeMethodThrowsExceptionIfInvalidTypeGiven()
-    {
-        $relationshipTypeDefinition = new DocumentTypeDefinition('typeId');
-        $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException');
-        $this->relationshipTypeDefinition->initialize($relationshipTypeDefinition);
-    }
-
-    /**
-     * @covers \Dkd\PhpCmis\DataObjects\RelationshipTypeDefinition::initialize
-     */
-    public function testInitializeMethodCopiesPropertyValuesFromGivenTypeDefinition()
+    public function testPopulateWithClonesMethodCopiesPropertyValuesFromGivenTypeDefinition()
     {
         $dummyTypeDefinition = new RelationshipTypeDefinition('typeId');
         $dummyTypeDefinition->setAllowedTargetTypeIds(array('foo'));
         $dummyTypeDefinition->setAllowedSourceTypeIds(array('bar'));
 
-        $this->relationshipTypeDefinition->initialize($dummyTypeDefinition);
+        $this->relationshipTypeDefinition->populateWithClones($dummyTypeDefinition);
         $this->assertEquals($dummyTypeDefinition, $this->relationshipTypeDefinition);
     }
 

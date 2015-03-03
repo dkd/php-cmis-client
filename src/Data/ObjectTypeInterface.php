@@ -20,8 +20,7 @@ use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
 interface ObjectTypeInterface extends TypeDefinitionInterface
 {
     /**
-     * Constructor of the object type. This constructor MUST call the parent constructor of the type definition
-     * and MUST all the <code>ObjectTypeHelperTrait::objectTypeConstructor</code>
+     * Constructor of the object type.
      *
      * @param SessionInterface $session
      * @param TypeDefinitionInterface $typeDefinition
