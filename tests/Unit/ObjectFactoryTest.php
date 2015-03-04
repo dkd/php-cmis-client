@@ -11,6 +11,7 @@ namespace Dkd\PhpCmis\Test\Unit;
  */
 
 use Dkd\PhpCmis\ObjectFactory;
+use Dkd\PhpCmis\PropertyIds;
 use Dkd\PhpCmis\SessionInterface;
 use PHPUnit_Framework_MockObject_MockObject;
 
@@ -147,6 +148,17 @@ class ObjectFactoryTest extends \PHPUnit_Framework_TestCase
     public function testConvertPropertiesReturnsNullIfNoPropertiesGiven()
     {
         $this->assertNull($this->getObjectFactory()->convertProperties(array()));
+    }
+
+    public function testConvertPropertiesThrowsExceptionIfSecondaryTypesPropertyIsSetButNotAnArray()
+    {
+        $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', null, 1425473414);
+        $this->getObjectFactory()->convertProperties(
+            array(
+                PropertyIds::OBJECT_TYPE_ID => 'type-id',
+                PropertyIds::SECONDARY_OBJECT_TYPE_IDS => 'invalidValue'
+            )
+        );
     }
 
     // TODO Write unit tests for convertProperties

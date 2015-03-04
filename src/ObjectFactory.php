@@ -298,11 +298,21 @@ class ObjectFactory implements ObjectFactoryInterface
 
                 if (!$secondaryType instanceof SecondaryType) {
                     throw new CmisInvalidArgumentException(
-                        "Secondary types property contains a type that is not a secondary type: " . $secondaryTypeId
+                        'Secondary types property contains a type that is not a secondary type: ' . $secondaryTypeId,
+                        1425479398
                     );
                 }
                 $allSecondaryTypes[] = $secondaryType;
             }
+        } elseif ($secondaryTypeIds !== null) {
+            throw new CmisInvalidArgumentException(
+                sprintf(
+                    'The property "%s" must be of type array or undefined but is of type "%s"',
+                    PropertyIds::SECONDARY_OBJECT_TYPE_IDS,
+                    gettype($secondaryTypeIds)
+                ),
+                1425473414
+            );
         }
 
         if (!empty($secondaryTypes) && empty($allSecondaryTypes)) {
