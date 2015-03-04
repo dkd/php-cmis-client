@@ -1,9 +1,9 @@
 <?php
 require_once(__DIR__ . '/../vendor/autoload.php');
-if (!is_file(__DIR__ . '/conf/Configuration.template.php')) {
-    die("Please add your connection credentials to the file \"" . __DIR__ . "/conf/Configuration.template.php\".\n");
+if (!is_file(__DIR__ . '/conf/Configuration.php')) {
+    die("Please add your connection credentials to the file \"" . __DIR__ . "/conf/Configuration.php\".\n");
 } else {
-    require_once(__DIR__ . '/conf/Configuration.template.php');
+    require_once(__DIR__ . '/conf/Configuration.php');
 }
 
 $httpInvoker = new \GuzzleHttp\Client(
