@@ -54,7 +54,7 @@ class DiscoveryServiceTest extends AbstractBrowserBindingServiceTestCase
         $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
             array('getJsonConverter')
         )->getMock();
-        $cmisBindingsHelperMock->expects($this->any())->method('getJsonConverter')->willReturn($jsonConverterMock);
+        $cmisBindingsHelperMock->expects($this->once())->method('getJsonConverter')->willReturn($jsonConverterMock);
 
         /** @var DiscoveryService|PHPUnit_Framework_MockObject_MockObject $discoveryService */
         $discoveryService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
@@ -63,10 +63,10 @@ class DiscoveryServiceTest extends AbstractBrowserBindingServiceTestCase
             array('getRepositoryUrl', 'post')
         )->getMock();
 
-        $discoveryService->expects($this->any())->method('getRepositoryUrl')->with(
+        $discoveryService->expects($this->once())->method('getRepositoryUrl')->with(
             $repositoryId
         )->willReturn(Url::createFromUrl(self::BROWSER_URL_TEST));
-        $discoveryService->expects($this->any())->method('post')->with($expectedUrl)->willReturn($responseMock);
+        $discoveryService->expects($this->once())->method('post')->with($expectedUrl)->willReturn($responseMock);
 
         $this->assertSame(
             null,
@@ -122,7 +122,7 @@ class DiscoveryServiceTest extends AbstractBrowserBindingServiceTestCase
         $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
             array('getJsonConverter')
         )->getMock();
-        $cmisBindingsHelperMock->expects($this->any())->method('getJsonConverter')->willReturn($jsonConverterMock);
+        $cmisBindingsHelperMock->expects($this->once())->method('getJsonConverter')->willReturn($jsonConverterMock);
 
         /** @var DiscoveryService|PHPUnit_Framework_MockObject_MockObject $discoveryService */
         $discoveryService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
@@ -131,7 +131,7 @@ class DiscoveryServiceTest extends AbstractBrowserBindingServiceTestCase
             array('getRepositoryUrl', 'post')
         )->getMock();
 
-        $discoveryService->expects($this->any())->method('getRepositoryUrl')->with(
+        $discoveryService->expects($this->once())->method('getRepositoryUrl')->with(
             $repositoryId
         )->willReturn(Url::createFromUrl(self::BROWSER_URL_TEST));
         $discoveryService->expects($this->any())->method('post')->with($expectedUrl)->willReturn($responseMock);
@@ -190,7 +190,7 @@ class DiscoveryServiceTest extends AbstractBrowserBindingServiceTestCase
         $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
             array('getJsonConverter')
         )->getMock();
-        $cmisBindingsHelperMock->expects($this->any())->method('getJsonConverter')->willReturn($jsonConverterMock);
+        $cmisBindingsHelperMock->expects($this->once())->method('getJsonConverter')->willReturn($jsonConverterMock);
 
         /** @var DiscoveryService|PHPUnit_Framework_MockObject_MockObject $discoveryService */
         $discoveryService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
@@ -199,10 +199,10 @@ class DiscoveryServiceTest extends AbstractBrowserBindingServiceTestCase
             array('getRepositoryUrl', 'post')
         )->getMock();
 
-        $discoveryService->expects($this->any())->method('getRepositoryUrl')->with(
+        $discoveryService->expects($this->once())->method('getRepositoryUrl')->with(
             $repositoryId
         )->willReturn(Url::createFromUrl(self::BROWSER_URL_TEST));
-        $discoveryService->expects($this->any())->method('post')->with($expectedUrl)->willReturn($responseMock);
+        $discoveryService->expects($this->once())->method('post')->with($expectedUrl)->willReturn($responseMock);
 
         $expectedObjectList = new ObjectList();
         $expectedObjectList->setObjects(array_fill(0, $expectedNumberOfItems, new ObjectData()));
@@ -276,6 +276,172 @@ class DiscoveryServiceTest extends AbstractBrowserBindingServiceTestCase
                 false,
                 0,
                 99
+            )
+        );
+    }
+
+    /**
+     * @dataProvider getContentChangesDataProvider
+     * @param string $expectedUrl
+     * @param string $repositoryId
+     * @param string|null $changeLogToken
+     * @param boolean $includeProperties
+     * @param boolean $includePolicyIds
+     * @param boolean $includeAcl
+     * @param integer|null $maxItems
+     */
+    public function testGetContentChangesCallsReadFunctionWithParameterizedQuery(
+        $expectedUrl,
+        $repositoryId,
+        $changeLogToken = null,
+        $includeProperties = false,
+        $includePolicyIds = false,
+        $includeAcl = false,
+        $maxItems = null
+    ) {
+        $responseData = array('foo' => 'bar');
+        $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
+        )->setMethods(array('json'))->getMock();
+        $responseMock->expects($this->once())->method('json')->willReturn($responseData);
+
+        $dummyObjectData = new ObjectData();
+        $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
+            array('convertObjectList')
+        )->getMock();
+        $jsonConverterMock->expects($this->once())->method('convertObjectList')->with($responseData)->willReturn(
+            $dummyObjectData
+        );
+
+        $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
+            array('getJsonConverter')
+        )->getMock();
+        $cmisBindingsHelperMock->expects($this->once())->method('getJsonConverter')->willReturn($jsonConverterMock);
+
+        /** @var DiscoveryService|PHPUnit_Framework_MockObject_MockObject $discoveryService */
+        $discoveryService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
+            array($this->getSessionMock(), $cmisBindingsHelperMock)
+        )->setMethods(
+            array('getRepositoryUrl', 'read')
+        )->getMock();
+
+        $discoveryService->expects($this->any())->method('getRepositoryUrl')->with(
+            $repositoryId
+        )->willReturn(Url::createFromUrl(self::BROWSER_URL_TEST));
+        $discoveryService->expects($this->once())->method('read')->with($expectedUrl)->willReturn($responseMock);
+
+        $discoveryService->getContentChanges(
+            $repositoryId,
+            $changeLogToken,
+            $includeProperties,
+            $includePolicyIds,
+            $includeAcl,
+            $maxItems
+        );
+    }
+
+    /**
+     * @dataProvider getContentChangesDataProvider
+     * @param string $expectedUrl
+     * @param string $repositoryId
+     * @param string|null $changeLogToken
+     * @param boolean $includeProperties
+     * @param boolean $includePolicyIds
+     * @param boolean $includeAcl
+     * @param integer|null $maxItems
+     */
+    public function testGetContentChangesReturnObjectList(
+        $expectedUrl,
+        $repositoryId,
+        $changeLogToken = null,
+        $includeProperties = false,
+        $includePolicyIds = false,
+        $includeAcl = false,
+        $maxItems = null
+    ) {
+        $responseData = $this->getResponseFixtureContentAsArray(
+            'Cmis/v1.1/BrowserBinding/getContentChanges-response.log'
+        );
+        $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
+        )->setMethods(array('json'))->getMock();
+        $responseMock->expects($this->once())->method('json')->willReturn($responseData);
+
+        $dummyObjectData = new ObjectData();
+
+        $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
+            array('convertObject')
+        )->getMock();
+
+        $expectedNumberOfItems = 39;
+        $jsonConverterMock->expects($this->exactly($expectedNumberOfItems))->method('convertObject')->willReturn(
+            $dummyObjectData
+        );
+
+        $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
+            array('getJsonConverter')
+        )->getMock();
+        $cmisBindingsHelperMock->expects($this->once())->method('getJsonConverter')->willReturn($jsonConverterMock);
+
+        /** @var DiscoveryService|PHPUnit_Framework_MockObject_MockObject $discoveryService */
+        $discoveryService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
+            array($this->getSessionMock(), $cmisBindingsHelperMock)
+        )->setMethods(
+            array('getRepositoryUrl', 'read')
+        )->getMock();
+
+        $discoveryService->expects($this->once())->method('getRepositoryUrl')->with(
+            $repositoryId
+        )->willReturn(Url::createFromUrl(self::BROWSER_URL_TEST));
+        $discoveryService->expects($this->once())->method('read')->with($expectedUrl)->willReturn($responseMock);
+
+        $expectedObjectList = new ObjectList();
+        $expectedObjectList->setObjects(array_fill(0, $expectedNumberOfItems, new ObjectData()));
+        $expectedObjectList->setNumItems($expectedNumberOfItems);
+        $expectedObjectList->hasMoreItems(false);
+
+        $this->assertEquals(
+            $expectedObjectList,
+            $discoveryService->getContentChanges(
+                $repositoryId,
+                $changeLogToken,
+                $includeProperties,
+                $includePolicyIds,
+                $includeAcl,
+                $maxItems
+            )
+        );
+    }
+
+    /**
+     * Data provider for getContentChanges
+     *
+     * @return array
+     */
+    public function getContentChangesDataProvider()
+    {
+        return array(
+            array(
+                Url::createFromUrl(
+                    self::BROWSER_URL_TEST . '?changeLogToken=changeLogToken&includeProperties=false'
+                    . '&includePolicyIds=false&includeACL=false&maxItems=99&succinct=false'
+                ),
+                'repositoryId',
+                'changeLogToken',
+                false,
+                false,
+                false,
+                99
+            ),
+            array(
+                Url::createFromUrl(
+                    self::BROWSER_URL_TEST . '?includeProperties=true'
+                    . '&includePolicyIds=true&includeACL=true&succinct=false'
+                ),
+                'repositoryId',
+                null,
+                true,
+                true,
+                true,
+                null
             )
         );
     }

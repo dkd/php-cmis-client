@@ -48,7 +48,7 @@ interface DiscoveryServiceInterface
      */
     public function getContentChanges(
         $repositoryId,
-        $changeLogToken = null,
+        &$changeLogToken = null,
         $includeProperties = false,
         $includePolicyIds = false,
         $includeAcl = false,

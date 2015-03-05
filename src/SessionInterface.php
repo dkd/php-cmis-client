@@ -327,7 +327,6 @@ interface SessionInterface
      * Deletes a type.
      *
      * @param string $typeId the ID of the type to delete
-     * @return mixed
      */
     public function deleteType($typeId);
 

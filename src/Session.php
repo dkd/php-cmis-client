@@ -27,10 +27,12 @@ use Dkd\PhpCmis\Data\RepositoryInfoInterface;
 use Dkd\PhpCmis\DataObjects\ObjectId;
 use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
 use Dkd\PhpCmis\Enum\AclPropagation;
+use Dkd\PhpCmis\Enum\CmisVersion;
 use Dkd\PhpCmis\Enum\IncludeRelationships;
 use Dkd\PhpCmis\Enum\RelationshipDirection;
 use Dkd\PhpCmis\Enum\VersioningState;
 use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
+use Dkd\PhpCmis\Exception\CmisNotSupportedException;
 use Dkd\PhpCmis\Exception\CmisObjectNotFoundException;
 use Dkd\PhpCmis\Exception\CmisRuntimeException;
 use Dkd\PhpCmis\Exception\IllegalStateException;
@@ -500,7 +502,7 @@ class Session implements SessionInterface
      * @param string[] $renditionFilter the rendition filter or <code>null</code> for no renditions
      * @param boolean $includePathSegments indicates whether path segment or the relative path segment should
      *      be included or not
-     * @param string $orderBy the object order, a comma-separated list of query names and the ascending
+     * @param string|null $orderBy the object order, a comma-separated list of query names and the ascending
      * modifier "ASC" or the descending modifier "DESC" for each query name
      * @param boolean $cacheEnabled flag that indicates if the object cache should be used
      * @param integer $maxItemsPerPage the max items per page/batch
@@ -518,7 +520,23 @@ class Session implements SessionInterface
         $cacheEnabled = false,
         $maxItemsPerPage = 100
     ) {
-        // TODO: Implement createOperationContext() method.
+        $operationContext = new OperationContext();
+        $operationContext->setFilter($filter);
+        $operationContext->setIncludeAcls($includeAcls);
+        $operationContext->setIncludeAllowableActions($includeAllowableActions);
+        $operationContext->setIncludePolicies($includePolicies);
+        if ($includeRelationships !== null) {
+            $operationContext->setIncludeRelationships($includeRelationships);
+        }
+        $operationContext->setRenditionFilter($renditionFilter);
+        $operationContext->setIncludePathSegments($includePathSegments);
+        if (!empty($orderBy)) {
+            $operationContext->setOrderBy($orderBy);
+        }
+        $operationContext->setCacheEnabled($cacheEnabled);
+        $operationContext->setMaxItemsPerPage($maxItemsPerPage);
+
+        return $operationContext;
     }
 
     /**
@@ -586,10 +604,17 @@ class Session implements SessionInterface
      *
      * @param TypeDefinitionInterface $type
      * @return ObjectTypeInterface the new type definition
+     * @throws CmisNotSupportedException If repository version 1.0
      */
     public function createType(TypeDefinitionInterface $type)
     {
-        // TODO: Implement createType() method.
+        if ($this->getRepositoryInfo()->getCmisVersion() == CmisVersion::cast(CmisVersion::CMIS_1_0)) {
+            throw new CmisNotSupportedException("This method is not supported for CMIS 1.0 repositories.");
+        }
+
+        return $this->convertTypeDefinition(
+            $this->getBinding()->getRepositoryService()->createType($this->getRepositoryInfo(), $type)
+        );
     }
 
     /**
@@ -613,11 +638,16 @@ class Session implements SessionInterface
      * Deletes a type.
      *
      * @param string $typeId the ID of the type to delete
-     * @return mixed
+     * @throws CmisNotSupportedException If repository version 1.0
      */
     public function deleteType($typeId)
     {
-        // TODO: Implement deleteType() method.
+        if ($this->getRepositoryInfo()->getCmisVersion() == CmisVersion::cast(CmisVersion::CMIS_1_0)) {
+            throw new CmisNotSupportedException("This method is not supported for CMIS 1.0 repositories.");
+        }
+
+        $this->getBinding()->getRepositoryService()->deleteType($this->getRepositoryInfo(), $typeId);
+        $this->removeObjectFromCache($typeId);
     }
 
     /**
@@ -669,7 +699,7 @@ class Session implements SessionInterface
      * @param string $changeLogToken the change log token to start from or <code>null</code> to start from
      *      the first available event in the repository
      * @param boolean $includeProperties indicates whether changed properties should be included in the result or not
-     * @param integer $maxNumItems maximum numbers of events
+     * @param integer|null $maxNumItems maximum numbers of events
      * @param OperationContextInterface $context the OperationContext
      * @return ChangeEventsInterface the change events
      */
@@ -679,7 +709,20 @@ class Session implements SessionInterface
         $maxNumItems = null,
         OperationContextInterface $context = null
     ) {
-        // TODO: Implement getContentChanges() method.
+        if ($context === null) {
+            $context = $this->getDefaultContext();
+        }
+
+        $objectList = $this->getBinding()->getDiscoveryService()->getContentChanges(
+            $this->getRepositoryInfo()->getId(),
+            $changeLogToken,
+            $includeProperties,
+            $context->isIncludePolicies(),
+            $context->isIncludeAcls(),
+            $maxNumItems
+        );
+
+        return $this->getObjectFactory()->convertChangeEvents($changeLogToken, $objectList);
     }
 
     /**

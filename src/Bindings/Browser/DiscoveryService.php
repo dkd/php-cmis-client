@@ -49,14 +49,41 @@ class DiscoveryService extends AbstractBrowserBindingService implements Discover
      */
     public function getContentChanges(
         $repositoryId,
-        $changeLogToken = null,
+        &$changeLogToken = null,
         $includeProperties = false,
         $includePolicyIds = false,
         $includeAcl = false,
         $maxItems = null,
         ExtensionDataInterface $extension = null
     ) {
-        // TODO: Implement getContentChanges() method.
+        $url = $this->getRepositoryUrl($repositoryId, Constants::SELECTOR_CONTENT_CHANGES);
+
+        $url->getQuery()->modify(
+            array(
+                Constants::PARAM_PROPERTIES => $includeProperties ? 'true' : 'false',
+                Constants::PARAM_POLICY_IDS => $includePolicyIds ? 'true' : 'false',
+                Constants::PARAM_ACL => $includeAcl ? 'true' : 'false',
+                Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
+            )
+        );
+
+        if ($changeLogToken !== null) {
+            $url->getQuery()->modify(array(Constants::PARAM_CHANGE_LOG_TOKEN => (string) $changeLogToken));
+        }
+
+        if ($maxItems > 0) {
+            $url->getQuery()->modify(array(Constants::PARAM_MAX_ITEMS => (string) $maxItems));
+        }
+
+        $responseData = $this->read($url)->json();
+
+        // $changeLogToken was passed by reference. The value is changed here
+        if ($changeLogToken!==null && isset($responseData[JSONConstants::JSON_OBJECTLIST_CHANGE_LOG_TOKEN])) {
+            $changeLogToken = (string) $responseData[JSONConstants::JSON_OBJECTLIST_CHANGE_LOG_TOKEN];
+        }
+
+        // TODO Implement Cache
+        return $this->getJsonConverter()->convertObjectList($responseData);
     }
 
     /**

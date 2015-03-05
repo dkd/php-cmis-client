@@ -10,6 +10,7 @@ namespace Dkd\PhpCmis\Bindings\Browser;
  * file that was distributed with this source code.
  */
 
+use Dkd\PhpCmis\Constants;
 use Dkd\PhpCmis\Data\ExtensionDataInterface;
 use Dkd\PhpCmis\Data\RepositoryInfoInterface;
 use Dkd\PhpCmis\Definitions\TypeDefinitionContainerInterface;
@@ -33,7 +34,18 @@ class RepositoryService extends AbstractBrowserBindingService implements Reposit
      */
     public function createType($repositoryId, TypeDefinitionInterface $type, ExtensionDataInterface $extension = null)
     {
-        // TODO: Implement createType() method.
+        $url = $this->getRepositoryUrl($repositoryId);
+
+        $url->getQuery()->modify(
+            array(
+                Constants::CONTROL_CMISACTION => Constants::CMISACTION_CREATE_TYPE,
+                Constants::CONTROL_TYPE => json_encode($this->getJsonConverter()->convertFromTypeDefinition($type))
+            )
+        );
+
+        $responseData = $this->post($url)->json();
+
+        return $this->getJsonConverter()->convertTypeDefinition($responseData);
     }
 
     /**
@@ -45,7 +57,16 @@ class RepositoryService extends AbstractBrowserBindingService implements Reposit
      */
     public function deleteType($repositoryId, $typeId, ExtensionDataInterface $extension = null)
     {
-        // TODO: Implement deleteType() method.
+        $url = $this->getRepositoryUrl($repositoryId);
+
+        $url->getQuery()->modify(
+            array(
+                Constants::CONTROL_CMISACTION => Constants::CMISACTION_DELETE_TYPE,
+                Constants::CONTROL_TYPE_ID => $typeId
+            )
+        );
+
+        $this->post($url)->json();
     }
 
     /**
@@ -152,6 +173,17 @@ class RepositoryService extends AbstractBrowserBindingService implements Reposit
      */
     public function updateType($repositoryId, TypeDefinitionInterface $type, ExtensionDataInterface $extension = null)
     {
-        // TODO: Implement updateType() method.
+        $url = $this->getRepositoryUrl($repositoryId);
+
+        $url->getQuery()->modify(
+            array(
+                Constants::CONTROL_CMISACTION => Constants::CMISACTION_UPDATE_TYPE,
+                Constants::CONTROL_TYPE => json_encode($this->getJsonConverter()->convertFromTypeDefinition($type))
+            )
+        );
+
+        $responseData = $this->post($url)->json();
+
+        return $this->getJsonConverter()->convertTypeDefinition($responseData);
     }
 }

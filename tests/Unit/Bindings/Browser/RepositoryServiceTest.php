@@ -11,12 +11,17 @@ namespace Dkd\PhpCmis\Test\Unit\Bindings\Browser;
  */
 
 use Dkd\PhpCmis\Bindings\Browser\RepositoryService;
-use Dkd\PhpCmis\DataObjects\RepositoryInfo;
+use Dkd\PhpCmis\DataObjects\AbstractTypeDefinition;
+use Dkd\PhpCmis\DataObjects\ItemTypeDefinition;
 use Dkd\PhpCmis\DataObjects\RepositoryInfoBrowserBinding;
+use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
+use League\Url\Url;
 use PHPUnit_Framework_MockObject_MockObject;
 
 class RepositoryServiceTest extends AbstractBrowserBindingServiceTestCase
 {
+    const CLASS_TO_TEST = '\\Dkd\\PhpCmis\\Bindings\\Browser\\RepositoryService';
+
     public function testGetRepositoryInfoReturnsRepositoryInfoObjectForGivenRepositoryId()
     {
         /** @var RepositoryService|PHPUnit_Framework_MockObject_MockObject $repositoryService */
@@ -95,5 +100,223 @@ class RepositoryServiceTest extends AbstractBrowserBindingServiceTestCase
         );
 
         $this->assertSame($dummyTypeDefinition, $repositoryService->getTypeDefinition('foo', 'bar'));
+    }
+
+    /**
+     * @dataProvider createTypeDataProvider
+     * @param string $expectedUrl
+     * @param array $typeDefinitionArrayRepresentation
+     * @param string $repositoryId
+     * @param TypeDefinitionInterface $type
+     */
+    public function testCreateTypeCallsPostFunctionWithParameterizedQuery(
+        $expectedUrl,
+        array $typeDefinitionArrayRepresentation,
+        $repositoryId,
+        TypeDefinitionInterface $type
+    ) {
+        $responseData = array('foo' => 'bar');
+        $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
+        )->setMethods(array('json'))->getMock();
+        $responseMock->expects($this->any())->method('json')->willReturn($responseData);
+
+        $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
+            array('convertFromTypeDefinition','convertTypeDefinition')
+        )->getMock();
+
+        /** @var  AbstractTypeDefinition|PHPUnit_Framework_MockObject_MockObject $dummyTypeDefinition */
+        $dummyTypeDefinition = $this->getMockBuilder('\\Dkd\\PhpCmis\\ObjectData\\AbstractTypeDefinition')->getMock();
+        $jsonConverterMock->expects($this->atLeastOnce())->method('convertTypeDefinition')->with(
+            $responseData
+        )->willReturn($dummyTypeDefinition);
+        $jsonConverterMock->expects($this->atLeastOnce())->method('convertFromTypeDefinition')->willReturn(
+            $typeDefinitionArrayRepresentation
+        );
+
+        $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
+            array('getJsonConverter')
+        )->getMock();
+        $cmisBindingsHelperMock->expects($this->exactly(2))->method(
+            'getJsonConverter'
+        )->willReturn($jsonConverterMock);
+
+        /** @var RepositoryService|PHPUnit_Framework_MockObject_MockObject $repositoryService */
+        $repositoryService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
+            array($this->getSessionMock(), $cmisBindingsHelperMock)
+        )->setMethods(
+            array('getRepositoryUrl', 'post')
+        )->getMock();
+
+        $repositoryService->expects($this->atLeastOnce())->method('getRepositoryUrl')->with(
+            $repositoryId
+        )->willReturn(Url::createFromUrl(self::BROWSER_URL_TEST));
+        $repositoryService->expects($this->atLeastOnce())->method('post')->with(
+            $expectedUrl
+        )->willReturn($responseMock);
+
+        $repositoryService->createType(
+            $repositoryId,
+            $type
+        );
+    }
+
+    /**
+     * Data provider for updateType
+     *
+     * @return array
+     */
+    public function createTypeDataProvider()
+    {
+        $typeDefinitionArrayRepresentation = array('foo' => 'bar');
+        $typeDefinitionJsonRepresentation = '{"foo":"bar"}';
+
+        return array(
+            array(
+                Url::createFromUrl(
+                    self::BROWSER_URL_TEST
+                    . '?cmisaction=createType&type=' . $typeDefinitionJsonRepresentation
+                ),
+                $typeDefinitionArrayRepresentation,
+                'repositoryId',
+                new ItemTypeDefinition('typeId'),
+            )
+        );
+    }
+
+
+    /**
+     * @dataProvider deleteTypeDataProvider
+     * @param string $expectedUrl
+     * @param string $repositoryId
+     * @param string $typeId
+     */
+    public function testDeleteTypeCallsPostFunctionWithParameterizedQuery(
+        $expectedUrl,
+        $repositoryId,
+        $typeId
+    ) {
+        $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
+        )->getMock();
+
+        $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->getMock();
+
+        /** @var RepositoryService|PHPUnit_Framework_MockObject_MockObject $repositoryService */
+        $repositoryService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
+            array($this->getSessionMock(), $cmisBindingsHelperMock)
+        )->setMethods(
+            array('getRepositoryUrl', 'post')
+        )->getMock();
+
+        $repositoryService->expects($this->atLeastOnce())->method('getRepositoryUrl')->with(
+            $repositoryId
+        )->willReturn(Url::createFromUrl(self::BROWSER_URL_TEST));
+        $repositoryService->expects($this->atLeastOnce())->method('post')->with(
+            $expectedUrl
+        )->willReturn($responseMock);
+
+        $repositoryService->deleteType(
+            $repositoryId,
+            $typeId
+        );
+    }
+
+    /**
+     * Data provider for deleteType
+     *
+     * @return array
+     */
+    public function deleteTypeDataProvider()
+    {
+        return array(
+            array(
+                Url::createFromUrl(
+                    self::BROWSER_URL_TEST
+                    . '?cmisaction=deleteType&typeId=typeId'
+                ),
+                'repositoryId',
+                'typeId',
+            )
+        );
+    }
+
+    /**
+     * @dataProvider updateTypeDataProvider
+     * @param string $expectedUrl
+     * @param array $typeDefinitionArrayRepresentation
+     * @param string $repositoryId
+     * @param TypeDefinitionInterface $type
+     */
+    public function testUpdateTypeCallsPostFunctionWithParameterizedQuery(
+        $expectedUrl,
+        array $typeDefinitionArrayRepresentation,
+        $repositoryId,
+        TypeDefinitionInterface $type
+    ) {
+        $responseData = array('foo' => 'bar');
+        $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
+        )->setMethods(array('json'))->getMock();
+        $responseMock->expects($this->any())->method('json')->willReturn($responseData);
+
+        $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
+            array('convertFromTypeDefinition','convertTypeDefinition')
+        )->getMock();
+
+        /** @var  AbstractTypeDefinition|PHPUnit_Framework_MockObject_MockObject $dummyTypeDefinition */
+        $dummyTypeDefinition = $this->getMockBuilder('\\Dkd\\PhpCmis\\ObjectData\\AbstractTypeDefinition')->getMock();
+        $jsonConverterMock->expects($this->atLeastOnce())->method('convertTypeDefinition')->with(
+            $responseData
+        )->willReturn($dummyTypeDefinition);
+        $jsonConverterMock->expects($this->atLeastOnce())->method('convertFromTypeDefinition')->willReturn(
+            $typeDefinitionArrayRepresentation
+        );
+
+        $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
+            array('getJsonConverter')
+        )->getMock();
+        $cmisBindingsHelperMock->expects($this->exactly(2))->method(
+            'getJsonConverter'
+        )->willReturn($jsonConverterMock);
+
+        /** @var RepositoryService|PHPUnit_Framework_MockObject_MockObject $repositoryService */
+        $repositoryService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
+            array($this->getSessionMock(), $cmisBindingsHelperMock)
+        )->setMethods(
+            array('getRepositoryUrl', 'post')
+        )->getMock();
+
+        $repositoryService->expects($this->atLeastOnce())->method('getRepositoryUrl')->with(
+            $repositoryId
+        )->willReturn(Url::createFromUrl(self::BROWSER_URL_TEST));
+        $repositoryService->expects($this->atLeastOnce())->method('post')->with(
+            $expectedUrl
+        )->willReturn($responseMock);
+
+        $repositoryService->updateType(
+            $repositoryId,
+            $type
+        );
+    }
+
+    /**
+     * Data provider for updateType
+     *
+     * @return array
+     */
+    public function updateTypeDataProvider()
+    {
+        $typeDefinitionArrayRepresentation = array('foo' => 'bar');
+        $typeDefinitionJsonRepresentation = '{"foo":"bar"}';
+
+        return array(
+            array(
+                Url::createFromUrl(
+                    self::BROWSER_URL_TEST
+                    . '?cmisaction=updateType&type=' . $typeDefinitionJsonRepresentation
+                ),
+                $typeDefinitionArrayRepresentation,
+                'repositoryId',
+                new ItemTypeDefinition('typeId'),
+            )
+        );
     }
 }
