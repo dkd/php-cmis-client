@@ -124,5 +124,5 @@ class SessionParameter
 //    // --- workarounds ---
 //
 //    const INCLUDE_OBJECTID_URL_PARAM_ON_CHECKOUT = "dkd.phpcmis.workaround.includeObjectIdOnCheckout";
-//    const OMIT_CHANGE_TOKENS = "dkd.phpcmis.workaround.omitChangeTokens";
+    const OMIT_CHANGE_TOKENS = "dkd.phpcmis.workaround.omitChangeTokens";
 }

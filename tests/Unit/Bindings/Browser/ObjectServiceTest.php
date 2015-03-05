@@ -20,9 +20,11 @@ use Dkd\PhpCmis\DataObjects\AccessControlList;
 use Dkd\PhpCmis\DataObjects\ObjectData;
 use Dkd\PhpCmis\DataObjects\Principal;
 use Dkd\PhpCmis\DataObjects\Properties;
+use Dkd\PhpCmis\DataObjects\PropertyId;
 use Dkd\PhpCmis\DataObjects\PropertyString;
 use Dkd\PhpCmis\Enum\IncludeRelationships;
 use Dkd\PhpCmis\Enum\VersioningState;
+use Dkd\PhpCmis\SessionParameter;
 use GuzzleHttp\Stream\StreamInterface;
 use League\Url\Url;
 use PHPUnit_Framework_MockObject_MockObject;
@@ -1083,6 +1085,153 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
                 'foo:bar',
                 false,
                 false,
+            )
+        );
+    }
+
+    /**
+     * @dataProvider updatePropertiesDataProvider
+     * @param string $expectedUrl
+     * @param string $repositoryId
+     * @param string $objectId
+     * @param PropertiesInterface $properties
+     * @param string|null $changeToken
+     * @param array $sessionParameterMap
+     */
+    public function testUpdatePropertiesCallsPostFunctionWithParameterizedQuery(
+        $expectedUrl,
+        $repositoryId,
+        $objectId,
+        PropertiesInterface $properties,
+        $changeToken = null,
+        $sessionParameterMap = array()
+    ) {
+        $responseData = array('foo' => 'bar');
+        $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
+        )->setMethods(array('json'))->getMock();
+        $responseMock->expects($this->any())->method('json')->willReturn($responseData);
+
+        $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
+            array('convertObject')
+        )->getMock();
+
+        /** @var  ObjectData|PHPUnit_Framework_MockObject_MockObject $dummyObjectData */
+        $dummyObjectData = $this->getMockBuilder('\\Dkd\\PhpCmis\\ObjectData\\ObjectData')->setMethods(
+            array('getId','getProperties')
+        )->getMock();
+
+        $newObjectId = 'foo-id';
+        $newChangeTokenId = 'newTokenId';
+        $dummyProperties  = new Properties();
+        $newChangeTokenProperty = new PropertyId('cmis:changeToken', $newChangeTokenId);
+        $dummyProperties->addProperty($newChangeTokenProperty);
+
+        $dummyObjectData->expects($this->any())->method('getId')->willReturn($newObjectId);
+        $dummyObjectData->expects($this->any())->method('getProperties')->willReturn($dummyProperties);
+
+        $jsonConverterMock->expects($this->atLeastOnce())->method('convertObject')->with($responseData)->willReturn(
+            $dummyObjectData
+        );
+
+        $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
+            array('getJsonConverter')
+        )->getMock();
+        $cmisBindingsHelperMock->expects($this->atLeastOnce())->method(
+            'getJsonConverter'
+        )->willReturn($jsonConverterMock);
+
+        $sessionMock = $this->getSessionMock($sessionParameterMap);
+
+        /** @var ObjectService|PHPUnit_Framework_MockObject_MockObject $objectService */
+        $objectService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
+            array($sessionMock, $cmisBindingsHelperMock)
+        )->setMethods(
+            array('getObjectUrl', 'post', 'getSession')
+        )->getMock();
+
+        $objectService->expects($this->atLeastOnce())->method('getObjectUrl')->with(
+            $repositoryId,
+            $objectId
+        )->willReturn(Url::createFromUrl(self::BROWSER_URL_TEST));
+
+        $objectService->expects($this->atLeastOnce())->method('post')->with($expectedUrl)->willReturn($responseMock);
+        $objectService->expects($this->atLeastOnce())->method('getSession')->willReturn($sessionMock);
+
+        $objectService->updateProperties(
+            $repositoryId,
+            $objectId,
+            $properties,
+            $changeToken
+        );
+
+        $this->assertEquals($objectId, $newObjectId);
+        if ($changeToken !== null) {
+            $this->assertEquals($changeToken, $newChangeTokenId);
+        }
+    }
+
+    /**
+     * Data provider for updateProperties
+     *
+     * @return array
+     */
+    public function updatePropertiesDataProvider()
+    {
+        $propertySet1 = new Properties();
+        $propertySet1->addProperties(array(
+            new PropertyString('cmis:name', 'name'),
+            new PropertyString('cmis:description', 'description')
+        ));
+
+        $propertySet2 = new Properties();
+        $propertySet2->addProperties(array(
+            new PropertyString('cmis:name', 'foo'),
+            new PropertyString('cmis:description', 'bar')
+         ));
+
+        return array(
+            'Parameter set with defined changeToken and empty session parameters' => array(
+                Url::createFromUrl(
+                    self::BROWSER_URL_TEST
+                    . '?propertyId[0]=cmis:name&propertyValue[0]=name'
+                    . '&propertyId[1]=cmis:description&propertyValue[1]=description'
+                    . '&changeToken=changeToken&cmisaction=update&succinct=false'
+                ),
+                'repositoryId',
+                'objectId',
+                $propertySet1,
+                'changeToken',
+                array()
+            ),
+            'Parameter set with empty changeToken and defined session parameter' => array(
+                Url::createFromUrl(
+                    self::BROWSER_URL_TEST
+                    . '?propertyId[0]=cmis:name&propertyValue[0]=foo'
+                    . '&propertyId[1]=cmis:description&propertyValue[1]=bar'
+                    . '&cmisaction=update&succinct=true'
+                ),
+                'repositoryId',
+                'objectId',
+                $propertySet2,
+                null,
+                array(
+                    array(SessionParameter::BROWSER_SUCCINCT, null, true)
+                )
+            ),
+            'Parameter set with defined changeToken and defined OMIT_CHANGE_TOKENS session parameter' => array(
+                Url::createFromUrl(
+                    self::BROWSER_URL_TEST
+                    . '?propertyId[0]=cmis:name&propertyValue[0]=foo'
+                    . '&propertyId[1]=cmis:description&propertyValue[1]=bar'
+                    . '&cmisaction=update&succinct=false'
+                ),
+                'repositoryId',
+                'objectId',
+                $propertySet2,
+                'changeToken',
+                array(
+                    array(SessionParameter::OMIT_CHANGE_TOKENS, false, true)
+                )
             )
         );
     }

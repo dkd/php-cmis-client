@@ -21,7 +21,10 @@ use Dkd\PhpCmis\Data\RenditionDataInterface;
 use Dkd\PhpCmis\Enum\IncludeRelationships;
 use Dkd\PhpCmis\Enum\UnfileObject;
 use Dkd\PhpCmis\Enum\VersioningState;
+use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
 use Dkd\PhpCmis\ObjectServiceInterface;
+use Dkd\PhpCmis\PropertyIds;
+use Dkd\PhpCmis\SessionParameter;
 use GuzzleHttp\Stream\StreamInterface;
 
 /**
@@ -711,6 +714,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      * @param string|null $changeToken The last change token of this object that the client received.
      *      The repository might return a new change token (default is <code>null</code>)
      * @param ExtensionDataInterface|null $extension
+     * @throws CmisInvalidArgumentException If $objectId is empty
      */
     public function updateProperties(
         $repositoryId,
@@ -719,6 +723,36 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         & $changeToken = null,
         ExtensionDataInterface $extension = null
     ) {
-        // TODO: Implement updateProperties() method.
+        if (empty($objectId)) {
+            throw new CmisInvalidArgumentException('Object id must not be empty!');
+        }
+
+        $url = $this->getObjectUrl($repositoryId, $objectId);
+
+        $url->getQuery()->modify($this->convertPropertiesToQueryArray($properties));
+        $url->getQuery()->modify(
+            array(
+                Constants::CONTROL_CMISACTION => Constants::CMISACTION_UPDATE_PROPERTIES,
+                Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false'
+            )
+        );
+
+        if ($changeToken !== null && !$this->getSession()->get(SessionParameter::OMIT_CHANGE_TOKENS, false)) {
+            $url->getQuery()->modify(array(Constants::PARAM_CHANGE_TOKEN => $changeToken));
+        }
+
+        $responseData = $this->post($url)->json();
+        $newObject = $this->getJsonConverter()->convertObject($responseData);
+
+        // $objectId was passed by reference. The value is changed here to new object id
+        $objectId = null;
+        if ($newObject !== null) {
+            $objectId = $newObject->getId();
+            if ($changeToken !== null && count($newObject->getProperties()->getProperties()) > 0) {
+                $newChangeToken = $newObject->getProperties()->getProperties()[PropertyIds::CHANGE_TOKEN];
+                // $changeToken was passed by reference. The value is changed here
+                $changeToken = $newChangeToken === null ? null : $newChangeToken->getFirstValue();
+            }
+        }
     }
 }

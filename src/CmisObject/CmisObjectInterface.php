@@ -13,7 +13,6 @@ namespace Dkd\PhpCmis\CmisObject;
 use Dkd\PhpCmis\Data\AceInterface;
 use Dkd\PhpCmis\Data\AclInterface;
 use Dkd\PhpCmis\Data\AllowableActionsInterface;
-use Dkd\PhpCmis\Data\CmisExtensionElementInterface;
 use Dkd\PhpCmis\Data\PolicyInterface;
 use Dkd\PhpCmis\Data\RelationshipInterface;
 use Dkd\PhpCmis\Enum\AclPropagation;
@@ -171,7 +170,7 @@ interface CmisObjectInterface extends ObjectIdInterface, CmisObjectPropertiesInt
      * @return CmisObjectInterface|null the object ID of the updated object - can return <code>null</code> in case
      *     of a repository failure
      */
-    public function updateProperties(array $properties, $refresh);
+    public function updateProperties(array $properties, $refresh = true);
 
     /**
      * Returns all permissions for the given principal from the ACL.
