@@ -550,6 +550,7 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers  Dkd\PhpCmis\Converter\JsonConverter::convertProperties
+     * @covers  Dkd\PhpCmis\Converter\JsonConverter::getPropertyByPropertyType
      * @covers  Dkd\PhpCmis\Converter\JsonConverter::convertStringValues
      * @covers  Dkd\PhpCmis\Converter\JsonConverter::convertBooleanValues
      * @covers  Dkd\PhpCmis\Converter\JsonConverter::convertIntegerValues

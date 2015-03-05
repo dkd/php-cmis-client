@@ -1014,14 +1014,20 @@ class JsonConverter extends AbstractDataConverter
         }
         $properties = new Properties();
 
-        foreach ($data as $propertyKey => $propertyData) {
+        foreach ($data as $propertyData) {
             $id = (!empty($propertyData[JSONConstants::JSON_PROPERTY_ID])) ?
                 $propertyData[JSONConstants::JSON_PROPERTY_ID] : null;
             $queryName = (!empty($propertyData[JSONConstants::JSON_PROPERTY_QUERYNAME])) ?
                 $propertyData[JSONConstants::JSON_PROPERTY_QUERYNAME] : null;
 
-            if ($id === null && $queryName === null) {
-                throw new CmisRuntimeException('Invalid property!');
+            if ($id === null || $queryName === null) {
+                throw new CmisRuntimeException(
+                    sprintf(
+                        'Invalid property data given! Value of "%s" and "%s" must not be empty!',
+                        JSONConstants::JSON_PROPERTY_ID,
+                        JSONConstants::JSON_PROPERTY_QUERYNAME
+                    )
+                );
             }
 
             try {
@@ -1040,38 +1046,24 @@ class JsonConverter extends AbstractDataConverter
                 $propertyValues = $propertyData[JSONConstants::JSON_PROPERTY_VALUE];
             }
 
-            if ($propertyType->equals(PropertyType::cast(PropertyType::STRING))) {
-                $property = new PropertyString($id, $this->convertStringValues($propertyValues));
-            } elseif ($propertyType->equals(PropertyType::cast(PropertyType::ID))) {
-                $property = new PropertyId($id, $this->convertStringValues($propertyValues));
-            } elseif ($propertyType->equals(PropertyType::cast(PropertyType::BOOLEAN))) {
-                $property = new PropertyBoolean($id, $this->convertBooleanValues($propertyValues));
-            } elseif ($propertyType->equals(PropertyType::cast(PropertyType::INTEGER))) {
-                $property = new PropertyInteger($id, $this->convertIntegerValues($propertyValues));
-            } elseif ($propertyType->equals(PropertyType::cast(PropertyType::DATETIME))) {
-                $property = new PropertyDateTime($id, $this->convertDateTimeValues($propertyValues));
-            } elseif ($propertyType->equals(PropertyType::cast(PropertyType::DECIMAL))) {
-                $property = new PropertyDecimal($id, $this->convertDecimalValues($propertyValues));
-            } elseif ($propertyType->equals(PropertyType::cast(PropertyType::HTML))) {
-                $property = new PropertyHtml($id, $this->convertStringValues($propertyValues));
-            } elseif ($propertyType->equals(PropertyType::cast(PropertyType::URI))) {
-                $property = new PropertyUri($id, $this->convertStringValues($propertyValues));
-            } else {
-                // this could only happen if a new property type is added to the enumeration and not implemented here.
-                throw new CmisInvalidArgumentException(
-                    sprintf('The given property type "%s" could not be converted.', $propertyType)
-                );
-            }
+            // get property keys without JSON-response-specific cardinality properties
+            $jsonPropertyKeys = JSONConstants::getPropertyKeys();
+            $propertyKeys = array_values(array_diff($jsonPropertyKeys, array(
+                // remove the cardinality property here as this is not a property of a property but only required for
+                // the other way when converting the property to the JSON object for the browser binding.
+                JSONConstants::JSON_PROPERTY_CARDINALITY,
+                JSONConstants::JSON_PROPERTY_VALUE,
+                JSONConstants::JSON_PROPERTY_ID,
+                JSONConstants::JSON_PROPERTY_DATATYPE
+            )));
 
-            $property->setQueryName($queryName);
-            if (isset($propertyData[JSONConstants::JSON_PROPERTY_DISPLAYNAME])) {
-                $property->setDisplayName((string) $propertyData[JSONConstants::JSON_PROPERTY_DISPLAYNAME]);
-            }
-            if (isset($propertyData[JSONConstants::JSON_PROPERTY_LOCALNAME])) {
-                $property->setLocalName((string) $propertyData[JSONConstants::JSON_PROPERTY_LOCALNAME]);
-            }
-
-            $property->setExtensions($this->convertExtension($propertyData, JSONConstants::getPropertyKeys()));
+            $property = $this->getPropertyByPropertyType($propertyType, $id, $propertyValues);
+            $property->populate(
+                $propertyData,
+                $propertyKeys,
+                true
+            );
+            $property->setExtensions($this->convertExtension($propertyData, $jsonPropertyKeys));
 
             $properties->addProperty($property);
         }
@@ -1081,6 +1073,40 @@ class JsonConverter extends AbstractDataConverter
         }
 
         return $properties;
+    }
+
+    /**
+     * @param PropertyType $propertyType
+     * @param string $id
+     * @param array $propertyValues
+     * @return PropertyBoolean|PropertyDateTime|PropertyDecimal|PropertyHtml|PropertyId|PropertyInteger|PropertyString
+     */
+    protected function getPropertyByPropertyType(PropertyType $propertyType, $id, array $propertyValues)
+    {
+        if ($propertyType->equals(PropertyType::cast(PropertyType::STRING))) {
+            $property = new PropertyString($id, $this->convertStringValues($propertyValues));
+        } elseif ($propertyType->equals(PropertyType::cast(PropertyType::ID))) {
+            $property = new PropertyId($id, $this->convertStringValues($propertyValues));
+        } elseif ($propertyType->equals(PropertyType::cast(PropertyType::BOOLEAN))) {
+            $property = new PropertyBoolean($id, $this->convertBooleanValues($propertyValues));
+        } elseif ($propertyType->equals(PropertyType::cast(PropertyType::INTEGER))) {
+            $property = new PropertyInteger($id, $this->convertIntegerValues($propertyValues));
+        } elseif ($propertyType->equals(PropertyType::cast(PropertyType::DATETIME))) {
+            $property = new PropertyDateTime($id, $this->convertDateTimeValues($propertyValues));
+        } elseif ($propertyType->equals(PropertyType::cast(PropertyType::DECIMAL))) {
+            $property = new PropertyDecimal($id, $this->convertDecimalValues($propertyValues));
+        } elseif ($propertyType->equals(PropertyType::cast(PropertyType::HTML))) {
+            $property = new PropertyHtml($id, $this->convertStringValues($propertyValues));
+        } elseif ($propertyType->equals(PropertyType::cast(PropertyType::URI))) {
+            $property = new PropertyUri($id, $this->convertStringValues($propertyValues));
+        } else {
+            // this could only happen if a new property type is added to the enumeration and not implemented here.
+            throw new CmisInvalidArgumentException(
+                sprintf('The given property type "%s" could not be converted.', $propertyType)
+            );
+        }
+
+        return $property;
     }
 
     /**
