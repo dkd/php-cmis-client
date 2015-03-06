@@ -51,6 +51,7 @@ try {
     );
 
     echo "Document has been created. Document Id: " . $document->getId() . "\n";
+    echo "Please delete that document now by hand!\n";
 } catch (\Dkd\PhpCmis\Exception\CmisContentAlreadyExistsException $e) {
     echo "********* ERROR **********\n";
     echo $e->getMessage() . "\n";
