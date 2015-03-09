@@ -136,6 +136,37 @@ class CmisBindingTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\\Dkd\\PhpCmis\\RepositoryServiceInterface', $binding->getRepositoryService());
     }
 
+    public function testGetNavigationServiceReturnsInstanceOfNavigationService()
+    {
+        // the subject will be mocked because we have to mock getCmisBindingsHelper
+        /** @var CmisBinding|\PHPUnit_Framework_MockObject_MockObject $binding */
+        $binding = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBinding')->setConstructorArgs(
+            array(
+                new Session(),
+                array(SessionParameter::BINDING_CLASS => 'foo')
+            )
+        )->setMethods(array('getCmisBindingsHelper'))->getMock();
+
+        $cmisBindingsHelperMock = $this->getMockBuilder(
+            '\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper'
+        )->getMock();
+
+        $cmisBindingSessionInterfaceMock = $this->getMockBuilder(
+            '\\Dkd\\PhpCmis\\Bindings\\BindingSessionInterface'
+        )->setMethods(array('getNavigationService'))->getMockForAbstractClass();
+        $cmisBindingSessionInterfaceMock->expects($this->any())->method('getNavigationService')->willReturn(
+            $this->getMockForAbstractClass('\\Dkd\\PhpCmis\\NavigationServiceInterface')
+        );
+
+        $cmisBindingsHelperMock->expects($this->any())->method('getSpi')->willReturn($cmisBindingSessionInterfaceMock);
+
+        $binding->expects($this->any())->method('getCmisBindingsHelper')->willReturn(
+            $cmisBindingsHelperMock
+        );
+
+        $this->assertInstanceOf('\\Dkd\\PhpCmis\\NavigationServiceInterface', $binding->getNavigationService());
+    }
+
     /**
      * @depends testConstructorSetsObjectFactoryPropertyToGivenObjectFactory
      */

@@ -162,8 +162,7 @@ class CmisBinding implements CmisBindingInterface
      */
     public function getNavigationService()
     {
-        throw new \Exception('Not yet implemented!');
-        // TODO: Implement getNavigationService() method.
+        return $this->getCmisBindingsHelper()->getSpi($this->session)->getNavigationService();
     }
 
     /**
