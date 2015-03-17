@@ -313,18 +313,18 @@ interface ObjectServiceInterface
      *
      * @param string $repositoryId the identifier for the repository
      * @param string $objectId the identifier for the object
-     * @param string $streamId
-     * @param integer $offset
-     * @param integer $length
+     * @param string|null $streamId
+     * @param integer|null $offset
+     * @param integer|null $length
      * @param ExtensionDataInterface|null $extension
-     * @return StreamInterface
+     * @return StreamInterface|null
      */
     public function getContentStream(
         $repositoryId,
         $objectId,
-        $streamId,
-        $offset,
-        $length,
+        $streamId = null,
+        $offset = null,
+        $length = null,
         ExtensionDataInterface $extension = null
     );
 

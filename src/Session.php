@@ -737,7 +737,15 @@ class Session implements SessionInterface
      */
     public function getContentStream(ObjectIdInterface $docId, $streamId = null, $offset = null, $length = null)
     {
-        // TODO: Implement getContentStream() method.
+        $contentStream = $this->getBinding()->getObjectService()->getContentStream(
+            $this->getRepositoryId(),
+            $docId->getId(),
+            $streamId,
+            $offset,
+            $length
+        );
+
+        return $contentStream instanceof StreamInterface ? $contentStream : null;
     }
 
     /**

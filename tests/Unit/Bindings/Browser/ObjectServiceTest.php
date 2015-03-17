@@ -1235,4 +1235,369 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
             )
         );
     }
+
+    /**
+     * @dataProvider setContentStreamDataProvider
+     * @param string $expectedUrl
+     * @param string $repositoryId
+     * @param string $objectId
+     * @param StreamInterface $contentStream
+     * @param boolean $overwriteFlag
+     * @param string|null $changeToken
+     * @param array $sessionParameterMap
+     */
+    public function testSetContentStreamCallsPostFunctionWithParameterizedQuery(
+        $expectedUrl,
+        $repositoryId,
+        $objectId,
+        StreamInterface $contentStream,
+        $overwriteFlag = true,
+        $changeToken = null,
+        $sessionParameterMap = array()
+    ) {
+        $responseData = array('foo' => 'bar');
+        $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
+        )->setMethods(array('json'))->getMock();
+        $responseMock->expects($this->any())->method('json')->willReturn($responseData);
+
+        $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
+            array('convertObject')
+        )->getMock();
+
+        /** @var  ObjectData|PHPUnit_Framework_MockObject_MockObject $dummyObjectData */
+        $dummyObjectData = $this->getMockBuilder('\\Dkd\\PhpCmis\\ObjectData\\ObjectData')->setMethods(
+            array('getId','getProperties')
+        )->getMock();
+
+        $newObjectId = 'foo-id';
+        $newChangeTokenId = 'newTokenId';
+        $dummyProperties  = new Properties();
+        $newChangeTokenProperty = new PropertyId('cmis:changeToken', $newChangeTokenId);
+        $dummyProperties->addProperty($newChangeTokenProperty);
+
+        $dummyObjectData->expects($this->any())->method('getId')->willReturn($newObjectId);
+        $dummyObjectData->expects($this->any())->method('getProperties')->willReturn($dummyProperties);
+
+        $jsonConverterMock->expects($this->atLeastOnce())->method('convertObject')->with($responseData)->willReturn(
+            $dummyObjectData
+        );
+
+        $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
+            array('getJsonConverter')
+        )->getMock();
+        $cmisBindingsHelperMock->expects($this->atLeastOnce())->method(
+            'getJsonConverter'
+        )->willReturn($jsonConverterMock);
+
+        $sessionMock = $this->getSessionMock($sessionParameterMap);
+
+        /** @var ObjectService|PHPUnit_Framework_MockObject_MockObject $objectService */
+        $objectService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
+            array($sessionMock, $cmisBindingsHelperMock)
+        )->setMethods(
+            array('getObjectUrl', 'post', 'getSession')
+        )->getMock();
+
+        $objectService->expects($this->atLeastOnce())->method('getObjectUrl')->with(
+            $repositoryId,
+            $objectId
+        )->willReturn(Url::createFromUrl(self::BROWSER_URL_TEST));
+
+        $objectService->expects($this->atLeastOnce())->method('post')->with(
+            $expectedUrl,
+            array('content' => $contentStream)
+        )->willReturn($responseMock);
+        $objectService->expects($this->atLeastOnce())->method('getSession')->willReturn($sessionMock);
+
+        $objectService->setContentStream(
+            $repositoryId,
+            $objectId,
+            $contentStream,
+            $overwriteFlag,
+            $changeToken
+        );
+
+        $this->assertEquals($objectId, $newObjectId);
+        if ($changeToken !== null) {
+            $this->assertEquals($changeToken, $newChangeTokenId);
+        }
+    }
+
+    /**
+     * Data provider for setContentStream
+     *
+     * @return array
+     */
+    public function setContentStreamDataProvider()
+    {
+        $contentStream = $this->getMockForAbstractClass('\\GuzzleHttp\\Stream\\StreamInterface');
+        return array(
+            'Parameter set with defined changeToken and empty session parameters' => array(
+                Url::createFromUrl(
+                    self::BROWSER_URL_TEST
+                    . '?cmisaction=setContent&overwriteFlag=true'
+                    . '&changeToken=changeToken&succinct=false'
+                ),
+                'repositoryId',
+                'objectId',
+                $contentStream,
+                true,
+                'changeToken',
+                array()
+            ),
+            'Parameter set with empty changeToken and defined session parameter' => array(
+                Url::createFromUrl(
+                    self::BROWSER_URL_TEST
+                    . '?cmisaction=setContent&overwriteFlag=true&succinct=true'
+                ),
+                'repositoryId',
+                'objectId',
+                $contentStream,
+                true,
+                null,
+                array(
+                    array(SessionParameter::BROWSER_SUCCINCT, null, true)
+                )
+            ),
+            'Parameter set with defined changeToken and defined OMIT_CHANGE_TOKENS session parameter' => array(
+                Url::createFromUrl(
+                    self::BROWSER_URL_TEST
+                    . '?cmisaction=setContent&overwriteFlag=false&succinct=false'
+                ),
+                'repositoryId',
+                'objectId',
+                $contentStream,
+                false,
+                'changeToken',
+                array(
+                    array(SessionParameter::OMIT_CHANGE_TOKENS, false, true)
+                )
+            )
+        );
+    }
+
+    /**
+     * @dataProvider deleteContentStreamDataProvider
+     * @param string $expectedUrl
+     * @param string $repositoryId
+     * @param string $objectId
+     * @param StreamInterface $contentStream
+     * @param boolean $overwriteFlag
+     * @param string|null $changeToken
+     * @param array $sessionParameterMap
+     */
+    public function testDeleteContentStreamCallsPostFunctionWithParameterizedQuery(
+        $expectedUrl,
+        $repositoryId,
+        $objectId,
+        $changeToken = null,
+        $sessionParameterMap = array()
+    ) {
+        $responseData = array('foo' => 'bar');
+        $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
+        )->setMethods(array('json'))->getMock();
+        $responseMock->expects($this->any())->method('json')->willReturn($responseData);
+
+        $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
+            array('convertObject')
+        )->getMock();
+
+        /** @var  ObjectData|PHPUnit_Framework_MockObject_MockObject $dummyObjectData */
+        $dummyObjectData = $this->getMockBuilder('\\Dkd\\PhpCmis\\ObjectData\\ObjectData')->setMethods(
+            array('getId','getProperties')
+        )->getMock();
+
+        $newObjectId = 'foo-id';
+        $newChangeTokenId = 'newTokenId';
+        $dummyProperties  = new Properties();
+        $newChangeTokenProperty = new PropertyId('cmis:changeToken', $newChangeTokenId);
+        $dummyProperties->addProperty($newChangeTokenProperty);
+
+        $dummyObjectData->expects($this->any())->method('getId')->willReturn($newObjectId);
+        $dummyObjectData->expects($this->any())->method('getProperties')->willReturn($dummyProperties);
+
+        $jsonConverterMock->expects($this->atLeastOnce())->method('convertObject')->with($responseData)->willReturn(
+            $dummyObjectData
+        );
+
+        $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
+            array('getJsonConverter')
+        )->getMock();
+        $cmisBindingsHelperMock->expects($this->atLeastOnce())->method(
+            'getJsonConverter'
+        )->willReturn($jsonConverterMock);
+
+        $sessionMock = $this->getSessionMock($sessionParameterMap);
+
+        /** @var ObjectService|PHPUnit_Framework_MockObject_MockObject $objectService */
+        $objectService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
+            array($sessionMock, $cmisBindingsHelperMock)
+        )->setMethods(
+            array('getObjectUrl', 'post', 'getSession')
+        )->getMock();
+
+        $objectService->expects($this->atLeastOnce())->method('getObjectUrl')->with(
+            $repositoryId,
+            $objectId
+        )->willReturn(Url::createFromUrl(self::BROWSER_URL_TEST));
+
+        $objectService->expects($this->atLeastOnce())->method('post')->with($expectedUrl)->willReturn($responseMock);
+        $objectService->expects($this->atLeastOnce())->method('getSession')->willReturn($sessionMock);
+
+        $objectService->deleteContentStream(
+            $repositoryId,
+            $objectId,
+            $changeToken
+        );
+
+        $this->assertEquals($objectId, $newObjectId);
+        if ($changeToken !== null) {
+            $this->assertEquals($changeToken, $newChangeTokenId);
+        }
+    }
+
+    /**
+     * Data provider for deleteContentStream
+     *
+     * @return array
+     */
+    public function deleteContentStreamDataProvider()
+    {
+        return array(
+            'Parameter set with defined changeToken and empty session parameters' => array(
+                Url::createFromUrl(
+                    self::BROWSER_URL_TEST
+                    . '?cmisaction=deleteContent&changeToken=changeToken&succinct=false'
+                ),
+                'repositoryId',
+                'objectId',
+                'changeToken',
+                array()
+            ),
+            'Parameter set with empty changeToken and defined session parameter' => array(
+                Url::createFromUrl(
+                    self::BROWSER_URL_TEST
+                    . '?cmisaction=deleteContent&succinct=true'
+                ),
+                'repositoryId',
+                'objectId',
+                null,
+                array(
+                    array(SessionParameter::BROWSER_SUCCINCT, null, true)
+                )
+            ),
+            'Parameter set with defined changeToken and defined OMIT_CHANGE_TOKENS session parameter' => array(
+                Url::createFromUrl(
+                    self::BROWSER_URL_TEST
+                    . '?cmisaction=deleteContent&succinct=false'
+                ),
+                'repositoryId',
+                'objectId',
+                'changeToken',
+                array(
+                    array(SessionParameter::OMIT_CHANGE_TOKENS, false, true)
+                )
+            )
+        );
+    }
+
+    /**
+     * @dataProvider getContentStreamDataProvider
+     * @param string $expectedUrl
+     * @param string $repositoryId
+     * @param string $objectId
+     * @param string|null $streamId
+     * @param integer|null $offset
+     * @param integer|null $length
+     * @param array $sessionParameterMap
+     */
+    public function testGetContentStreamCallsGetFunctionWithParameterizedQuery(
+        $expectedUrl,
+        $repositoryId,
+        $objectId,
+        $streamId = null,
+        $offset = null,
+        $length = null
+    ) {
+        $contentStream = $stream = $this->getMockForAbstractClass('\\GuzzleHttp\\Stream\\StreamInterface');
+        $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
+        )->setMethods(array('getBody'))->getMock();
+        $responseMock->expects($this->any())->method('getBody')->willReturn($contentStream);
+
+        $httpInvoker  = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
+            array('get')
+        )->getMock();
+        $httpInvoker->expects($this->any())->method('get')->willReturn($responseMock);
+
+        $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
+            array('getHttpInvoker')
+        )->getMock();
+        $cmisBindingsHelperMock->expects($this->any())->method('getHttpInvoker')->willReturn($httpInvoker);
+
+        /** @var ObjectService|PHPUnit_Framework_MockObject_MockObject $objectService */
+        $objectService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
+            array($this->getSessionMock(), $cmisBindingsHelperMock)
+        )->setMethods(
+            array('getObjectUrl')
+        )->getMock();
+
+        $objectService->expects($this->any())->method('getObjectUrl')->with(
+            $repositoryId,
+            $objectId,
+            Constants::SELECTOR_CONTENT
+        )->willReturn(Url::createFromUrl(self::BROWSER_URL_TEST));
+        $objectService->expects($this->any())->method('read')->with($expectedUrl)->willReturn($responseMock);
+
+        $responseContentStream = $objectService->getContentStream(
+            $repositoryId,
+            $objectId,
+            $streamId,
+            $offset,
+            $length
+        );
+
+        if ($offset !== null) {
+            $this->assertInstanceOf('\\GuzzleHttp\\Stream\\LimitStream', $responseContentStream);
+        } else {
+            $this->assertSame($contentStream, $responseContentStream);
+        }
+    }
+
+    /**
+     * Data provider for getContentStream
+     *
+     * @return array
+     */
+    public function getContentStreamDataProvider()
+    {
+        return array(
+            'Parameter set without optional parameters' => array(
+                Url::createFromUrl(
+                    self::BROWSER_URL_TEST
+                ),
+                'repositoryId',
+                'objectId',
+            ),
+            'Parameter set with streamId' => array(
+                Url::createFromUrl(
+                    self::BROWSER_URL_TEST
+                    . '?streamId=streamId'
+                ),
+                'repositoryId',
+                'objectId',
+                'streamId'
+            ),
+            'Parameter set with offset and length' => array(
+                Url::createFromUrl(
+                    self::BROWSER_URL_TEST
+                    . '?streamId=streamId'
+                ),
+                'repositoryId',
+                'objectId',
+                null,
+                0,
+                20
+            )
+        );
+    }
 }

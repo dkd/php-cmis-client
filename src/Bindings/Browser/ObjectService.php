@@ -25,6 +25,8 @@ use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
 use Dkd\PhpCmis\ObjectServiceInterface;
 use Dkd\PhpCmis\PropertyIds;
 use Dkd\PhpCmis\SessionParameter;
+use GuzzleHttp\Stream\LimitStream;
+use GuzzleHttp\Message\Response;
 use GuzzleHttp\Stream\StreamInterface;
 
 /**
@@ -365,6 +367,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      * @param string|null $changeToken the last change token of this object that the client received.
      *      The repository might return a new change token (default is <code>null</code>)
      * @param ExtensionDataInterface|null $extension
+     * @throws CmisInvalidArgumentException If $objectId is empty
      */
     public function deleteContentStream(
         $repositoryId,
@@ -372,7 +375,37 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         & $changeToken = null,
         ExtensionDataInterface $extension = null
     ) {
-        // TODO: Implement deleteContentStream() method.
+        if (empty($objectId)) {
+            throw new CmisInvalidArgumentException('Object id must not be empty!');
+        }
+
+        $url = $this->getObjectUrl($repositoryId, $objectId);
+
+        $url->getQuery()->modify(
+            array(
+                Constants::CONTROL_CMISACTION => Constants::CMISACTION_DELETE_CONTENT,
+                Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false'
+            )
+        );
+
+        if ($changeToken !== null && !$this->getSession()->get(SessionParameter::OMIT_CHANGE_TOKENS, false)) {
+            $url->getQuery()->modify(array(Constants::PARAM_CHANGE_TOKEN => $changeToken));
+        }
+
+        $responseData = $this->post($url)->json();
+        $newObject = $this->getJsonConverter()->convertObject($responseData);
+
+        // $objectId was passed by reference. The value is changed here to new object id
+        $objectId = null;
+        if ($newObject !== null) {
+            $objectId = $newObject->getId();
+            $newObjectProperties = $newObject->getProperties()->getProperties();
+            if ($changeToken !== null && count($newObjectProperties) > 0) {
+                $newChangeToken = $newObjectProperties[PropertyIds::CHANGE_TOKEN];
+                // $changeToken was passed by reference. The value is changed here
+                $changeToken = $newChangeToken === null ? null : $newChangeToken->getFirstValue();
+            }
+        }
     }
 
     /**
@@ -446,21 +479,46 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      *
      * @param string $repositoryId the identifier for the repository
      * @param string $objectId the identifier for the object
-     * @param string $streamId
-     * @param integer $offset
-     * @param integer $length
+     * @param string|null $streamId The identifier for the rendition stream, when used to get a rendition stream.
+     *      For documents, if not provided then this method returns the content stream. For folders,
+     *      it MUST be provided.
+     * @param integer|null $offset
+     * @param integer|null $length
      * @param ExtensionDataInterface|null $extension
-     * @return StreamInterface
+     * @return StreamInterface|null
+     * @throws CmisInvalidArgumentException If object id is empty
      */
     public function getContentStream(
         $repositoryId,
         $objectId,
-        $streamId,
-        $offset,
-        $length,
+        $streamId = null,
+        $offset = null,
+        $length = null,
         ExtensionDataInterface $extension = null
     ) {
-        // TODO: Implement getContentStream() method.
+        if (empty($objectId)) {
+            throw new CmisInvalidArgumentException('Object id must not be empty!');
+        }
+
+        $url = $this->getObjectUrl($repositoryId, $objectId, Constants::SELECTOR_CONTENT);
+
+        if ($streamId !== null) {
+            $url->getQuery()->modify(array(Constants::PARAM_STREAM_ID => $streamId));
+        }
+
+        /** @var Response $response */
+        $response = $this->getHttpInvoker()->get($url);
+
+        $contentStream = $response->getBody();
+        if (!$contentStream instanceof StreamInterface) {
+            return null;
+        }
+
+        if ($offset !== null) {
+            $contentStream = new LimitStream($contentStream, $length !== null ? $length : -1, $offset);
+        }
+
+        return $contentStream;
     }
 
     /**
@@ -693,6 +751,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      * @param string|null $changeToken The last change token of this object that the client received.
      *      The repository might return a new change token (default is <code>null</code>)
      * @param ExtensionDataInterface|null $extension
+     * @throws CmisInvalidArgumentException If object id is empty
      */
     public function setContentStream(
         $repositoryId,
@@ -702,7 +761,42 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         & $changeToken = null,
         ExtensionDataInterface $extension = null
     ) {
-        // TODO: Implement setContentStream() method.
+        if (empty($objectId)) {
+            throw new CmisInvalidArgumentException('Object id must not be empty!');
+        }
+
+        $url = $this->getObjectUrl($repositoryId, $objectId);
+
+        $url->getQuery()->modify(
+            array(
+                Constants::CONTROL_CMISACTION => Constants::CMISACTION_SET_CONTENT,
+                Constants::PARAM_OVERWRITE_FLAG => $overwriteFlag ? 'true' : 'false',
+                Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false'
+            )
+        );
+
+        if ($changeToken !== null && !$this->getSession()->get(SessionParameter::OMIT_CHANGE_TOKENS, false)) {
+            $url->getQuery()->modify(array(Constants::PARAM_CHANGE_TOKEN => $changeToken));
+        }
+
+        $responseData = $this->post(
+            $url,
+            array('content' => $contentStream)
+        )->json();
+
+        $newObject = $this->getJsonConverter()->convertObject($responseData);
+
+        // $objectId was passed by reference. The value is changed here to new object id
+        $objectId = null;
+        if ($newObject !== null) {
+            $objectId = $newObject->getId();
+            $newObjectProperties = $newObject->getProperties()->getProperties();
+            if ($changeToken !== null && count($newObjectProperties) > 0) {
+                $newChangeToken = $newObjectProperties[PropertyIds::CHANGE_TOKEN];
+                // $changeToken was passed by reference. The value is changed here
+                $changeToken = $newChangeToken === null ? null : $newChangeToken->getFirstValue();
+            }
+        }
     }
 
     /**
@@ -748,8 +842,9 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         $objectId = null;
         if ($newObject !== null) {
             $objectId = $newObject->getId();
-            if ($changeToken !== null && count($newObject->getProperties()->getProperties()) > 0) {
-                $newChangeToken = $newObject->getProperties()->getProperties()[PropertyIds::CHANGE_TOKEN];
+            $newObjectProperties = $newObject->getProperties()->getProperties();
+            if ($changeToken !== null && count($newObjectProperties) > 0) {
+                $newChangeToken = $newObjectProperties[PropertyIds::CHANGE_TOKEN];
                 // $changeToken was passed by reference. The value is changed here
                 $changeToken = $newChangeToken === null ? null : $newChangeToken->getFirstValue();
             }
