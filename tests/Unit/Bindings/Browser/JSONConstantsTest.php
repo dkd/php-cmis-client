@@ -236,4 +236,15 @@ class JSONConstantsTest extends \PHPUnit_Framework_TestCase
             JSONConstants::getQueryResultListKeys()
         );
     }
+
+    public function testGetFailedToDeleteKeysReturnsContentOfStaticArray()
+    {
+        $this->assertSame(
+            $this->getStaticAttribute(
+                '\\Dkd\\PhpCmis\\Bindings\\Browser\\JSONConstants',
+                'FAILEDTODELETE_KEYS'
+            ),
+            JSONConstants::getFailedToDeleteKeys()
+        );
+    }
 }

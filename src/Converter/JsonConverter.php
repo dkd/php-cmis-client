@@ -37,6 +37,7 @@ use Dkd\PhpCmis\DataObjects\CmisExtensionElement;
 use Dkd\PhpCmis\DataObjects\CreatablePropertyTypes;
 use Dkd\PhpCmis\DataObjects\DocumentTypeDefinition;
 use Dkd\PhpCmis\DataObjects\ExtensionFeature;
+use Dkd\PhpCmis\DataObjects\FailedToDeleteData;
 use Dkd\PhpCmis\DataObjects\FolderTypeDefinition;
 use Dkd\PhpCmis\DataObjects\ItemTypeDefinition;
 use Dkd\PhpCmis\DataObjects\NewTypeSettableAttributes;
@@ -1048,14 +1049,20 @@ class JsonConverter extends AbstractDataConverter
 
             // get property keys without JSON-response-specific cardinality properties
             $jsonPropertyKeys = JSONConstants::getPropertyKeys();
-            $propertyKeys = array_values(array_diff($jsonPropertyKeys, array(
-                // remove the cardinality property here as this is not a property of a property but only required for
-                // the other way when converting the property to the JSON object for the browser binding.
-                JSONConstants::JSON_PROPERTY_CARDINALITY,
-                JSONConstants::JSON_PROPERTY_VALUE,
-                JSONConstants::JSON_PROPERTY_ID,
-                JSONConstants::JSON_PROPERTY_DATATYPE
-            )));
+            $propertyKeys = array_values(
+                array_diff(
+                    $jsonPropertyKeys,
+                    array(
+                        // remove the cardinality property here as this is not a property of a property but only
+                        // required for the other way when converting the property to the JSON object for the
+                        // browser binding.
+                        JSONConstants::JSON_PROPERTY_CARDINALITY,
+                        JSONConstants::JSON_PROPERTY_VALUE,
+                        JSONConstants::JSON_PROPERTY_ID,
+                        JSONConstants::JSON_PROPERTY_DATATYPE
+                    )
+                )
+            );
 
             $property = $this->getPropertyByPropertyType($propertyType, $id, $propertyValues);
             $property->populate(
@@ -1837,5 +1844,35 @@ class JsonConverter extends AbstractDataConverter
         );
 
         return $objectInFolderContainer;
+    }
+
+    /**
+     * Converts FailedToDelete ids.
+     *
+     * @param array $data
+     * @return FailedToDeleteData
+     */
+    public function convertFailedToDelete(array $data = null)
+    {
+        $result = new FailedToDeleteData();
+
+        if (empty($data)) {
+            return $result;
+        }
+
+        $jsonIds = array();
+        if (isset($data[JSONConstants::JSON_FAILEDTODELETE_ID])) {
+            $jsonIds = (array) $data[JSONConstants::JSON_FAILEDTODELETE_ID];
+        }
+
+        $ids = array();
+        foreach ($jsonIds as $id) {
+            $ids[] = (string) $id;
+        }
+
+        $result->setIds($ids);
+        $result->setExtensions($this->convertExtension($data, JSONConstants::getFailedToDeleteKeys()));
+
+        return $result;
     }
 }

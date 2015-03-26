@@ -172,7 +172,7 @@ interface FolderInterface extends FileableCmisObjectInterface, FolderPropertiesI
      *     perform this operation even if deletion of a child- or descendant-object in the specified folder cannot be
      *     deleted. If <code>false</code>, then the repository SHOULD abort this method when it fails to
      *     delete a single child object or descendant object.
-     * @return string[] A list of identifiers of objects in the folder tree that were not deleted.
+     * @return FailedToDeleteDataInterface A list of identifiers of objects in the folder tree that were not deleted.
      */
     public function deleteTree($allVersions, UnfileObject $unfile, $continueOnFailure = true);
 

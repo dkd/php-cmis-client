@@ -14,6 +14,7 @@ use Dkd\PhpCmis\Data\AclInterface;
 use Dkd\PhpCmis\Data\AllowableActionsInterface;
 use Dkd\PhpCmis\Data\BulkUpdateObjectIdAndChangeTokenInterface;
 use Dkd\PhpCmis\Data\ExtensionDataInterface;
+use Dkd\PhpCmis\Data\FailedToDeleteDataInterface;
 use Dkd\PhpCmis\Data\ObjectDataInterface;
 use Dkd\PhpCmis\Data\PropertiesInterface;
 use Dkd\PhpCmis\Data\RenditionDataInterface;
@@ -286,7 +287,7 @@ interface ObjectServiceInterface
      * @param boolean $continueOnFailure If <code>true</code>, then the repository should continue attempting to perform
      *      this operation even if deletion of a child- or descendant-object in the specified folder cannot be deleted
      * @param ExtensionDataInterface|null $extension
-     * @return array Returns a list of object ids that could not be deleted
+     * @return FailedToDeleteDataInterface Returns a list of object ids that could not be deleted
      */
     public function deleteTree(
         $repositoryId,

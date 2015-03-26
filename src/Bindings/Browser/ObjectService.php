@@ -15,6 +15,7 @@ use Dkd\PhpCmis\Data\AclInterface;
 use Dkd\PhpCmis\Data\AllowableActionsInterface;
 use Dkd\PhpCmis\Data\BulkUpdateObjectIdAndChangeTokenInterface;
 use Dkd\PhpCmis\Data\ExtensionDataInterface;
+use Dkd\PhpCmis\Data\FailedToDeleteDataInterface;
 use Dkd\PhpCmis\Data\ObjectDataInterface;
 use Dkd\PhpCmis\Data\PropertiesInterface;
 use Dkd\PhpCmis\Data\RenditionDataInterface;
@@ -447,7 +448,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      *      perform this operation even if deletion of a child- or descendant-object in the specified folder cannot
      *      be deleted
      * @param ExtensionDataInterface|null $extension
-     * @return array Returns a list of object ids that could not be deleted
+     * @return FailedToDeleteDataInterface Returns a list of object ids that could not be deleted
      */
     public function deleteTree(
         $repositoryId,
@@ -457,7 +458,23 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         $continueOnFailure = false,
         ExtensionDataInterface $extension = null
     ) {
-        // TODO: Implement deleteTree() method.
+        $url = $this->getObjectUrl($repositoryId, $folderId);
+        $url->getQuery()->modify(
+            array(
+                Constants::CONTROL_CMISACTION => Constants::CMISACTION_DELETE_TREE,
+                Constants::PARAM_FOLDER_ID => $folderId,
+                Constants::PARAM_ALL_VERSIONS => $allVersions ? 'true' : 'false',
+                Constants::PARAM_CONTINUE_ON_FAILURE => $continueOnFailure ? 'true' : 'false'
+            )
+        );
+
+        if ($unfileObjects !== null) {
+            $url->getQuery()->modify(array(Constants::PARAM_UNFILE_OBJECTS => (string) $unfileObjects));
+        }
+
+        $response = $this->post($url);
+
+        return $this->getJsonConverter()->convertFailedToDelete((array) $response->json());
     }
 
     /**

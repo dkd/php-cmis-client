@@ -23,6 +23,7 @@ use Dkd\PhpCmis\DataObjects\Properties;
 use Dkd\PhpCmis\DataObjects\PropertyId;
 use Dkd\PhpCmis\DataObjects\PropertyString;
 use Dkd\PhpCmis\Enum\IncludeRelationships;
+use Dkd\PhpCmis\Enum\UnfileObject;
 use Dkd\PhpCmis\Enum\VersioningState;
 use Dkd\PhpCmis\SessionParameter;
 use GuzzleHttp\Stream\StreamInterface;
@@ -1597,6 +1598,121 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
                 null,
                 0,
                 20
+            )
+        );
+    }
+
+    /**
+     * @dataProvider deleteTreeDataProvider
+     * @param string $expectedUrl
+     * @param string $repositoryId
+     * @param string $folderId
+     * @param boolean $allVersions
+     * @param UnfileObject $unfileObjects
+     * @param boolean $continueOnFailure
+     */
+    public function testDeleteTreeCallsPostFunctionWithParameterizedQuery(
+        $expectedUrl,
+        $repositoryId,
+        $folderId,
+        $allVersions = true,
+        UnfileObject $unfileObjects = null,
+        $continueOnFailure = false
+    ) {
+        $responseData = array('foo' => 'bar');
+        $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
+        )->setMethods(array('json'))->getMock();
+        $responseMock->expects($this->any())->method('json')->willReturn($responseData);
+
+        $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
+            array('convertFailedToDelete')
+        )->getMock();
+
+        /** @var  ObjectData|PHPUnit_Framework_MockObject_MockObject $dummyObjectData */
+        $dummyFailedToDeleteData = $this->getMock('\\Dkd\\PhpCmis\\ObjectData\\FailedToDeleteData');
+
+        $jsonConverterMock->expects($this->atLeastOnce())->method(
+            'convertFailedToDelete'
+        )->with($responseData)->willReturn(
+            $dummyFailedToDeleteData
+        );
+
+        $sessionMock = $this->getSessionMock();
+
+        /** @var ObjectService|PHPUnit_Framework_MockObject_MockObject $objectService */
+        $objectService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
+            array($sessionMock)
+        )->setMethods(
+            array('getObjectUrl', 'post', 'getJsonConverter')
+        )->getMock();
+
+        $objectService->expects($this->atLeastOnce())->method('getObjectUrl')->with(
+            $repositoryId,
+            $folderId
+        )->willReturn(Url::createFromUrl(self::BROWSER_URL_TEST));
+
+        $objectService->expects($this->atLeastOnce())->method('post')->with($expectedUrl)->willReturn($responseMock);
+        $objectService->expects($this->atLeastOnce())->method('getJsonConverter')->willReturn($jsonConverterMock);
+
+        $result = $objectService->deleteTree(
+            $repositoryId,
+            $folderId,
+            $allVersions,
+            $unfileObjects,
+            $continueOnFailure
+        );
+
+        $this->assertSame($dummyFailedToDeleteData, $result);
+    }
+
+    /**
+     * @return array
+     */
+    public function deleteTreeDataProvider()
+    {
+        return array(
+            array(
+                Url::createFromUrl(
+                    self::BROWSER_URL_TEST
+                    . '?cmisaction=deleteTree&folderId=folderIdValue&allVersions=true'
+                    . '&continueOnFailure=false'
+                ),
+                'repositoryIdValue',
+                'folderIdValue'
+            ),
+            array(
+                Url::createFromUrl(
+                    self::BROWSER_URL_TEST
+                    . '?cmisaction=deleteTree&folderId=folderIdValue&allVersions=false'
+                    . '&continueOnFailure=false'
+                ),
+                'repositoryIdValue',
+                'folderIdValue',
+                false
+            ),
+            array(
+                Url::createFromUrl(
+                    self::BROWSER_URL_TEST
+                    . '?cmisaction=deleteTree&folderId=folderIdValue&allVersions=true'
+                    . '&continueOnFailure=true'
+                ),
+                'repositoryIdValue',
+                'folderIdValue',
+                true,
+                null,
+                true
+            ),
+            array(
+                Url::createFromUrl(
+                    self::BROWSER_URL_TEST
+                    . '?cmisaction=deleteTree&folderId=folderIdValue&allVersions=true'
+                    . '&continueOnFailure=true&unfileObjects=delete'
+                ),
+                'repositoryIdValue',
+                'folderIdValue',
+                true,
+                UnfileObject::cast(UnfileObject::DELETE),
+                true
             )
         );
     }

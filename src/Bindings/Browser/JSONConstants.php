@@ -663,4 +663,18 @@ class JSONConstants
     {
         return self::$TYPE_TYPE_MUTABILITY_KEYS;
     }
+
+    const JSON_FAILEDTODELETE_ID = "ids";
+
+    protected static $FAILEDTODELETE_KEYS = array(
+        self::JSON_FAILEDTODELETE_ID
+    );
+
+    /**
+     * @return array Array of all type mutability keys
+     */
+    public static function getFailedToDeleteKeys()
+    {
+        return self::$FAILEDTODELETE_KEYS;
+    }
 }

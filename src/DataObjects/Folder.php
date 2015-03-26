@@ -14,6 +14,7 @@ use Dkd\PhpCmis\CmisObject\CmisObjectInterface;
 use Dkd\PhpCmis\Constants;
 use Dkd\PhpCmis\Data\AceInterface;
 use Dkd\PhpCmis\Data\DocumentInterface;
+use Dkd\PhpCmis\Data\FailedToDeleteDataInterface;
 use Dkd\PhpCmis\Data\FolderInterface;
 use Dkd\PhpCmis\Data\ItemInterface;
 use Dkd\PhpCmis\Data\ObjectIdInterface;
@@ -265,7 +266,7 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
      *     perform this operation even if deletion of a child- or descendant-object in the specified folder cannot be
      *     deleted. If <code>false</code>, then the repository SHOULD abort this method when it fails to
      *     delete a single child object or descendant object.
-     * @return string[] A list of identifiers of objects in the folder tree that were not deleted.
+     * @return FailedToDeleteDataInterface A list of identifiers of objects in the folder tree that were not deleted.
      */
     public function deleteTree($allVersions, UnfileObject $unfile, $continueOnFailure = true)
     {
@@ -277,7 +278,7 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
             $continueOnFailure
         );
 
-        if (empty($failed)) {
+        if (count($failed->getIds()) === 0) {
             $this->getSession()->removeObjectFromCache($this);
         }
 

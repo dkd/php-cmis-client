@@ -21,6 +21,7 @@ use Dkd\PhpCmis\DataObjects\CmisExtensionElement;
 use Dkd\PhpCmis\DataObjects\CreatablePropertyTypes;
 use Dkd\PhpCmis\DataObjects\DocumentTypeDefinition;
 use Dkd\PhpCmis\DataObjects\ExtensionFeature;
+use Dkd\PhpCmis\DataObjects\FailedToDeleteData;
 use Dkd\PhpCmis\DataObjects\FolderTypeDefinition;
 use Dkd\PhpCmis\DataObjects\ItemTypeDefinition;
 use Dkd\PhpCmis\DataObjects\NewTypeSettableAttributes;
@@ -1087,5 +1088,38 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
         $expectedObjectInFolderContainer->setChildren($children);
 
         $this->assertEquals($expectedObjectInFolderContainer, $jsonConverterMock->convertDescendant($convertInputData));
+    }
+
+    public function testConvertFailedToDeleteReturnsInstanceOfFailedToDeleteDataIfEmptyArrayGiven()
+    {
+        $this->assertInstanceOf(
+            '\\Dkd\\PhpCmis\\DataObjects\\FailedToDeleteData',
+            $this->jsonConverter->convertFailedToDelete(array())
+        );
+    }
+
+    public function testConvertFailedToDeleteReturnsInstanceOfFailedToDeleteDataIfNullValueGiven()
+    {
+        $this->assertInstanceOf(
+            '\\Dkd\\PhpCmis\\DataObjects\\FailedToDeleteData',
+            $this->jsonConverter->convertFailedToDelete(null)
+        );
+    }
+
+    public function testConvertFailedToDeleteConvertsArrayToFailedToDeleteObject()
+    {
+        $ids = array('foo', 'bar');
+        $failedToDelete = $this->jsonConverter->convertFailedToDelete(
+            array(
+                JSONConstants::JSON_FAILEDTODELETE_ID => $ids,
+                'customExtension' => 'foobar'
+            )
+        );
+
+        $expectedObject = new FailedToDeleteData();
+        $expectedObject->setIds($ids);
+        $expectedObject->setExtensions(array(new CmisExtensionElement('', 'customExtension', array(), 'foobar')));
+
+        $this->assertEquals($expectedObject, $failedToDelete);
     }
 }
