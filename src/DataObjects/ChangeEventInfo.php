@@ -22,12 +22,12 @@ class ChangeEventInfo extends AbstractExtensionData implements ChangeEventInfoIn
     /**
      * @var \DateTime
      */
-    private $changeTime;
+    protected $changeTime;
 
     /**
      * @var ChangeType
      */
-    private $changeType;
+    protected $changeType;
 
     /**
      * @return \DateTime

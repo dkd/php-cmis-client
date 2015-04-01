@@ -20,42 +20,42 @@ class RenditionData extends AbstractExtensionData implements RenditionDataInterf
     /**
      * @var string
      */
-    private $streamId = '';
+    protected $streamId = '';
 
     /**
      * string
      */
-    private $mimeType = '';
+    protected $mimeType = '';
 
     /**
      * integer
      */
-    private $length = 0;
+    protected $length = 0;
 
     /**
      * string
      */
-    private $kind = '';
+    protected $kind = '';
 
     /**
      * string
      */
-    private $title = '';
+    protected $title = '';
 
     /**
      * integer
      */
-    private $width = 0;
+    protected $width = 0;
 
     /**
      * integer
      */
-    private $height = 0;
+    protected $height = 0;
 
     /**
      * string
      */
-    private $renditionDocumentId = '';
+    protected $renditionDocumentId = '';
 
     /**
      * @return integer

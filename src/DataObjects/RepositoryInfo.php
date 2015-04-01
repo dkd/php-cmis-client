@@ -25,87 +25,87 @@ class RepositoryInfo extends AbstractExtensionData implements RepositoryInfoInte
     /**
      * @var string
      */
-    private $id = '';
+    protected $id = '';
 
     /**
      * @var string
      */
-    private $name = '';
+    protected $name = '';
 
     /**
      * @var string
      */
-    private $description = '';
+    protected $description = '';
 
     /**
      * @var CmisVersion
      */
-    private $cmisVersion;
+    protected $cmisVersion;
 
     /**
      * @var RepositoryCapabilitiesInterface
      */
-    private $capabilities;
+    protected $capabilities;
 
     /**
      * @var string
      */
-    private $rootFolderId = '';
+    protected $rootFolderId = '';
 
     /**
      * @var AclCapabilitiesInterface
      */
-    private $aclCapabilities;
+    protected $aclCapabilities;
 
     /**
      * @var string
      */
-    private $principalIdAnonymous = '';
+    protected $principalIdAnonymous = '';
 
     /**
      * @var string
      */
-    private $principalIdAnyone = '';
+    protected $principalIdAnyone = '';
 
     /**
      * @var string
      */
-    private $thinClientUri = '';
+    protected $thinClientUri = '';
 
     /**
      * @var boolean
      */
-    private $changesIncomplete = false;
+    protected $changesIncomplete = false;
 
     /**
      * @var BaseTypeId[]
      */
-    private $changesOnType = array();
+    protected $changesOnType = array();
 
     /**
      * @var string
      */
-    private $latestChangeLogToken = '';
+    protected $latestChangeLogToken = '';
 
     /**
      * @var string
      */
-    private $vendorName = '';
+    protected $vendorName = '';
 
     /**
      * @var string
      */
-    private $productName = '';
+    protected $productName = '';
 
     /**
      * @var string
      */
-    private $productVersion = '';
+    protected $productVersion = '';
 
     /**
      * @var ExtensionFeatureInterface[]
      */
-    private $extensionFeatures = array();
+    protected $extensionFeatures = array();
 
     /**
      * @param AclCapabilitiesInterface $aclCapabilities
