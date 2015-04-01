@@ -43,7 +43,7 @@ interface QueryStatementInterface
      * @param integer $parameterIndex the parameter index (one-based)
      * @param \DateTime $dateTime the DateTime value as DateTime object
      */
-    public function setDateTime($parameterIndex, $dateTime);
+    public function setDateTime($parameterIndex, \DateTime $dateTime);
 
     /**
      * Sets the designated parameter to the given DateTime value with the prefix 'TIMESTAMP '.
@@ -51,7 +51,7 @@ interface QueryStatementInterface
      * @param integer $parameterIndex the parameter index (one-based)
      * @param \DateTime $dateTime the DateTime value as DateTime object
      */
-    public function setDateTimeTimestamp($parameterIndex, $dateTime);
+    public function setDateTimeTimestamp($parameterIndex, \DateTime $dateTime);
 
     /**
      * Sets the designated parameter to the given object ID.
@@ -130,23 +130,6 @@ interface QueryStatementInterface
      * @param ObjectTypeInterface $type the object type
      */
     public function setType($parameterIndex, ObjectTypeInterface $type);
-
-    /**
-     * Sets the designated parameter to the given URI.
-     *
-     * @param integer $parameterIndex the parameter index (one-based)
-     * @param string $uri the URI
-     */
-    public function setUri($parameterIndex, $uri);
-
-    /**
-     * Sets the designated parameter to the given URL.
-     *
-     * @param integer $parameterIndex the parameter index (one-based)
-     * @param string $url the URL
-     * @return mixed
-     */
-    public function setUrl($parameterIndex, $url);
 
     /**
      * Returns the query statement.

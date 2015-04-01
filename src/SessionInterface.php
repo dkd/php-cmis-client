@@ -526,22 +526,27 @@ interface SessionInterface
      * @param string $statement the query statement (CMIS query language)
      * @param boolean $searchAllVersions specifies whether non-latest document versions should be included or not,
      *      <code>true</code> searches all document versions, <code>false</code> only searches latest document versions
-     * @param OperationContextInterface $context the operation context to use
+     * @param OperationContextInterface|null $context the operation context to use
      * @return QueryResultInterface[]
      */
-    public function query($statement, $searchAllVersions, OperationContextInterface $context = null);
+    public function query($statement, $searchAllVersions = false, OperationContextInterface $context = null);
 
     /**
      * Builds a CMIS query and returns the query results as an iterator of CmisObject objects.
      *
      * @param string $typeId the ID of the object type
-     * @param string $where the WHERE part of the query
+     * @param string|null $where the WHERE part of the query
      * @param boolean $searchAllVersions specifies whether non-latest document versions should be included or not,
      *      <code>true</code> searches all document versions, <code>false</code> only searches latest document versions
-     * @param OperationContextInterface $context the operation context to use
+     * @param OperationContextInterface|null $context the operation context to use
      * @return CmisObjectInterface[]
      */
-    public function queryObjects($typeId, $where, $searchAllVersions, $context);
+    public function queryObjects(
+        $typeId,
+        $where = null,
+        $searchAllVersions = false,
+        OperationContextInterface $context = null
+    );
 
     /**
      * Removes the given object from the cache.

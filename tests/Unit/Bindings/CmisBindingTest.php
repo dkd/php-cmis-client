@@ -187,4 +187,35 @@ class CmisBindingTest extends \PHPUnit_Framework_TestCase
             $binding->getObjectFactory()
         );
     }
+
+    public function testGetDiscoveryServiceReturnsInstanceOfDiscoveryService()
+    {
+        // the subject will be mocked because we have to mock getCmisBindingsHelper
+        /** @var CmisBinding|\PHPUnit_Framework_MockObject_MockObject $binding */
+        $binding = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBinding')->setConstructorArgs(
+            array(
+                new Session(),
+                array(SessionParameter::BINDING_CLASS => 'foo')
+            )
+        )->setMethods(array('getCmisBindingsHelper'))->getMock();
+
+        $cmisBindingsHelperMock = $this->getMockBuilder(
+            '\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper'
+        )->getMock();
+
+        $cmisBindingSessionInterfaceMock = $this->getMockBuilder(
+            '\\Dkd\\PhpCmis\\Bindings\\BindingSessionInterface'
+        )->setMethods(array('getDiscoveryService'))->getMockForAbstractClass();
+        $cmisBindingSessionInterfaceMock->expects($this->any())->method('getDiscoveryService')->willReturn(
+            $this->getMockForAbstractClass('\\Dkd\\PhpCmis\\DiscoveryServiceInterface')
+        );
+
+        $cmisBindingsHelperMock->expects($this->any())->method('getSpi')->willReturn($cmisBindingSessionInterfaceMock);
+
+        $binding->expects($this->any())->method('getCmisBindingsHelper')->willReturn(
+            $cmisBindingsHelperMock
+        );
+
+        $this->assertInstanceOf('\\Dkd\\PhpCmis\\DiscoveryServiceInterface', $binding->getDiscoveryService());
+    }
 }

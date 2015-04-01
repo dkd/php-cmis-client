@@ -1003,27 +1003,116 @@ class Session implements SessionInterface
      * @param string $statement the query statement (CMIS query language)
      * @param boolean $searchAllVersions specifies whether non-latest document versions should be included or not,
      *      <code>true</code> searches all document versions, <code>false</code> only searches latest document versions
-     * @param OperationContextInterface $context the operation context to use
+     * @param OperationContextInterface|null $context the operation context to use
      * @return QueryResultInterface[]
+     * @throws CmisInvalidArgumentException If statement is empty
      */
-    public function query($statement, $searchAllVersions, OperationContextInterface $context = null)
+    public function query($statement, $searchAllVersions = false, OperationContextInterface $context = null)
     {
-        // TODO: Implement query() method.
+        if (empty($statement)) {
+            throw new CmisInvalidArgumentException('Statement must not be empty.');
+        }
+
+        if ($context === null) {
+            $context = $this->getDefaultContext();
+        }
+
+        $queryResults = array();
+        $skipCount = 0;
+
+        $objectList = $this->getBinding()->getDiscoveryService()->query(
+            $this->getRepositoryInfo()->getId(),
+            $statement,
+            $searchAllVersions,
+            $context->getIncludeRelationships(),
+            $context->getRenditionFilterString(),
+            $context->isIncludeAllowableActions(),
+            $context->getMaxItemsPerPage(),
+            $skipCount
+        );
+
+        foreach ($objectList->getObjects() as $objectData) {
+            $queryResult = $this->getObjectFactory()->convertQueryResult($objectData);
+            if ($queryResult instanceof QueryResultInterface) {
+                $queryResults[] = $queryResult;
+            }
+        }
+
+        // TODO: Implement pagination using skipCount
+
+        return $queryResults;
     }
 
     /**
      * Builds a CMIS query and returns the query results as an iterator of CmisObject objects.
      *
      * @param string $typeId the ID of the object type
-     * @param string $where the WHERE part of the query
+     * @param string|null $where the WHERE part of the query
      * @param boolean $searchAllVersions specifies whether non-latest document versions should be included or not,
      *      <code>true</code> searches all document versions, <code>false</code> only searches latest document versions
      * @param OperationContextInterface $context the operation context to use
      * @return CmisObjectInterface[]
+     * @throws CmisInvalidArgumentException If type id is empty
      */
-    public function queryObjects($typeId, $where, $searchAllVersions, $context)
-    {
-        // TODO: Implement queryObjects() method.
+    public function queryObjects(
+        $typeId,
+        $where = null,
+        $searchAllVersions = false,
+        OperationContextInterface $context = null
+    ) {
+        if (empty($typeId)) {
+            throw new CmisInvalidArgumentException('Type id must not be empty.');
+        }
+
+        if ($context === null) {
+            $context = $this->getDefaultContext();
+        }
+
+        $queryFilterString = $context->getQueryFilterString();
+        if (!empty($queryFilterString)) {
+            $querySelect = $queryFilterString;
+        } else {
+            $querySelect = '*';
+        }
+
+        $whereClause = '';
+        if (!empty($where)) {
+            $whereClause = ' WHERE ' . $where;
+        }
+
+        $orderBy = $context->getOrderBy();
+        if (!empty($orderBy)) {
+            $orderBy = ' ORDER BY ' . $orderBy;
+        }
+
+        $typeDefinition = $this->getTypeDefinition($typeId);
+        $statement = 'SELECT ' . $querySelect . ' FROM ' . $typeDefinition->getQueryName() . $whereClause . $orderBy;
+        $queryStatement = new QueryStatement($this, $statement);
+
+        $resultObjects = array();
+        $skipCount = 0;
+
+        $objectList = $this->getBinding()->getDiscoveryService()->query(
+            $this->getRepositoryInfo()->getId(),
+            $queryStatement->toQueryString(),
+            $searchAllVersions,
+            $context->getIncludeRelationships(),
+            $context->getRenditionFilterString(),
+            $context->isIncludeAllowableActions(),
+            $context->getMaxItemsPerPage(),
+            $skipCount
+        );
+
+        foreach ($objectList->getObjects() as $objectData) {
+            $object = $this->getObjectFactory()->convertObject($objectData, $context);
+            if ($object instanceof CmisObjectInterface) {
+                $resultObjects[] = $object;
+            }
+        }
+
+        // TODO: Implement pagination using skipCount
+
+        return $resultObjects;
     }
 
     /**

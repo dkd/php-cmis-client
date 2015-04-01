@@ -13,14 +13,14 @@ namespace Dkd\PhpCmis\CmisObject;
 use Dkd\PhpCmis\Data\AceInterface;
 use Dkd\PhpCmis\Data\AclInterface;
 use Dkd\PhpCmis\Data\AllowableActionsInterface;
+use Dkd\PhpCmis\Data\ObjectIdInterface;
 use Dkd\PhpCmis\Data\PolicyInterface;
 use Dkd\PhpCmis\Data\RelationshipInterface;
+use Dkd\PhpCmis\Data\RenditionInterface;
 use Dkd\PhpCmis\Enum\AclPropagation;
 use Dkd\PhpCmis\Enum\ExtensionLevel;
 use Dkd\PhpCmis\Exception\CmisObjectNotFoundException;
-use Dkd\PhpCmis\Data\ObjectIdInterface;
 use Dkd\PhpCmis\Exception\IllegalStateException;
-use Dkd\PhpCmis\RenditionInterface;
 
 /**
  * Base interface for all CMIS objects.

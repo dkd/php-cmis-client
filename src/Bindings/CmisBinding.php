@@ -140,8 +140,7 @@ class CmisBinding implements CmisBindingInterface
      */
     public function getDiscoveryService()
     {
-        throw new \Exception('Not yet implemented!');
-        // TODO: Implement getDiscoveryService() method.
+        return $this->getCmisBindingsHelper()->getSpi($this->session)->getDiscoveryService();
     }
 
     /**

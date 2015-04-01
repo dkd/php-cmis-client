@@ -22,6 +22,7 @@ use Dkd\PhpCmis\Data\PropertiesInterface;
 use Dkd\PhpCmis\Data\PropertyDataInterface;
 use Dkd\PhpCmis\Data\PropertyInterface;
 use Dkd\PhpCmis\Data\RenditionDataInterface;
+use Dkd\PhpCmis\Data\RenditionInterface;
 use Dkd\PhpCmis\Data\RepositoryInfoInterface;
 use Dkd\PhpCmis\Data\SecondaryTypeInterface;
 use Dkd\PhpCmis\Definitions\PropertyDefinitionInterface;
@@ -122,10 +123,10 @@ interface ObjectFactoryInterface
 
     /**
      * @param string $objectId
-     * @param RenditionDataInterface $rendition
+     * @param RenditionDataInterface $renditionData
      * @return RenditionInterface
      */
-    public function convertRendition($objectId, RenditionDataInterface $rendition);
+    public function convertRendition($objectId, RenditionDataInterface $renditionData);
 
     /**
      * @param RepositoryInfoInterface $repositoryInfo

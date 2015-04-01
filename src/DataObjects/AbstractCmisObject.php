@@ -24,6 +24,7 @@ use Dkd\PhpCmis\Data\PolicyInterface;
 use Dkd\PhpCmis\Data\PropertiesInterface;
 use Dkd\PhpCmis\Data\PropertyInterface;
 use Dkd\PhpCmis\Data\RelationshipInterface;
+use Dkd\PhpCmis\Data\RenditionInterface;
 use Dkd\PhpCmis\Data\SecondaryTypeInterface;
 use Dkd\PhpCmis\Definitions\PropertyDefinitionInterface;
 use Dkd\PhpCmis\Enum\AclPropagation;
@@ -37,7 +38,6 @@ use Dkd\PhpCmis\Exception\IllegalStateException;
 use Dkd\PhpCmis\ObjectFactoryInterface;
 use Dkd\PhpCmis\OperationContextInterface;
 use Dkd\PhpCmis\PropertyIds;
-use Dkd\PhpCmis\RenditionInterface;
 use Dkd\PhpCmis\SessionInterface;
 
 abstract class AbstractCmisObject implements CmisObjectInterface

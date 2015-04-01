@@ -23,6 +23,7 @@ use Dkd\PhpCmis\Data\PropertiesInterface;
 use Dkd\PhpCmis\Data\PropertyDataInterface;
 use Dkd\PhpCmis\Data\PropertyInterface;
 use Dkd\PhpCmis\Data\RenditionDataInterface;
+use Dkd\PhpCmis\Data\RenditionInterface;
 use Dkd\PhpCmis\Data\RepositoryInfoInterface;
 use Dkd\PhpCmis\Data\SecondaryTypeInterface;
 use Dkd\PhpCmis\DataObjects\Document;
@@ -37,6 +38,7 @@ use Dkd\PhpCmis\DataObjects\Property;
 use Dkd\PhpCmis\DataObjects\PropertyId;
 use Dkd\PhpCmis\DataObjects\Relationship;
 use Dkd\PhpCmis\DataObjects\RelationshipType;
+use Dkd\PhpCmis\DataObjects\Rendition;
 use Dkd\PhpCmis\DataObjects\SecondaryType;
 use Dkd\PhpCmis\Definitions\DocumentTypeDefinitionInterface;
 use Dkd\PhpCmis\Definitions\FolderTypeDefinitionInterface;
@@ -419,26 +421,33 @@ class ObjectFactory implements ObjectFactoryInterface
      */
     public function convertQueryProperties(PropertiesInterface $properties)
     {
-        // TODO: Implement convertQueryProperties() method.
+        return $properties->getProperties();
     }
 
     /**
+     * Converts ObjectData to QueryResult
+     *
      * @param ObjectDataInterface $objectData
-     * @return QueryResultInterface
+     * @return QueryResult
      */
     public function convertQueryResult(ObjectDataInterface $objectData)
     {
-        // TODO: Implement convertQueryResult() method.
+        return new QueryResult($this->session, $objectData);
     }
 
     /**
+     * Converts RenditionData to Rendition
+     *
      * @param string $objectId
-     * @param RenditionDataInterface $rendition
+     * @param RenditionDataInterface $renditionData
      * @return RenditionInterface
      */
-    public function convertRendition($objectId, RenditionDataInterface $rendition)
+    public function convertRendition($objectId, RenditionDataInterface $renditionData)
     {
-        // TODO: Implement convertRendition() method.
+        $rendition = new Rendition($this->session, $objectId);
+        $rendition->populate($renditionData);
+
+        return $rendition;
     }
 
     /**

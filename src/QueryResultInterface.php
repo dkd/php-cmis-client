@@ -13,6 +13,7 @@ namespace Dkd\PhpCmis;
 use Dkd\PhpCmis\Data\AllowableActionsInterface;
 use Dkd\PhpCmis\Data\PropertyDataInterface;
 use Dkd\PhpCmis\Data\RelationshipInterface;
+use Dkd\PhpCmis\Data\RenditionInterface;
 
 /**
  * Query Result.

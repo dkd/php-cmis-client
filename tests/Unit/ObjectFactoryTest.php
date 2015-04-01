@@ -10,6 +10,7 @@ namespace Dkd\PhpCmis\Test\Unit;
  * file that was distributed with this source code.
  */
 
+use Dkd\PhpCmis\DataObjects\ObjectData;
 use Dkd\PhpCmis\ObjectFactory;
 use Dkd\PhpCmis\PropertyIds;
 use Dkd\PhpCmis\SessionInterface;
@@ -158,6 +159,15 @@ class ObjectFactoryTest extends \PHPUnit_Framework_TestCase
                 PropertyIds::OBJECT_TYPE_ID => 'type-id',
                 PropertyIds::SECONDARY_OBJECT_TYPE_IDS => 'invalidValue'
             )
+        );
+    }
+
+    public function testConvertQueryResult()
+    {
+        $objectData = new ObjectData();
+        $this->assertInstanceOf(
+            '\\Dkd\\PhpCmis\\QueryResult',
+            $this->getObjectFactory()->convertQueryResult($objectData)
         );
     }
 

@@ -207,4 +207,7 @@ class Constants
 
     // rendition filter
     const RENDITION_NONE = 'cmis:none';
+
+    // query datetime format
+    const QUERY_DATETIMEFORMAT = 'Y-m-d\TH:i:s.uP';
 }
