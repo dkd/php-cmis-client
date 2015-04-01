@@ -100,7 +100,14 @@ abstract class AbstractBrowserBindingService
         }
 
         if ($result === null) {
-            throw new CmisObjectNotFoundException("Unknown repository!");
+            throw new CmisObjectNotFoundException(
+                sprintf(
+                    'Unknown Object! Repository: "%s" | Object: "%s" | Selector: "%s"',
+                    $repositoryId,
+                    $objectId,
+                    $selector
+                )
+            );
         }
 
         return $result;
@@ -363,7 +370,14 @@ abstract class AbstractBrowserBindingService
         }
 
         if ($result === null) {
-            throw new CmisObjectNotFoundException("Unknown repository!");
+            throw new CmisObjectNotFoundException(
+                sprintf(
+                    'Unknown path! Repository: "%s" | Path: "%s" | Selector: "%s"',
+                    $repositoryId,
+                    $path,
+                    $selector
+                )
+            );
         }
 
         return $result;
@@ -454,7 +468,13 @@ abstract class AbstractBrowserBindingService
         }
 
         if ($result === null) {
-            throw new CmisObjectNotFoundException("Unknown repository!");
+            throw new CmisObjectNotFoundException(
+                sprintf(
+                    'Unknown repository! Repository: "%s" | Selector: "%s"',
+                    $repositoryId,
+                    $selector
+                )
+            );
         }
 
         return $result;
