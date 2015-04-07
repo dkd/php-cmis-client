@@ -706,6 +706,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      *      returning any results (default is 0)
      * @param ExtensionDataInterface|null $extension
      * @return RenditionDataInterface[]
+     * @throws CmisInvalidArgumentException If object id is empty or skip count not of type integer
      */
     public function getRenditions(
         $repositoryId,
@@ -715,7 +716,29 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         $skipCount = 0,
         ExtensionDataInterface $extension = null
     ) {
-        // TODO: Implement getRenditions() method.
+        if (empty($objectId)) {
+            throw new CmisInvalidArgumentException('Object id must not be empty!');
+        }
+
+        if (!is_int($skipCount)) {
+            throw new CmisInvalidArgumentException('Skip count must be of type integer!');
+        }
+
+        $url = $this->getObjectUrl($repositoryId, $objectId, Constants::SELECTOR_RENDITIONS);
+        $url->getQuery()->modify(
+            array(
+                Constants::PARAM_RENDITION_FILTER => $renditionFilter,
+                Constants::PARAM_SKIP_COUNT => (string) $skipCount,
+            )
+        );
+
+        if ($maxItems !== null) {
+            $url->getQuery()->modify(array(Constants::PARAM_MAX_ITEMS => (string) $maxItems));
+        }
+
+        $responseData = $this->read($url)->json();
+
+        return $this->getJsonConverter()->convertRenditions($responseData);
     }
 
     /**

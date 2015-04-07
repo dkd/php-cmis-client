@@ -22,6 +22,7 @@ use Dkd\PhpCmis\DataObjects\Principal;
 use Dkd\PhpCmis\DataObjects\Properties;
 use Dkd\PhpCmis\DataObjects\PropertyId;
 use Dkd\PhpCmis\DataObjects\PropertyString;
+use Dkd\PhpCmis\DataObjects\RenditionData;
 use Dkd\PhpCmis\Enum\IncludeRelationships;
 use Dkd\PhpCmis\Enum\UnfileObject;
 use Dkd\PhpCmis\Enum\VersioningState;
@@ -1713,6 +1714,94 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
                 true,
                 UnfileObject::cast(UnfileObject::DELETE),
                 true
+            )
+        );
+    }
+
+
+    /**
+     * @dataProvider getRenditionsDataProvider
+     * @param string $expectedUrl
+     * @param string $repositoryId
+     * @param string $objectId
+     * @param string $renditionFilter
+     * @param integer|null $maxItems
+     * @param integer $skipCount
+     */
+    public function testGetRenditionsCallsReadFunctionWithParameterizedQuery(
+        $expectedUrl,
+        $repositoryId,
+        $objectId,
+        $renditionFilter = Constants::RENDITION_NONE,
+        $maxItems = null,
+        $skipCount = 0
+    ) {
+        $responseData = array('foo' => 'bar');
+        $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
+        )->setMethods(array('json'))->getMock();
+        $responseMock->expects($this->once())->method('json')->willReturn($responseData);
+
+        $dummyRenditionData = new RenditionData();
+        $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
+            array('convertRendition')
+        )->getMock();
+        $jsonConverterMock->expects($this->any())->method('convertRendition')->with($responseData)->willReturn(
+            $dummyRenditionData
+        );
+
+        $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
+            array('getJsonConverter')
+        )->getMock();
+        $cmisBindingsHelperMock->expects($this->once())->method('getJsonConverter')->willReturn($jsonConverterMock);
+
+        /** @var ObjectService|PHPUnit_Framework_MockObject_MockObject $objectService */
+        $objectService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
+            array($this->getSessionMock(), $cmisBindingsHelperMock)
+        )->setMethods(
+            array('getObjectUrl', 'read')
+        )->getMock();
+
+        $objectService->expects($this->once())->method('getObjectUrl')->with(
+            $repositoryId,
+            $objectId,
+            Constants::SELECTOR_RENDITIONS
+        )->willReturn(Url::createFromUrl(self::BROWSER_URL_TEST));
+        $objectService->expects($this->once())->method('read')->with($expectedUrl)->willReturn($responseMock);
+
+        $objectService->getRenditions(
+            $repositoryId,
+            $objectId,
+            $renditionFilter,
+            $maxItems,
+            $skipCount
+        );
+    }
+
+    /**
+     * Data provider for getRenditions
+     *
+     * @return array
+     */
+    public function getRenditionsDataProvider()
+    {
+        return array(
+            array(
+                Url::createFromUrl(
+                    self::BROWSER_URL_TEST . '?renditionFilter=cmis:thumbnail&skipCount=0'
+                ),
+                'repositoryId',
+                'objectId',
+                'cmis:thumbnail'
+            ),
+            array(
+                Url::createFromUrl(
+                    self::BROWSER_URL_TEST . '?renditionFilter=cmis:thumbnail&maxItems=99&skipCount=10'
+                ),
+                'repositoryId',
+                'objectId',
+                'cmis:thumbnail',
+                99,
+                10
             )
         );
     }
