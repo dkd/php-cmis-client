@@ -95,7 +95,7 @@ abstract class AbstractFileableCmisObject extends AbstractCmisObject implements 
                 $this->session->createObjectId((String) $idProperty->getFirstValue()),
                 $context
             );
-            if ($parentFolder instanceof FolderInterface) {
+            if (!$parentFolder instanceof FolderInterface) {
                 // the repository sent an object that is not a folder...
                 throw new CmisRuntimeException('Repository sent invalid data! Object is not a folder!');
             }
