@@ -459,12 +459,12 @@ abstract class AbstractCmisObject implements CmisObjectInterface
      */
     public function getBaseTypeId()
     {
-        $baseType = $this->getProperty(PropertyIds::BASE_TYPE_ID);
-        if ($baseType === null) {
+        $baseTypeProperty = $this->getProperty(PropertyIds::BASE_TYPE_ID);
+        if ($baseTypeProperty === null) {
             return null;
         }
 
-        return BaseTypeId::cast($baseType);
+        return BaseTypeId::cast($baseTypeProperty->getFirstValue());
     }
 
     /**
