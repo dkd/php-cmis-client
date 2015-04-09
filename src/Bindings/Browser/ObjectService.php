@@ -26,6 +26,7 @@ use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
 use Dkd\PhpCmis\ObjectServiceInterface;
 use Dkd\PhpCmis\PropertyIds;
 use Dkd\PhpCmis\SessionParameter;
+use GuzzleHttp\Post\PostFile;
 use GuzzleHttp\Stream\LimitStream;
 use GuzzleHttp\Message\Response;
 use GuzzleHttp\Stream\StreamInterface;
@@ -95,11 +96,11 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      * @param VersioningState|null $versioningState specifies what the versioning state of the newly created object
      *      must be (default is <code>VersioningState::MAJOR</code>)
      * @param string[] $policies a list of policy IDs that must be applied to the newly created document object
-     * @param AclInterface|null  $addAces a list of ACEs that must be added to the newly created document object,
+     * @param AclInterface|null $addAces a list of ACEs that must be added to the newly created document object,
      *      either using the ACL from folderId if specified, or being applied if no folderId is specified
      * @param AclInterface|null $removeAces a list of ACEs that must be removed from the newly created document object,
      *      either using the ACL from folderId if specified, or being ignored if no folderId is specified
-     * @param ExtensionDataInterface|null  $extension
+     * @param ExtensionDataInterface|null $extension
      * @return string|null Returns the new object id or <code>null</code> if the repository sent an empty
      *      result (which should not happen)
      */
@@ -135,6 +136,18 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         $this->appendAddAcesToUrl($url, $addAces);
         $this->appendRemoveAcesToUrl($url, $removeAces);
         $this->appendPoliciesToUrl($url, $policies);
+
+        // Guzzle gets the mime type for a file by the filename extension. Sometimes the filename does not contain
+        // the correct filename extension for example when a file is uploaded in php it gets a temporary name without
+        // a file extension. If the filename does not contain a file extension we use the given 'cmis:name' property
+        // as filename. See also https://github.com/guzzle/guzzle/issues/571
+        if (pathinfo($contentStream->getMetadata('uri'), PATHINFO_EXTENSION) === '') {
+            $contentStream = new PostFile(
+                'content',
+                $contentStream,
+                $properties->getProperties()['cmis:name']->getFirstValue()
+            );
+        }
 
         $responseData = $this->post(
             $url,
@@ -532,7 +545,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         }
 
         if ($offset !== null) {
-            $contentStream = new LimitStream($contentStream, $length !== null ? $length : -1, $offset);
+            $contentStream = new LimitStream($contentStream, $length !== null ? $length : - 1, $offset);
         }
 
         return $contentStream;
