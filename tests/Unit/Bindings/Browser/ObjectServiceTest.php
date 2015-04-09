@@ -27,6 +27,7 @@ use Dkd\PhpCmis\Enum\IncludeRelationships;
 use Dkd\PhpCmis\Enum\UnfileObject;
 use Dkd\PhpCmis\Enum\VersioningState;
 use Dkd\PhpCmis\SessionParameter;
+use GuzzleHttp\Post\PostFile;
 use GuzzleHttp\Stream\StreamInterface;
 use League\Url\Url;
 use PHPUnit_Framework_MockObject_MockObject;
@@ -164,13 +165,15 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
      * @param PropertiesInterface $properties
      * @param string|null $folderId
      * @param StreamInterface|null $contentStream
-     * @param VersioningState|null  $versioningState
+     * @param VersioningState|null $versioningState
      * @param string[] $policies
      * @param AclInterface|null $addAces
      * @param AclInterface|null $removeAces
+     * @param mixed $expectedContentStream The expected content stream that should be passed to guzzle
      */
     public function testCreateDocumentCallsPostFunctionWithParameterizedQuery(
         $expectedUrl,
+        $expectedContentStream,
         $repositoryId,
         PropertiesInterface $properties,
         $folderId = null,
@@ -225,7 +228,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
 
         $objectService->expects($this->atLeastOnce())->method('post')->with(
             $expectedUrl,
-            array('content' => $contentStream)
+            array('content' => $expectedContentStream)
         )->willReturn($responseMock);
 
         $this->assertSame(
@@ -245,10 +248,28 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
 
     public function createDocumentDataProvider()
     {
-        $property = new PropertyString('cmis:name', 'name');
+        $property = new PropertyString('cmis:name', 'name.jpg');
         $properties = new Properties();
         $properties->addProperty($property);
-        $stream = $this->getMockForAbstractClass('\\GuzzleHttp\\Stream\\StreamInterface');
+        $streamWithFileExtension = $this->getMockBuilder('\\GuzzleHttp\\Stream\\StreamInterface')->setMethods(
+            array('getMetadata')
+        )->getMockForAbstractClass();
+        $streamWithFileExtension->expects($this->any())->method('getMetadata')->with('uri')->willReturn(
+            '/foo/bar/baz.jpg'
+        );
+
+        $streamWithoutFileExtension = $this->getMockBuilder('\\GuzzleHttp\\Stream\\StreamInterface')->setMethods(
+            array('getMetadata')
+        )->getMockForAbstractClass();
+        $streamWithoutFileExtension->expects($this->any())->method('getMetadata')->with('uri')->willReturn(
+            '/foo/bar/baz'
+        );
+
+        $expectedPostStream = new PostFile(
+            'content',
+            $streamWithoutFileExtension,
+            'name.jpg'
+        );
 
         $principal1 = new Principal('principalId1');
         $ace1 = new AccessControlEntry($principal1, array('permissionValue1', 'permissionValue2'));
@@ -267,18 +288,19 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $removeAcl = new AccessControlList(array($ace3, $ace4));
 
         return array(
-            array(
+            'Create document without stream' => array(
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
-                    . '?propertyId[0]=cmis:name&propertyValue[0]=name&cmisaction=createDocument&succinct=false'
+                    . '?propertyId[0]=cmis:name&propertyValue[0]=name.jpg&cmisaction=createDocument&succinct=false'
                 ),
+                null,
                 'repositoryId',
                 $properties
             ),
-            array(
+            'Create document with a stream where the uri contains a file extension' => array(
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
-                    . '?propertyId[0]=cmis:name&propertyValue[0]=name&cmisaction=createDocument'
+                    . '?propertyId[0]=cmis:name&propertyValue[0]=name.jpg&cmisaction=createDocument'
                     . '&versioningState=major&succinct=false'
                     . '&policy[0]=policyOne&policy[1]=policyTwo'
                     . '&addACEPrincipal[0]=principalId1'
@@ -290,10 +312,36 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
                     . '&removeACEPrincipal[1]=principalId4'
                     . '&removeACEPermission[1][0]=permissionValue7&removeACEPermission[1][1]=permissionValue8'
                 ),
+                $streamWithFileExtension,
                 'repositoryId',
                 $properties,
                 'folderId',
-                $stream,
+                $streamWithFileExtension,
+                VersioningState::cast(VersioningState::MAJOR),
+                array('policyOne', 'policyTwo'),
+                $addAcl,
+                $removeAcl
+            ),
+            'Create document with a stream where the uri does not have a file extension' => array(
+                Url::createFromUrl(
+                    self::BROWSER_URL_TEST
+                    . '?propertyId[0]=cmis:name&propertyValue[0]=name.jpg&cmisaction=createDocument'
+                    . '&versioningState=major&succinct=false'
+                    . '&policy[0]=policyOne&policy[1]=policyTwo'
+                    . '&addACEPrincipal[0]=principalId1'
+                    . '&addACEPermission[0][0]=permissionValue1&addACEPermission[0][1]=permissionValue2'
+                    . '&addACEPrincipal[1]=principalId2'
+                    . '&addACEPermission[1][0]=permissionValue3&addACEPermission[1][1]=permissionValue4'
+                    . '&removeACEPrincipal[0]=principalId3'
+                    . '&removeACEPermission[0][0]=permissionValue5&removeACEPermission[0][1]=permissionValue6'
+                    . '&removeACEPrincipal[1]=principalId4'
+                    . '&removeACEPermission[1][0]=permissionValue7&removeACEPermission[1][1]=permissionValue8'
+                ),
+                $expectedPostStream,
+                'repositoryId',
+                $properties,
+                'folderId',
+                $streamWithoutFileExtension,
                 VersioningState::cast(VersioningState::MAJOR),
                 array('policyOne', 'policyTwo'),
                 $addAcl,
@@ -449,8 +497,9 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $objectId,
         $allVersions = true
     ) {
-        $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
-        )->getMock();
+        $responseMock = $this->getMockBuilder(
+            '\\GuzzleHttp\\Message\\Response'
+        )->disableOriginalConstructor()->getMock();
 
         $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->getMock();
 
@@ -1119,12 +1168,12 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
 
         /** @var  ObjectData|PHPUnit_Framework_MockObject_MockObject $dummyObjectData */
         $dummyObjectData = $this->getMockBuilder('\\Dkd\\PhpCmis\\ObjectData\\ObjectData')->setMethods(
-            array('getId','getProperties')
+            array('getId', 'getProperties')
         )->getMock();
 
         $newObjectId = 'foo-id';
         $newChangeTokenId = 'newTokenId';
-        $dummyProperties  = new Properties();
+        $dummyProperties = new Properties();
         $newChangeTokenProperty = new PropertyId('cmis:changeToken', $newChangeTokenId);
         $dummyProperties->addProperty($newChangeTokenProperty);
 
@@ -1180,16 +1229,20 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
     public function updatePropertiesDataProvider()
     {
         $propertySet1 = new Properties();
-        $propertySet1->addProperties(array(
-            new PropertyString('cmis:name', 'name'),
-            new PropertyString('cmis:description', 'description')
-        ));
+        $propertySet1->addProperties(
+            array(
+                new PropertyString('cmis:name', 'name'),
+                new PropertyString('cmis:description', 'description')
+            )
+        );
 
         $propertySet2 = new Properties();
-        $propertySet2->addProperties(array(
-            new PropertyString('cmis:name', 'foo'),
-            new PropertyString('cmis:description', 'bar')
-         ));
+        $propertySet2->addProperties(
+            array(
+                new PropertyString('cmis:name', 'foo'),
+                new PropertyString('cmis:description', 'bar')
+            )
+        );
 
         return array(
             'Parameter set with defined changeToken and empty session parameters' => array(
@@ -1268,12 +1321,12 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
 
         /** @var  ObjectData|PHPUnit_Framework_MockObject_MockObject $dummyObjectData */
         $dummyObjectData = $this->getMockBuilder('\\Dkd\\PhpCmis\\ObjectData\\ObjectData')->setMethods(
-            array('getId','getProperties')
+            array('getId', 'getProperties')
         )->getMock();
 
         $newObjectId = 'foo-id';
         $newChangeTokenId = 'newTokenId';
-        $dummyProperties  = new Properties();
+        $dummyProperties = new Properties();
         $newChangeTokenProperty = new PropertyId('cmis:changeToken', $newChangeTokenId);
         $dummyProperties->addProperty($newChangeTokenProperty);
 
@@ -1406,12 +1459,12 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
 
         /** @var  ObjectData|PHPUnit_Framework_MockObject_MockObject $dummyObjectData */
         $dummyObjectData = $this->getMockBuilder('\\Dkd\\PhpCmis\\ObjectData\\ObjectData')->setMethods(
-            array('getId','getProperties')
+            array('getId', 'getProperties')
         )->getMock();
 
         $newObjectId = 'foo-id';
         $newChangeTokenId = 'newTokenId';
-        $dummyProperties  = new Properties();
+        $dummyProperties = new Properties();
         $newChangeTokenProperty = new PropertyId('cmis:changeToken', $newChangeTokenId);
         $dummyProperties->addProperty($newChangeTokenProperty);
 
@@ -1526,7 +1579,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         )->setMethods(array('getBody'))->getMock();
         $responseMock->expects($this->any())->method('getBody')->willReturn($contentStream);
 
-        $httpInvoker  = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
+        $httpInvoker = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
             array('get')
         )->getMock();
         $httpInvoker->expects($this->any())->method('get')->willReturn($responseMock);

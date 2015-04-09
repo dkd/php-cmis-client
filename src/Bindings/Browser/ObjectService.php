@@ -141,7 +141,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         // the correct filename extension for example when a file is uploaded in php it gets a temporary name without
         // a file extension. If the filename does not contain a file extension we use the given 'cmis:name' property
         // as filename. See also https://github.com/guzzle/guzzle/issues/571
-        if (pathinfo($contentStream->getMetadata('uri'), PATHINFO_EXTENSION) === '') {
+        if ($contentStream !== null && pathinfo($contentStream->getMetadata('uri'), PATHINFO_EXTENSION) === '') {
             $contentStream = new PostFile(
                 'content',
                 $contentStream,
