@@ -238,7 +238,7 @@ interface DataConverterInterface
      * Convert given input data to a TypeDescendants object
      *
      * @param array $data
-     * @return TypeDefinitionContainerInterface
+     * @return TypeDefinitionContainerInterface[]
      */
     public function convertTypeDescendants(array $data = null);
     

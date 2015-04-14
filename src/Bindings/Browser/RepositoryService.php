@@ -124,7 +124,26 @@ class RepositoryService extends AbstractBrowserBindingService implements Reposit
         $skipCount = 0,
         ExtensionDataInterface $extension = null
     ) {
-        // TODO: Implement getTypeChildren() method.
+        $url = $this->getRepositoryUrl($repositoryId, Constants::SELECTOR_TYPE_CHILDREN);
+        $url->getQuery()->modify(
+            array(
+                Constants::PARAM_PROPERTY_DEFINITIONS => $includePropertyDefinitions ? 'true' : 'false',
+                Constants::PARAM_SKIP_COUNT => $skipCount,
+                Constants::PARAM_DATETIME_FORMAT => (string) $this->getDateTimeFormat()
+            )
+        );
+
+        if ($typeId !== null) {
+            $url->getQuery()->modify(array(Constants::PARAM_TYPE_ID => $typeId));
+        }
+
+        if ($maxItems !== null) {
+            $url->getQuery()->modify(array(Constants::PARAM_MAX_ITEMS => $maxItems));
+        }
+
+        $responseData = $this->read($url)->json();
+
+        return $this->getJsonConverter()->convertTypeChildren($responseData);
     }
 
     /**
@@ -160,7 +179,25 @@ class RepositoryService extends AbstractBrowserBindingService implements Reposit
         $includePropertyDefinitions = false,
         ExtensionDataInterface $extension = null
     ) {
-        // TODO: Implement getTypeDescendants() method.
+        $url = $this->getRepositoryUrl($repositoryId, Constants::SELECTOR_TYPE_DESCENDANTS);
+        $url->getQuery()->modify(
+            array(
+                Constants::PARAM_PROPERTY_DEFINITIONS => $includePropertyDefinitions ? 'true' : 'false',
+                Constants::PARAM_DATETIME_FORMAT => (string) $this->getDateTimeFormat()
+            )
+        );
+
+        if ($typeId !== null) {
+            $url->getQuery()->modify(array(Constants::PARAM_TYPE_ID => $typeId));
+        }
+
+        if ($depth !== null) {
+            $url->getQuery()->modify(array(Constants::PARAM_DEPTH => $depth));
+        }
+
+        $responseData = $this->read($url)->json();
+
+        return $this->getJsonConverter()->convertTypeDescendants($responseData);
     }
 
     /**

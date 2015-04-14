@@ -12,6 +12,7 @@ namespace Dkd\PhpCmis\Converter;
 
 use Dkd\Enumeration\Exception\InvalidEnumerationValueException;
 use Dkd\PhpCmis\Bindings\Browser\JSONConstants;
+use Dkd\PhpCmis\Constants;
 use Dkd\PhpCmis\Data\AclCapabilitiesInterface;
 use Dkd\PhpCmis\Data\AclInterface;
 use Dkd\PhpCmis\Data\AllowableActionsInterface;
@@ -74,6 +75,8 @@ use Dkd\PhpCmis\DataObjects\RenditionData;
 use Dkd\PhpCmis\DataObjects\RepositoryCapabilities;
 use Dkd\PhpCmis\DataObjects\RepositoryInfoBrowserBinding;
 use Dkd\PhpCmis\DataObjects\SecondaryTypeDefinition;
+use Dkd\PhpCmis\DataObjects\TypeDefinitionContainer;
+use Dkd\PhpCmis\DataObjects\TypeDefinitionList;
 use Dkd\PhpCmis\DataObjects\TypeMutability;
 use Dkd\PhpCmis\Definitions\MutableDocumentTypeDefinitionInterface;
 use Dkd\PhpCmis\Definitions\MutableRelationshipTypeDefinitionInterface;
@@ -1547,22 +1550,86 @@ class JsonConverter extends AbstractDataConverter
      * Convert given input data to a TypeChildren object
      *
      * @param array|null $data
-     * @return TypeDefinitionListInterface
+     * @return TypeDefinitionListInterface|null Returns a TypeDefinitionListInterface object or <code>null</code>
+     *      if empty data is given.
      */
     public function convertTypeChildren(array $data = null)
     {
-        // TODO: Implement convertTypeChildren() method.
+        if (empty($data)) {
+            return null;
+        }
+
+        $result = new TypeDefinitionList();
+        $types = array();
+
+        $typesList = array();
+        if (isset($data[JSONConstants::JSON_TYPESLIST_TYPES])) {
+            $typesList = (array) $data[JSONConstants::JSON_TYPESLIST_TYPES];
+        }
+
+        foreach ($typesList as $typeData) {
+            if (is_array($typeData)) {
+                $type = $this->convertTypeDefinition($typeData);
+                if ($type !== null) {
+                    $types[] = $type;
+                }
+            }
+        }
+
+        $result->setList($types);
+        if (isset($data[JSONConstants::JSON_TYPESLIST_HAS_MORE_ITEMS])) {
+            $result->hasMoreItems($data[JSONConstants::JSON_TYPESLIST_HAS_MORE_ITEMS]);
+        }
+        if (isset($data[JSONConstants::JSON_TYPESLIST_NUM_ITEMS])) {
+            $result->setNumItems($data[JSONConstants::JSON_TYPESLIST_NUM_ITEMS]);
+        }
+
+        $result->setExtensions($this->convertExtension($data, JSONConstants::getTypesListKeys()));
+
+        return $result;
     }
 
     /**
      * Convert given input data to a TypeDescendants object
      *
      * @param array|null $data
-     * @return TypeDefinitionContainerInterface
+     * @return TypeDefinitionContainerInterface[] Returns an array of TypeDefinitionContainerInterface objects
      */
     public function convertTypeDescendants(array $data = null)
     {
-        // TODO: Implement convertTypeDescendants() method.
+        $result = array();
+
+        if (empty($data)) {
+            return $result;
+        }
+
+        foreach ($data as $itemData) {
+            if (!is_array($itemData)) {
+                continue;
+            }
+
+            $container = new TypeDefinitionContainer();
+
+            if (isset($itemData[JSONConstants::JSON_TYPESCONTAINER_TYPE])) {
+                $container->setTypeDefinition(
+                    $this->convertTypeDefinition($itemData[JSONConstants::JSON_TYPESCONTAINER_TYPE])
+                );
+            }
+
+            if (isset($itemData[JSONConstants::JSON_TYPESCONTAINER_CHILDREN])
+                && is_array($itemData[JSONConstants::JSON_TYPESCONTAINER_CHILDREN])
+            ) {
+                $container->setChildren(
+                    $this->convertTypeDescendants($itemData[JSONConstants::JSON_TYPESCONTAINER_CHILDREN])
+                );
+            }
+
+            $container->setExtensions($this->convertExtension($data, JSONConstants::getTypesContainerKeys()));
+
+            $result[] = $container;
+        }
+
+        return $result;
     }
 
     /**

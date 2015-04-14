@@ -677,4 +677,38 @@ class JSONConstants
     {
         return self::$FAILEDTODELETE_KEYS;
     }
+
+    const JSON_TYPESLIST_TYPES = 'types';
+    const JSON_TYPESLIST_HAS_MORE_ITEMS = 'hasMoreItems';
+    const JSON_TYPESLIST_NUM_ITEMS = 'numItems';
+
+    protected static $TYPESLIST_KEYS = array(
+        self::JSON_TYPESLIST_TYPES,
+        self::JSON_TYPESLIST_HAS_MORE_ITEMS,
+        self::JSON_TYPESLIST_NUM_ITEMS
+    );
+
+    /**
+     * @return array Array of all "Types list" keys
+     */
+    public static function getTypesListKeys()
+    {
+        return self::$TYPESLIST_KEYS;
+    }
+
+    const JSON_TYPESCONTAINER_TYPE = 'type';
+    const JSON_TYPESCONTAINER_CHILDREN = 'children';
+
+    protected static $TYPESCONTAINER_KEYS = array(
+        self::JSON_TYPESCONTAINER_TYPE,
+        self::JSON_TYPESCONTAINER_CHILDREN
+    );
+
+    /**
+     * @return array Array of all "Types container" keys
+     */
+    public static function getTypesContainerKeys()
+    {
+        return self::$TYPESCONTAINER_KEYS;
+    }
 }

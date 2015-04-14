@@ -25,6 +25,7 @@ use Dkd\PhpCmis\Data\PolicyInterface;
 use Dkd\PhpCmis\Data\RelationshipInterface;
 use Dkd\PhpCmis\Data\RepositoryInfoInterface;
 use Dkd\PhpCmis\DataObjects\ObjectId;
+use Dkd\PhpCmis\Definitions\TypeDefinitionContainerInterface;
 use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
 use Dkd\PhpCmis\Enum\AclPropagation;
 use Dkd\PhpCmis\Enum\CmisVersion;
@@ -958,7 +959,13 @@ class Session implements SessionInterface
      */
     public function getTypeChildren($typeId, $includePropertyDefinitions)
     {
-        // TODO: Implement getTypeChildren() method.
+        return $this->getBinding()->getRepositoryService()->getTypeChildren(
+            $this->getRepositoryId(),
+            $typeId,
+            $includePropertyDefinitions,
+            999, // set max items to 999 - TODO: Implement CollectionIterable() method to iterate over all objects.
+            0 // TODO: Implement CollectionIterable() method to iterate over all objects.
+        );
     }
 
     /**
@@ -988,13 +995,18 @@ class Session implements SessionInterface
      * @param string $typeId the type ID or <code>null</code> to request the base types
      * @param integer $depth indicates whether the property definitions should be included or not
      * @param boolean $includePropertyDefinitions the tree depth, must be greater than 0 or -1 for infinite depth
-     * @return TreeInterface A tree that contains ObjectTypeInterface objects
+     * @return TypeDefinitionContainerInterface[] A tree that contains ObjectTypeInterface objects
      * @see ObjectTypeInterface ObjectTypeInterface contained in returned Tree
      * @throws CmisObjectNotFoundException - if a type with the given type ID doesn't exist
      */
     public function getTypeDescendants($typeId, $depth, $includePropertyDefinitions)
     {
-        // TODO: Implement getTypeDescendants() method.
+        return $this->getBinding()->getRepositoryService()->getTypeDescendants(
+            $this->getRepositoryId(),
+            $typeId,
+            (integer) $depth,
+            $includePropertyDefinitions
+        );
     }
 
     /**
