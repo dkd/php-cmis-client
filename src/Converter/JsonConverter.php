@@ -1578,7 +1578,7 @@ class JsonConverter extends AbstractDataConverter
 
         $result->setList($types);
         if (isset($data[JSONConstants::JSON_TYPESLIST_HAS_MORE_ITEMS])) {
-            $result->hasMoreItems($data[JSONConstants::JSON_TYPESLIST_HAS_MORE_ITEMS]);
+            $result->setHasMoreItems($data[JSONConstants::JSON_TYPESLIST_HAS_MORE_ITEMS]);
         }
         if (isset($data[JSONConstants::JSON_TYPESLIST_NUM_ITEMS])) {
             $result->setNumItems($data[JSONConstants::JSON_TYPESLIST_NUM_ITEMS]);
@@ -1611,9 +1611,10 @@ class JsonConverter extends AbstractDataConverter
             $container = new TypeDefinitionContainer();
 
             if (isset($itemData[JSONConstants::JSON_TYPESCONTAINER_TYPE])) {
-                $container->setTypeDefinition(
-                    $this->convertTypeDefinition($itemData[JSONConstants::JSON_TYPESCONTAINER_TYPE])
-                );
+                $typeDefinition = $this->convertTypeDefinition($itemData[JSONConstants::JSON_TYPESCONTAINER_TYPE]);
+                if ($typeDefinition !== null) {
+                    $container->setTypeDefinition($typeDefinition);
+                }
             }
 
             if (isset($itemData[JSONConstants::JSON_TYPESCONTAINER_CHILDREN])

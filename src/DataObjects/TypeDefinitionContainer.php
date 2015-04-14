@@ -20,7 +20,7 @@ use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
 class TypeDefinitionContainer extends AbstractExtensionData implements TypeDefinitionContainerInterface
 {
     /**
-     * @var TypeDefinitionContainerInterface
+     * @var TypeDefinitionContainerInterface[]
      */
     protected $children = array();
 
