@@ -39,6 +39,9 @@ class JSONConstants
     const JSON_REPINFO_PRINCIPAL_ID_ANYONE = 'principalIdAnyone';
     const JSON_REPINFO_EXTENDED_FEATURES = 'extendedFeatures';
 
+    /**
+     * @var array
+     */
     protected static $REPOSITORY_INFO_KEYS = array(
         self::JSON_REPINFO_ID,
         self::JSON_REPINFO_NAME,
@@ -89,6 +92,9 @@ class JSONConstants
     const JSON_CAP_CREATABLE_PROPERTY_TYPES = 'capabilityCreatablePropertyTypes';
     const JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES = 'capabilityNewTypeSettableAttributes';
 
+    /**
+     * @var array
+     */
     protected static $CAPABILITY_KEYS = array(
         self::JSON_CAP_CONTENT_STREAM_UPDATABILITY,
         self::JSON_CAP_CHANGES,
@@ -121,6 +127,9 @@ class JSONConstants
 
     const JSON_CAP_CREATABLE_PROPERTY_TYPES_CANCREATE = 'canCreate';
 
+    /**
+     * @var array
+     */
     protected static $CAPABILITY_CREATABLE_PROPERTY_KEYS = array(
         self::JSON_CAP_CREATABLE_PROPERTY_TYPES_CANCREATE
     );
@@ -149,6 +158,9 @@ class JSONConstants
     const JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES_CONTROLABLEPOLICY = 'controllablePolicy';
     const JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES_CONTROLABLEACL = 'controllableACL';
 
+    /**
+     * @var array
+     */
     protected static $CAP_NEW_TYPE_SETTABLE_ATTRIBUTES_KEYS = array(
         self::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES_ID,
         self::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES_LOCALNAME,
@@ -180,6 +192,9 @@ class JSONConstants
     const JSON_ACLCAP_PERMISSIONS = 'permissions';
     const JSON_ACLCAP_PERMISSION_MAPPING = 'permissionMapping';
 
+    /**
+     * @var array
+     */
     protected static $ACL_CAPABILITY_KEYS = array(
         self::JSON_ACLCAP_SUPPORTED_PERMISSIONS,
         self::JSON_ACLCAP_ACL_PROPAGATION,
@@ -200,6 +215,9 @@ class JSONConstants
     const JSON_ACLCAP_PERMISSION_PERMISSION = 'permission';
     const JSON_ACLCAP_PERMISSION_DESCRIPTION = 'description';
 
+    /**
+     * @var array
+     */
     protected static $ACL_CAPABILITY_PERMISSION_KEYS = array(
         self::JSON_ACLCAP_PERMISSION_PERMISSION,
         self::JSON_ACLCAP_PERMISSION_DESCRIPTION
@@ -218,6 +236,9 @@ class JSONConstants
     const JSON_ACLCAP_MAPPING_KEY = 'key';
     const JSON_ACLCAP_MAPPING_PERMISSION = 'permission';
 
+    /**
+     * @var array
+     */
     protected static $ACL_CAPABILITY_MAPPING_KEYS = array(
         self::JSON_ACLCAP_MAPPING_KEY,
         self::JSON_ACLCAP_MAPPING_PERMISSION
@@ -240,6 +261,9 @@ class JSONConstants
     const JSON_FEATURE_DESCRIPTION = 'description';
     const JSON_FEATURE_DATA = 'featureData';
 
+    /**
+     * @var array
+     */
     protected static $FEATURE_KEYS = array(
         self::JSON_FEATURE_ID,
         self::JSON_FEATURE_URL,
@@ -266,6 +290,9 @@ class JSONConstants
     const JSON_OBJECT_POLICY_IDS_IDS = 'ids';
     const JSON_OBJECT_RENDITIONS = 'renditions';
 
+    /**
+     * @var array
+     */
     protected static $OBJECT_KEYS = array(
         self::JSON_OBJECT_PROPERTIES,
         self::JSON_OBJECT_SUCCINCT_PROPERTIES,
@@ -289,6 +316,9 @@ class JSONConstants
         return self::$OBJECT_KEYS;
     }
 
+    /**
+     * @var array
+     */
     protected static $POLICY_IDS_KEYS = array(
         self::JSON_OBJECT_POLICY_IDS_IDS
     );
@@ -301,6 +331,9 @@ class JSONConstants
     const JSON_OBJECTINFOLDER_OBJECT = 'object';
     const JSON_OBJECTINFOLDER_PATH_SEGMENT = 'pathSegment';
 
+    /**
+     * @var array
+     */
     protected static $OBJECTINFOLDER_KEYS = array(
         self::JSON_OBJECTINFOLDER_OBJECT,
         self::JSON_OBJECTINFOLDER_PATH_SEGMENT
@@ -318,6 +351,9 @@ class JSONConstants
     const JSON_OBJECTINFOLDERLIST_HAS_MORE_ITEMS = 'hasMoreItems';
     const JSON_OBJECTINFOLDERLIST_NUM_ITEMS = 'numItems';
 
+    /**
+     * @var array
+     */
     protected static $OBJECTINFOLDERLIST_KEYS = array(
         self::JSON_OBJECTINFOLDERLIST_OBJECTS,
         self::JSON_OBJECTINFOLDERLIST_HAS_MORE_ITEMS,
@@ -335,6 +371,9 @@ class JSONConstants
     const JSON_OBJECTINFOLDERCONTAINER_OBJECT = 'object';
     const JSON_OBJECTINFOLDERCONTAINER_CHILDREN = 'children';
 
+    /**
+     * @var array
+     */
     protected static $OBJECTINFOLDERCONTAINER_KEYS = array(
         self::JSON_OBJECTINFOLDERCONTAINER_OBJECT,
         self::JSON_OBJECTINFOLDERCONTAINER_CHILDREN
@@ -351,6 +390,9 @@ class JSONConstants
     const JSON_OBJECTPARENTS_OBJECT = 'object';
     const JSON_OBJECTPARENTS_RELATIVE_PATH_SEGMENT = 'relativePathSegment';
 
+    /**
+     * @var array
+     */
     protected static $OBJECTPARENTS_KEYS = array(
         self::JSON_OBJECTPARENTS_OBJECT,
         self::JSON_OBJECTPARENTS_RELATIVE_PATH_SEGMENT
@@ -372,6 +414,9 @@ class JSONConstants
     const JSON_PROPERTY_DATATYPE = 'type';
     const JSON_PROPERTY_CARDINALITY = 'cardinality';
 
+    /**
+     * @var array
+     */
     protected static $PROPERTY_KEYS = array(
         self::JSON_PROPERTY_ID,
         self::JSON_PROPERTY_LOCALNAME,
@@ -395,6 +440,9 @@ class JSONConstants
     const JSON_CHANGE_EVENT_TYPE = 'changeType';
     const JSON_CHANGE_EVENT_TIME = 'changeTime';
 
+    /**
+     * @var array
+     */
     protected static $CHANGE_EVENT_KEYS = array(
         self::JSON_CHANGE_EVENT_TYPE,
         self::JSON_CHANGE_EVENT_TIME
@@ -413,6 +461,9 @@ class JSONConstants
     const JSON_ACL_ACES = 'aces';
     const JSON_ACL_IS_EXACT = 'isExact';
 
+    /**
+     * @var array
+     */
     protected static $ACL_KEYS = array(
         self::JSON_ACL_ACES,
         self::JSON_ACL_IS_EXACT
@@ -448,6 +499,9 @@ class JSONConstants
     const JSON_ACE_PERMISSIONS = 'permissions';
     const JSON_ACE_IS_DIRECT = 'isDirect';
 
+    /**
+     * @var array
+     */
     protected static $ACE_KEYS = array(
         self::JSON_ACE_PRINCIPAL,
         self::JSON_ACE_PERMISSIONS,
@@ -473,6 +527,9 @@ class JSONConstants
     const JSON_RENDITION_WIDTH = 'width';
     const JSON_RENDITION_DOCUMENT_ID = 'renditionDocumentId';
 
+    /**
+     * @var array
+     */
     protected static $RENDITION_KEYS = array(
         self::JSON_RENDITION_STREAM_ID,
         self::JSON_RENDITION_MIMETYPE,
@@ -499,6 +556,9 @@ class JSONConstants
     const JSON_OBJECTLIST_NUM_ITEMS = 'numItems';
     const JSON_OBJECTLIST_CHANGE_LOG_TOKEN = 'changeLogToken';
 
+    /**
+     * @var array
+     */
     protected static $OBJECTLIST_KEYS = array(
         self::JSON_OBJECTLIST_OBJECTS,
         self::JSON_OBJECTLIST_HAS_MORE_ITEMS,
@@ -518,6 +578,9 @@ class JSONConstants
     const JSON_QUERYRESULTLIST_HAS_MORE_ITEMS = 'hasMoreItems';
     const JSON_QUERYRESULTLIST_NUM_ITEMS = 'numItems';
 
+    /**
+     * @var array
+     */
     protected static $QUERYRESULTLIST_KEYS = array(
         self::JSON_QUERYRESULTLIST_RESULTS,
         self::JSON_QUERYRESULTLIST_HAS_MORE_ITEMS,
@@ -554,6 +617,9 @@ class JSONConstants
     const JSON_TYPE_ALLOWED_SOURCE_TYPES = 'allowedSourceTypes'; // relationship
     const JSON_TYPE_ALLOWED_TARGET_TYPES = 'allowedTargetTypes'; // relationship
 
+    /**
+     * @var array
+     */
     protected static $TYPE_KEYS = array(
         self::JSON_TYPE_ID,
         self::JSON_TYPE_LOCALNAME,
@@ -614,6 +680,9 @@ class JSONConstants
     const JSON_PROPERTY_TYPE_CHOICE_VALUE = 'value';
     const JSON_PROPERTY_TYPE_CHOICE_CHOICE = 'choice';
 
+    /**
+     * @var array
+     */
     protected static $PROPERTY_TYPE_KEYS = array(
         self::JSON_PROPERTY_TYPE_ID,
         self::JSON_PROPERTY_TYPE_LOCALNAME,
@@ -650,6 +719,9 @@ class JSONConstants
     const JSON_TYPE_TYPE_MUTABILITY_UPDATE = 'update';
     const JSON_TYPE_TYPE_MUTABILITY_DELETE = 'delete';
 
+    /**
+     * @var array
+     */
     protected static $TYPE_TYPE_MUTABILITY_KEYS = array(
         self::JSON_TYPE_TYPE_MUTABILITY_CREATE,
         self::JSON_TYPE_TYPE_MUTABILITY_DELETE,
@@ -666,6 +738,9 @@ class JSONConstants
 
     const JSON_FAILEDTODELETE_ID = "ids";
 
+    /**
+     * @var array
+     */
     protected static $FAILEDTODELETE_KEYS = array(
         self::JSON_FAILEDTODELETE_ID
     );
@@ -682,6 +757,9 @@ class JSONConstants
     const JSON_TYPESLIST_HAS_MORE_ITEMS = 'hasMoreItems';
     const JSON_TYPESLIST_NUM_ITEMS = 'numItems';
 
+    /**
+     * @var array
+     */
     protected static $TYPESLIST_KEYS = array(
         self::JSON_TYPESLIST_TYPES,
         self::JSON_TYPESLIST_HAS_MORE_ITEMS,
@@ -699,6 +777,9 @@ class JSONConstants
     const JSON_TYPESCONTAINER_TYPE = 'type';
     const JSON_TYPESCONTAINER_CHILDREN = 'children';
 
+    /**
+     * @var array
+     */
     protected static $TYPESCONTAINER_KEYS = array(
         self::JSON_TYPESCONTAINER_TYPE,
         self::JSON_TYPESCONTAINER_CHILDREN
