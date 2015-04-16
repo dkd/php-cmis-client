@@ -293,11 +293,13 @@ interface SessionInterface
     );
 
     /**
+     * Creates a new relationship between 2 objects.
+     *
      * @param string[] $properties
      * @param PolicyInterface[] $policies
      * @param AceInterface[] $addAces
      * @param AceInterface[] $removeAces
-     * @return ObjectIdInterface the object ID of the new relationship
+     * @return ObjectIdInterface|null the object ID of the new relationship
      */
     public function createRelationship(
         array $properties,

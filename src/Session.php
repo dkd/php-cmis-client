@@ -641,11 +641,14 @@ class Session implements SessionInterface
     }
 
     /**
+     * Creates a new relationship between 2 objects.
+     *
      * @param string[] $properties
      * @param PolicyInterface[] $policies
      * @param AceInterface[] $addAces
      * @param AceInterface[] $removeAces
-     * @return ObjectIdInterface the object ID of the new relationship
+     * @return ObjectIdInterface|null the object ID of the new relationship or <code>null</code> if the relationship
+     *      could not be created
      */
     public function createRelationship(
         array $properties,
@@ -653,7 +656,23 @@ class Session implements SessionInterface
         array $addAces = array(),
         array $removeAces = array()
     ) {
-        // TODO: Implement createRelationship() method.
+        if (empty($properties)) {
+            throw new CmisInvalidArgumentException('Properties must not be empty!');
+        }
+
+        $newObjectId = $this->getBinding()->getObjectService()->createRelationship(
+            $this->getRepositoryId(),
+            $this->getObjectFactory()->convertProperties($properties, null, array(), self::$createUpdatability),
+            $this->getObjectFactory()->convertPolicies($policies),
+            $this->getObjectFactory()->convertAces($addAces),
+            $this->getObjectFactory()->convertAces($removeAces)
+        );
+
+        if ($newObjectId === null) {
+            return null;
+        }
+
+        return $this->createObjectId($newObjectId);
     }
 
     /**
@@ -666,7 +685,7 @@ class Session implements SessionInterface
     public function createType(TypeDefinitionInterface $type)
     {
         if ($this->getRepositoryInfo()->getCmisVersion() == CmisVersion::cast(CmisVersion::CMIS_1_0)) {
-            throw new CmisNotSupportedException("This method is not supported for CMIS 1.0 repositories.");
+            throw new CmisNotSupportedException('This method is not supported for CMIS 1.0 repositories.');
         }
 
         return $this->convertTypeDefinition(
@@ -700,11 +719,11 @@ class Session implements SessionInterface
     public function deleteType($typeId)
     {
         if ($this->getRepositoryInfo()->getCmisVersion() == CmisVersion::cast(CmisVersion::CMIS_1_0)) {
-            throw new CmisNotSupportedException("This method is not supported for CMIS 1.0 repositories.");
+            throw new CmisNotSupportedException('This method is not supported for CMIS 1.0 repositories.');
         }
 
         $this->getBinding()->getRepositoryService()->deleteType($this->getRepositoryInfo(), $typeId);
-        $this->removeObjectFromCache($typeId);
+        $this->removeObjectFromCache($this->createObjectId($typeId));
     }
 
     /**

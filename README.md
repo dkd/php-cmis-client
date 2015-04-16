@@ -42,7 +42,7 @@ Currently implemented Services
   - [x] createDocumentFromSource
   - [x] createFolder
   - [x] createItem
-  - [ ] createRelationship
+  - [x] createRelationship
   - [ ] createPolicy
   - [ ] getAllowableActions
   - [x] getObject

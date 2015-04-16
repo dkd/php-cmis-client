@@ -360,7 +360,8 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      * @param AclInterface|null $removeAces a list of ACEs that must be removed from the newly created document object,
      *      either using the ACL from folderId if specified, or being ignored if no folderId is specified
      * @param ExtensionDataInterface|null $extension
-     * @return string
+     * @return string|null Returns the new item id of the relationship object or <code>null</code> if the repository
+     *      sent an empty result (which should not happen)
      */
     public function createRelationship(
         $repositoryId,
@@ -370,7 +371,25 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         AclInterface $removeAces = null,
         ExtensionDataInterface $extension = null
     ) {
-        // TODO: Implement createRelationship() method.
+        $url = $this->getRepositoryUrl($repositoryId);
+
+        $url->getQuery()->modify(
+            array(
+                Constants::CONTROL_CMISACTION => Constants::CMISACTION_CREATE_RELATIONSHIP,
+                Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false'
+            )
+        );
+
+        $url->getQuery()->modify($this->convertPropertiesToQueryArray($properties));
+        $this->appendPoliciesToUrl($url, $policies);
+        $this->appendAddAcesToUrl($url, $addAces);
+        $this->appendRemoveAcesToUrl($url, $removeAces);
+
+        $responseData = $this->post($url)->json();
+
+        $newObject = $this->getJsonConverter()->convertObject($responseData);
+
+        return ($newObject === null) ? null : $newObject->getId();
     }
 
     /**
