@@ -211,13 +211,13 @@ abstract class AbstractCmisObject implements CmisObjectInterface
                     $this->secondaryTypes[] = $type;
                 }
             }
-
-            $this->properties = $this->getObjectFactory()->convertPropertiesDataToPropertyList(
-                $this->getObjectType(),
-                $this->getSecondaryTypes(),
-                $properties
-            );
         }
+
+        $this->properties = $this->getObjectFactory()->convertPropertiesDataToPropertyList(
+            $this->getObjectType(),
+            (array) $this->getSecondaryTypes(),
+            $properties
+        );
 
         $this->extensions[(string) ExtensionLevel::cast(
             ExtensionLevel::PROPERTIES
