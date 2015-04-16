@@ -22,12 +22,12 @@ class RepositoryUrlCache
     /**
      * @var array
      */
-    protected $repositoryUrls;
+    protected $repositoryUrls = array();
 
     /**
      * @var array
      */
-    protected $rootUrls;
+    protected $rootUrls = array();
 
     /**
      * Adds the URLs of a repository to the cache.

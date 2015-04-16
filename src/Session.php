@@ -689,7 +689,7 @@ class Session implements SessionInterface
         }
 
         return $this->convertTypeDefinition(
-            $this->getBinding()->getRepositoryService()->createType($this->getRepositoryInfo(), $type)
+            $this->getBinding()->getRepositoryService()->createType($this->getRepositoryInfo()->getId(), $type)
         );
     }
 
