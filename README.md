@@ -9,7 +9,78 @@ PHP CMIS Client
 [![Latest Unstable Version](https://poser.pugx.org/dkd/php-cmis/v/unstable.svg)](https://packagist.org/packages/dkd/php-cmis)
 [![License](https://poser.pugx.org/dkd/php-cmis/license.svg)](https://packagist.org/packages/dkd/php-cmis)
 
-   **THIS LIBRARY IS STILL UNDER HEAVY DEVELOPMENT AND CAN'T BE USED YET!**
+PHP CMIS Client is a port of OpenCMIS (Java) to PHP.
+Interfaces are mostly the same so most OpenCMIS examples should
+be also usable for this PHP CMIS Library.
+
+Some basic examples can be found in the example folder
+(code is not nice but shows how it works).
+
+The functionality is not complete yet but still under development.
+
+Currently implemented Services
+------------------------------
+
+- RepositoryService
+  - [x] getRepositories (getRepositoryInfos)
+  - [x] getRepositoryInfo
+  - [x] getTypeChildren
+  - [x] getTypeDescendants
+  - [x] getTypeDefinition
+  - [x] updateType
+  - [x] createType
+  - [x] deleteType
+- NavigationService
+  - [x] getChildren
+  - [x] getDescendants
+  - [x] getFolderTree
+  - [x] getFolderParent
+  - [x] getObjectParents
+  - [x] getCheckedOutDocs
+- ObjectService
+  - [x] createDocument
+  - [x] createDocumentFromSource
+  - [x] createFolder
+  - [x] createItem
+  - [ ] createRelationship
+  - [ ] createPolicy
+  - [ ] getAllowableActions
+  - [x] getObject
+  - [x] getProperties
+  - [x] getObjectByPath
+  - [x] getContentStream
+  - [x] getRenditions
+  - [x] updateProperties
+  - [ ] bulkUpdateProperties
+  - [x] moveObject
+  - [x] deleteObject
+  - [x] deleteTree
+  - [x] setContentStream
+  - [ ] appendContentStream
+  - [x] deleteContentStream
+- MultifilingService
+  - [ ] addObjectToFolder
+  - [ ] removeObjectFromFolder
+- DiscoveryService
+  - [x] query
+  - [x] getContentChanges
+- VersioningService
+  - [ ] checkOut
+  - [ ] cancelCheckOut
+  - [ ] checkIn
+  - [ ] getObjectOfLatestVersion
+  - [ ] getPropertiesOfLatestVersion
+  - [ ] getAllVersions
+- RelationshipService
+  - [ ] getObjectRelationships
+- PolicyService
+  - [ ] applyPolicies
+  - [ ] removePolicy
+  - [ ] getAppliedPolicies
+- AclSservice
+  - [ ] getACL
+  - [ ] applyACL
+
 
 LICENSE
 =======
