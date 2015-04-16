@@ -436,6 +436,17 @@ abstract class AbstractCmisObject implements CmisObjectInterface
     }
 
     /**
+     * Returns the type of this CMIS object (object type identified by <code>cmis:objectTypeId</code>).
+     *
+     * @return ObjectTypeInterface the type of the object or <code>null</code> if the property
+     *         <code>cmis:objectTypeId</code> hasn't been requested or hasn't been provided by the repository
+     */
+    public function getType()
+    {
+        return $this->getObjectType();
+    }
+
+    /**
      * Returns the base type of this CMIS object (object type identified by cmis:baseTypeId).
      *
      * @return ObjectTypeInterface the base type of the object or <code>null</code> if the property cmis:baseTypeId
