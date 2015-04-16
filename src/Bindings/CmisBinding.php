@@ -1,6 +1,7 @@
 <?php
 namespace Dkd\PhpCmis\Bindings;
 
+use Dkd\Enumeration\Exception\InvalidEnumerationValueException;
 use Dkd\PhpCmis\AclServiceInterface;
 use Dkd\PhpCmis\Bindings\Browser\RepositoryService;
 use Dkd\PhpCmis\Data\BindingsObjectFactoryInterface;
@@ -107,8 +108,7 @@ class CmisBinding implements CmisBindingInterface
      */
     public function close()
     {
-        throw new \Exception('Not yet implemented!');
-        // TODO: Implement close() method.
+        $this->getCmisBindingsHelper()->getSpi($this->session)->close();
     }
 
     /**
@@ -118,8 +118,7 @@ class CmisBinding implements CmisBindingInterface
      */
     public function getAclService()
     {
-        throw new \Exception('Not yet implemented!');
-        // TODO: Implement getAclService() method.
+        return $this->getCmisBindingsHelper()->getSpi($this->session)->getAclService();
     }
 
     /**
@@ -129,8 +128,17 @@ class CmisBinding implements CmisBindingInterface
      */
     public function getBindingType()
     {
-        throw new \Exception('Not yet implemented!');
-        // TODO: Implement getBindingType() method.
+        $bindingType = $this->session->get(SessionParameter::BINDING_TYPE);
+
+        if (!is_string($bindingType)) {
+            return BindingType::cast(BindingType::CUSTOM);
+        }
+
+        try {
+            return BindingType::cast($bindingType);
+        } catch (InvalidEnumerationValueException $exception) {
+            return BindingType::cast(BindingType::CUSTOM);
+        }
     }
 
     /**
@@ -150,8 +158,7 @@ class CmisBinding implements CmisBindingInterface
      */
     public function getMultiFilingService()
     {
-        throw new \Exception('Not yet implemented!');
-        // TODO: Implement getMultiFilingService() method.
+        return $this->getCmisBindingsHelper()->getSpi($this->session)->getMultiFilingService();
     }
 
     /**
@@ -191,8 +198,7 @@ class CmisBinding implements CmisBindingInterface
      */
     public function getPolicyService()
     {
-        throw new \Exception('Not yet implemented!');
-        // TODO: Implement getPolicyService() method.
+        return $this->getCmisBindingsHelper()->getSpi($this->session)->getPolicyService();
     }
 
     /**
@@ -202,8 +208,7 @@ class CmisBinding implements CmisBindingInterface
      */
     public function getRelationshipService()
     {
-        throw new \Exception('Not yet implemented!');
-        // TODO: Implement getRelationshipService() method.
+        return $this->getCmisBindingsHelper()->getSpi($this->session)->getRelationshipService();
     }
 
     /**
@@ -223,8 +228,7 @@ class CmisBinding implements CmisBindingInterface
      */
     public function getSessionId()
     {
-        throw new \Exception('Not yet implemented!');
-        // TODO: Implement getSessionId() method.
+        return $this->session->getSessionId();
     }
 
     /**
@@ -234,8 +238,7 @@ class CmisBinding implements CmisBindingInterface
      */
     public function getVersioningService()
     {
-        throw new \Exception('Not yet implemented!');
-        // TODO: Implement getVersioningService() method.
+        return $this->getCmisBindingsHelper()->getSpi($this->session)->getVersioningService();
     }
 
     /**
