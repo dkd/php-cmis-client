@@ -28,9 +28,11 @@ use Dkd\PhpCmis\DataObjects\ObjectId;
 use Dkd\PhpCmis\Definitions\TypeDefinitionContainerInterface;
 use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
 use Dkd\PhpCmis\Enum\AclPropagation;
+use Dkd\PhpCmis\Enum\BaseTypeId;
 use Dkd\PhpCmis\Enum\CmisVersion;
 use Dkd\PhpCmis\Enum\IncludeRelationships;
 use Dkd\PhpCmis\Enum\RelationshipDirection;
+use Dkd\PhpCmis\Enum\Updatability;
 use Dkd\PhpCmis\Enum\VersioningState;
 use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
 use Dkd\PhpCmis\Exception\CmisNotSupportedException;
@@ -94,6 +96,16 @@ class Session implements SessionInterface
     protected $objectTypeCache;
 
     /**
+     * @var Updatability[]
+     */
+    protected static $createUpdatability = array();
+
+    /**
+     * @var Updatability[]
+     */
+    protected static $createAndCheckoutUpdatability = array();
+
+    /**
      * @param array $parameters
      * @param ObjectFactoryInterface $objectFactory
      * @param Cache $cache
@@ -136,6 +148,17 @@ class Session implements SessionInterface
 
         $this->repositoryInfo = $this->getBinding()->getRepositoryService()->getRepositoryInfo(
             $this->parameters[SessionParameter::REPOSITORY_ID]
+        );
+
+        self::$createUpdatability = array(
+            Updatability::cast(Updatability::ONCREATE),
+            Updatability::cast(Updatability::READWRITE)
+        );
+
+        self::$createAndCheckoutUpdatability = array(
+            Updatability::cast(Updatability::ONCREATE),
+            Updatability::cast(Updatability::READWRITE),
+            Updatability::cast(Updatability::WHENCHECKEDOUT)
         );
     }
 
@@ -316,7 +339,8 @@ class Session implements SessionInterface
      *      either using the ACL from folderId if specified, or being applied if no folderId is specified.
      * @param AceInterface[] $removeAces A list of ACEs that MUST be removed from the newly-created document
      *      object, either using the ACL from folderId if specified, or being ignored if no folderId is specified.
-     * @return ObjectIdInterface the object ID of the new document
+     * @return ObjectIdInterface|null the object ID of the new document or <code>null</code> if the document could not
+     *      be created.
      * @throws CmisInvalidArgumentException Throws an <code>CmisInvalidArgumentException</code> if empty
      *      property list is given
      */
@@ -335,7 +359,12 @@ class Session implements SessionInterface
 
         $objectId = $this->getBinding()->getObjectService()->createDocument(
             $this->getRepositoryId(),
-            $this->getObjectFactory()->convertProperties($properties),
+            $this->getObjectFactory()->convertProperties(
+                $properties,
+                null,
+                array(),
+                self::$createAndCheckoutUpdatability
+            ),
             $folderId === null ? null : $folderId->getId(),
             $contentStream,
             $versioningState,
@@ -344,6 +373,10 @@ class Session implements SessionInterface
             $this->getObjectFactory()->convertAces($removeAces),
             null
         );
+
+        if ($objectId === null) {
+            return null;
+        }
 
         return $this->createObjectId($objectId);
     }
@@ -375,7 +408,8 @@ class Session implements SessionInterface
      *      either using the ACL from folderId if specified, or being applied if no folderId is specified.
      * @param AceInterface[] $removeAces A list of ACEs that MUST be removed from the newly-created document
      *      object, either using the ACL from folderId if specified, or being ignored if no folderId is specified.
-     * @return ObjectIdInterface the object ID of the new document
+     * @return ObjectIdInterface|null the object ID of the new document or <code>null</code> if the document could not
+     *      be created.
      * @throws CmisInvalidArgumentException Throws an <code>CmisInvalidArgumentException</code> if empty
      *      property list is given
      */
@@ -388,14 +422,32 @@ class Session implements SessionInterface
         array $addAces = array(),
         array $removeAces = array()
     ) {
-        if (empty($properties)) {
-            throw new CmisInvalidArgumentException('Properties must not be empty!');
+        if (!$source instanceof CmisObjectInterface) {
+            $sourceObject = $this->getObject($source);
+        } else {
+            $sourceObject = $source;
+        }
+
+        $type = $sourceObject->getType();
+        $secondaryTypes = $sourceObject->getSecondaryTypes();
+
+        if ($secondaryTypes === null) {
+            $secondaryTypes = array();
+        }
+
+        if (!BaseTypeId::cast($type->getBaseTypeId())->equals(BaseTypeId::CMIS_DOCUMENT)) {
+            throw new CmisInvalidArgumentException('Source object must be a document!');
         }
 
         $objectId = $this->getBinding()->getObjectService()->createDocumentFromSource(
             $this->getRepositoryId(),
             $source->getId(),
-            $this->getObjectFactory()->convertProperties($properties),
+            $this->getObjectFactory()->convertProperties(
+                $properties,
+                $type,
+                $secondaryTypes,
+                self::$createAndCheckoutUpdatability
+            ),
             $folderId === null ? null : $folderId->getId(),
             $versioningState,
             $this->getObjectFactory()->convertPolicies($policies),
@@ -403,6 +455,10 @@ class Session implements SessionInterface
             $this->getObjectFactory()->convertAces($removeAces),
             null
         );
+
+        if ($objectId === null) {
+            return null;
+        }
 
         return $this->createObjectId($objectId);
     }
