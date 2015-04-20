@@ -48,7 +48,7 @@ class CmisExtensionElement implements CmisExtensionElementInterface
      * @param string $namespace
      * @param string $name
      * @param array $attributes
-     * @param string $value
+     * @param string|null $value
      * @param CmisExtensionElement[] $children
      * @throws \InvalidArgumentException
      */

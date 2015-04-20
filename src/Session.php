@@ -107,11 +107,11 @@ class Session implements SessionInterface
 
     /**
      * @param array $parameters
-     * @param ObjectFactoryInterface $objectFactory
-     * @param Cache $cache
-     * @param Cache $typeDefinitionCache
-     * @param Cache $objectTypeCache
-     * @param CmisBindingsHelper $cmisBindingHelper
+     * @param ObjectFactoryInterface|null $objectFactory
+     * @param Cache|null $cache
+     * @param Cache|null $typeDefinitionCache
+     * @param Cache|null $objectTypeCache
+     * @param CmisBindingsHelper|null $cmisBindingHelper
      * @throws CmisInvalidArgumentException
      * @throws IllegalStateException
      */
@@ -805,9 +805,10 @@ class Session implements SessionInterface
      * Retrieves the main content stream of a document.
      *
      * @param ObjectIdInterface $docId the ID of the document
-     * @param string $streamId the stream ID
-     * @param integer $offset the offset of the stream or <code>null</code> to read the stream from the beginning
-     * @param integer $length the maximum length of the stream or <code>null</code> to read to the end of the stream
+     * @param string|null $streamId the stream ID
+     * @param integer|null $offset the offset of the stream or <code>null</code> to read the stream from the beginning
+     * @param integer|null $length the maximum length of the stream or <code>null</code> to read to the end of the
+     *      stream
      * @return StreamInterface|null the content stream or <code>null</code> if the
      *      document has no content stream
      */
@@ -853,7 +854,7 @@ class Session implements SessionInterface
      * @param ObjectIdInterface $objectId the document ID of an arbitrary version in the version series
      * @param boolean $major if <code>true</code> the latest major version will be returned,
      *      otherwise the very last version will be returned
-     * @param OperationContextInterface $context the OperationContext to use
+     * @param OperationContextInterface|null $context the OperationContext to use
      * @return DocumentInterface the latest document version
      */
     public function getLatestDocumentVersion(
@@ -915,7 +916,7 @@ class Session implements SessionInterface
      * if necessary.
      *
      * @param string $path the object path
-     * @param OperationContextInterface $context the OperationContext to use
+     * @param OperationContextInterface|null $context the OperationContext to use
      * @return CmisObjectInterface Returns a CMIS object from the session cache.
      * @throws CmisInvalidArgumentException Throws an <code>CmisInvalidArgumentException</code>
      *      if path is empty.
@@ -1004,7 +1005,7 @@ class Session implements SessionInterface
     /**
      * Gets the root folder of the repository with the given OperationContext.
      *
-     * @param OperationContextInterface $context
+     * @param OperationContextInterface|null $context
      * @return FolderInterface the root folder object
      * @throws CmisRuntimeException
      */
@@ -1137,7 +1138,7 @@ class Session implements SessionInterface
      * @param string|null $where the WHERE part of the query
      * @param boolean $searchAllVersions specifies whether non-latest document versions should be included or not,
      *      <code>true</code> searches all document versions, <code>false</code> only searches latest document versions
-     * @param OperationContextInterface $context the operation context to use
+     * @param OperationContextInterface|null $context the operation context to use
      * @return CmisObjectInterface[]
      * @throws CmisInvalidArgumentException If type id is empty
      */

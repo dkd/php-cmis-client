@@ -49,7 +49,7 @@ abstract class AbstractFileableCmisObject extends AbstractCmisObject implements 
     /**
      * Returns the parents of this object.
      *
-     * @param OperationContextInterface $context the OperationContext to use to fetch the parent folder objects
+     * @param OperationContextInterface|null $context the OperationContext to use to fetch the parent folder objects
      * @return FolderInterface[] the list of parent folders of this object or an empty list if this object is unfiled
      *     or if this object is the root folder
      * @throws CmisRuntimeException Throws exception if invalid data is returned by the repository
@@ -251,8 +251,8 @@ abstract class AbstractFileableCmisObject extends AbstractCmisObject implements 
     }
 
     /**
-     * @param ObjectIdInterface $objectId
-     * @param OperationContextInterface $context
+     * @param ObjectIdInterface|null $objectId
+     * @param OperationContextInterface|null $context
      * @return CmisObjectInterface|null
      * @throws CmisRuntimeException Throws exception if newly created object is not a document as expected
      */

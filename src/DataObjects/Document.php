@@ -168,13 +168,13 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
     /**
      * Creates a copy of this document, including content.
      *
-     * @param ObjectIdInterface $targetFolderId the ID of the target folder, <code>null</code> to create an unfiled
+     * @param ObjectIdInterface|null $targetFolderId the ID of the target folder, <code>null</code> to create an unfiled
      *      document
      * @param array $properties The property values that MUST be applied to the object. This list of properties SHOULD
      *     only contain properties whose values differ from the source document. The array key is the property name
      *     the value is the property value.
-     * @param VersioningState $versioningState An enumeration specifying what the versioning state of the newly-created
-     *     object MUST be. Valid values are:
+     * @param VersioningState|null $versioningState An enumeration specifying what the versioning state of the
+     *     newly-created object MUST be. Valid values are:
      *      <code>none</code>
      *          (default, if the object-type is not versionable) The document MUST be created as a non-versionable
      *          document.
@@ -191,7 +191,7 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
      *     using the ACL from folderId if specified, or being applied if no folderId is specified.
      * @param AceInterface[] $removeAces A list of ACEs that MUST be removed from the newly-created document object,
      *     either using the ACL from folderId if specified, or being ignored if no folderId is specified.
-     * @param OperationContextInterface $context
+     * @param OperationContextInterface|null $context
      * @return DocumentInterface the new document object or <code>null</code> if the parameter <code>context</code> was
      *     set to <code>null</code>
      * @throws CmisRuntimeException Exception is thrown if the created object is not a document
@@ -240,13 +240,13 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
     /**
      * Copies the document manually. The content is streamed from the repository and back.
      *
-     * @param ObjectIdInterface $targetFolderId the ID of the target folder, <code>null</code> to create an unfiled
+     * @param ObjectIdInterface|null $targetFolderId the ID of the target folder, <code>null</code> to create an unfiled
      *      document
      * @param array $properties The property values that MUST be applied to the object. This list of properties SHOULD
      *     only contain properties whose values differ from the source document. The array key is the property name
      *     the value is the property value.
-     * @param VersioningState $versioningState An enumeration specifying what the versioning state of the newly-created
-     *     object MUST be. Valid values are:
+     * @param VersioningState|null $versioningState An enumeration specifying what the versioning state of the
+     *     newly-created object MUST be. Valid values are:
      *      <code>none</code>
      *          (default, if the object-type is not versionable) The document MUST be created as a non-versionable
      *          document.
@@ -359,7 +359,7 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
      * The behavior of this method is undefined if the document is not versionable
      * and can be different for each repository.
      *
-     * @param OperationContextInterface $context
+     * @param OperationContextInterface|null $context
      * @return DocumentInterface[]
      */
     public function getAllVersions(OperationContextInterface $context = null)
@@ -420,9 +420,10 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
      * Retrieves the content stream that is associated with the given stream ID.
      * This is usually a rendition of the document.
      *
-     * @param string $streamId the stream ID
-     * @param integer $offset the offset of the stream or <code>null</code> to read the stream from the beginning
-     * @param integer $length the maximum length of the stream or <code>null</code> to read to the end of the stream
+     * @param string|null $streamId the stream ID
+     * @param integer|null $offset the offset of the stream or <code>null</code> to read the stream from the beginning
+     * @param integer|null $length the maximum length of the stream or <code>null</code> to read to the end of the
+     *      stream
      * @return StreamInterface|null the content stream, or <code>null</code> if no content is associated with this
      *      stream ID
      */

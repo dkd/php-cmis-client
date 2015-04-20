@@ -43,7 +43,7 @@ interface RenditionInterface extends RenditionDataInterface
     /**
      * Returns the rendition document using the provides OperationContext if the rendition is a stand-alone document.
      *
-     * @param OperationContextInterface $context
+     * @param OperationContextInterface|null $context
      * @return DocumentInterface|null the rendition document or <code>null</code> if there is no rendition document
      */
     public function getRenditionDocument(OperationContextInterface $context = null);

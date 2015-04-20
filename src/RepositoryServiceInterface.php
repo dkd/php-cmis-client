@@ -100,9 +100,9 @@ interface RepositoryServiceInterface
      * Returns the set of descendant object type defined for the repository under the specified type.
      *
      * @param string $repositoryId repositoryId - the identifier for the repository
-     * @param string $typeId|null the typeId of an object type specified in the repository
+     * @param string|null $typeId the typeId of an object type specified in the repository
      * (if not specified the repository MUST return all types and MUST ignore the value of the depth parameter)
-     * @param integer $depth|null the number of levels of depth in the type hierarchy from which
+     * @param integer|null $depth the number of levels of depth in the type hierarchy from which
      * to return results (default is repository specific)
      * @param boolean $includePropertyDefinitions if <code>true</code> the repository MUST return the property
      * definitions for each object type returned (default is <code>false</code>)

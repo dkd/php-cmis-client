@@ -114,7 +114,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
      * @param SessionInterface $session
      * @param ObjectTypeInterface $objectType
      * @param OperationContextInterface $context
-     * @param ObjectDataInterface $objectData
+     * @param ObjectDataInterface|null $objectData
      */
     public function initialize(
         SessionInterface $session,
@@ -245,7 +245,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
     /**
      * Returns a list of missing property keys
      *
-     * @param PropertyDefinitionInterface[] $properties
+     * @param PropertyDefinitionInterface[]|null $properties
      * @return array
      */
     protected function getMissingBaseProperties(array $properties = null)
