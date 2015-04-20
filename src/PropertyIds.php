@@ -21,7 +21,7 @@ final class PropertyIds
      * CMIS data type: string
      * type: string
      */
-    const NAME = "cmis:name";
+    const NAME = 'cmis:name';
 
     /**
      * CMIS property <code>cmis:objectId</code> ID of the object.
@@ -29,7 +29,7 @@ final class PropertyIds
      * CMIS data type: id
      * type: string
      */
-    const OBJECT_ID = "cmis:objectId";
+    const OBJECT_ID = 'cmis:objectId';
 
     /**
      * CMIS property <code>cmis:objectTypeId</code> ID of primary type of the
@@ -38,7 +38,7 @@ final class PropertyIds
      * CMIS data type: id
      * type: string
      */
-    const OBJECT_TYPE_ID = "cmis:objectTypeId";
+    const OBJECT_TYPE_ID = 'cmis:objectTypeId';
 
     /**
      * CMIS property <code>cmis:baseTypeId</code> ID of the base type of the object.
@@ -46,7 +46,7 @@ final class PropertyIds
      * CMIS data type: id
      * type: string
      */
-    const BASE_TYPE_ID = "cmis:baseTypeId";
+    const BASE_TYPE_ID = 'cmis:baseTypeId';
 
     /**
      * CMIS property <code>cmis:createdBy</code> creator of the object.
@@ -54,7 +54,7 @@ final class PropertyIds
      * CMIS data type: string
      * type: string
      */
-    const CREATED_BY = "cmis:createdBy";
+    const CREATED_BY = 'cmis:createdBy';
 
     /**
      * CMIS property <code>cmis:creationDate</code> creation date.
@@ -62,7 +62,7 @@ final class PropertyIds
      * CMIS data type: datetime
      * type: DateTime
      */
-    const CREATION_DATE = "cmis:creationDate";
+    const CREATION_DATE = 'cmis:creationDate';
 
     /**
      * CMIS property <code>cmis:lastModifiedBy</code> last modifier of the object.
@@ -70,7 +70,7 @@ final class PropertyIds
      * CMIS data type: string
      * type: string
      */
-    const LAST_MODIFIED_BY = "cmis:lastModifiedBy";
+    const LAST_MODIFIED_BY = 'cmis:lastModifiedBy';
 
     /**
      * CMIS property <code>cmis:lastModificationDate</code> last modification date.
@@ -78,7 +78,7 @@ final class PropertyIds
      * CMIS data type: datetime
      * type: DateTime
      */
-    const LAST_MODIFICATION_DATE = "cmis:lastModificationDate";
+    const LAST_MODIFICATION_DATE = 'cmis:lastModificationDate';
 
     /**
      * CMIS property <code>cmis:changeToken</code> change token of the object.
@@ -86,7 +86,7 @@ final class PropertyIds
      * CMIS data type: string
      * type: string
      */
-    const CHANGE_TOKEN = "cmis:changeToken";
+    const CHANGE_TOKEN = 'cmis:changeToken';
 
     /**
      * CMIS property <code>cmis:description</code> description of the object.
@@ -94,7 +94,7 @@ final class PropertyIds
      * CMIS data type: string
      * type: string
      */
-    const DESCRIPTION = "cmis:description";
+    const DESCRIPTION = 'cmis:description';
 
     /**
      * CMIS property <code>cmis:secondaryObjectTypeIds} (multivalue): list of
@@ -103,7 +103,7 @@ final class PropertyIds
      * CMIS data type: id
      * type: string
      */
-    const SECONDARY_OBJECT_TYPE_IDS = "cmis:secondaryObjectTypeIds";
+    const SECONDARY_OBJECT_TYPE_IDS = 'cmis:secondaryObjectTypeIds';
 
     protected static $BASE_PROPERTY_KEYS = array(
         self::NAME,
@@ -135,7 +135,7 @@ final class PropertyIds
      * CMIS data type: boolean
      * type: boolean
      */
-    const IS_IMMUTABLE = "cmis:isImmutable";
+    const IS_IMMUTABLE = 'cmis:isImmutable';
 
     /**
      * CMIS document property <code>cmis:isLatestVersion</code> flag the indicates
@@ -144,7 +144,7 @@ final class PropertyIds
      * CMIS data type: boolean
      * type: boolean
      */
-    const IS_LATEST_VERSION = "cmis:isLatestVersion";
+    const IS_LATEST_VERSION = 'cmis:isLatestVersion';
 
     /**
      * CMIS document property <code>cmis:isMajorVersion</code> flag the indicates if
@@ -153,7 +153,7 @@ final class PropertyIds
      * CMIS data type: boolean
      * type: boolean
      */
-    const IS_MAJOR_VERSION = "cmis:isMajorVersion";
+    const IS_MAJOR_VERSION = 'cmis:isMajorVersion';
 
     /**
      * CMIS document property <code>cmis:isLatestMajorVersion</code> flag the
@@ -162,7 +162,7 @@ final class PropertyIds
      * CMIS data type: boolean
      * type: boolean
      */
-    const IS_LATEST_MAJOR_VERSION = "cmis:isLatestMajorVersion";
+    const IS_LATEST_MAJOR_VERSION = 'cmis:isLatestMajorVersion';
 
     /**
      * CMIS document property <code>cmis:versionLabel</code> version label of the
@@ -171,7 +171,7 @@ final class PropertyIds
      * CMIS data type: string
      * type: string
      */
-    const VERSION_LABEL = "cmis:versionLabel";
+    const VERSION_LABEL = 'cmis:versionLabel';
 
     /**
      * CMIS document property <code>cmis:versionSeriesId</code> ID of the version
@@ -180,7 +180,7 @@ final class PropertyIds
      * CMIS data type: id
      * type: string
      */
-    const VERSION_SERIES_ID = "cmis:versionSeriesId";
+    const VERSION_SERIES_ID = 'cmis:versionSeriesId';
 
     /**
      * CMIS document property <code>cmis:isVersionSeriesCheckedOut</code> flag the
@@ -189,7 +189,7 @@ final class PropertyIds
      * CMIS data type: boolean
      * type: boolean
      */
-    const IS_VERSION_SERIES_CHECKED_OUT = "cmis:isVersionSeriesCheckedOut";
+    const IS_VERSION_SERIES_CHECKED_OUT = 'cmis:isVersionSeriesCheckedOut';
 
     /**
      * CMIS document property <code>cmis:versionSeriesCheckedOutBy</code> user who
@@ -198,7 +198,7 @@ final class PropertyIds
      * CMIS data type: string
      * type: string
      */
-    const VERSION_SERIES_CHECKED_OUT_BY = "cmis:versionSeriesCheckedOutBy";
+    const VERSION_SERIES_CHECKED_OUT_BY = 'cmis:versionSeriesCheckedOutBy';
 
     /**
      * CMIS document property <code>cmis:versionSeriesCheckedOutId</code> ID of the
@@ -207,7 +207,7 @@ final class PropertyIds
      * CMIS data type: id
      * type: string
      */
-    const VERSION_SERIES_CHECKED_OUT_ID = "cmis:versionSeriesCheckedOutId";
+    const VERSION_SERIES_CHECKED_OUT_ID = 'cmis:versionSeriesCheckedOutId';
 
     /**
      * CMIS document property <code>cmis:checkinComment</code> check-in comment for
@@ -216,7 +216,7 @@ final class PropertyIds
      * CMIS data type: string
      * type: string
      */
-    const CHECKIN_COMMENT = "cmis:checkinComment";
+    const CHECKIN_COMMENT = 'cmis:checkinComment';
 
     /**
      * CMIS document property <code>cmis:contentStreamLength</code> length of the
@@ -225,7 +225,7 @@ final class PropertyIds
      * CMIS data type: integer
      * type: BigInteger
      */
-    const CONTENT_STREAM_LENGTH = "cmis:contentStreamLength";
+    const CONTENT_STREAM_LENGTH = 'cmis:contentStreamLength';
 
     /**
      * CMIS document property <code>cmis:contentStreamMimeType</code> MIME type of
@@ -234,7 +234,7 @@ final class PropertyIds
      * CMIS data type: string
      * type: string
      */
-    const CONTENT_STREAM_MIME_TYPE = "cmis:contentStreamMimeType";
+    const CONTENT_STREAM_MIME_TYPE = 'cmis:contentStreamMimeType';
 
     /**
      * CMIS document property <code>cmis:contentStreamFileName</code> file name, if
@@ -243,7 +243,7 @@ final class PropertyIds
      * CMIS data type: string
      * type: string
      */
-    const CONTENT_STREAM_FILE_NAME = "cmis:contentStreamFileName";
+    const CONTENT_STREAM_FILE_NAME = 'cmis:contentStreamFileName';
 
     /**
      * CMIS document property <code>cmis:contentStreamId</code> content stream ID.
@@ -251,7 +251,7 @@ final class PropertyIds
      * CMIS data type: id
      * type: string
      */
-    const CONTENT_STREAM_ID = "cmis:contentStreamId";
+    const CONTENT_STREAM_ID = 'cmis:contentStreamId';
 
     /**
      * CMIS document property <code>cmis:isPrivateWorkingCopy</code> flag the
@@ -260,7 +260,7 @@ final class PropertyIds
      * CMIS data type: boolean
      * type: boolean
      */
-    const IS_PRIVATE_WORKING_COPY = "cmis:isPrivateWorkingCopy";
+    const IS_PRIVATE_WORKING_COPY = 'cmis:isPrivateWorkingCopy';
 
 
     // ---- folder ----
@@ -270,7 +270,7 @@ final class PropertyIds
      * CMIS data type: id
      * type: string
      */
-    const PARENT_ID = "cmis:parentId";
+    const PARENT_ID = 'cmis:parentId';
 
     /**
      * CMIS folder property <code>cmis:allowedChildObjectTypeIds} (multivalue):
@@ -279,7 +279,7 @@ final class PropertyIds
      * CMIS data type: id
      * type: string
      */
-    const ALLOWED_CHILD_OBJECT_TYPE_IDS = "cmis:allowedChildObjectTypeIds";
+    const ALLOWED_CHILD_OBJECT_TYPE_IDS = 'cmis:allowedChildObjectTypeIds';
 
     /**
      * CMIS folder property <code>cmis:path</code> folder path.
@@ -287,7 +287,7 @@ final class PropertyIds
      * CMIS data type: string
      * type: string
      */
-    const PATH = "cmis:path";
+    const PATH = 'cmis:path';
 
 
     // ---- relationship ----
@@ -298,7 +298,7 @@ final class PropertyIds
      * CMIS data type: id
      * type: string
      */
-    const SOURCE_ID = "cmis:sourceId";
+    const SOURCE_ID = 'cmis:sourceId';
 
     /**
      * CMIS relationship property <code>cmis:targetId</code> ID of the target
@@ -307,7 +307,7 @@ final class PropertyIds
      * CMIS data type: id
      * type: string
      */
-    const TARGET_ID = "cmis:targetId";
+    const TARGET_ID = 'cmis:targetId';
 
 
     // ---- policy ----
@@ -317,7 +317,7 @@ final class PropertyIds
      * CMIS data type: string
      * type: string
      */
-    const POLICY_TEXT = "cmis:policyText";
+    const POLICY_TEXT = 'cmis:policyText';
 
 
     // ---- retention ----
@@ -327,7 +327,7 @@ final class PropertyIds
      * CMIS data type: datetime
      * type: DateTime
      */
-    const EXPIRATION_DATE = "cmis:rm_expirationDate";
+    const EXPIRATION_DATE = 'cmis:rm_expirationDate';
 
     /**
      * CMIS retention property <code>cmis:rm_startOfRetention</code> start date.
@@ -335,7 +335,7 @@ final class PropertyIds
      * CMIS data type: datetime
      * type: DateTime
      */
-    const START_OF_RETENTION = "cmis:rm_startOfRetention";
+    const START_OF_RETENTION = 'cmis:rm_startOfRetention';
 
     /**
      * CMIS retention property <code>cmis:rm_destructionDate</code> destruction
@@ -344,7 +344,7 @@ final class PropertyIds
      * CMIS data type: datetime
      * type: DateTime
      */
-    const DESTRUCTION_DATE = "cmis:rm_destructionDate";
+    const DESTRUCTION_DATE = 'cmis:rm_destructionDate';
 
     /**
      * CMIS retention property <code>cmis:rm_holdIds} (multivalue): IDs of the
@@ -353,7 +353,7 @@ final class PropertyIds
      * CMIS data type: id
      * type: string
      */
-    const HOLD_IDS = "cmis:rm_holdIds";
+    const HOLD_IDS = 'cmis:rm_holdIds';
 
 
     // ---- extensions ----
@@ -366,5 +366,5 @@ final class PropertyIds
      *
      * @cmis Extension
      */
-    const CONTENT_STREAM_HASH = "cmis:contentStreamHash";
+    const CONTENT_STREAM_HASH = 'cmis:contentStreamHash';
 }

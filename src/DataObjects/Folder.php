@@ -468,7 +468,7 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
 
         // we still don't know the path ... it's not a CMIS compliant repository
         if ($path === null) {
-            throw new CmisRuntimeException('Repository didn\'t return ' . PropertyIds::PATH . "!");
+            throw new CmisRuntimeException('Repository didn\'t return ' . PropertyIds::PATH . '!');
         }
 
         return $path;

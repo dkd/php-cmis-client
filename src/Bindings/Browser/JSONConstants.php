@@ -736,7 +736,7 @@ class JSONConstants
         return self::$TYPE_TYPE_MUTABILITY_KEYS;
     }
 
-    const JSON_FAILEDTODELETE_ID = "ids";
+    const JSON_FAILEDTODELETE_ID = 'ids';
 
     /**
      * @var array

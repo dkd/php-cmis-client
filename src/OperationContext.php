@@ -17,7 +17,7 @@ use Dkd\PhpCmis\Enum\IncludeRelationships;
  */
 class OperationContext implements OperationContextInterface
 {
-    const PROPERTIES_WILDCARD = "*";
+    const PROPERTIES_WILDCARD = '*';
 
     /**
      * @var string[]
@@ -145,7 +145,7 @@ class OperationContext implements OperationContextInterface
             }
 
             if (stripos($filter, ',') !== false) {
-                throw new \InvalidArgumentException("Filter must not contain a comma!");
+                throw new \InvalidArgumentException('Filter must not contain a comma!');
             }
 
             $filters[] = $filter;
@@ -275,7 +275,7 @@ class OperationContext implements OperationContextInterface
     public function setMaxItemsPerPage($maxItemsPerPage)
     {
         if ((int) $maxItemsPerPage < 1) {
-            throw new \InvalidArgumentException("itemsPerPage must be > 0!");
+            throw new \InvalidArgumentException('itemsPerPage must be > 0!');
         }
         $this->maxItemsPerPage = (int) $maxItemsPerPage;
 
