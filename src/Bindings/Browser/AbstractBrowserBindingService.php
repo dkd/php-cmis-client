@@ -309,6 +309,10 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
             }
         }
 
+        if (empty($message) && $exception !== null) {
+            $message = $exception->getMessage();
+        }
+
         // fall back to status code
         switch ($code) {
             case 301:
