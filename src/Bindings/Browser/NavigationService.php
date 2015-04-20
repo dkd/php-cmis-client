@@ -32,7 +32,7 @@ class NavigationService extends AbstractBrowserBindingService implements Navigat
      * @param string $folderId the identifier for the folder
      * @param string|null $filter a comma-separated list of query names that defines which properties must be
      *      returned by the repository (default is repository specific)
-     * @param string $orderBy a comma-separated list of query names that define the order of the result set.
+     * @param string|null $orderBy a comma-separated list of query names that define the order of the result set.
      *      Each query name must be followed by the ascending modifier "ASC" or the descending modifier "DESC"
      *      (default is repository specific)
      * @param boolean $includeAllowableActions if <code>true</code>, then the repository must return the available

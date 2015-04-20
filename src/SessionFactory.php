@@ -22,9 +22,9 @@ class SessionFactory implements SessionFactoryInterface
 {
     /**
      * @param array $parameters
-     * @param ObjectFactoryInterface $objectFactory
-     * @param Cache $cache
-     * @param Cache $typeDefinitionCache
+     * @param ObjectFactoryInterface|null $objectFactory
+     * @param Cache|null $cache
+     * @param Cache|null $typeDefinitionCache
      * @return Session
      */
     public function createSession(
@@ -39,9 +39,9 @@ class SessionFactory implements SessionFactoryInterface
 
     /**
      * @param array $parameters
-     * @param ObjectFactoryInterface $objectFactory
-     * @param Cache $cache
-     * @param Cache $typeDefinitionCache
+     * @param ObjectFactoryInterface|null $objectFactory
+     * @param Cache|null $cache
+     * @param Cache|null $typeDefinitionCache
      * @return Data\RepositoryInfoInterface[]
      */
     public function getRepositories(

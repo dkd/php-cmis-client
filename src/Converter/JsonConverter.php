@@ -1913,7 +1913,7 @@ class JsonConverter extends AbstractDataConverter
     /**
      * Converts FailedToDelete ids.
      *
-     * @param array $data
+     * @param array|null $data
      * @return FailedToDeleteData
      */
     public function convertFailedToDelete(array $data = null)

@@ -29,7 +29,7 @@ class CmisBindingsHelper
 
     /**
      * @param array $parameters
-     * @param Cache $typeDefinitionCache
+     * @param Cache|null $typeDefinitionCache
      * @return CmisBindingInterface
      */
     public function createBinding(

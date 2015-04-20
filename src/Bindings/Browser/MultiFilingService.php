@@ -43,7 +43,7 @@ class MultiFilingService extends AbstractBrowserBindingService implements MultiF
      *
      * @param string $repositoryId The identifier for the repository.
      * @param string $objectId The identifier for the object.
-     * @param string $folderId The folder from which the object is to be removed.
+     * @param string|null $folderId The folder from which the object is to be removed.
      *      If no value is specified, then the repository MUST remove the object from all folders in which it is
      *      currently filed.
      * @param ExtensionDataInterface|null $extension

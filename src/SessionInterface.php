@@ -56,7 +56,7 @@ interface SessionInterface
      * @param ObjectIdInterface $objectId the ID the object
      * @param AceInterface[] $addAces of ACEs to be added or <code>null</code> if no ACEs should be added
      * @param AceInterface[] $removeAces list of ACEs to be removed or <code>null</code> if no ACEs should be removed
-     * @param AclPropagation $aclPropagation value that defines the propagation of the ACE changes;
+     * @param AclPropagation|null $aclPropagation value that defines the propagation of the ACE changes;
      *      <code>null</code> is equal to AclPropagation.REPOSITORYDETERMINED
      * @return AclInterface the new ACL of the object
      */
@@ -101,14 +101,14 @@ interface SessionInterface
      * Creates a new document. The stream in contentStream is consumed but not closed by this method.
      *
      * @param string[] $properties The property values that MUST be applied to the newly-created document object.
-     * @param ObjectIdInterface $folderId If specified, the identifier for the folder that MUST be the parent folder
-     *      for the newly-created document object. This parameter MUST be specified if the repository does NOT
+     * @param ObjectIdInterface|null $folderId If specified, the identifier for the folder that MUST be the parent
+     *      folder for the newly-created document object. This parameter MUST be specified if the repository does NOT
      *      support the optional "unfiling" capability.
-     * @param StreamInterface $contentStream The content stream that MUST be stored for the newly-created document
+     * @param StreamInterface|null $contentStream The content stream that MUST be stored for the newly-created document
      *      object. The method of passing the contentStream to the server and the encoding mechanism will be specified
      *      by each specific binding. MUST be required if the type requires it.
-     * @param VersioningState $versioningState An enumeration specifying what the versioning state of the newly-created
-     *     object MUST be. Valid values are:
+     * @param VersioningState|null $versioningState An enumeration specifying what the versioning state of the
+     *     newly-created object MUST be. Valid values are:
      *      <code>none</code>
      *          (default, if the object-type is not versionable) The document MUST be created as a non-versionable
      *          document.
@@ -143,11 +143,11 @@ interface SessionInterface
      * @param ObjectIdInterface $source The identifier for the source document.
      * @param string[] $properties The property values that MUST be applied to the object. This list of properties
      *      SHOULD only contain properties whose values differ from the source document.
-     * @param ObjectIdInterface $folderId If specified, the identifier for the folder that MUST be the parent folder
-     *      for the newly-created document object. This parameter MUST be specified if the repository does NOT
+     * @param ObjectIdInterface|null $folderId If specified, the identifier for the folder that MUST be the parent
+     *      folder for the newly-created document object. This parameter MUST be specified if the repository does NOT
      *      support the optional "unfiling" capability.
-     * @param VersioningState $versioningState An enumeration specifying what the versioning state of the newly-created
-     *     object MUST be. Valid values are:
+     * @param VersioningState|null $versioningState An enumeration specifying what the versioning state of the
+     *     newly-created object MUST be. Valid values are:
      *      <code>none</code>
      *          (default, if the object-type is not versionable) The document MUST be created as a non-versionable
      *          document.
@@ -233,7 +233,7 @@ interface SessionInterface
      * @param string[] $renditionFilter the rendition filter or <code>null</code> for no renditions
      * @param boolean $includePathSegments indicates whether path segment or the relative path segment should
      *      be included or not
-     * @param string $orderBy the object order, a comma-separated list of query names and the ascending
+     * @param string|null $orderBy the object order, a comma-separated list of query names and the ascending
      * modifier "ASC" or the descending modifier "DESC" for each query name
      * @param boolean $cacheEnabled flag that indicates if the object cache should be used
      * @param integer $maxItemsPerPage the max items per page/batch
@@ -353,7 +353,7 @@ interface SessionInterface
     /**
      * Returns all checked out documents with the given OperationContext.
      *
-     * @param OperationContextInterface $context
+     * @param OperationContextInterface|null $context
      * @return DocumentInterface[]
      */
     public function getCheckedOutDocs(OperationContextInterface $context = null);
@@ -364,8 +364,8 @@ interface SessionInterface
      * @param string $changeLogToken the change log token to start from or <code>null</code> to start from
      *      the first available event in the repository
      * @param boolean $includeProperties indicates whether changed properties should be included in the result or not
-     * @param integer $maxNumItems maximum numbers of events
-     * @param OperationContextInterface $context the OperationContext
+     * @param integer|null $maxNumItems maximum numbers of events
+     * @param OperationContextInterface|null $context the OperationContext
      * @return ChangeEventsInterface the change events
      */
     public function getContentChanges(
@@ -379,9 +379,10 @@ interface SessionInterface
      * Retrieves the main content stream of a document.
      *
      * @param ObjectIdInterface $docId the ID of the document
-     * @param string $streamId the stream ID
-     * @param integer $offset the offset of the stream or <code>null</code> to read the stream from the beginning
-     * @param integer $length the maximum length of the stream or <code>null</code> to read to the end of the stream
+     * @param string|null $streamId the stream ID
+     * @param integer|null $offset the offset of the stream or <code>null</code> to read the stream from the beginning
+     * @param integer|null $length the maximum length of the stream or <code>null</code> to read to the end of the
+     *      stream
      * @return StreamInterface|null the content stream or <code>null</code> if the
      *      document has no content stream
      */
@@ -410,7 +411,7 @@ interface SessionInterface
      * @param ObjectIdInterface $objectId the document ID of an arbitrary version in the version series
      * @param boolean $major if <code>true</code> the latest major version will be returned,
      *      otherwise the very last version will be returned
-     * @param OperationContextInterface $context the OperationContext to use
+     * @param OperationContextInterface|null $context the OperationContext to use
      * @return DocumentInterface the latest document version
      */
     public function getLatestDocumentVersion(
@@ -428,7 +429,7 @@ interface SessionInterface
 
     /**
      * @param ObjectIdInterface $objectId the object ID
-     * @param OperationContextInterface $context the OperationContext to use
+     * @param OperationContextInterface|null $context the OperationContext to use
      * @return CmisObjectInterface the requested object
      * @throws CmisObjectNotFoundException - if an object with the given ID doesn't exist
      */
@@ -442,7 +443,7 @@ interface SessionInterface
      * if necessary.
      *
      * @param string $path the object path
-     * @param OperationContextInterface $context the OperationContext to use
+     * @param OperationContextInterface|null $context the OperationContext to use
      * @return CmisObjectInterface Returns a CMIS object from the session cache.
      * @throws CmisObjectNotFoundException - if an object with the given ID doesn't exist
      */
@@ -483,7 +484,7 @@ interface SessionInterface
     /**
      * Gets the root folder of the repository with the given OperationContext.
      *
-     * @param OperationContextInterface $context
+     * @param OperationContextInterface|null $context
      * @return FolderInterface the root folder object
      */
     public function getRootFolder(OperationContextInterface $context = null);

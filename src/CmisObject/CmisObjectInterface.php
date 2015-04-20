@@ -69,7 +69,7 @@ interface CmisObjectInterface extends ObjectIdInterface, CmisObjectPropertiesInt
     /**
      * Returns the allowable actions if they have been fetched for this object.
      *
-     * @return AllowableActionsInterface
+     * @return AllowableActionsInterface|null
      */
     public function getAllowableActions();
 

@@ -62,7 +62,7 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
 
     /**
      * @param BindingSessionInterface $session
-     * @param CmisBindingsHelper $cmisBindingsHelper
+     * @param CmisBindingsHelper|null $cmisBindingsHelper
      */
     public function __construct(BindingSessionInterface $session, $cmisBindingsHelper = null)
     {
@@ -73,7 +73,7 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
     /**
      * Set cmis binding helper property
      *
-     * @param CmisBindingsHelper $cmisBindingsHelper The cmis binding helper that should be defined.
+     * @param CmisBindingsHelper|null $cmisBindingsHelper The cmis binding helper that should be defined.
      * If <code>null</code> is given a new instance of CmisBindingsHelper will be created.
      */
     protected function setCmisBindingsHelper($cmisBindingsHelper = null)
@@ -86,7 +86,7 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
      *
      * @param string $repositoryId
      * @param string $objectId
-     * @param string $selector
+     * @param string|null $selector
      * @throws CmisConnectionException
      * @throws CmisObjectNotFoundException
      * @return Url
@@ -158,7 +158,7 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
     /**
      * Retrieves the the repository info objects.
      *
-     * @param string $repositoryId
+     * @param string|null $repositoryId
      * @throws CmisConnectionException
      * @return RepositoryInfo[] Returns ALL Repository Infos that are available and not just the one requested by id.
      */
@@ -286,7 +286,7 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
      *
      * @param integer $code
      * @param string $message
-     * @param \Exception $exception
+     * @param null|\Exception $exception
      * @return CmisBaseException
      */
     protected function convertStatusCode($code, $message, \Exception $exception = null)
@@ -360,7 +360,7 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
      *
      * @param string $repositoryId
      * @param string $path
-     * @param string $selector
+     * @param string|null $selector
      * @throws CmisConnectionException
      * @throws CmisObjectNotFoundException
      * @return Url
@@ -458,7 +458,7 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
      * Get url for a repository
      *
      * @param string $repositoryId
-     * @param string $selector
+     * @param string|null $selector
      * @throws CmisConnectionException
      * @throws CmisObjectNotFoundException
      * @return Url

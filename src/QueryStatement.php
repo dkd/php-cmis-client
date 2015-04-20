@@ -36,7 +36,7 @@ class QueryStatement implements QueryStatementInterface
     protected $parametersMap = array();
 
     /**
-     * @param Session $session
+     * @param SessionInterface $session
      * @param string $statement
      * @throws CmisInvalidArgumentException
      */
@@ -56,7 +56,7 @@ class QueryStatement implements QueryStatementInterface
      *
      * @param boolean $searchAllVersions <code>true</code> if all document versions should be included in the search
      *      results, <code>false</code> if only the latest document versions should be included in the search results
-     * @param OperationContextInterface $context the operation context to use
+     * @param OperationContextInterface|null $context the operation context to use
      * @return QueryResultInterface[]
      */
     public function query($searchAllVersions, OperationContextInterface $context = null)

@@ -23,7 +23,7 @@ class CmisBindingFactory
      * Create a browser binding
      *
      * @param array $sessionParameters
-     * @param Cache $typeDefinitionCache
+     * @param Cache|null $typeDefinitionCache
      * @return CmisBinding
      */
     public function createCmisBrowserBinding(

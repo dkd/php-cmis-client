@@ -260,7 +260,7 @@ class Session implements SessionInterface
      * @param ObjectIdInterface $objectId the ID the object
      * @param AceInterface[] $addAces of ACEs to be added or <code>null</code> if no ACEs should be added
      * @param AceInterface[] $removeAces list of ACEs to be removed or <code>null</code> if no ACEs should be removed
-     * @param AclPropagation $aclPropagation value that defines the propagation of the ACE changes;
+     * @param AclPropagation|null $aclPropagation value that defines the propagation of the ACE changes;
      *      <code>null</code> is equal to AclPropagation.REPOSITORYDETERMINED
      * @return AclInterface the new ACL of the object
      */
@@ -315,14 +315,14 @@ class Session implements SessionInterface
      * Creates a new document. The stream in contentStream is consumed but not closed by this method.
      *
      * @param string[] $properties The property values that MUST be applied to the newly-created document object.
-     * @param ObjectIdInterface $folderId If specified, the identifier for the folder that MUST be the parent folder
-     *      for the newly-created document object. This parameter MUST be specified if the repository does NOT
+     * @param ObjectIdInterface|null $folderId If specified, the identifier for the folder that MUST be the parent
+     *      folder for the newly-created document object. This parameter MUST be specified if the repository does NOT
      *      support the optional "unfiling" capability.
-     * @param StreamInterface $contentStream The content stream that MUST be stored for the newly-created document
+     * @param StreamInterface|null $contentStream The content stream that MUST be stored for the newly-created document
      *      object. The method of passing the contentStream to the server and the encoding mechanism will be specified
      *      by each specific binding. MUST be required if the type requires it.
-     * @param VersioningState $versioningState An enumeration specifying what the versioning state of the newly-created
-     *     object MUST be. Valid values are:
+     * @param VersioningState|null $versioningState An enumeration specifying what the versioning state of the
+     *     newly-created object MUST be. Valid values are:
      *      <code>none</code>
      *          (default, if the object-type is not versionable) The document MUST be created as a non-versionable
      *          document.
@@ -387,11 +387,11 @@ class Session implements SessionInterface
      * @param ObjectIdInterface $source The identifier for the source document.
      * @param string[] $properties The property values that MUST be applied to the object. This list of properties
      *      SHOULD only contain properties whose values differ from the source document.
-     * @param ObjectIdInterface $folderId If specified, the identifier for the folder that MUST be the parent folder
-     *      for the newly-created document object. This parameter MUST be specified if the repository does NOT
+     * @param ObjectIdInterface|null $folderId If specified, the identifier for the folder that MUST be the parent
+     *      folder for the newly-created document object. This parameter MUST be specified if the repository does NOT
      *      support the optional "unfiling" capability.
-     * @param VersioningState $versioningState An enumeration specifying what the versioning state of the newly-created
-     *     object MUST be. Valid values are:
+     * @param VersioningState|null $versioningState An enumeration specifying what the versioning state of the
+     *     newly-created object MUST be. Valid values are:
      *      <code>none</code>
      *          (default, if the object-type is not versionable) The document MUST be created as a non-versionable
      *          document.
@@ -753,7 +753,7 @@ class Session implements SessionInterface
     /**
      * Returns all checked out documents with the given OperationContext.
      *
-     * @param OperationContextInterface $context
+     * @param OperationContextInterface|null $context
      * @return DocumentInterface[]
      */
     public function getCheckedOutDocs(OperationContextInterface $context = null)
@@ -776,7 +776,7 @@ class Session implements SessionInterface
      *      the first available event in the repository
      * @param boolean $includeProperties indicates whether changed properties should be included in the result or not
      * @param integer|null $maxNumItems maximum numbers of events
-     * @param OperationContextInterface $context the OperationContext
+     * @param OperationContextInterface|null $context the OperationContext
      * @return ChangeEventsInterface the change events
      */
     public function getContentChanges(

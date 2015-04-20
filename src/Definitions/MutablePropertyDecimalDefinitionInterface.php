@@ -36,7 +36,8 @@ interface MutablePropertyDecimalDefinitionInterface extends
     /**
      * Sets the precision of this decimal.
      *
-     * @param DecimalPrecision $decimalPrecision the precision or <code>null</code> if the decimal supports any value
+     * @param DecimalPrecision|null $decimalPrecision the precision or <code>null</code> if the decimal supports any
+     *      value
      */
     public function setPrecision(DecimalPrecision $decimalPrecision = null);
 }

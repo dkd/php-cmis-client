@@ -73,7 +73,7 @@ class RepositoryUrlCache
      * Returns the repository URL of a repository.
      *
      * @param string $repositoryId
-     * @param string $selector add optional cmis selector parameter
+     * @param string|null $selector add optional cmis selector parameter
      * @return Url|null
      */
     public function getRepositoryUrl($repositoryId, $selector = null)
@@ -107,7 +107,7 @@ class RepositoryUrlCache
      *
      * @param string $repositoryId
      * @param string $objectId
-     * @param string $selector
+     * @param string|null $selector
      * @return Url|null
      */
     public function getObjectUrl($repositoryId, $objectId, $selector = null)
@@ -132,7 +132,7 @@ class RepositoryUrlCache
      *
      * @param string $repositoryId
      * @param string $path
-     * @param string $selector
+     * @param string|null $selector
      * @return Url
      */
     public function getPathUrl($repositoryId, $path, $selector = null)

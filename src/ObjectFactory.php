@@ -268,7 +268,7 @@ class ObjectFactory implements ObjectFactoryInterface
      * Convert properties to their property data objects and put them into a Properties object
      *
      * @param mixed[] $properties
-     * @param ObjectTypeInterface $type
+     * @param ObjectTypeInterface|null $type
      * @param SecondaryTypeInterface[] $secondaryTypes
      * @param Updatability[] $updatabilityFilter
      * @return PropertiesInterface

@@ -89,7 +89,7 @@ interface VersioningServiceInterface
      * @param string $repositoryId the identifier for the repository
      * @param string $objectId The identifier for the object
      * @param string $versionSeriesId the identifier for the object
-     * @param string $filter a comma-separated list of query names that defines which properties must be
+     * @param string|null $filter a comma-separated list of query names that defines which properties must be
      *      returned by the repository (default is repository specific)
      * @param boolean $includeAllowableActions if <code>true</code>, then the repository must return the allowable
      *      actions for the objects (default is <code>false</code>)

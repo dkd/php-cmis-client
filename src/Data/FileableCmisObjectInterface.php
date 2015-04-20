@@ -29,7 +29,7 @@ interface FileableCmisObjectInterface extends CmisObjectInterface
     /**
      * Returns the parents of this object.
      *
-     * @param OperationContextInterface $context the OperationContext to use to fetch the parent folder objects
+     * @param OperationContextInterface|null $context the OperationContext to use to fetch the parent folder objects
      * @return FolderInterface[] the list of parent folders of this object or an
      * empty list if this object is unfiled or if this object is the root folder
      */
@@ -48,7 +48,7 @@ interface FileableCmisObjectInterface extends CmisObjectInterface
      *
      * @param ObjectIdInterface $sourceFolderId the object ID of the source folder
      * @param ObjectIdInterface $targetFolderId the object ID of the target folder
-     * @param OperationContextInterface $context the OperationContext to use to fetch the moved object
+     * @param OperationContextInterface|null $context the OperationContext to use to fetch the moved object
      *
      * @return FileableCmisObjectInterface the moved object
      */
