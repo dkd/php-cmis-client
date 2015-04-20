@@ -12,6 +12,7 @@ namespace Dkd\PhpCmis\Bindings\Browser;
 
 use Dkd\PhpCmis\Bindings\BindingSessionInterface;
 use Dkd\PhpCmis\Bindings\CmisBindingsHelper;
+use Dkd\PhpCmis\Bindings\LinkAccessInterface;
 use Dkd\PhpCmis\Constants;
 use Dkd\PhpCmis\Data\AclInterface;
 use Dkd\PhpCmis\Data\PropertiesInterface;
@@ -37,7 +38,7 @@ use League\Url\Url;
 /**
  * Base class for all Browser Binding client services.
  */
-abstract class AbstractBrowserBindingService
+abstract class AbstractBrowserBindingService implements LinkAccessInterface
 {
     /**
      * @var BindingSessionInterface
@@ -664,5 +665,38 @@ abstract class AbstractBrowserBindingService
                 )
             );
         }
+    }
+
+    /**
+     * Gets the content link from the cache if it is there or loads it into the
+     * cache if it is not there.
+     *
+     * @param string $repositoryId
+     * @param string $documentId
+     * @return string|null
+     */
+    public function loadContentLink($repositoryId, $documentId)
+    {
+        $result = $this->getRepositoryUrlCache()->getObjectUrl($repositoryId, $documentId, Constants::SELECTOR_CONTENT);
+        return $result === null ? null : (string) $result;
+    }
+
+    /**
+     * Gets a rendition content link from the cache if it is there or loads it
+     * into the cache if it is not there.
+     *
+     * @param string $repositoryId
+     * @param string $documentId
+     * @param string $streamId
+     * @return string|null
+     */
+    public function loadRenditionContentLink($repositoryId, $documentId, $streamId)
+    {
+        $result = $this->getRepositoryUrlCache()->getObjectUrl($repositoryId, $documentId, Constants::SELECTOR_CONTENT);
+        if ($result !== null) {
+            $result->getQuery()->modify(array(Constants::PARAM_STREAM_ID => $streamId));
+            $result = (string) $result;
+        }
+        return $result;
     }
 }

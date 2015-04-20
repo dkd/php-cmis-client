@@ -10,6 +10,7 @@ namespace Dkd\PhpCmis\DataObjects;
  * file that was distributed with this source code.
  */
 
+use Dkd\PhpCmis\Bindings\LinkAccessInterface;
 use Dkd\PhpCmis\Constants;
 use Dkd\PhpCmis\Data\AceInterface;
 use Dkd\PhpCmis\Data\ContentStreamHashInterface;
@@ -386,6 +387,33 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
         }
 
         return $result;
+    }
+
+    /**
+     * Returns the content URL of the document or a rendition if the binding
+     * supports content URLs.
+     *
+     * Depending on the repository and the binding, the server might not return
+     * the content but an error message. Authentication data is not attached.
+     * That is, a user may have to re-authenticate to get the content.
+     *
+     * @param string|null $streamId the ID of the rendition or <code>null</code> for the document
+     *
+     * @return string|null the content URL of the document or rendition or <code>null</code> if
+     *         the binding does not support content URLs
+     */
+    public function getContentUrl($streamId = null)
+    {
+        $objectService = $this->getBinding()->getObjectService();
+        if ($objectService instanceof LinkAccessInterface) {
+            if ($streamId === null) {
+                return $objectService->loadContentLink($this->getRepositoryId(), $this->getId());
+            } else {
+                return $objectService->loadRenditionContentLink($this->getRepositoryId(), $this->getId(), $streamId);
+            }
+        }
+
+        return null;
     }
 
     /**

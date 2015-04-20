@@ -138,6 +138,21 @@ interface DocumentInterface extends FileableCmisObjectInterface, DocumentPropert
     public function getAllVersions(OperationContextInterface $context = null);
 
     /**
+     * Returns the content URL of the document or a rendition if the binding
+     * supports content URLs.
+     *
+     * Depending on the repository and the binding, the server might not return
+     * the content but an error message. Authentication data is not attached.
+     * That is, a user may have to re-authenticate to get the content.
+     *
+     * @param string|null $streamId the ID of the rendition or <code>null</code> for the document
+     *
+     * @return string|null the content URL of the document or rendition or <code>null</code> if
+     *         the binding does not support content URLs
+     */
+    public function getContentUrl($streamId = null);
+
+    /**
      * Retrieves the content stream that is associated with the given stream ID.
      * This is usually a rendition of the document.
      *
