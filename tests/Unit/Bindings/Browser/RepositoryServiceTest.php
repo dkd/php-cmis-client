@@ -167,14 +167,13 @@ class RepositoryServiceTest extends AbstractBrowserBindingServiceTestCase
      */
     public function createTypeDataProvider()
     {
-        $typeDefinitionArrayRepresentation = array('foo' => 'bar');
-        $typeDefinitionJsonRepresentation = '{"foo":"bar"}';
+        $typeDefinitionArrayRepresentation = array('foo' => 'bar', 'baz' => 'bazz');
 
         return array(
             array(
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
-                    . '?cmisaction=createType&type=' . $typeDefinitionJsonRepresentation
+                    . '?cmisaction=createType&type[foo]=bar&type[baz]=bazz'
                 ),
                 $typeDefinitionArrayRepresentation,
                 'repositoryId',

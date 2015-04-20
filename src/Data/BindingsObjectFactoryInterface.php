@@ -10,7 +10,14 @@ namespace Dkd\PhpCmis\Data;
  * file that was distributed with this source code.
  */
 
+use Dkd\PhpCmis\DataObjects\DocumentTypeDefinition;
+use Dkd\PhpCmis\DataObjects\FolderTypeDefinition;
+use Dkd\PhpCmis\DataObjects\ItemTypeDefinition;
+use Dkd\PhpCmis\DataObjects\PolicyTypeDefinition;
+use Dkd\PhpCmis\DataObjects\RelationshipTypeDefinition;
+use Dkd\PhpCmis\DataObjects\SecondaryTypeDefinition;
 use Dkd\PhpCmis\Definitions\PropertyDefinitionInterface;
+use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
 use GuzzleHttp\Stream\StreamInterface;
 
 /**
@@ -134,4 +141,17 @@ interface BindingsObjectFactoryInterface
      * @return PropertyUriInterface
      */
     public function createPropertyUriData($id, array $values);
+
+
+    /**
+     * Get a type definition object by its base type id
+     *
+     * @param string $baseTypeIdString
+     * @param string $typeId
+     * @return FolderTypeDefinition|DocumentTypeDefinition|RelationshipTypeDefinition|PolicyTypeDefinition|ItemTypeDefinition|SecondaryTypeDefinition
+     * @throws CmisInvalidArgumentException Exception is thrown if the base type exists in the BaseTypeId enumeration
+     *      but is not implemented here. This could only happen if the base type enumeration is extended which requires
+     *      a CMIS specification change.
+     */
+    public function getTypeDefinitionByBaseTypeId($baseTypeIdString, $typeId);
 }

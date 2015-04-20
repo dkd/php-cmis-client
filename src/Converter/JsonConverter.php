@@ -10,9 +10,10 @@ namespace Dkd\PhpCmis\Converter;
  * file that was distributed with this source code.
  */
 
+use Dkd\Enumeration\Enumeration;
 use Dkd\Enumeration\Exception\InvalidEnumerationValueException;
 use Dkd\PhpCmis\Bindings\Browser\JSONConstants;
-use Dkd\PhpCmis\Constants;
+use Dkd\PhpCmis\Converter\Types\TypeConverterInterface;
 use Dkd\PhpCmis\Data\AclCapabilitiesInterface;
 use Dkd\PhpCmis\Data\AclInterface;
 use Dkd\PhpCmis\Data\AllowableActionsInterface;
@@ -33,14 +34,12 @@ use Dkd\PhpCmis\DataObjects\AccessControlEntry;
 use Dkd\PhpCmis\DataObjects\AccessControlList;
 use Dkd\PhpCmis\DataObjects\AclCapabilities;
 use Dkd\PhpCmis\DataObjects\AllowableActions;
+use Dkd\PhpCmis\DataObjects\BindingsObjectFactory;
 use Dkd\PhpCmis\DataObjects\ChangeEventInfo;
 use Dkd\PhpCmis\DataObjects\CmisExtensionElement;
 use Dkd\PhpCmis\DataObjects\CreatablePropertyTypes;
-use Dkd\PhpCmis\DataObjects\DocumentTypeDefinition;
 use Dkd\PhpCmis\DataObjects\ExtensionFeature;
 use Dkd\PhpCmis\DataObjects\FailedToDeleteData;
-use Dkd\PhpCmis\DataObjects\FolderTypeDefinition;
-use Dkd\PhpCmis\DataObjects\ItemTypeDefinition;
 use Dkd\PhpCmis\DataObjects\NewTypeSettableAttributes;
 use Dkd\PhpCmis\DataObjects\ObjectData;
 use Dkd\PhpCmis\DataObjects\ObjectInFolderContainer;
@@ -51,7 +50,6 @@ use Dkd\PhpCmis\DataObjects\ObjectParentData;
 use Dkd\PhpCmis\DataObjects\PermissionDefinition;
 use Dkd\PhpCmis\DataObjects\PermissionMapping;
 use Dkd\PhpCmis\DataObjects\PolicyIdList;
-use Dkd\PhpCmis\DataObjects\PolicyTypeDefinition;
 use Dkd\PhpCmis\DataObjects\Principal;
 use Dkd\PhpCmis\DataObjects\Properties;
 use Dkd\PhpCmis\DataObjects\PropertyBoolean;
@@ -70,11 +68,9 @@ use Dkd\PhpCmis\DataObjects\PropertyString;
 use Dkd\PhpCmis\DataObjects\PropertyStringDefinition;
 use Dkd\PhpCmis\DataObjects\PropertyUri;
 use Dkd\PhpCmis\DataObjects\PropertyUriDefinition;
-use Dkd\PhpCmis\DataObjects\RelationshipTypeDefinition;
 use Dkd\PhpCmis\DataObjects\RenditionData;
 use Dkd\PhpCmis\DataObjects\RepositoryCapabilities;
 use Dkd\PhpCmis\DataObjects\RepositoryInfoBrowserBinding;
-use Dkd\PhpCmis\DataObjects\SecondaryTypeDefinition;
 use Dkd\PhpCmis\DataObjects\TypeDefinitionContainer;
 use Dkd\PhpCmis\DataObjects\TypeDefinitionList;
 use Dkd\PhpCmis\DataObjects\TypeMutability;
@@ -82,6 +78,7 @@ use Dkd\PhpCmis\Definitions\MutableDocumentTypeDefinitionInterface;
 use Dkd\PhpCmis\Definitions\MutableRelationshipTypeDefinitionInterface;
 use Dkd\PhpCmis\Definitions\MutableTypeDefinitionInterface;
 use Dkd\PhpCmis\Definitions\PropertyDefinitionInterface;
+use Dkd\PhpCmis\Definitions\RelationshipTypeDefinitionInterface;
 use Dkd\PhpCmis\Definitions\TypeDefinitionContainerInterface;
 use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
 use Dkd\PhpCmis\Definitions\TypeDefinitionListInterface;
@@ -576,7 +573,7 @@ class JsonConverter extends AbstractDataConverter
             unset($data[JSONConstants::JSON_TYPE_BASE_ID]);
         }
 
-        $typeDefinition = $this->getTypeDefinitionByBaseTypeId(
+        $typeDefinition = $this->getBindingsObjectFactory()->getTypeDefinitionByBaseTypeId(
             $baseTypeId,
             $data[JSONConstants::JSON_TYPE_ID]
         );
@@ -701,46 +698,6 @@ class JsonConverter extends AbstractDataConverter
         );
 
         return $typeMutability;
-    }
-
-    /**
-     * Get a type definition object by its base type id
-     *
-     * @param string $baseTypeIdString
-     * @param string $typeId
-     * @return FolderTypeDefinition|DocumentTypeDefinition|RelationshipTypeDefinition|PolicyTypeDefinition|ItemTypeDefinition|SecondaryTypeDefinition
-     * @throws CmisInvalidArgumentException Exception is thrown if the base type exists in the BaseTypeId enumeration
-     *      but is not implemented here. This could only happen if the base type enumeration is extended which requires
-     *      a CMIS specification change.
-     */
-    protected function getTypeDefinitionByBaseTypeId($baseTypeIdString, $typeId)
-    {
-        $baseTypeId = BaseTypeId::cast($baseTypeIdString);
-
-        if ($baseTypeId->equals(BaseTypeId::cast(BaseTypeId::CMIS_FOLDER))) {
-            $baseType = new FolderTypeDefinition($typeId);
-        } elseif ($baseTypeId->equals(BaseTypeId::cast(BaseTypeId::CMIS_DOCUMENT))) {
-            $baseType = new DocumentTypeDefinition($typeId);
-        } elseif ($baseTypeId->equals(BaseTypeId::cast(BaseTypeId::CMIS_RELATIONSHIP))) {
-            $baseType = new RelationshipTypeDefinition($typeId);
-        } elseif ($baseTypeId->equals(BaseTypeId::cast(BaseTypeId::CMIS_POLICY))) {
-            $baseType = new PolicyTypeDefinition($typeId);
-        } elseif ($baseTypeId->equals(BaseTypeId::cast(BaseTypeId::CMIS_ITEM))) {
-            $baseType = new ItemTypeDefinition($typeId);
-        } elseif ($baseTypeId->equals(BaseTypeId::cast(BaseTypeId::CMIS_SECONDARY))) {
-            $baseType = new SecondaryTypeDefinition($typeId);
-        } else {
-            // @codeCoverageIgnoreStart
-            // this could only happen if a new baseType is added to the enumeration and not implemented here.
-            throw new CmisInvalidArgumentException(
-                sprintf('The given type definition "%s" could not be converted.', $baseTypeId)
-            );
-            // @codeCoverageIgnoreEnd
-        }
-
-        $baseType->setBaseTypeId($baseTypeId);
-
-        return $baseType;
     }
 
     /**
@@ -1436,11 +1393,103 @@ class JsonConverter extends AbstractDataConverter
      * Convert a type definition object to a custom format
      *
      * @param TypeDefinitionInterface $typeDefinition
-     * @return mixed
+     * @return string JSON representation of the type definition
      */
     public function convertFromTypeDefinition(TypeDefinitionInterface $typeDefinition)
     {
-        // TODO: Implement convertFromTypeDefinition() method.
+        $propertyList = array(
+            'baseTypeId' => JSONConstants::JSON_TYPE_BASE_ID,
+            'parentTypeId' => JSONConstants::JSON_TYPE_PARENT_ID
+        );
+
+        if ($typeDefinition instanceof RelationshipTypeDefinitionInterface) {
+            $propertyList['allowedTargetTypeIds'] = JSONConstants::JSON_TYPE_ALLOWED_TARGET_TYPES;
+            $propertyList['allowedSourceTypeIds'] = JSONConstants::JSON_TYPE_ALLOWED_SOURCE_TYPES;
+        }
+
+        $data = $typeDefinition->exportGettableProperties(
+            $propertyList
+        );
+        $data = $this->castArrayValuesToSimpleTypes($data);
+
+        return json_encode($data, JSON_FORCE_OBJECT);
+    }
+
+    /**
+     * Cast values of an array to simple types
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function castArrayValuesToSimpleTypes(array $data)
+    {
+        foreach ($data as $key => $item) {
+            if (is_array($item)) {
+                $data[$key] = $this->castArrayValuesToSimpleTypes($item);
+            } elseif (is_object($item)) {
+                $data[$key] = $this->convertObjectToSimpleType($item);
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * Convert an object to a simple type representation
+     *
+     * @param mixed $data
+     * @return mixed
+     * @throws CmisRuntimeException Exception is thrown if no type converter could be found to convert the given data
+     *      to a simple type
+     */
+    protected function convertObjectToSimpleType($data)
+    {
+        /** @var null|TypeConverterInterface $converterClassName */
+        $converterClassName = null;
+        if (class_exists($this->buildConverterClassName(get_class($data)))) {
+            $converterClassName = $this->buildConverterClassName(get_class($data));
+        } else {
+            $classInterfaces = class_implements($data);
+            foreach ((array) $classInterfaces as $classInterface) {
+                if (class_exists($this->buildConverterClassName($classInterface))) {
+                    $converterClassName = $this->buildConverterClassName($classInterface);
+                    break;
+                }
+            }
+            if ($converterClassName === null) {
+                $classParents = class_parents($data);
+                foreach ((array) $classParents as $classParent) {
+                    if (class_exists($this->buildConverterClassName($classParent))) {
+                        $converterClassName = $this->buildConverterClassName($classParent);
+                        break;
+                    }
+                }
+            }
+        }
+
+        if ($converterClassName === null) {
+            throw new CmisRuntimeException(
+                'Could not find a converter that converts "' . get_class($data) . '" to a simple type.'
+            );
+        }
+
+        return $converterClassName::convertToSimpleType($data);
+    }
+
+    /**
+     * Build a converter class name with namespace.
+     *
+     * The Dkd\PhpCmis namespace will be stripped.
+     *
+     * @param $className
+     * @return string
+     */
+    protected function buildConverterClassName($className)
+    {
+        $converterClassName =  '\\Dkd\\PhpCmis\\Converter\\Types\\';
+        $converterClassName .= str_replace('Dkd\\PhpCmis\\', '', $className);
+        $converterClassName .= 'Converter';
+        return $converterClassName;
     }
 
     /**
@@ -1938,5 +1987,14 @@ class JsonConverter extends AbstractDataConverter
         $result->setExtensions($this->convertExtension($data, JSONConstants::getFailedToDeleteKeys()));
 
         return $result;
+    }
+
+    /**
+     * @return BindingsObjectFactory
+     * @codeCoverageIgnore
+     */
+    protected function getBindingsObjectFactory()
+    {
+        return new BindingsObjectFactory();
     }
 }

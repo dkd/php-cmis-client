@@ -39,7 +39,7 @@ class RepositoryService extends AbstractBrowserBindingService implements Reposit
         $url->getQuery()->modify(
             array(
                 Constants::CONTROL_CMISACTION => Constants::CMISACTION_CREATE_TYPE,
-                Constants::CONTROL_TYPE => json_encode($this->getJsonConverter()->convertFromTypeDefinition($type))
+                Constants::CONTROL_TYPE => $this->getJsonConverter()->convertFromTypeDefinition($type)
             )
         );
 

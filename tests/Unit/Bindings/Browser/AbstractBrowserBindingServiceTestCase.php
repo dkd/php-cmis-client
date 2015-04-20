@@ -22,6 +22,7 @@ abstract class AbstractBrowserBindingServiceTestCase extends \PHPUnit_Framework_
     use FixtureHelperTrait;
 
     const BROWSER_URL_TEST = 'http://foo.bar.baz';
+    const TYPE_DEFINITION_CACHE_CLASS = 'http://foo.bar.baz';
 
     /**
      * Returns a mock of a BindingSessionInterface

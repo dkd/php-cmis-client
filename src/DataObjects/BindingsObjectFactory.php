@@ -22,6 +22,8 @@ use Dkd\PhpCmis\Definitions\PropertyIdDefinitionInterface;
 use Dkd\PhpCmis\Definitions\PropertyIntegerDefinitionInterface;
 use Dkd\PhpCmis\Definitions\PropertyStringDefinitionInterface;
 use Dkd\PhpCmis\Definitions\PropertyUriDefinitionInterface;
+use Dkd\PhpCmis\Enum\BaseTypeId;
+use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
 use Dkd\PhpCmis\Exception\CmisRuntimeException;
 use GuzzleHttp\Stream\StreamInterface;
 
@@ -181,5 +183,45 @@ class BindingsObjectFactory implements BindingsObjectFactoryInterface
     public function createPropertyUriData($id, array $values)
     {
         return new PropertyUri($id, $values);
+    }
+
+    /**
+     * Get a type definition object by its base type id
+     *
+     * @param string $baseTypeIdString
+     * @param string $typeId
+     * @return FolderTypeDefinition|DocumentTypeDefinition|RelationshipTypeDefinition|PolicyTypeDefinition|ItemTypeDefinition|SecondaryTypeDefinition
+     * @throws CmisInvalidArgumentException Exception is thrown if the base type exists in the BaseTypeId enumeration
+     *      but is not implemented here. This could only happen if the base type enumeration is extended which requires
+     *      a CMIS specification change.
+     */
+    public function getTypeDefinitionByBaseTypeId($baseTypeIdString, $typeId)
+    {
+        $baseTypeId = BaseTypeId::cast($baseTypeIdString);
+
+        if ($baseTypeId->equals(BaseTypeId::cast(BaseTypeId::CMIS_FOLDER))) {
+            $baseType = new FolderTypeDefinition($typeId);
+        } elseif ($baseTypeId->equals(BaseTypeId::cast(BaseTypeId::CMIS_DOCUMENT))) {
+            $baseType = new DocumentTypeDefinition($typeId);
+        } elseif ($baseTypeId->equals(BaseTypeId::cast(BaseTypeId::CMIS_RELATIONSHIP))) {
+            $baseType = new RelationshipTypeDefinition($typeId);
+        } elseif ($baseTypeId->equals(BaseTypeId::cast(BaseTypeId::CMIS_POLICY))) {
+            $baseType = new PolicyTypeDefinition($typeId);
+        } elseif ($baseTypeId->equals(BaseTypeId::cast(BaseTypeId::CMIS_ITEM))) {
+            $baseType = new ItemTypeDefinition($typeId);
+        } elseif ($baseTypeId->equals(BaseTypeId::cast(BaseTypeId::CMIS_SECONDARY))) {
+            $baseType = new SecondaryTypeDefinition($typeId);
+        } else {
+            // @codeCoverageIgnoreStart
+            // this could only happen if a new baseType is added to the enumeration and not implemented here.
+            throw new CmisInvalidArgumentException(
+                sprintf('The given type definition "%s" could not be converted.', $baseTypeId)
+            );
+            // @codeCoverageIgnoreEnd
+        }
+
+        $baseType->setBaseTypeId($baseTypeId);
+
+        return $baseType;
     }
 }
