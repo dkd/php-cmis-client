@@ -70,6 +70,9 @@ class CmisBindingFactory
         if (!isset($sessionParameters[SessionParameter::JSON_CONVERTER_CLASS])) {
             $sessionParameters[SessionParameter::JSON_CONVERTER_CLASS] = '\\Dkd\\PhpCmis\\Converter\\JsonConverter';
         }
+        if (!isset($sessionParameters[SessionParameter::TYPE_DEFINITION_CACHE_CLASS])) {
+            $sessionParameters[SessionParameter::TYPE_DEFINITION_CACHE_CLASS] = '\\Doctrine\\Common\\Cache\\ArrayCache';
+        }
     }
 
     /**

@@ -152,11 +152,33 @@ class RepositoryService extends AbstractBrowserBindingService implements Reposit
      * @param string $repositoryId the identifier for the repository
      * @param string $typeId he type definition
      * @param ExtensionDataInterface|null $extension
+     * @param boolean $useCache
      * @return TypeDefinitionInterface|null the newly created type
      */
-    public function getTypeDefinition($repositoryId, $typeId, ExtensionDataInterface $extension = null)
-    {
-        return $this->getTypeDefinitionInternal($repositoryId, $typeId);
+    public function getTypeDefinition(
+        $repositoryId,
+        $typeId,
+        ExtensionDataInterface $extension = null,
+        $useCache = true
+    ) {
+        $cache = null;
+        $cacheKey = $repositoryId . '-' . $typeId;
+
+        // if the cache should be used and the extension is not set, check the cache first
+        if ($useCache === true && empty($extension)) {
+            $cache = $this->cmisBindingsHelper->getTypeDefinitionCache($this->getSession());
+
+            if ($cache->contains($cacheKey)) {
+                return $cache->fetch($cacheKey);
+            }
+        }
+        $typeDefinition = $this->getTypeDefinitionInternal($repositoryId, $typeId);
+
+        if ($useCache === true && empty($extension)) {
+            $cache->save($cacheKey, $typeDefinition);
+        }
+
+        return $typeDefinition;
     }
 
     /**

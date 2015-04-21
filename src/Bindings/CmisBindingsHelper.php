@@ -211,4 +211,33 @@ class CmisBindingsHelper
     {
         return new CmisBindingFactory();
     }
+
+    /**
+     * Returns the type definition cache from the session.
+     *
+     * @param BindingSessionInterface $session
+     * @return Cache
+     * @throws CmisRuntimeException Exception is thrown if cache instance could not be initialized.
+     */
+    public function getTypeDefinitionCache(BindingSessionInterface $session)
+    {
+        $cache = $session->get(self::TYPE_DEFINITION_CACHE);
+        if ($cache !== null) {
+            return $cache;
+        }
+
+        $className = $session->get(SessionParameter::TYPE_DEFINITION_CACHE_CLASS);
+        try {
+            $cache = new $className();
+        } catch (\Exception $exception) {
+            throw new CmisRuntimeException(
+                sprintf('Could not create object of type "%s"!', $className),
+                null,
+                $exception
+            );
+        }
+        $session->put(self::TYPE_DEFINITION_CACHE, $cache);
+
+        return $cache;
+    }
 }
