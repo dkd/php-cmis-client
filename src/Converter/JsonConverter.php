@@ -1024,14 +1024,10 @@ class JsonConverter extends AbstractDataConverter
             $queryName = (!empty($propertyData[JSONConstants::JSON_PROPERTY_QUERYNAME])) ?
                 $propertyData[JSONConstants::JSON_PROPERTY_QUERYNAME] : null;
 
-            if ($id === null || $queryName === null) {
-                throw new CmisRuntimeException(
-                    sprintf(
-                        'Invalid property data given! Value of "%s" and "%s" must not be empty!',
-                        JSONConstants::JSON_PROPERTY_ID,
-                        JSONConstants::JSON_PROPERTY_QUERYNAME
-                    )
-                );
+            // A Property must always have an ID except if it used in a query result.
+            // In a query result a Property should have an ID and must have a query name.
+            if ($id === null && $queryName === null) {
+                throw new CmisRuntimeException('Invalid property! Neither a property ID nor a query name is provided!');
             }
 
             try {
