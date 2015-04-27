@@ -33,7 +33,8 @@ abstract class AbstractBrowserBindingServiceTestCase extends \PHPUnit_Framework_
     {
         $map = array(
             array(SessionParameter::BROWSER_SUCCINCT, null, false),
-            array(SessionParameter::BROWSER_URL, null, self::BROWSER_URL_TEST)
+            array(SessionParameter::BROWSER_URL, null, self::BROWSER_URL_TEST),
+            array(SessionParameter::TYPE_DEFINITION_CACHE_CLASS, null, '\\Doctrine\\Common\\Cache\\ArrayCache')
         );
 
         $map = array_merge($sessionParameterMap, $map);

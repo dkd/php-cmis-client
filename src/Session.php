@@ -825,13 +825,13 @@ class Session implements SessionInterface
     }
 
     /**
-     * Returns a clone of the current default operation parameters for filtering, paging and caching.
+     * Returns the current default operation parameters for filtering, paging and caching.
      *
      * @return OperationContextInterface the default operation context
      */
     public function getDefaultContext()
     {
-        return clone $this->defaultContext;
+        return $this->defaultContext;
     }
 
     /**
