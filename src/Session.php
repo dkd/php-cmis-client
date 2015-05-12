@@ -27,6 +27,7 @@ use Dkd\PhpCmis\Data\RepositoryInfoInterface;
 use Dkd\PhpCmis\DataObjects\ObjectId;
 use Dkd\PhpCmis\Definitions\TypeDefinitionContainerInterface;
 use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
+use Dkd\PhpCmis\Definitions\TypeDefinitionListInterface;
 use Dkd\PhpCmis\Enum\AclPropagation;
 use Dkd\PhpCmis\Enum\BaseTypeId;
 use Dkd\PhpCmis\Enum\CmisVersion;
@@ -722,7 +723,7 @@ class Session implements SessionInterface
             throw new CmisNotSupportedException('This method is not supported for CMIS 1.0 repositories.');
         }
 
-        $this->getBinding()->getRepositoryService()->deleteType($this->getRepositoryInfo(), $typeId);
+        $this->getBinding()->getRepositoryService()->deleteType($this->getRepositoryId(), $typeId);
         $this->removeObjectFromCache($this->createObjectId($typeId));
     }
 
@@ -1014,7 +1015,7 @@ class Session implements SessionInterface
         $rootFolderId = $this->getRepositoryInfo()->getRootFolderId();
 
         $rootFolder = $this->getObject(
-            new ObjectId($rootFolderId),
+            $this->createObjectId($rootFolderId),
             $context === null ? $this->getDefaultContext() : $context
         );
 
@@ -1030,7 +1031,7 @@ class Session implements SessionInterface
      *
      * @param string $typeId the type ID or <code>null</code> to request the base types
      * @param boolean $includePropertyDefinitions indicates whether the property definitions should be included or not
-     * @return ObjectTypeInterface[] the type iterator
+     * @return TypeDefinitionListInterface the type iterator
      * @throws CmisObjectNotFoundException - if a type with the given type ID doesn't exist
      */
     public function getTypeChildren($typeId, $includePropertyDefinitions)

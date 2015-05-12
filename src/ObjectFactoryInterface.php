@@ -226,7 +226,7 @@ interface ObjectFactoryInterface
      * @param string $displayName Used for presentation by application.
      * @param string $description Description of this object-type, such as the nature of content, or its intended use.
      *      Used for presentation by application.
-     * @param TypeMutabilityInterface $typeMutability
+     * @param TypeMutabilityInterface|null $typeMutability
      *      typeMutability.create - Indicates whether new child types may be created with this type as the parent.
      *      typeMutability.update - Indicates whether clients may make changes to this type per the constraints
      *          defined in this specification.
