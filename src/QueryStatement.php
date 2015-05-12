@@ -69,14 +69,10 @@ class QueryStatement implements QueryStatementInterface
      *
      * @param integer $parameterIndex the parameter index (one-based)
      * @param boolean $bool the boolean
-     * @throws CmisInvalidArgumentException If parameter index not of type integer
      */
     public function setBoolean($parameterIndex, $bool)
     {
-        if (!is_int($parameterIndex)) {
-            throw new CmisInvalidArgumentException('Parameter index must be of type integer!');
-        }
-        $this->parametersMap[$parameterIndex] = $bool === true ? 'TRUE' : 'FALSE';
+        $this->setParameter($parameterIndex, $bool === true ? 'TRUE' : 'FALSE');
     }
 
     /**
@@ -84,15 +80,10 @@ class QueryStatement implements QueryStatementInterface
      *
      * @param integer $parameterIndex the parameter index (one-based)
      * @param \DateTime $dateTime the DateTime value as DateTime object
-     * @throws CmisInvalidArgumentException If parameter index not of type integer
      */
     public function setDateTime($parameterIndex, \DateTime $dateTime)
     {
-        if (!is_int($parameterIndex)) {
-            throw new CmisInvalidArgumentException('Parameter index must be of type integer!');
-        }
-
-        $this->parametersMap[$parameterIndex] = $dateTime->format(Constants::QUERY_DATETIMEFORMAT);
+        $this->setParameter($parameterIndex, $dateTime->format(Constants::QUERY_DATETIMEFORMAT));
     }
 
     /**
@@ -100,15 +91,10 @@ class QueryStatement implements QueryStatementInterface
      *
      * @param integer $parameterIndex the parameter index (one-based)
      * @param \DateTime $dateTime the DateTime value as DateTime object
-     * @throws CmisInvalidArgumentException If parameter index not of type integer
      */
     public function setDateTimeTimestamp($parameterIndex, \DateTime $dateTime)
     {
-        if (!is_int($parameterIndex)) {
-            throw new CmisInvalidArgumentException('Parameter index must be of type integer!');
-        }
-
-        $this->parametersMap[$parameterIndex] = 'TIMESTAMP ' . $dateTime->format(Constants::QUERY_DATETIMEFORMAT);
+        $this->setParameter($parameterIndex, 'TIMESTAMP ' . $dateTime->format(Constants::QUERY_DATETIMEFORMAT));
     }
 
     /**
@@ -116,15 +102,10 @@ class QueryStatement implements QueryStatementInterface
      *
      * @param integer $parameterIndex the parameter index (one-based)
      * @param ObjectIdInterface $id the object ID
-     * @throws CmisInvalidArgumentException If parameter index not of type integer
      */
     public function setId($parameterIndex, ObjectIdInterface $id)
     {
-        if (!is_int($parameterIndex)) {
-            throw new CmisInvalidArgumentException('Parameter index must be of type integer!');
-        }
-
-        $this->parametersMap[$parameterIndex] = $this->escape($id->getId());
+        $this->setParameter($parameterIndex, $this->escape($id->getId()));
     }
 
     /**
@@ -132,19 +113,15 @@ class QueryStatement implements QueryStatementInterface
      *
      * @param integer $parameterIndex the parameter index (one-based)
      * @param integer $number the value to be set as number
-     * @throws CmisInvalidArgumentException If parameter index or number not of type integer
+     * @throws CmisInvalidArgumentException If number not of type integer
      */
     public function setNumber($parameterIndex, $number)
     {
-        if (!is_int($parameterIndex)) {
-            throw new CmisInvalidArgumentException('Parameter index must be of type integer!');
-        }
-
         if (!is_int($number)) {
             throw new CmisInvalidArgumentException('Number must be of type integer!');
         }
 
-        $this->parametersMap[$parameterIndex] = $number;
+        $this->setParameter($parameterIndex, $number);
     }
 
     /**
@@ -152,20 +129,16 @@ class QueryStatement implements QueryStatementInterface
      *
      * @param integer $parameterIndex the parameter index (one-based)
      * @param PropertyDefinitionInterface $propertyDefinition
-     * @throws CmisInvalidArgumentException If parameter index not of type integer or property has no query name
+     * @throws CmisInvalidArgumentException If property has no query name
      */
     public function setProperty($parameterIndex, PropertyDefinitionInterface $propertyDefinition)
     {
-        if (!is_int($parameterIndex)) {
-            throw new CmisInvalidArgumentException('Parameter index must be of type integer!');
-        }
-
         $queryName = $propertyDefinition->getQueryName();
         if (empty($queryName)) {
             throw new CmisInvalidArgumentException('Property has no query name!');
         }
 
-        $this->parametersMap[$parameterIndex] = $this->escape($queryName);
+        $this->setParameter($parameterIndex, $this->escape($queryName));
     }
 
     /**
@@ -173,19 +146,15 @@ class QueryStatement implements QueryStatementInterface
      *
      * @param integer $parameterIndex the parameter index (one-based)
      * @param string $string the string
-     * @throws CmisInvalidArgumentException If parameter index not of type integer or string not of type string
+     * @throws CmisInvalidArgumentException If given value is not a string
      */
     public function setString($parameterIndex, $string)
     {
-        if (!is_int($parameterIndex)) {
-            throw new CmisInvalidArgumentException('Parameter index must be of type integer!');
-        }
-
         if (!is_string($string)) {
             throw new CmisInvalidArgumentException('Parameter string must be of type string!');
         }
 
-        $this->parametersMap[$parameterIndex] = $this->escape($string);
+        $this->setParameter($parameterIndex, $this->escape($string));
     }
 
     /**
@@ -214,19 +183,15 @@ class QueryStatement implements QueryStatementInterface
      *
      * @param integer $parameterIndex the parameter index (one-based)
      * @param string $string the CONTAINS string
-     * @throws CmisInvalidArgumentException If parameter index not of type integer or string not of type string
+     * @throws CmisInvalidArgumentException If given value is not a string
      */
     public function setStringContains($parameterIndex, $string)
     {
-        if (!is_int($parameterIndex)) {
-            throw new CmisInvalidArgumentException('Parameter index must be of type integer!');
-        }
-
         if (!is_string($string)) {
             throw new CmisInvalidArgumentException('Parameter string must be of type string!');
         }
 
-        $this->parametersMap[$parameterIndex] = $this->escapeContains($string);
+        $this->setParameter($parameterIndex, $this->escapeContains($string));
     }
 
     /**
@@ -235,19 +200,15 @@ class QueryStatement implements QueryStatementInterface
      *
      * @param integer $parameterIndex the parameter index (one-based)
      * @param $string
-     * @throws CmisInvalidArgumentException If parameter index not of type integer or string not of type string
+     * @throws CmisInvalidArgumentException If given value is not a string
      */
     public function setStringLike($parameterIndex, $string)
     {
-        if (!is_int($parameterIndex)) {
-            throw new CmisInvalidArgumentException('Parameter index must be of type integer!');
-        }
-
         if (!is_string($string)) {
             throw new CmisInvalidArgumentException('Parameter string must be of type string!');
         }
 
-        $this->parametersMap[$parameterIndex] = $this->escapeLike($string);
+        $this->setParameter($parameterIndex, $this->escapeLike($string));
     }
 
     /**
@@ -255,15 +216,26 @@ class QueryStatement implements QueryStatementInterface
      *
      * @param integer $parameterIndex the parameter index (one-based)
      * @param ObjectTypeInterface $type the object type
-     * @throws CmisInvalidArgumentException If parameter index not of type integer
      */
     public function setType($parameterIndex, ObjectTypeInterface $type)
+    {
+        $this->setParameter($parameterIndex, $this->escape($type->getQueryName()));
+    }
+
+    /**
+     * Sets the designated parameter to the given value
+     *
+     * @param integer $parameterIndex
+     * @param mixed $value
+     * @throws CmisInvalidArgumentException If parameter index is not of type integer
+     */
+    protected function setParameter($parameterIndex, $value)
     {
         if (!is_int($parameterIndex)) {
             throw new CmisInvalidArgumentException('Parameter index must be of type integer!');
         }
 
-        $this->parametersMap[$parameterIndex] = $this->escape($type->getQueryName());
+        $this->parametersMap[$parameterIndex] = $value;
     }
 
     /**
@@ -279,7 +251,7 @@ class QueryStatement implements QueryStatementInterface
         $length = strlen($this->statement);
 
         for ($i=0; $i < $length; $i++) {
-            $char =  $this->statement{$i};
+            $char = $this->statement{$i};
             if ($char === '\'') {
                 if ($inString && $this->statement{max(0, $i-1)} === '\\') {
                     $inString = true;

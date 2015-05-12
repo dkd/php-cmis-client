@@ -10,6 +10,7 @@ use Dkd\PhpCmis\DataObjects\PropertyIdDefinition;
 use Dkd\PhpCmis\DataObjects\PropertyStringDefinition;
 use Dkd\PhpCmis\Definitions\PropertyDefinitionInterface;
 use Dkd\PhpCmis\QueryStatement;
+use Dkd\PhpCmis\SessionInterface;
 use PHPUnit_Framework_MockObject_MockObject;
 
 /**
@@ -24,6 +25,7 @@ use PHPUnit_Framework_MockObject_MockObject;
 class QueryStatementTest extends \PHPUnit_Framework_TestCase
 {
     use ReflectionHelperTrait;
+    use DataProviderCollectionTrait;
 
     const CLASS_TO_TEST = '\\Dkd\\PhpCmis\\QueryStatement';
 
@@ -35,6 +37,7 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
      */
     protected function getQueryStatementObject($statement = 'SELECT * FROM foo')
     {
+        /** @var PHPUnit_Framework_MockObject_MockObject|SessionInterface $sessionMock */
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->getMockForAbstractClass();
         $queryStatementObject = new QueryStatement($sessionMock, $statement);
 
@@ -153,12 +156,10 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     *
-     */
     public function testConstructorSetsSessionPropertyToGivenSession()
     {
         $statement = 'SELECT foo FROM bar';
+        /** @var PHPUnit_Framework_MockObject_MockObject|SessionInterface $sessionMock */
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->getMockForAbstractClass();
         $queryStatementObject = new QueryStatement($sessionMock, $statement);
 
@@ -169,12 +170,10 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     *
-     */
     public function testConstructorSetsStatementPropertyToGivenStatement()
     {
         $statement = 'SELECT foo FROM bar';
+        /** @var PHPUnit_Framework_MockObject_MockObject|SessionInterface $sessionMock */
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->getMockForAbstractClass();
         $queryStatementObject = new QueryStatement($sessionMock, $statement);
 
@@ -217,9 +216,17 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
      * @param integer $parameterIndex
      * @param boolean $value
      * @param string $expectedValue
+     * @param \Closure $callback
      */
-    public function testSetBooleanAddsParametersMapValue($parameterIndex, $value, $expectedValue)
-    {
+    public function testSetBooleanAddsParametersMapValue(
+        $parameterIndex,
+        $value,
+        $expectedValue,
+        \Closure $callback = null
+    ) {
+        if ($callback) {
+            $callback($this);
+        }
         $queryStatement = $this->getQueryStatementObject();
         $queryStatement->setBoolean($parameterIndex, $value);
 
@@ -239,18 +246,37 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array(1, true, 'TRUE'),
-            array(2, false, 'FALSE')
+            array(2, false, 'FALSE'),
+            array(
+                '2',
+                false,
+                'FALSE',
+                function (QueryStatementTest $parent) {
+                    $parent->setExpectedException(
+                        '\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException',
+                        'Parameter index must be of type integer!'
+                    );
+                }
+            ),
         );
     }
 
     /**
      * @dataProvider setDateTimeDataProvider
      * @param integer $parameterIndex
-     * @param \DateTime  $value
+     * @param \DateTime $value
      * @param string $expectedValue
+     * @param \Closure $callback
      */
-    public function testSetDateTimeAddsParametersMapValue($parameterIndex, \DateTime $value, $expectedValue)
-    {
+    public function testSetDateTimeAddsParametersMapValue(
+        $parameterIndex,
+        \DateTime $value,
+        $expectedValue,
+        \Closure $callback = null
+    ) {
+        if ($callback) {
+            $callback($this);
+        }
         $queryStatement = $this->getQueryStatementObject();
         $queryStatement->setDateTime($parameterIndex, $value);
 
@@ -270,7 +296,18 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array(1, new \DateTime('2015-03-27 11:14:15.638276+02:00'), '2015-03-27T11:14:15.638276+02:00'),
-            array(2, new \DateTime('2015-02-26 10:21:25.523185+01:00'), '2015-02-26T10:21:25.523185+01:00')
+            array(2, new \DateTime('2015-02-26 10:21:25.523185+01:00'), '2015-02-26T10:21:25.523185+01:00'),
+            array(
+                '2',
+                new \DateTime('2015-02-26 10:21:25.523185+01:00'),
+                '2015-02-26T10:21:25.523185+01:00',
+                function (QueryStatementTest $parent) {
+                    $parent->setExpectedException(
+                        '\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException',
+                        'Parameter index must be of type integer!'
+                    );
+                }
+            )
         );
     }
 
@@ -279,9 +316,18 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
      * @param integer $parameterIndex
      * @param \DateTime $value
      * @param string $expectedValue
+     * @param \Closure $callback
      */
-    public function testSetDateTimeTimestampAddsParametersMapValue($parameterIndex, \DateTime $value, $expectedValue)
-    {
+    public function testSetDateTimeTimestampAddsParametersMapValue(
+        $parameterIndex,
+        \DateTime $value,
+        $expectedValue,
+        \Closure $callback = null
+    ) {
+        if ($callback) {
+            $callback($this);
+        }
+
         $queryStatement = $this->getQueryStatementObject();
         $queryStatement->setDateTimeTimestamp($parameterIndex, $value);
 
@@ -301,7 +347,18 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array(1, new \DateTime('2015-03-27 11:14:15.638276+02:00'), 'TIMESTAMP 2015-03-27T11:14:15.638276+02:00'),
-            array(2, new \DateTime('2015-02-26 10:21:25.523185+01:00'), 'TIMESTAMP 2015-02-26T10:21:25.523185+01:00')
+            array(2, new \DateTime('2015-02-26 10:21:25.523185+01:00'), 'TIMESTAMP 2015-02-26T10:21:25.523185+01:00'),
+            array(
+                '2',
+                new \DateTime('2015-02-26 10:21:25.523185+01:00'),
+                'TIMESTAMP 2015-02-26T10:21:25.523185+01:00',
+                function (QueryStatementTest $parent) {
+                    $parent->setExpectedException(
+                        '\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException',
+                        'Parameter index must be of type integer!'
+                    );
+                }
+            )
         );
     }
 
@@ -310,9 +367,18 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
      * @param integer $parameterIndex
      * @param ObjectIdInterface $value
      * @param string $expectedValue
+     * @param \Closure $callback
      */
-    public function testSetIdAddsParametersMapValue($parameterIndex, ObjectIdInterface $value, $expectedValue)
-    {
+    public function testSetIdAddsParametersMapValue(
+        $parameterIndex,
+        ObjectIdInterface $value,
+        $expectedValue,
+        \Closure $callback = null
+    ) {
+        if ($callback) {
+            $callback($this);
+        }
+
         $queryStatement = $this->getQueryStatementObject();
         $queryStatement->setId($parameterIndex, $value);
 
@@ -330,7 +396,6 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
      */
     public function setIdDataProvider()
     {
-
         $folderMock = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\DataObjects\\Document'
         )->disableOriginalConstructor()->getMock();
@@ -344,7 +409,18 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
         return array(
             array(1, new ObjectId('foo'), '\'foo\''),
             array(2, $folderMock, '\'bar\''),
-            array(3, $documentMock, '\'baz\'')
+            array(3, $documentMock, '\'baz\''),
+            array(
+                '1',
+                new ObjectId('foo'),
+                '\'foo\'',
+                function (QueryStatementTest $parent) {
+                    $parent->setExpectedException(
+                        '\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException',
+                        'Parameter index must be of type integer!'
+                    );
+                }
+            )
         );
     }
 
@@ -353,15 +429,16 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
      * @param integer $parameterIndex
      * @param integer|string $value
      * @param string $expectedValue
-     * @param boolean $testExeption
+     * @param \Closure $callback
      */
-    public function testSetNumberAddsParametersMapValue($parameterIndex, $value, $expectedValue, $testExeption = false)
-    {
-        if ($testExeption) {
-            $this->setExpectedException(
-                '\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException',
-                'Number must be of type integer!'
-            );
+    public function testSetNumberAddsParametersMapValue(
+        $parameterIndex,
+        $value,
+        $expectedValue,
+        \Closure $callback = null
+    ) {
+        if ($callback) {
+            $callback($this);
         }
 
         $queryStatement = $this->getQueryStatementObject();
@@ -384,7 +461,28 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
         return array(
             array(1, 123, 123),
             array(2, 456, 456),
-            array(2, 'abz', 456, true)
+            array(
+                2,
+                'abz',
+                456,
+                function (QueryStatementTest $parent) {
+                    $parent->setExpectedException(
+                        '\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException',
+                        'Number must be of type integer!'
+                    );
+                }
+            ),
+            array(
+                '1',
+                456,
+                456,
+                function (QueryStatementTest $parent) {
+                    $parent->setExpectedException(
+                        '\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException',
+                        'Parameter index must be of type integer!'
+                    );
+                }
+            )
         );
     }
 
@@ -393,12 +491,18 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
      * @param integer $parameterIndex
      * @param PropertyDefinitionInterface $value
      * @param string $expectedValue
+     * @param \Closure $callback
      */
     public function testSetPropertyAddsParametersMapValue(
         $parameterIndex,
         PropertyDefinitionInterface $value,
-        $expectedValue
+        $expectedValue,
+        \Closure $callback = null
     ) {
+        if ($callback) {
+            $callback($this);
+        }
+
         $queryStatement = $this->getQueryStatementObject();
         $queryStatement->setProperty($parameterIndex, $value);
 
@@ -422,9 +526,33 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
         $propertyIdDefinition = new PropertyIdDefinition('bar');
         $propertyIdDefinition->setQueryName('bar:baz');
 
+        $propertyIdDefinitionWithEmptyQueryName = new PropertyIdDefinition('bar');
+
         return array(
             array(1, $propertyStringDefinition, '\'foo:bar\''),
-            array(2, $propertyIdDefinition, '\'bar:baz\'')
+            array(2, $propertyIdDefinition, '\'bar:baz\''),
+            array(
+                2,
+                $propertyIdDefinitionWithEmptyQueryName,
+                '\'bar:baz\'',
+                function (QueryStatementTest $parent) {
+                    $parent->setExpectedException(
+                        '\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException',
+                        'Property has no query name!'
+                    );
+                }
+            ),
+            array(
+                '2',
+                $propertyIdDefinition,
+                '\'bar:baz\'',
+                function (QueryStatementTest $parent) {
+                    $parent->setExpectedException(
+                        '\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException',
+                        'Parameter index must be of type integer!'
+                    );
+                }
+            )
         );
     }
 
@@ -433,9 +561,18 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
      * @param integer $parameterIndex
      * @param string $value
      * @param string $expectedValue
+     * @param \Closure $callback
      */
-    public function testSetStringAddsParametersMapValue($parameterIndex, $value, $expectedValue)
-    {
+    public function testSetStringAddsParametersMapValue(
+        $parameterIndex,
+        $value,
+        $expectedValue,
+        \Closure $callback = null
+    ) {
+        if ($callback) {
+            $callback($this);
+        }
+
         $queryStatement = $this->getQueryStatementObject();
         $queryStatement->setString($parameterIndex, $value);
 
@@ -458,7 +595,29 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
             array(2, 'foo:bar', '\'foo:bar\''),
             array(2, 'foo\'bar', '\'foo\\\'bar\''),
             array(3, 'foo\bar\baz', '\'foo\\\\bar\\\\baz\''),
-            array(3, 'foo\\bar\\baz', '\'foo\\\\bar\\\\baz\'')
+            array(3, 'foo\\bar\\baz', '\'foo\\\\bar\\\\baz\''),
+            array(
+                3,
+                1,
+                '',
+                function (QueryStatementTest $parent) {
+                    $parent->setExpectedException(
+                        '\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException',
+                        'Parameter string must be of type string!'
+                    );
+                }
+            ),
+            array(
+                '3',
+                'foo\\bar\\baz',
+                '\'foo\\\\bar\\\\baz\'',
+                function (QueryStatementTest $parent) {
+                    $parent->setExpectedException(
+                        '\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException',
+                        'Parameter index must be of type integer!'
+                    );
+                }
+            )
         );
     }
 
@@ -467,9 +626,17 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
      * @param integer $parameterIndex
      * @param string $value
      * @param string $expectedValue
+     * @param \Closure $callback
      */
-    public function testSetStringContainsAddsParametersMapValue($parameterIndex, $value, $expectedValue)
-    {
+    public function testSetStringContainsAddsParametersMapValue(
+        $parameterIndex,
+        $value,
+        $expectedValue,
+        \Closure $callback = null
+    ) {
+        if ($callback) {
+            $callback($this);
+        }
         $queryStatement = $this->getQueryStatementObject();
         $queryStatement->setStringContains($parameterIndex, $value);
 
@@ -495,7 +662,29 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
             array(3, 'foo\*bar\\baz', '\'foo\\*bar\\\\baz\''),
             array(3, 'foo\?"bar"', '\'foo\\?\\"bar\\"\''),
             array(3, 'foo%bar\\baz', '\'foo%bar\\\\baz\''),
-            array(3, 'foo_?"bar"', '\'foo_?\\"bar\\"\'')
+            array(3, 'foo_?"bar"', '\'foo_?\\"bar\\"\''),
+            array(
+                1,
+                1,
+                '',
+                function (QueryStatementTest $parent) {
+                    $parent->setExpectedException(
+                        '\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException',
+                        'Parameter string must be of type string!'
+                    );
+                }
+            ),
+            array(
+                '1',
+                'foo',
+                '\'foo\'',
+                function (QueryStatementTest $parent) {
+                    $parent->setExpectedException(
+                        '\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException',
+                        'Parameter index must be of type integer!'
+                    );
+                }
+            )
         );
     }
 
@@ -504,9 +693,17 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
      * @param integer $parameterIndex
      * @param $value
      * @param string $expectedValue
+     * @param \Closure $callback
      */
-    public function testSetStringLikeAddsParametersMapValue($parameterIndex, $value, $expectedValue)
-    {
+    public function testSetStringLikeAddsParametersMapValue(
+        $parameterIndex,
+        $value,
+        $expectedValue,
+        \Closure $callback = null
+    ) {
+        if ($callback) {
+            $callback($this);
+        }
         $queryStatement = $this->getQueryStatementObject();
         $queryStatement->setStringLike($parameterIndex, $value);
 
@@ -532,7 +729,29 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
             array(3, 'foo\*bar\\baz', '\'foo\\\\*bar\\\\baz\''),
             array(3, 'foo\?"bar"', '\'foo\\\\?"bar"\''),
             array(3, 'foo%bar\%baz', '\'foo%bar\\%baz\''),
-            array(3, 'foo\_?"bar"', '\'foo\\_?"bar"\'')
+            array(3, 'foo\_?"bar"', '\'foo\\_?"bar"\''),
+            array(
+                1,
+                1,
+                '',
+                function (QueryStatementTest $parent) {
+                    $parent->setExpectedException(
+                        '\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException',
+                        'Parameter string must be of type string!'
+                    );
+                }
+            ),
+            array(
+                '1',
+                'foo',
+                '\'foo\'',
+                function (QueryStatementTest $parent) {
+                    $parent->setExpectedException(
+                        '\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException',
+                        'Parameter index must be of type integer!'
+                    );
+                }
+            )
         );
     }
 
@@ -541,9 +760,18 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
      * @param integer $parameterIndex
      * @param ObjectTypeInterface $value
      * @param string $expectedValue
+     * @param \Closure $callback
      */
-    public function testSetTypeAddsParametersMapValue($parameterIndex, ObjectTypeInterface $value, $expectedValue)
-    {
+    public function testSetTypeAddsParametersMapValue(
+        $parameterIndex,
+        ObjectTypeInterface $value,
+        $expectedValue,
+        \Closure $callback = null
+    ) {
+        if ($callback) {
+            $callback($this);
+        }
+
         $queryStatement = $this->getQueryStatementObject();
         $queryStatement->setType($parameterIndex, $value);
 
@@ -565,7 +793,9 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
         $folderTypeMock = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\DataObjects\\DocumentType'
         )->disableOriginalConstructor()->getMock();
+        $folderTypeMock2 = clone $folderTypeMock;
         $folderTypeMock->expects($this->once())->method('getQueryName')->willReturn('foo:bar');
+        $folderTypeMock2->expects($this->once())->method('getQueryName')->willReturn('foo:bar');
 
         /** @var FolderType|PHPUnit_Framework_MockObject_MockObject $documentTypeMock */
         $documentTypeMock = $this->getMockBuilder(
@@ -575,7 +805,18 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
 
         return array(
             array(1, $folderTypeMock, '\'foo:bar\''),
-            array(2, $documentTypeMock, '\'bar:baz\'')
+            array(2, $documentTypeMock, '\'bar:baz\''),
+            array(
+                '1',
+                $folderTypeMock2,
+                '\'foo:bar\'',
+                function (QueryStatementTest $parent) {
+                    $parent->setExpectedException(
+                        '\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException',
+                        'Parameter index must be of type integer!'
+                    );
+                }
+            )
         );
     }
 
@@ -608,20 +849,27 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
     public function toQueryStringDataProvider()
     {
         return array(
-           array(
-               'SELECT * FROM foo:bar WHERE property1 = ? AND property2 > ? ',
-               array(
-                   'setString' => array(1, 'baz'),
-                   'setNumber' => array(2, 123)
-               ),
-               'SELECT * FROM foo:bar WHERE property1 = \'baz\' AND property2 > 123'
-           ),
+            array(
+                'SELECT * FROM foo:bar WHERE property1 = ? AND property2 > ? ',
+                array(
+                    'setString' => array(1, 'baz'),
+                    'setNumber' => array(2, 123)
+                ),
+                'SELECT * FROM foo:bar WHERE property1 = \'baz\' AND property2 > 123'
+            ),
             array(
                 'SELECT * FROM bar WHERE id = ?',
                 array(
                     'setId' => array(1, new ObjectId('foobar'))
                 ),
                 'SELECT * FROM bar WHERE id = \'foobar\''
+            ),
+            array(
+                'SELECT * FROM bar WHERE property1 = \'as\\\'df\' AND id = ?',
+                array(
+                    'setId' => array(1, new ObjectId('foobar'))
+                ),
+                'SELECT * FROM bar WHERE property1 = \'as\\\'df\' AND id = \'foobar\''
             ),
         );
     }
@@ -632,6 +880,7 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
             '\\Dkd\\PhpCmis\\QueryResultInterface'
         )->getMockForAbstractClass();
         $queryResultArray = array($queryResultInterfaceMock);
+        /** @var PHPUnit_Framework_MockObject_MockObject|SessionInterface $sessionMock */
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->getMockForAbstractClass();
         $sessionMock->expects($this->once())->method('query')->willReturn($queryResultArray);
 
