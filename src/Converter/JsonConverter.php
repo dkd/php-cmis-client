@@ -709,62 +709,35 @@ class JsonConverter extends AbstractDataConverter
         if (empty($data)) {
             return null;
         }
-        $id = null;
-        if (!empty($data[JSONConstants::JSON_PROPERTY_TYPE_ID])) {
-            $id = $data[JSONConstants::JSON_PROPERTY_TYPE_ID];
+
+        $data[JSONConstants::JSON_PROPERTY_TYPE_PROPERTY_TYPE] = PropertyType::cast(
+            $data[JSONConstants::JSON_PROPERTY_TYPE_PROPERTY_TYPE]
+        );
+
+        $propertyDefinition = $this->getPropertyDefinitionByType(
+            $data[JSONConstants::JSON_PROPERTY_TYPE_PROPERTY_TYPE],
+            $data
+        );
+
+        // remove the id property as it has been already set to the property definition.
+        unset($data[JSONConstants::JSON_PROPERTY_TYPE_ID]);
+
+        if (isset($data[JSONConstants::JSON_PROPERTY_TYPE_RESOLUTION])) {
+            $data[JSONConstants::JSON_PROPERTY_TYPE_RESOLUTION] = DateTimeResolution::cast(
+                $data[JSONConstants::JSON_PROPERTY_TYPE_RESOLUTION]
+            );
         }
 
-        $propertyType = PropertyType::cast($data[JSONConstants::JSON_PROPERTY_TYPE_PROPERTY_TYPE]);
-        $cardinality = Cardinality::cast($data[JSONConstants::JSON_PROPERTY_TYPE_CARDINALITY]);
-
-        if ($propertyType->equals(PropertyType::STRING)) {
-            $propertyDefinition = new PropertyStringDefinition($id);
-            if (isset($data[JSONConstants::JSON_PROPERTY_TYPE_MAX_LENGTH])) {
-                $propertyDefinition->setMaxLength((integer) $data[JSONConstants::JSON_PROPERTY_TYPE_MAX_LENGTH]);
-            }
-        } elseif ($propertyType->equals(PropertyType::ID)) {
-            $propertyDefinition = new PropertyIdDefinition($id);
-        } elseif ($propertyType->equals(PropertyType::BOOLEAN)) {
-            $propertyDefinition = new PropertyBooleanDefinition($id);
-        } elseif ($propertyType->equals(PropertyType::INTEGER)) {
-            $propertyDefinition = new PropertyIntegerDefinition($id);
-            if (isset($data[JSONConstants::JSON_PROPERTY_TYPE_MIN_VALUE])) {
-                $propertyDefinition->setMinValue((integer) $data[JSONConstants::JSON_PROPERTY_TYPE_MIN_VALUE]);
-            }
-            if (isset($data[JSONConstants::JSON_PROPERTY_TYPE_MAX_VALUE])) {
-                $propertyDefinition->setMaxValue((integer) $data[JSONConstants::JSON_PROPERTY_TYPE_MAX_VALUE]);
-            }
-        } elseif ($propertyType->equals(PropertyType::DATETIME)) {
-            $propertyDefinition = new PropertyDateTimeDefinition($id);
-            if (isset($data[JSONConstants::JSON_PROPERTY_TYPE_RESOLUTION])) {
-                $propertyDefinition->setDateTimeResolution(
-                    DateTimeResolution::cast($data[JSONConstants::JSON_PROPERTY_TYPE_RESOLUTION])
-                );
-            }
-        } elseif ($propertyType->equals(PropertyType::DECIMAL)) {
-            $propertyDefinition = new PropertyDecimalDefinition($id);
-            if (isset($data[JSONConstants::JSON_PROPERTY_TYPE_MIN_VALUE])) {
-                $propertyDefinition->setMinValue((integer) $data[JSONConstants::JSON_PROPERTY_TYPE_MIN_VALUE]);
-            }
-            if (isset($data[JSONConstants::JSON_PROPERTY_TYPE_MAX_VALUE])) {
-                $propertyDefinition->setMaxValue((integer) $data[JSONConstants::JSON_PROPERTY_TYPE_MAX_VALUE]);
-            }
-            if (isset($data[JSONConstants::JSON_PROPERTY_TYPE_PRECISION])) {
-                $propertyDefinition->setPrecision(
-                    DecimalPrecision::cast($data[JSONConstants::JSON_PROPERTY_TYPE_PRECISION])
-                );
-            }
-        } elseif ($propertyType->equals(PropertyType::HTML)) {
-            $propertyDefinition = new PropertyHtmlDefinition($id);
-        } elseif ($propertyType->equals(PropertyType::URI)) {
-            $propertyDefinition = new PropertyUriDefinition($id);
-        } else {
-            // @codeCoverageIgnoreStart
-            // this could only happen if a new property type is added to the enumeration and not implemented here.
-            throw new CmisInvalidArgumentException(
-                sprintf('The given property definition "%s" could not be converted.', $propertyType)
+        if (isset($data[JSONConstants::JSON_PROPERTY_TYPE_PRECISION])) {
+            $data[JSONConstants::JSON_PROPERTY_TYPE_PRECISION] = DecimalPrecision::cast(
+                $data[JSONConstants::JSON_PROPERTY_TYPE_PRECISION]
             );
-            // @codeCoverageIgnoreEnd
+        }
+
+        if (isset($data[JSONConstants::JSON_PROPERTY_TYPE_CARDINALITY])) {
+            $data[JSONConstants::JSON_PROPERTY_TYPE_CARDINALITY] = Cardinality::cast(
+                $data[JSONConstants::JSON_PROPERTY_TYPE_CARDINALITY]
+            );
         }
 
         // TODO
@@ -786,45 +759,58 @@ class JsonConverter extends AbstractDataConverter
 //            }
 //        }
 
-        $propertyDefinition->setPropertyType($propertyType);
-        $propertyDefinition->setCardinality($cardinality);
-        if (isset($data[JSONConstants::JSON_PROPERTY_TYPE_LOCALNAME])) {
-            $propertyDefinition->setLocalName((string) $data[JSONConstants::JSON_PROPERTY_TYPE_LOCALNAME]);
-        }
-        if (isset($data[JSONConstants::JSON_PROPERTY_TYPE_LOCALNAMESPACE])) {
-            $propertyDefinition->setLocalNamespace((string) $data[JSONConstants::JSON_PROPERTY_TYPE_LOCALNAMESPACE]);
-        }
-        if (isset($data[JSONConstants::JSON_PROPERTY_TYPE_QUERYNAME])) {
-            $propertyDefinition->setQueryName((string) $data[JSONConstants::JSON_PROPERTY_TYPE_QUERYNAME]);
-        }
-        if (isset($data[JSONConstants::JSON_PROPERTY_TYPE_DESCRIPTION])) {
-            $propertyDefinition->setDescription((string) $data[JSONConstants::JSON_PROPERTY_TYPE_DESCRIPTION]);
-        }
-        if (isset($data[JSONConstants::JSON_PROPERTY_TYPE_DISPLAYNAME])) {
-            $propertyDefinition->setDisplayName((string) $data[JSONConstants::JSON_PROPERTY_TYPE_DISPLAYNAME]);
-        }
-        if (isset($data[JSONConstants::JSON_PROPERTY_TYPE_INHERITED])) {
-            $propertyDefinition->setIsInherited((boolean) $data[JSONConstants::JSON_PROPERTY_TYPE_INHERITED]);
-        }
-        if (isset($data[JSONConstants::JSON_PROPERTY_TYPE_OPENCHOICE])) {
-            $propertyDefinition->setIsOpenChoice((boolean) $data[JSONConstants::JSON_PROPERTY_TYPE_OPENCHOICE]);
-        }
-        if (isset($data[JSONConstants::JSON_PROPERTY_TYPE_ORDERABLE])) {
-            $propertyDefinition->setIsOrderable((boolean) $data[JSONConstants::JSON_PROPERTY_TYPE_ORDERABLE]);
-        }
-        if (isset($data[JSONConstants::JSON_PROPERTY_TYPE_QUERYABLE])) {
-            $propertyDefinition->setIsQueryable((boolean) $data[JSONConstants::JSON_PROPERTY_TYPE_QUERYABLE]);
-        }
-        if (isset($data[JSONConstants::JSON_PROPERTY_TYPE_REQUIRED])) {
-            $propertyDefinition->setIsRequired((boolean) $data[JSONConstants::JSON_PROPERTY_TYPE_REQUIRED]);
-        }
         if (isset($data[JSONConstants::JSON_PROPERTY_TYPE_UPDATABILITY])) {
-            $propertyDefinition->setUpdatability(
-                Updatability::cast($data[JSONConstants::JSON_PROPERTY_TYPE_UPDATABILITY])
+            $data[JSONConstants::JSON_PROPERTY_TYPE_UPDATABILITY] = Updatability::cast(
+                $data[JSONConstants::JSON_PROPERTY_TYPE_UPDATABILITY]
             );
         }
-
+        $propertyDefinition->populate(
+            $data,
+            array(JSONConstants::JSON_PROPERTY_TYPE_RESOLUTION => 'dateTimeResolution')
+        );
         $propertyDefinition->setExtensions($this->convertExtension($data, JSONConstants::getPropertyTypeKeys()));
+
+        return $propertyDefinition;
+    }
+
+    /**
+     * @param PropertyType $propertyType
+     * @param array $data
+     * @return PropertyBooleanDefinition|PropertyDateTimeDefinition|PropertyDecimalDefinition|PropertyHtmlDefinition|PropertyIdDefinition|PropertyIntegerDefinition|PropertyStringDefinition
+     */
+    protected function getPropertyDefinitionByType(PropertyType $propertyType, array $data = array())
+    {
+        $id = null;
+        if (!empty($data[JSONConstants::JSON_PROPERTY_TYPE_ID])) {
+            $id = $data[JSONConstants::JSON_PROPERTY_TYPE_ID];
+        }
+
+        if ($propertyType->equals(PropertyType::STRING)) {
+            $propertyDefinition = new PropertyStringDefinition($id);
+        } elseif ($propertyType->equals(PropertyType::ID)) {
+            $propertyDefinition = new PropertyIdDefinition($id);
+        } elseif ($propertyType->equals(PropertyType::BOOLEAN)) {
+            $propertyDefinition = new PropertyBooleanDefinition($id);
+        } elseif ($propertyType->equals(PropertyType::INTEGER)) {
+            $propertyDefinition = new PropertyIntegerDefinition($id);
+        } elseif ($propertyType->equals(PropertyType::DATETIME)) {
+            $propertyDefinition = new PropertyDateTimeDefinition($id);
+        } elseif ($propertyType->equals(PropertyType::DECIMAL)) {
+            $propertyDefinition = new PropertyDecimalDefinition($id);
+        } elseif ($propertyType->equals(PropertyType::HTML)) {
+            $propertyDefinition = new PropertyHtmlDefinition($id);
+        } elseif ($propertyType->equals(PropertyType::URI)) {
+            $propertyDefinition = new PropertyUriDefinition($id);
+        } else {
+            // @codeCoverageIgnoreStart
+            // this could only happen if a new property type is added to the enumeration and not implemented here.
+            throw new CmisInvalidArgumentException(
+                sprintf('The given property definition "%s" could not be converted.', $propertyType)
+            );
+            // @codeCoverageIgnoreEnd
+        }
+
+        $propertyDefinition->setPropertyType($propertyType);
 
         return $propertyDefinition;
     }
