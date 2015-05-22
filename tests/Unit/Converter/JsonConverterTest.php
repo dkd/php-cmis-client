@@ -397,6 +397,7 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
      * @dataProvider convertTypeDefinitionDataProvider
      * @param $expectedTypeObject
      * @param $data
+     * @covers Dkd\PhpCmis\Converter\JsonConverter::convertTypeDefinition
      */
     public function testConvertTypeDefinitionConvertsArrayToTypeDefinitionObject($expectedTypeObject, $data)
     {
@@ -409,6 +410,7 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
      * @dataProvider convertTypeDefinitionDataProvider
      * @param $expectedTypeObject
      * @param $data
+     * @covers Dkd\PhpCmis\Converter\JsonConverter::convertTypeDefinition
      */
     public function testConvertTypeDefinitionConvertsArrayToTypeDefinitionObjectAndPopulatesData(
         $expectedTypeObject,
@@ -1121,5 +1123,36 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
         $expectedObject->setExtensions(array(new CmisExtensionElement('', 'customExtension', array(), 'foobar')));
 
         $this->assertEquals($expectedObject, $failedToDelete);
+    }
+
+    /**
+     * @dataProvider convertPropertyDefinitionConvertsArrayToObjectDataProvider
+     * @param $expected
+     * @param $data
+     */
+    public function testConvertPropertyDefinitionConvertsArrayToObject($expected, $data)
+    {
+        $this->assertEquals($expected, $this->jsonConverter->convertPropertyDefinition($data));
+    }
+
+    /**
+     * @return array
+     */
+    public function convertPropertyDefinitionConvertsArrayToObjectDataProvider()
+    {
+        $propertyDefinitions = $this->getResponseFixtureContentAsArray(
+            'Cmis/v1.1/BrowserBinding/getTypeDefinition-response.log'
+        )['propertyDefinitions'];
+        $expectedObjects = require(__DIR__ . '/../../Fixtures/Php/PropertyDefinitionsFixture.php');
+
+        $data = array(array(null, array()));
+        foreach ($propertyDefinitions as $key => $propertyDefinitionData) {
+            $data[] = array(
+                $expectedObjects[$key],
+                $propertyDefinitionData
+            );
+        }
+
+        return $data;
     }
 }

@@ -759,10 +759,12 @@ class JsonConverter extends AbstractDataConverter
         } elseif ($propertyType->equals(PropertyType::URI)) {
             $propertyDefinition = new PropertyUriDefinition($id);
         } else {
+            // @codeCoverageIgnoreStart
             // this could only happen if a new property type is added to the enumeration and not implemented here.
             throw new CmisInvalidArgumentException(
                 sprintf('The given property definition "%s" could not be converted.', $propertyType)
             );
+            // @codeCoverageIgnoreEnd
         }
 
         // TODO
