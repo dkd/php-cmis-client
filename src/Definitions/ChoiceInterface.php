@@ -21,6 +21,11 @@ interface ChoiceInterface
     public function getChoice();
 
     /**
+     * @param ChoiceInterface[] $choice
+     */
+    public function setChoice(array $choice);
+
+    /**
      * Return the display name of the choice value.
      *
      * @return string
@@ -28,9 +33,23 @@ interface ChoiceInterface
     public function getDisplayName();
 
     /**
+     * Sets the display name of the choice value.
+     *
+     * @return string $displayName
+     */
+    public function setDisplayName($displayName);
+
+    /**
      * Return the value of the choice value.
      *
-     * @return array
+     * @return ChoiceInterface[]|string[]|integer[]|boolean[]|float[]|\DateTime[]
      */
     public function getValue();
+
+    /**
+     * Sets the value of the choice value.
+     *
+     * @param ChoiceInterface[]|string[]|integer[]|boolean[]|float[]|\DateTime[] $value
+     */
+    public function setValue(array $value);
 }
