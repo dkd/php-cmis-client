@@ -16,15 +16,15 @@ use Dkd\PhpCmis\Definitions\TypeMutabilityInterface;
 use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
 
 /**
- * Convert a Type Mutability Object to a string representation
+ * Convert a Type Mutability Object to a array representation
  */
 class TypeMutabilityInterfaceConverter implements TypeConverterInterface
 {
     /**
      * Convert given object to a scalar representation or an array of scalar values.
      *
-     * @param $object
-     * @return string[] Array / Scalar representation of object
+     * @param TypeMutabilityInterface $object
+     * @return boolean[] Array representation of object
      * @throws CmisInvalidArgumentException thrown if given object does not implement expected TypeMutabilityInterface
      */
     public static function convertToSimpleType($object)

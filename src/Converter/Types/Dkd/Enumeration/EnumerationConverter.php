@@ -22,8 +22,8 @@ class EnumerationConverter implements TypeConverterInterface
     /**
      * Convert given object to a scalar representation or an array of scalar values.
      *
-     * @param $object
-     * @return string Array / Scalar representation of object
+     * @param Enumeration $object
+     * @return string String representation of Enumeration value
      * @throws CmisInvalidArgumentException is thrown if given object does not implement expected Enumeration interface
      */
     public static function convertToSimpleType($object)
