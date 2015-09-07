@@ -281,15 +281,15 @@ interface SessionInterface
      *      if <code>null</code> all properties are selected
      * @param string[] $fromTypes a Map of type aliases (keys) and type IDs (values), the Map must contain
      *      exactly one primary type and zero or more secondary types
-     * @param string $whereClause an optional WHERE clause with placeholders ('?'), see QueryStatement for details
+     * @param string|null $whereClause an optional WHERE clause with placeholders ('?'), see QueryStatement for details
      * @param string[] $orderByPropertyIds an optional list of properties IDs for the ORDER BY clause
      * @return QueryStatementInterface a new query statement object
      */
     public function createQueryStatement(
         array $selectPropertyIds,
         array $fromTypes,
-        $whereClause,
-        array $orderByPropertyIds
+        $whereClause = null,
+        array $orderByPropertyIds = array()
     );
 
     /**

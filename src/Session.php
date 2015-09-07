@@ -628,17 +628,25 @@ class Session implements SessionInterface
      *      if <code>null</code> all properties are selected
      * @param string[] $fromTypes a Map of type aliases (keys) and type IDs (values), the Map must contain
      *      exactly one primary type and zero or more secondary types
-     * @param string $whereClause an optional WHERE clause with placeholders ('?'), see QueryStatement for details
+     * @param string|null $whereClause an optional WHERE clause with placeholders ('?'), see QueryStatement for details
      * @param string[] $orderByPropertyIds an optional list of properties IDs for the ORDER BY clause
      * @return QueryStatementInterface a new query statement object
+     * @throws CmisInvalidArgumentException
      */
     public function createQueryStatement(
         array $selectPropertyIds,
         array $fromTypes,
-        $whereClause,
-        array $orderByPropertyIds
+        $whereClause = null,
+        array $orderByPropertyIds = array()
     ) {
-        // TODO: Implement createQueryStatement() method.
+        if (empty($selectPropertyIds)) {
+            throw new CmisInvalidArgumentException('Select property IDs must not be empty');
+        }
+        if (empty($fromTypes)) {
+            throw new CmisInvalidArgumentException('From types must not be empty');
+        }
+
+        return new QueryStatement($this, null, $selectPropertyIds, $fromTypes, $whereClause, $orderByPropertyIds);
     }
 
     /**

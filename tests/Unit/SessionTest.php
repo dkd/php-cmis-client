@@ -144,6 +144,25 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testCreateQueryStatementThrowsErrorOnEmptyProperties()
+    {
+        $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException');
+        $mock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Session')
+            ->setMethods(array('dummy'))
+            ->disableOriginalConstructor()
+            ->getMock();
+        $mock->createQueryStatement(array(), array('foobar'));
+    }
+
+    public function testCreateQueryStatementThrowsErrorOnEmptyTypes()
+    {
+        $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException');
+        $mock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Session')
+            ->setMethods(array('dummy'))
+            ->disableOriginalConstructor()
+            ->getMock();
+        $mock->createQueryStatement(array('foobar'), array());
+    }
 
     public function testCacheIsSetToDefaultCacheWhenNoCacheIsGivenOrDefined()
     {

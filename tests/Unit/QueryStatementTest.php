@@ -8,7 +8,9 @@ use Dkd\PhpCmis\DataObjects\FolderType;
 use Dkd\PhpCmis\DataObjects\ObjectId;
 use Dkd\PhpCmis\DataObjects\PropertyIdDefinition;
 use Dkd\PhpCmis\DataObjects\PropertyStringDefinition;
+use Dkd\PhpCmis\DataObjects\SecondaryTypeDefinition;
 use Dkd\PhpCmis\Definitions\PropertyDefinitionInterface;
+use Dkd\PhpCmis\Exception\CmisObjectNotFoundException;
 use Dkd\PhpCmis\QueryStatement;
 use Dkd\PhpCmis\SessionInterface;
 use PHPUnit_Framework_MockObject_MockObject;
@@ -185,30 +187,224 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider invalidStatementDataProvider
-     * @param mixed $idValue
+     * @param array $arguments
+     * @param integer $expectedExceptionCode
+     * @dataProvider getConstructorErrorArguments
      */
-    public function testConstructorThrowsExceptionIfStatementIsEmpty($statement)
+    public function testConstructorThrowsExceptionOnInvalidArguments(array $arguments, $expectedExceptionCode)
     {
         $this->setExpectedException(
             '\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException',
-            'Statement must not be empty!'
+            null,
+            $expectedExceptionCode
         );
-        $this->getQueryStatementObject($statement);
+        $p1 = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->getMockForAbstractClass();
+        list ($p2, $p3, $p4, $p5, $p6) = $arguments;
+        new QueryStatement($p1, $p2, $p3, $p4, $p5, $p6);
     }
 
     /**
-     * Data provider for escapeContains
-     *
      * @return array
      */
-    public function invalidStatementDataProvider()
+    public function getConstructorErrorArguments()
     {
         return array(
-            array(''),
-            array('  '),
-            array(null)
+            'Statement null' => array(
+                array(null, array(), array(), null, array()),
+                1441286811
+            ),
+            'Statement empty' => array(
+                array('', array(), array(), null, array()),
+                1441286811
+            ),
+            'Statement whitespace' => array(
+                array(' ', array(), array(), null, array()),
+                1441286811
+            ),
+            'Types empty' => array(
+                array(null, array('foobar'), array(), null, array()),
+                1441286812
+            ),
+            'Manual statement cannot be used when properties are used' => array(
+                array('foobar', array('foobar'), array(), null, array()),
+                1441286813
+            ),
+            'Manual statement cannot be used when types are used' => array(
+                array('foobar', array(), array('foobar'), null, array()),
+                1441286814
+            ),
+            'Manual statement cannot be used when clause is used' => array(
+                array('foobar', array(), array(), 'foobar', array()),
+                1441286815
+            ),
+            'Manual statement cannot be used when orderings are used' => array(
+                array('foobar', array(), array(), null, array('foobar')),
+                1441286816
+            ),
         );
+    }
+
+    /**
+     * @param array $arguments
+     * @param string $expectedStatement
+     * @dataProvider getConstructorStatementGenerationData
+     */
+    public function testConstructorGeneratesExpectedStatementFromArguments(array $arguments, $expectedStatement)
+    {
+        list ($p2, $p3, $p4, $p5, $p6) = $arguments;
+        $type = $this->getMockBuilder('Dkd\\PhpCmis\\Definitions\\TypeDefinitionInterface')
+            ->setMethods(array('getQueryName'))
+            ->getMockForAbstractClass();
+        $type->expects($this->any())->method('getQueryName')->willReturn('t');
+        $p1 = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')
+            ->setMethods(array('getTypeDefinition'))
+            ->getMockForAbstractClass();
+        $p1->expects($this->any())->method('getTypeDefinition')->willReturn($type);
+        $queryStatement = new QueryStatement($p1, $p2, $p3, $p4, $p5, $p6);
+        $this->assertAttributeEquals($expectedStatement, 'statement', $queryStatement);
+    }
+
+    /**
+     * @return array
+     */
+    public function getConstructorStatementGenerationData()
+    {
+        $propertyDefinition1 = new PropertyStringDefinition('p1');
+        $propertyDefinition1->setQueryName('p1-qn');
+        $propertyDefinition2 = new PropertyStringDefinition('p2');
+        $propertyDefinition2->setQueryName('p2-qn');
+        $typeDefinition1 = new SecondaryTypeDefinition('t1');
+        $typeDefinition1->setQueryName('t1-qn');
+        $typeDefinition2 = new SecondaryTypeDefinition('t2');
+        $typeDefinition2->setQueryName('t2-qn');
+        return array(
+            'Statement passed through if provided' => array(
+                array('foobar-statement', array(), array(), null, array()),
+                'foobar-statement'
+            ),
+            'Single property from single type without clause without ordering' => array(
+                array(null, array('p1'), array('t1'), null, array()),
+                'SELECT p1 FROM t primary'
+            ),
+            'Single property from single type with alias without clause without ordering' => array(
+                array(null, array('p1'), array('t1 alias1'), null, array()),
+                'SELECT p1 FROM t alias1'
+            ),
+            'Single property from single type with clause without ordering' => array(
+                array(null, array('p1'), array('t1'), '1=1', array()),
+                'SELECT p1 FROM t primary WHERE 1=1'
+            ),
+            'Single property from single type with clause with ordering' => array(
+                array(null, array('p1'), array('t1'), '1=1', array('p1 ASC')),
+                'SELECT p1 FROM t primary WHERE 1=1 ORDER BY p1 ASC'
+            ),
+            'Single property from two types without clause without ordering' => array(
+                array(null, array('p1'), array('t1', 't2'), null, array()),
+                'SELECT p1 FROM t primary JOIN t AS a ON primary.cmis:objectId = a.cmis:objectId'
+            ),
+            'Two properties from single type without clause without ordering' => array(
+                array(null, array('p1', 'p2'), array('t1'), null, array()),
+                'SELECT p1, p2 FROM t primary'
+            ),
+            'Two properties from two types without clause without ordering' => array(
+                array(null, array('p1', 'p2'), array('t1', 't2'), null, array()),
+                'SELECT p1, p2 FROM t primary JOIN t AS a ON primary.cmis:objectId = a.cmis:objectId'
+            ),
+            'Two properties from two types with clause without ordering' => array(
+                array(null, array('p1', 'p2'), array('t1', 't2'), '1=1', array()),
+                'SELECT p1, p2 FROM t primary JOIN t AS a ON primary.cmis:objectId = a.cmis:objectId WHERE 1=1'
+            ),
+            'Two properties from two types with clause with ordering' => array(
+                array(null, array('p1', 'p2'), array('t1', 't2'), '1=1', array('p1 ASC')),
+                'SELECT p1, p2 FROM t primary JOIN t AS a ON primary.cmis:objectId = a.cmis:objectId WHERE 1=1' .
+                    ' ORDER BY p1 ASC'
+            ),
+            'Multiple orderings without clause' => array(
+                array(null, array('p1', 'p2'), array('t1'), null, array('p1 ASC', 'p2 DESC')),
+                'SELECT p1, p2 FROM t primary ORDER BY p1 ASC, p2 DESC'
+            ),
+            'Multiple orderings with clause' => array(
+                array(null, array('p1', 'p2'), array('t1'), '1=1', array('p1 ASC', 'p2 DESC')),
+                'SELECT p1, p2 FROM t primary WHERE 1=1 ORDER BY p1 ASC, p2 DESC'
+            ),
+            'Alias of tables provided for single table' => array(
+                array(null, array('p1'), array(array('t1', 'alias')), null, array()),
+                'SELECT p1 FROM t alias'
+            ),
+            'Alias of tables provided for multiple tables' => array(
+                array(null, array('p1'), array(array('t1', 'alias1'), array('t2', 'alias2')), null, array()),
+                'SELECT p1 FROM t alias1 JOIN t AS alias2 ON alias1.cmis:objectId = alias2.cmis:objectId'
+            ),
+            'TypeDefinition instance in property list' => array(
+                array(null, array($propertyDefinition1), array('t1'), null, array()),
+                'SELECT p1-qn FROM t primary'
+            ),
+            'Multiple TypeDefinition instances in property list' => array(
+                array(null, array($propertyDefinition1, $propertyDefinition2), array('t1'), null, array()),
+                'SELECT p1-qn, p2-qn FROM t primary'
+            ),
+            'TypeDefinition instance in types list' => array(
+                array(null, array('p1'), array($typeDefinition1), null, array()),
+                'SELECT p1 FROM t primary'
+            ),
+            'TypeDefinition instance with alias in types list' => array(
+                array(null, array('p1'), array(array($typeDefinition1, 'alias1')), null, array()),
+                'SELECT p1 FROM t alias1'
+            ),
+            'Multiple TypeDefinition instances in types list' => array(
+                array(null, array('p1'), array($typeDefinition1, $typeDefinition2), null, array()),
+                'SELECT p1 FROM t primary JOIN t AS a ON primary.cmis:objectId = a.cmis:objectId'
+            ),
+            'Multiple TypeDefinition instances with aliases in types list' => array(
+                array(
+                    null,
+                    array('p1'),
+                    array(
+                        array($typeDefinition1, 'alias1'),
+                        array($typeDefinition2, 'alias2')
+                    ),
+                    null,
+                    array()
+                ),
+                'SELECT p1 FROM t alias1 JOIN t AS alias2 ON alias1.cmis:objectId = alias2.cmis:objectId'
+            ),
+            'TypeDefinition instance in orderings list' => array(
+                array(null, array('p1'), array('t1'), null, array($propertyDefinition1)),
+                'SELECT p1 FROM t primary ORDER BY p1-qn ASC'
+            ),
+            'Multiple TypeDefinition instances in orderings list' => array(
+                array(null, array('p1'), array('t1'), null, array($propertyDefinition1, $propertyDefinition2)),
+                'SELECT p1 FROM t primary ORDER BY p1-qn ASC, p2-qn ASC'
+            ),
+            'Multiple TypeDefinition instances with direction in orderings list' => array(
+                array(
+                    null,
+                    array('p1'),
+                    array('t1'),
+                    null,
+                    array(
+                        array($propertyDefinition1, 'DESC'),
+                        array($propertyDefinition2, 'DESC')
+                    ),
+                ),
+                'SELECT p1 FROM t primary ORDER BY p1-qn DESC, p2-qn DESC'
+            ),
+        );
+    }
+
+    public function testGetQueryNameAndAliasForTypeReturnsInputIfObjectIsUnloadable()
+    {
+        $exception = new CmisObjectNotFoundException();
+        $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')
+            ->setMethods(array('getTypeDefinition'))
+            ->getMockForAbstractClass();
+        $sessionMock->expects($this->once())->method('getTypeDefinition')->willThrowException($exception);
+        $queryStatement = new QueryStatement($sessionMock, 'foobar');
+        $method = new \ReflectionMethod($queryStatement, 'getQueryNameAndAliasForType');
+        $method->setAccessible(true);
+        $input = array('foobar-notfound', 'unused');
+        $output = $method->invokeArgs($queryStatement, $input);
+        $this->assertEquals($input, $output);
     }
 
     /**
