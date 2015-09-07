@@ -35,7 +35,9 @@ class DocumentTypeDefinitionTest extends \PHPUnit_Framework_TestCase
         $dummyTypeDefinition->setIsVersionable(true);
         $dummyTypeDefinition->setContentStreamAllowed(ContentStreamAllowed::cast(ContentStreamAllowed::ALLOWED));
 
+        $errorReportingLevel = error_reporting(E_ALL & ~E_USER_NOTICE);
         $this->documentTypeDefinition->populateWithClones($dummyTypeDefinition);
+        error_reporting($errorReportingLevel);
 
         $this->assertEquals($dummyTypeDefinition, $this->documentTypeDefinition);
     }

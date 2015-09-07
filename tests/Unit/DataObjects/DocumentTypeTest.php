@@ -28,7 +28,9 @@ class DocumentTypeTest extends \PHPUnit_Framework_TestCase
          * @var DocumentTypeDefinitionInterface|PHPUnit_Framework_MockObject_MockObject $documentTypeDefinition
          */
         $documentTypeDefinition = new DocumentTypeDefinition('typeId');
+        $errorReportingLevel = error_reporting(E_ALL & ~E_USER_NOTICE);
         $documentType = new DocumentType($sessionMock, $documentTypeDefinition);
+        error_reporting($errorReportingLevel);
 
         $this->assertAttributeSame($sessionMock, 'session', $documentType);
     }

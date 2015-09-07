@@ -30,7 +30,9 @@ class RelationshipTypeDefinitionTest extends \PHPUnit_Framework_TestCase
         $dummyTypeDefinition->setAllowedTargetTypeIds(array('foo'));
         $dummyTypeDefinition->setAllowedSourceTypeIds(array('bar'));
 
+        $errorReportingLevel = error_reporting(E_ALL & ~E_USER_NOTICE);
         $this->relationshipTypeDefinition->populateWithClones($dummyTypeDefinition);
+        error_reporting($errorReportingLevel);
         $this->assertEquals($dummyTypeDefinition, $this->relationshipTypeDefinition);
     }
 

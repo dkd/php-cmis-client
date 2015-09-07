@@ -24,7 +24,9 @@ class SecondaryTypeTest extends \PHPUnit_Framework_TestCase
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->getMockForAbstractClass();
 
         $secondaryTypeDefinition = new SecondaryTypeDefinition('typeId');
+        $errorReportingLevel = error_reporting(E_ALL & ~E_USER_NOTICE);
         $secondaryType = new SecondaryType($sessionMock, $secondaryTypeDefinition);
+        error_reporting($errorReportingLevel);
 
         $this->assertAttributeSame($sessionMock, 'session', $secondaryType);
     }

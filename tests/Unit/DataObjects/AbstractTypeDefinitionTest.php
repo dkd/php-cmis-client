@@ -213,7 +213,9 @@ class AbstractTypeDefinitionTest extends \PHPUnit_Framework_TestCase
             '\\Dkd\\PhpCmis\\DataObjects\\AbstractTypeDefinition'
         )->setConstructorArgs(array('typeId'))->getMockForAbstractClass();
 
+        $errorReportingLevel = error_reporting(E_ALL & ~E_USER_NOTICE);
         $this->abstractTypeDefinition->populateWithClones($dummyTypeDefinition);
+        error_reporting($errorReportingLevel);
         foreach (array_merge($this->stringProperties, $this->booleanProperties, $this->objectProperties) as $property) {
             if ($property !== 'propertyDefinitions') {
                 $this->assertAttributeEquals(null, $property, $this->abstractTypeDefinition);

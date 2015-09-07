@@ -25,7 +25,9 @@ class PolicyTypeTest extends \PHPUnit_Framework_TestCase
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->getMockForAbstractClass();
 
         $policyTypeDefinition = new PolicyTypeDefinition('typeId');
+        $errorReportingLevel = error_reporting(E_ALL & ~E_USER_NOTICE);
         $policyType = new PolicyType($sessionMock, $policyTypeDefinition);
+        error_reporting($errorReportingLevel);
 
         $this->assertAttributeSame($sessionMock, 'session', $policyType);
     }

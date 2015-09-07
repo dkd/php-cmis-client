@@ -24,7 +24,9 @@ class FolderTypeTest extends \PHPUnit_Framework_TestCase
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->getMockForAbstractClass();
 
         $folderTypeDefinition = new FolderTypeDefinition('typeId');
+        $errorReportingLevel = error_reporting(E_ALL & ~E_USER_NOTICE);
         $folderType = new FolderType($sessionMock, $folderTypeDefinition);
+        error_reporting($errorReportingLevel);
 
         $this->assertAttributeSame($sessionMock, 'session', $folderType);
     }

@@ -51,7 +51,9 @@ class RelationshipTypeTest extends \PHPUnit_Framework_TestCase
             $this->objectTypeDefinitionMock
         );
 
+        $errorReportingLevel = error_reporting(E_ALL & ~E_USER_NOTICE);
         $this->relationshipType = new RelationshipType($this->sessionMock, new RelationshipTypeDefinition('typeId'));
+        error_reporting($errorReportingLevel);
     }
 
     public function testConstructorSetsSession()

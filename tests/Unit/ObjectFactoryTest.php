@@ -110,7 +110,10 @@ class ObjectFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testConvertTypeDefinitionConvertsTypeDefinitionToAType($expectedInstance, $typeDefinition)
     {
-        $this->assertInstanceOf($expectedInstance, $this->getObjectFactory()->convertTypeDefinition($typeDefinition));
+        $errorReportingLevel = error_reporting(E_ALL & ~E_USER_NOTICE);
+        $instance = $this->getObjectFactory()->convertTypeDefinition($typeDefinition);
+        error_reporting($errorReportingLevel);
+        $this->assertInstanceOf($expectedInstance, $instance);
     }
 
     /**

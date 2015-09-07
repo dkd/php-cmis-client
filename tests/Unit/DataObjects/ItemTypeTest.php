@@ -24,7 +24,9 @@ class ItemTypeTest extends \PHPUnit_Framework_TestCase
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->getMockForAbstractClass();
 
         $itemTypeDefinition = new ItemTypeDefinition('typeId');
+        $errorReportingLevel = error_reporting(E_ALL & ~E_USER_NOTICE);
         $itemType = new ItemType($sessionMock, $itemTypeDefinition);
+        error_reporting($errorReportingLevel);
 
         $this->assertAttributeSame($sessionMock, 'session', $itemType);
     }
