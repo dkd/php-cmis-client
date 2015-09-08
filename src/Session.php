@@ -42,6 +42,7 @@ use Dkd\PhpCmis\Exception\CmisRuntimeException;
 use Dkd\PhpCmis\Exception\IllegalStateException;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\Cache;
+use Doctrine\Common\Cache\CacheProvider;
 use GuzzleHttp\Stream\StreamInterface;
 
 /**
@@ -221,8 +222,14 @@ class Session implements SessionInterface
                 $cache = $this->createDefaultCacheInstance();
             }
 
-            if (!($cache instanceof Cache)) {
-                throw new \RuntimeException('Class does not implement \\Doctrine\\Common\\Cache\\Cache!', 1408354124);
+            if (!($cache instanceof CacheProvider)) {
+                throw new \RuntimeException(
+                    sprintf(
+                        'Class %s does not subclass \\Doctrine\\Common\\Cache\\CacheProvider!',
+                        get_class($cache)
+                    ),
+                    1408354124
+                );
             }
 
             return $cache;
@@ -238,7 +245,7 @@ class Session implements SessionInterface
      * Returns an instance of the Doctrine ArrayCache.
      * This methods is primarily required for unit testing.
      *
-     * @return ArrayCache
+     * @return CacheProvider
      */
     protected function createDefaultCacheInstance()
     {
@@ -248,7 +255,7 @@ class Session implements SessionInterface
     /**
      * Get the cache instance
      *
-     * @return Cache
+     * @return CacheProvider
      */
     public function getCache()
     {
@@ -309,7 +316,7 @@ class Session implements SessionInterface
      */
     public function clear()
     {
-        // TODO: Implement clear() method.
+        $this->getCache()->flushAll();
     }
 
     /**
@@ -896,11 +903,16 @@ class Session implements SessionInterface
             $context = $this->getDefaultContext();
         }
 
-        // TODO ADD CACHE
+        $objectIdString = $objectId->getId();
+        $cacheIdentity = $objectIdString . '|' . $context->getCacheKey();
+
+        if ($this->getCache()->contains($cacheIdentity)) {
+            return $this->getCache()->fetch($cacheIdentity);
+        }
 
         $objectData = $this->getBinding()->getObjectService()->getObject(
             $this->getRepositoryInfo()->getId(),
-            $objectId->getId(),
+            $objectIdString,
             $context->getQueryFilterString(),
             $context->isIncludeAllowableActions(),
             $context->getIncludeRelationships(),
@@ -914,7 +926,9 @@ class Session implements SessionInterface
             throw new CmisObjectNotFoundException('Could not find object for given id.');
         }
 
-        return $this->getObjectFactory()->convertObject($objectData, $context);
+        $object = $this->getObjectFactory()->convertObject($objectData, $context);
+        $this->getCache()->save($cacheIdentity, $object);
+        return $object;
     }
 
     /**
@@ -1215,11 +1229,18 @@ class Session implements SessionInterface
     /**
      * Removes the given object from the cache.
      *
+     * Note about specific implementation: in order to avoid an over-engineered
+     * taggable cache mechanism and with it, extensive traversal of objects when
+     * creating tags, objects are not tagged in the cache. In addition, objects
+     * are added to the cache with a secondary identification; the context - and
+     * the context is not available here when removing a single object from the
+     * cache. Instead, we opt to simply flush the entire cache and let it refill.
+     *
      * @param ObjectIdInterface $objectId
      */
     public function removeObjectFromCache(ObjectIdInterface $objectId)
     {
-        // TODO: Implement removeObjectFromCache() method.
+        $this->clear();
     }
 
     /**

@@ -195,7 +195,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     public function testCacheIsSetToCacheDefinedInParametersArray()
     {
         /** @var \Doctrine\Common\Cache\Cache $dummyCache */
-        $cache = $this->getMockForAbstractClass('\\Doctrine\\Common\\Cache\\Cache');
+        $cache = $this->getMockForAbstractClass('\\Doctrine\\Common\\Cache\\CacheProvider');
         $session = new Session(
             array(SessionParameter::REPOSITORY_ID => 'foo', SessionParameter::CACHE_CLASS => get_class($cache)),
             null,
