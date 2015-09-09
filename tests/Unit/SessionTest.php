@@ -37,10 +37,14 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $repositoryServiceMock = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\RepositoryServiceInterface'
         )->getMockForAbstractClass();
+        $relationshipServiceMock = $this->getMockBuilder(
+            '\\Dkd\\PhpCmis\\RelationshipServiceInterface'
+        )->getMockForAbstractClass();
         $bindingMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingInterface')->setMethods(
-            array('getRepositoryService')
+            array('getRepositoryService', 'getRelationshipService')
         )->getMockForAbstractClass();
         $bindingMock->expects($this->any())->method('getRepositoryService')->willReturn($repositoryServiceMock);
+        $bindingMock->expects($this->any())->method('getRelationshipService')->willReturn($relationshipServiceMock);
         /** @var CmisBindingsHelper|PHPUnit_Framework_MockObject_MockObject $bindingsHelperMock */
         $bindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
             array('createBinding')
@@ -218,6 +222,40 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $object = $this->getMock('\\stdClass');
         new Session(
             array(SessionParameter::CACHE_CLASS => get_class($object))
+        );
+    }
+
+    public function testGetRelationships()
+    {
+        $bindingsMock = $this->getBindingsHelperMock();
+        $bindingsMock->createBinding(array())->getRelationshipService()
+            ->expects($this->once())
+            ->method('getObjectRelationships')
+            ->with();
+        $session = new Session(
+            array(SessionParameter::REPOSITORY_ID => 'foo'),
+            null,
+            null,
+            null,
+            null,
+            $bindingsMock
+        );
+        $repositoryInfo = $this->getMockBuilder('\\Dkd\\PhpCmis\\DataObjects\\RepositoryInfo')
+            ->setMethods(array('getId'))
+            ->getMock();
+        $repositoryInfo->expects($this->once())->method('getId');
+        $objectType = $this->getMockBuilder('\\Dkd\\PhpCmis\\Data\\ObjectTypeInterface')
+            ->setMethods(array('getId', '__toString'))
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $property = new \ReflectionProperty($session, 'repositoryInfo');
+        $property->setAccessible(true);
+        $property->setValue($session, $repositoryInfo);
+        $session->getRelationships(
+            new PhpCmis\DataObjects\ObjectId('foobar-object-id'),
+            true,
+            PhpCmis\Enum\RelationshipDirection::cast(PhpCmis\Enum\RelationshipDirection::TARGET),
+            $objectType
         );
     }
 }

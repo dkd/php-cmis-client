@@ -72,7 +72,7 @@ Currently implemented Services
   - [ ] getPropertiesOfLatestVersion
   - [ ] getAllVersions
 - RelationshipService
-  - [ ] getObjectRelationships
+  - [x] getObjectRelationships
 - PolicyService
   - [ ] applyPolicies
   - [ ] removePolicy

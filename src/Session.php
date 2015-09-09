@@ -992,7 +992,7 @@ class Session implements SessionInterface
      * @param boolean $includeSubRelationshipTypes
      * @param RelationshipDirection $relationshipDirection
      * @param ObjectTypeInterface $type
-     * @param OperationContextInterface $context
+     * @param OperationContextInterface|null $context
      * @return RelationshipInterface[]
      */
     public function getRelationships(
@@ -1000,9 +1000,22 @@ class Session implements SessionInterface
         $includeSubRelationshipTypes,
         RelationshipDirection $relationshipDirection,
         ObjectTypeInterface $type,
-        OperationContextInterface $context
+        OperationContextInterface $context = null
     ) {
-        // TODO: Implement getRelationships() method.
+
+        if ($context === null) {
+            $context = $this->getDefaultContext();
+        }
+
+        // TODO: Implement cache!
+
+        return $this->getBinding()->getRelationshipService()->getObjectRelationships(
+            $this->getRepositoryId(),
+            $objectId->getId(),
+            $includeSubRelationshipTypes,
+            $relationshipDirection,
+            $type->getId()
+        );
     }
 
     /**
