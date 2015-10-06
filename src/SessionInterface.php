@@ -463,7 +463,7 @@ interface SessionInterface
      * @param boolean $includeSubRelationshipTypes
      * @param RelationshipDirection $relationshipDirection
      * @param ObjectTypeInterface $type
-     * @param OperationContextInterface $context
+     * @param OperationContextInterface|null $context
      * @return RelationshipInterface[]
      */
     public function getRelationships(
@@ -471,7 +471,7 @@ interface SessionInterface
         $includeSubRelationshipTypes,
         RelationshipDirection $relationshipDirection,
         ObjectTypeInterface $type,
-        OperationContextInterface $context
+        OperationContextInterface $context = null
     );
 
     /**
