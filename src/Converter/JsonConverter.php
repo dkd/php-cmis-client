@@ -10,7 +10,6 @@ namespace Dkd\PhpCmis\Converter;
  * file that was distributed with this source code.
  */
 
-use Dkd\Enumeration\Enumeration;
 use Dkd\Enumeration\Exception\InvalidEnumerationValueException;
 use Dkd\PhpCmis\Bindings\Browser\JSONConstants;
 use Dkd\PhpCmis\Converter\Types\TypeConverterInterface;
@@ -710,9 +709,7 @@ class JsonConverter extends AbstractDataConverter
             return null;
         }
 
-        $data[JSONConstants::JSON_PROPERTY_TYPE_PROPERTY_TYPE] = PropertyType::cast(
-            $data[JSONConstants::JSON_PROPERTY_TYPE_PROPERTY_TYPE]
-        );
+        $data = $this->preparePropertyDefinitionData($data);
 
         $propertyDefinition = $this->getPropertyDefinitionByType(
             $data[JSONConstants::JSON_PROPERTY_TYPE_PROPERTY_TYPE],
@@ -721,24 +718,6 @@ class JsonConverter extends AbstractDataConverter
 
         // remove the id property as it has been already set to the property definition.
         unset($data[JSONConstants::JSON_PROPERTY_TYPE_ID]);
-
-        if (isset($data[JSONConstants::JSON_PROPERTY_TYPE_RESOLUTION])) {
-            $data[JSONConstants::JSON_PROPERTY_TYPE_RESOLUTION] = DateTimeResolution::cast(
-                $data[JSONConstants::JSON_PROPERTY_TYPE_RESOLUTION]
-            );
-        }
-
-        if (isset($data[JSONConstants::JSON_PROPERTY_TYPE_PRECISION])) {
-            $data[JSONConstants::JSON_PROPERTY_TYPE_PRECISION] = DecimalPrecision::cast(
-                $data[JSONConstants::JSON_PROPERTY_TYPE_PRECISION]
-            );
-        }
-
-        if (isset($data[JSONConstants::JSON_PROPERTY_TYPE_CARDINALITY])) {
-            $data[JSONConstants::JSON_PROPERTY_TYPE_CARDINALITY] = Cardinality::cast(
-                $data[JSONConstants::JSON_PROPERTY_TYPE_CARDINALITY]
-            );
-        }
 
         // TODO
 //        $propertyDefinition->setChoices(
@@ -759,11 +738,6 @@ class JsonConverter extends AbstractDataConverter
 //            }
 //        }
 
-        if (isset($data[JSONConstants::JSON_PROPERTY_TYPE_UPDATABILITY])) {
-            $data[JSONConstants::JSON_PROPERTY_TYPE_UPDATABILITY] = Updatability::cast(
-                $data[JSONConstants::JSON_PROPERTY_TYPE_UPDATABILITY]
-            );
-        }
         $propertyDefinition->populate(
             $data,
             array(JSONConstants::JSON_PROPERTY_TYPE_RESOLUTION => 'dateTimeResolution')
@@ -771,6 +745,50 @@ class JsonConverter extends AbstractDataConverter
         $propertyDefinition->setExtensions($this->convertExtension($data, JSONConstants::getPropertyTypeKeys()));
 
         return $propertyDefinition;
+    }
+
+    /**
+     * Cast data values to the expected type
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function preparePropertyDefinitionData(array $data)
+    {
+        $data[JSONConstants::JSON_PROPERTY_TYPE_PROPERTY_TYPE] = PropertyType::cast(
+            $data[JSONConstants::JSON_PROPERTY_TYPE_PROPERTY_TYPE]
+        );
+
+        if (isset($data[JSONConstants::JSON_PROPERTY_TYPE_DEAULT_VALUE])) {
+            $data[JSONConstants::JSON_PROPERTY_TYPE_DEAULT_VALUE]
+                = (array) $data[JSONConstants::JSON_PROPERTY_TYPE_DEAULT_VALUE];
+        }
+
+        if (isset($data[JSONConstants::JSON_PROPERTY_TYPE_RESOLUTION])) {
+            $data[JSONConstants::JSON_PROPERTY_TYPE_RESOLUTION] = DateTimeResolution::cast(
+                $data[JSONConstants::JSON_PROPERTY_TYPE_RESOLUTION]
+            );
+        }
+
+        if (isset($data[JSONConstants::JSON_PROPERTY_TYPE_PRECISION])) {
+            $data[JSONConstants::JSON_PROPERTY_TYPE_PRECISION] = DecimalPrecision::cast(
+                $data[JSONConstants::JSON_PROPERTY_TYPE_PRECISION]
+            );
+        }
+
+        if (isset($data[JSONConstants::JSON_PROPERTY_TYPE_CARDINALITY])) {
+            $data[JSONConstants::JSON_PROPERTY_TYPE_CARDINALITY] = Cardinality::cast(
+                $data[JSONConstants::JSON_PROPERTY_TYPE_CARDINALITY]
+            );
+        }
+
+        if (isset($data[JSONConstants::JSON_PROPERTY_TYPE_UPDATABILITY])) {
+            $data[JSONConstants::JSON_PROPERTY_TYPE_UPDATABILITY] = Updatability::cast(
+                $data[JSONConstants::JSON_PROPERTY_TYPE_UPDATABILITY]
+            );
+        }
+
+        return $data;
     }
 
     /**

@@ -61,20 +61,25 @@ use Dkd\PhpCmis\Enum\CapabilityJoin;
 use Dkd\PhpCmis\Enum\CapabilityOrderBy;
 use Dkd\PhpCmis\Enum\CapabilityQuery;
 use Dkd\PhpCmis\Enum\CapabilityRenditions;
+use Dkd\PhpCmis\Enum\Cardinality;
 use Dkd\PhpCmis\Enum\ChangeType;
 use Dkd\PhpCmis\Enum\CmisVersion;
 use Dkd\PhpCmis\Enum\ContentStreamAllowed;
+use Dkd\PhpCmis\Enum\DateTimeResolution;
+use Dkd\PhpCmis\Enum\DecimalPrecision;
 use Dkd\PhpCmis\Enum\PropertyType;
 use Dkd\PhpCmis\Enum\SupportedPermissions;
+use Dkd\PhpCmis\Enum\Updatability;
 use Dkd\PhpCmis\Test\Unit\FixtureHelperTrait;
 use Dkd\PhpCmis\Test\Unit\ReflectionHelperTrait;
-use GuzzleHttp\Message\MessageFactory;
 use PHPUnit_Framework_MockObject_MockObject;
 
 class JsonConverterTest extends \PHPUnit_Framework_TestCase
 {
     use ReflectionHelperTrait;
     use FixtureHelperTrait;
+
+    const CLASS_TO_TEST = '\\Dkd\\PhpCmis\\Converter\\JsonConverter';
 
     /**
      * @var JsonConverter
@@ -1133,6 +1138,33 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
     public function testConvertPropertyDefinitionConvertsArrayToObject($expected, $data)
     {
         $this->assertEquals($expected, $this->jsonConverter->convertPropertyDefinition($data));
+    }
+
+    public function testPreparePropertyDefinitionDataConvertsValuesToExpectedValues()
+    {
+        $input = array(
+            JSONConstants::JSON_PROPERTY_TYPE_PROPERTY_TYPE => 'boolean',
+            JSONConstants::JSON_PROPERTY_TYPE_DEAULT_VALUE => true,
+            JSONConstants::JSON_PROPERTY_TYPE_RESOLUTION => 'date',
+            JSONConstants::JSON_PROPERTY_TYPE_PRECISION => '32',
+            JSONConstants::JSON_PROPERTY_TYPE_CARDINALITY => 'single',
+            JSONConstants::JSON_PROPERTY_TYPE_UPDATABILITY => 'readonly'
+        );
+        $expected = array(
+            JSONConstants::JSON_PROPERTY_TYPE_PROPERTY_TYPE => PropertyType::cast('boolean'),
+            JSONConstants::JSON_PROPERTY_TYPE_DEAULT_VALUE => array(true),
+            JSONConstants::JSON_PROPERTY_TYPE_RESOLUTION => DateTimeResolution::cast('date'),
+            JSONConstants::JSON_PROPERTY_TYPE_PRECISION => DecimalPrecision::cast('32'),
+            JSONConstants::JSON_PROPERTY_TYPE_CARDINALITY => Cardinality::cast('single'),
+            JSONConstants::JSON_PROPERTY_TYPE_UPDATABILITY => Updatability::cast('readonly')
+        );
+        $this->assertEquals(
+            $expected,
+            $this->getMethod(self::CLASS_TO_TEST, 'preparePropertyDefinitionData')->invokeArgs(
+                $this->jsonConverter,
+                array($input)
+            )
+        );
     }
 
     /**
