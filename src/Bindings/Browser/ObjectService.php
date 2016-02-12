@@ -121,22 +121,6 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
             $url = $this->getObjectUrl($repositoryId, $folderId);
         }
 
-        $url->getQuery()->modify($this->convertPropertiesToQueryArray($properties));
-        $url->getQuery()->modify(
-            array(
-                Constants::CONTROL_CMISACTION => Constants::CMISACTION_CREATE_DOCUMENT,
-                Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false'
-            )
-        );
-
-        if ($versioningState !== null) {
-            $url->getQuery()->modify(array(Constants::PARAM_VERSIONING_STATE => (string) $versioningState));
-        }
-
-        $this->appendAddAcesToUrl($url, $addAces);
-        $this->appendRemoveAcesToUrl($url, $removeAces);
-        $this->appendPoliciesToUrl($url, $policies);
-
         // Guzzle gets the mime type for a file by the filename extension. Sometimes the filename does not contain
         // the correct filename extension for example when a file is uploaded in php it gets a temporary name without
         // a file extension. If the filename does not contain a file extension we use the given 'cmis:name' property
@@ -149,9 +133,35 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
             );
         }
 
+        $queryArray = array_replace(
+			array(
+				Constants::CONTROL_CMISACTION => Constants::CMISACTION_CREATE_DOCUMENT,
+				Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
+				'content' => $contentStream
+			),
+			$this->convertPropertiesToQueryArray($properties),
+			$this->convertPolicyIdArrayToQueryArray($policies)
+		);
+		if (!empty($removeAces)) {
+			$queryArray = array_replace($queryArray, $this->convertAclToQueryArray(
+				$removeAces,
+				Constants::CONTROL_REMOVE_ACE_PRINCIPAL,
+				Constants::CONTROL_REMOVE_ACE_PERMISSION
+			));
+		}
+		if (!empty($addAces)) {
+			$queryArray = array_replace($queryArray, $this->convertAclToQueryArray(
+				$addAces,
+				Constants::CONTROL_ADD_ACE_PRINCIPAL,
+				Constants::CONTROL_ADD_ACE_PERMISSION
+			));
+		}
+        if ($versioningState !== null) {
+            $queryArray[Constants::PARAM_VERSIONING_STATE] = (string) $versioningState;
+        }
         $responseData = $this->post(
             $url,
-            array('content' => $contentStream)
+            $queryArray
         )->json();
 
         $newObject = $this->getJsonConverter()->convertObject($responseData);
@@ -196,24 +206,33 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
             $url = $this->getObjectUrl($repositoryId, $folderId);
         }
 
-        $url->getQuery()->modify($this->convertPropertiesToQueryArray($properties));
-        $url->getQuery()->modify(
-            array(
-                Constants::CONTROL_CMISACTION => Constants::CMISACTION_CREATE_DOCUMENT_FROM_SOURCE,
-                Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
+		$queryArray = array_replace(
+			array(
+				Constants::CONTROL_CMISACTION => Constants::CMISACTION_CREATE_DOCUMENT_FROM_SOURCE,
+				Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
                 Constants::PARAM_SOURCE_ID => (string) $sourceId
-            )
-        );
-
-        if ($versioningState !== null) {
-            $url->getQuery()->modify(array(Constants::PARAM_VERSIONING_STATE => (string) $versioningState));
-        }
-
-        $this->appendAddAcesToUrl($url, $addAces);
-        $this->appendRemoveAcesToUrl($url, $removeAces);
-        $this->appendPoliciesToUrl($url, $policies);
-
-        $responseData = $this->post($url)->json();
+			),
+			$this->convertPropertiesToQueryArray($properties),
+			$this->convertPolicyIdArrayToQueryArray($policies)
+		);
+		if (!empty($removeAces)) {
+			$queryArray = array_replace($queryArray, $this->convertAclToQueryArray(
+				$removeAces,
+				Constants::CONTROL_REMOVE_ACE_PRINCIPAL,
+				Constants::CONTROL_REMOVE_ACE_PERMISSION
+			));
+		}
+		if (!empty($addAces)) {
+			$queryArray = array_replace($queryArray, $this->convertAclToQueryArray(
+				$addAces,
+				Constants::CONTROL_ADD_ACE_PRINCIPAL,
+				Constants::CONTROL_ADD_ACE_PERMISSION
+			));
+		}
+		if ($versioningState !== null) {
+			$queryArray[Constants::PARAM_VERSIONING_STATE] = (string) $versioningState;
+		}
+        $responseData = $this->post($url, $queryArray)->json();
 
         $newObject = $this->getJsonConverter()->convertObject($responseData);
 
@@ -853,7 +872,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
 
         $responseData = $this->post(
             $url,
-            array('content' => $contentStream)
+            $contentStream
         )->json();
 
         $newObject = $this->getJsonConverter()->convertObject($responseData);
@@ -895,19 +914,14 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
 
         $url = $this->getObjectUrl($repositoryId, $objectId);
 
-        $url->getQuery()->modify($this->convertPropertiesToQueryArray($properties));
-        $url->getQuery()->modify(
-            array(
-                Constants::CONTROL_CMISACTION => Constants::CMISACTION_UPDATE_PROPERTIES,
-                Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false'
-            )
-        );
-
         if ($changeToken !== null && !$this->getSession()->get(SessionParameter::OMIT_CHANGE_TOKENS, false)) {
             $url->getQuery()->modify(array(Constants::PARAM_CHANGE_TOKEN => $changeToken));
         }
 
-        $responseData = $this->post($url)->json();
+        $queryArray = $this->convertPropertiesToQueryArray($properties);
+        $queryArray[Constants::CONTROL_CMISACTION] = Constants::CMISACTION_UPDATE_PROPERTIES;
+        $queryArray[Constants::PARAM_SUCCINCT] = $this->getSuccinct() ? 'true' : 'false';
+        $responseData = $this->post($url, $queryArray)->json();
         $newObject = $this->getJsonConverter()->convertObject($responseData);
 
         // $objectId was passed by reference. The value is changed here to new object id
