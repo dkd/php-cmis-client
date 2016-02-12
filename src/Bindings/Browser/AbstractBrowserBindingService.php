@@ -541,6 +541,9 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
             $value = $value->getTimestamp() * 1000;
         }
 
+        if (is_bool($value))
+            return $value ? 'true' : 'false';
+
         return $value;
     }
 
