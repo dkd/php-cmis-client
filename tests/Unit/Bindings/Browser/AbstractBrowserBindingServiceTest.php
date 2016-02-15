@@ -1018,7 +1018,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
                     0 => 'stringValue1',
                     1 => 'stringValue2'
                 ),
-                2 => true,
+                2 => 'true',
                 3 => 1.2,
                 4 => $currentTime->getTimestamp() * 1000,
                 5 => 'idValue'

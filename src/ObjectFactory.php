@@ -129,6 +129,7 @@ class ObjectFactory implements ObjectFactoryInterface
     public function convertContentStream(StreamInterface $contentStream)
     {
         // TODO: Implement convertContentStream() method.
+        return $contentStream;
     }
 
     /**

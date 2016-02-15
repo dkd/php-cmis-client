@@ -539,7 +539,10 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
         if ($value instanceof \DateTime) {
             // CMIS expects a timestamp in milliseconds
             $value = $value->getTimestamp() * 1000;
-        }
+        } elseif (is_bool($value)) {
+			// Booleans must be represented in string form since request will fail if cast to integer
+			$value = $value ? 'true' : 'false';
+		}
 
         return $value;
     }

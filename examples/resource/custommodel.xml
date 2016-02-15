@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://www.alfresco.org/model/dictionary/1.0" name="dkd:phpcmisclient">
+	<description>PHP CMIS client demo model</description>
+	<author>dkd Internet Service GmbH - Claus Due</author>
+	<version>1.0</version>
+	<imports>
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+	</imports>
+	<namespaces>
+		<namespace uri="http://www.dkd.de/model/content/cmis/1.0" prefix="dkd"/>
+	</namespaces>
+	<types>
+		<type name="dkd:phpcmisclient:demofolder">
+			<title>Demo Folder</title>
+			<parent>cm:folder</parent>
+		</type>
+	</types>
+</model>
