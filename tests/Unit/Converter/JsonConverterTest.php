@@ -804,14 +804,14 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
 
     public function testConvertDateTimeValueThrowsExceptionIfInvalidStringGiven()
     {
-        $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisRuntimeException', null, 1416296900);
+        $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisRuntimeException', '', 1416296900);
         $method = $this->getMethod($this->jsonConverter, 'convertDateTimeValue');
         $method->invoke($this->jsonConverter, 'foo');
     }
 
     public function testConvertDateTimeValueThrowsExceptionIfInvalidValueGiven()
     {
-        $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisRuntimeException', null, 1416296901);
+        $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisRuntimeException', '', 1416296901);
         $method = $this->getMethod($this->jsonConverter, 'convertDateTimeValue');
         $method->invoke($this->jsonConverter, array());
     }

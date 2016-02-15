@@ -156,7 +156,7 @@ class ObjectFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testConvertPropertiesThrowsExceptionIfSecondaryTypesPropertyIsSetButNotAnArray()
     {
-        $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', null, 1425473414);
+        $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', '', 1425473414);
         $this->getObjectFactory()->convertProperties(
             array(
                 PropertyIds::OBJECT_TYPE_ID => 'type-id',

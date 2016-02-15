@@ -284,7 +284,7 @@ class CmisBindingsHelperTest extends \PHPUnit_Framework_TestCase
 
         $this->setExpectedException(
             '\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException',
-            null,
+            '',
             1415281262
         );
         $this->assertSame($httpInvokerFixture, $this->cmisBindingsHelper->getHttpInvoker($sessionMock));

@@ -38,7 +38,7 @@ class ChoiceTest extends \PHPUnit_Framework_TestCase
     {
         /** @var ChoiceInterface $choice */
         $choice = $this->getMockForAbstractClass(self::CLASS_TO_TEST);
-        $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', null, 1413440336);
+        $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', '', 1413440336);
         $this->choice->setChoice(array($choice, new \stdClass()));
     }
 

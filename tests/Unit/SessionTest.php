@@ -105,7 +105,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(
             '\\RuntimeException',
-            null,
+            '',
             1408354120
         );
 
@@ -215,7 +215,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(
             '\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException',
-            null,
+            '',
             1408354123
         );
 
