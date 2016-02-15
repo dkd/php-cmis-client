@@ -932,32 +932,39 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
     }
 
     public function getRepositoriesInternalDataProvider()
-    {
-        $repositoryUrlCacheMock = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\Bindings\\Browser\\RepositoryUrlCache'
-        )->setMethods(array('getRepositoryUrl', 'buildUrl', 'addRepository'))->disableProxyingToOriginalMethods(
-        )->getMock();
-        $repositoryUrlCacheMock->expects($this->any())->method('buildUrl')->willReturn(
-            Url::createFromUrl('http://foo.bar.baz')
-        );
-        $repositoryUrlCacheMockWithRepositoryUrlEntry = clone $repositoryUrlCacheMock;
-        $repositoryUrlCacheMockWithRepositoryUrlEntry->expects($this->any())->method('getRepositoryUrl')->willReturn(
-            Url::createFromUrl('http://foo.bar.baz')
-        );
-        $repositoryUrlCacheMockWithRepositoryUrlEntry->expects($this->once())->method('addRepository');
+{
+    $mb = $this->getMockBuilder(
+        '\\Dkd\\PhpCmis\\Bindings\\Browser\\RepositoryUrlCache'
+    )->setMethods(array('getRepositoryUrl', 'buildUrl', 'addRepository'))->disableProxyingToOriginalMethods();
 
-        return array(
-            'no repository id - repository url cache builds url' => array(null, $repositoryUrlCacheMock),
-            'with repository id - repository url cache does NOT return repository url - url is build' => array(
-                'repository-id',
-                $repositoryUrlCacheMock
-            ),
-            'with repository id - repository url cache does return repository url - url is fetched from cache' => array(
-                'repository-id',
-                $repositoryUrlCacheMockWithRepositoryUrlEntry
-            )
-        );
-    }
+    $repositoryUrlCacheMockNoId = $mb->getMock();
+    $repositoryUrlCacheMockNoId->expects($this->any())->method('buildUrl')->willReturn(
+        Url::createFromUrl('http://foo.bar.baz')
+    );
+
+    $repositoryUrlCacheMock = $mb->getMock();
+    $repositoryUrlCacheMock->expects($this->any())->method('buildUrl')->willReturn(
+        Url::createFromUrl('http://foo.bar.baz')
+    );
+
+    $repositoryUrlCacheMockWithRepositoryUrlEntry = $mb->getMock();
+    $repositoryUrlCacheMockWithRepositoryUrlEntry->expects($this->any())->method('getRepositoryUrl')->willReturn(
+        Url::createFromUrl('http://foo.bar.baz')
+    );
+    $repositoryUrlCacheMockWithRepositoryUrlEntry->expects($this->once())->method('addRepository');
+
+    return array(
+        'no repository id - repository url cache builds url' => array(null, $repositoryUrlCacheMockNoId),
+        'with repository id - repository url cache does NOT return repository url - url is build' => array(
+            'repository-id',
+            $repositoryUrlCacheMock
+        ),
+        'with repository id - repository url cache does return repository url - url is fetched from cache' => array(
+            'repository-id',
+            $repositoryUrlCacheMockWithRepositoryUrlEntry
+        )
+    );
+}
 
     public function testConvertPropertiesToQueryArrayConvertsPropertiesIntoAnArray()
     {
