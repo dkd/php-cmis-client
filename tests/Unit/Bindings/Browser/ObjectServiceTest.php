@@ -227,7 +227,9 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
             )->willReturn(Url::createFromUrl(self::BROWSER_URL_TEST));
         }
 
-		$expectedPostData['content'] = $expectedContentStream;
+		if ($expectedContentStream) {
+			$expectedPostData['content'] = $expectedContentStream;
+		}
         $objectService->expects($this->atLeastOnce())->method('post')->with(
             $expectedUrl,
             $expectedPostData
@@ -1444,7 +1446,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
 
         $objectService->expects($this->atLeastOnce())->method('post')->with(
             $expectedUrl,
-            $contentStream
+            array('content' => $contentStream)
         )->willReturn($responseMock);
         $objectService->expects($this->atLeastOnce())->method('getSession')->willReturn($sessionMock);
 

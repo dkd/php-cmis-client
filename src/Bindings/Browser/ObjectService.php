@@ -137,11 +137,13 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
 			array(
 				Constants::CONTROL_CMISACTION => Constants::CMISACTION_CREATE_DOCUMENT,
 				Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
-				'content' => $contentStream
 			),
 			$this->convertPropertiesToQueryArray($properties),
 			$this->convertPolicyIdArrayToQueryArray($policies)
 		);
+		if ($contentStream) {
+			$queryArray['content'] = $contentStream;
+		}
 		if (!empty($removeAces)) {
 			$queryArray = array_replace($queryArray, $this->convertAclToQueryArray(
 				$removeAces,
@@ -872,7 +874,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
 
         $responseData = $this->post(
             $url,
-            $contentStream
+            array('content' => $contentStream)
         )->json();
 
         $newObject = $this->getJsonConverter()->convertObject($responseData);
