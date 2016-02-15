@@ -165,7 +165,7 @@ class RepositoryInfoTest extends \PHPUnit_Framework_TestCase
             if ($validType === 'object' || $validType === 'array') {
                 $this->setExpectedException(
                     '\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException',
-                    null,
+                    '',
                     1413440336
                 );
                 $this->repositoryInfo->$setterName($invalidValue);

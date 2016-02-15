@@ -92,6 +92,7 @@ class TypeHelperTraitTest extends \PHPUnit_Framework_TestCase
                 function (TypeHelperTraitTest $parent) {
                     $parent->setExpectedException(
                         '\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException',
+                        '',
                         1413440336
                     );
                 }
@@ -102,6 +103,7 @@ class TypeHelperTraitTest extends \PHPUnit_Framework_TestCase
                 function (TypeHelperTraitTest $parent) {
                     $parent->setExpectedException(
                         '\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException',
+                        '',
                         1413440336
                     );
                 }
@@ -112,6 +114,7 @@ class TypeHelperTraitTest extends \PHPUnit_Framework_TestCase
                 function (TypeHelperTraitTest $parent) {
                     $parent->setExpectedException(
                         '\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException',
+                        '',
                         1413440336
                     );
                 }
@@ -132,6 +135,7 @@ class TypeHelperTraitTest extends \PHPUnit_Framework_TestCase
                 function (TypeHelperTraitTest $parent) {
                     $parent->setExpectedException(
                         '\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException',
+                        '',
                         1413440336
                     );
                 }
