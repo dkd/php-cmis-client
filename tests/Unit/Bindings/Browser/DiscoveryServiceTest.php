@@ -46,8 +46,8 @@ class DiscoveryServiceTest extends AbstractBrowserBindingServiceTestCase
         $skipCount = 0
     ) {
         $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
-        )->setMethods(array('getBody'))->getMock();
-        $responseMock->expects($this->once())->method('getBody')->willReturn('');
+        )->setMethods(array('json'))->getMock();
+        $responseMock->expects($this->once())->method('json')->willReturn(array('foo' => 'bar'));
 
         $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->getMock();
 
