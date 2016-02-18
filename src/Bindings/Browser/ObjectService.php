@@ -872,7 +872,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
 
         $responseData = $this->post(
             $url,
-            $contentStream
+            array('content' => $contentStream)
         )->json();
 
         $newObject = $this->getJsonConverter()->convertObject($responseData);
