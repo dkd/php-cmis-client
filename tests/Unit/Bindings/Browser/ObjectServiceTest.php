@@ -227,7 +227,9 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
             )->willReturn(Url::createFromUrl(self::BROWSER_URL_TEST));
         }
 
-		$expectedPostData['content'] = $expectedContentStream;
+        if ($expectedContentStream) {
+            $expectedPostData['content'] = $expectedContentStream;
+        }
         $objectService->expects($this->atLeastOnce())->method('post')->with(
             $expectedUrl,
             $expectedPostData
@@ -398,6 +400,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
     /**
      * @dataProvider createFolderDataProvider
      * @param string $expectedUrl
+     * @param array $expectedPostData
      * @param string $repositoryId
      * @param PropertiesInterface $properties
      * @param string $folderId
@@ -407,6 +410,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
      */
     public function testCreateFolderCallsPostFunctionWithParameterizedQuery(
         $expectedUrl,
+        array $expectedPostData,
         $repositoryId,
         PropertiesInterface $properties,
         $folderId,
@@ -451,7 +455,8 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
             $folderId
         )->willReturn(Url::createFromUrl(self::BROWSER_URL_TEST));
         $objectService->expects($this->atLeastOnce())->method('post')->with(
-            $expectedUrl
+            $expectedUrl,
+            $expectedPostData
         )->willReturn($responseMock);
 
         $this->assertSame(
@@ -498,7 +503,16 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
             array(
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
-                    . '?propertyId[0]=cmis:name&propertyValue[0]=name&cmisaction=createFolder&succinct=false'
+                ),
+                array(
+                    'cmisaction' => 'createFolder',
+                    'succinct' => 'false',
+                    'propertyId' => array(
+                        'cmis:name'
+                    ),
+                    'propertyValue' => array(
+                        'name'
+                    )
                 ),
                 'repositoryId',
                 $properties,
@@ -507,17 +521,48 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
             array(
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
-                    . '?propertyId[0]=cmis:name&propertyValue[0]=name&cmisaction=createFolder'
-                    . '&succinct=false'
-                    . '&policy[0]=policyOne&policy[1]=policyTwo'
-                    . '&addACEPrincipal[0]=principalId1'
-                    . '&addACEPermission[0][0]=permissionValue1&addACEPermission[0][1]=permissionValue2'
-                    . '&addACEPrincipal[1]=principalId2'
-                    . '&addACEPermission[1][0]=permissionValue3&addACEPermission[1][1]=permissionValue4'
-                    . '&removeACEPrincipal[0]=principalId3'
-                    . '&removeACEPermission[0][0]=permissionValue5&removeACEPermission[0][1]=permissionValue6'
-                    . '&removeACEPrincipal[1]=principalId4'
-                    . '&removeACEPermission[1][0]=permissionValue7&removeACEPermission[1][1]=permissionValue8'
+                ),
+                array(
+                    'cmisaction' => 'createFolder',
+                    'succinct' => 'false',
+                    'propertyId' => array(
+                        'cmis:name'
+                    ),
+                    'propertyValue' => array(
+                        'name'
+                    ),
+                    'addACEPrincipal' => array(
+                        'principalId1',
+                        'principalId2'
+                    ),
+                    'addACEPermission' => array(
+                        array(
+                            'permissionValue1',
+                            'permissionValue2'
+                        ),
+                        array(
+                            'permissionValue3',
+                            'permissionValue4'
+                        )
+                    ),
+                    'policy' => array(
+                        'policyOne',
+                        'policyTwo'
+                    ),
+                    'removeACEPrincipal' => array(
+                        'principalId3',
+                        'principalId4'
+                    ),
+                    'removeACEPermission' => array(
+                        array(
+                            'permissionValue5',
+                            'permissionValue6'
+                        ),
+                        array(
+                            'permissionValue7',
+                            'permissionValue8'
+                        )
+                    )
                 ),
                 'repositoryId',
                 $properties,
@@ -779,6 +824,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
     /**
      * @dataProvider createItemDataProvider
      * @param string $expectedUrl
+     * @param array $expectedPostData
      * @param string $repositoryId
      * @param PropertiesInterface $properties
      * @param string|null $folderId
@@ -789,6 +835,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
      */
     public function testCreateItemCallsPostFunctionWithParameterizedQuery(
         $expectedUrl,
+        array $expectedPostData,
         $repositoryId,
         PropertiesInterface $properties,
         $folderId = null,
@@ -834,7 +881,8 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
             $folderId
         )->willReturn(Url::createFromUrl(self::BROWSER_URL_TEST));
         $objectService->expects($this->atLeastOnce())->method('post')->with(
-            $expectedUrl
+            $expectedUrl,
+            $expectedPostData
         )->willReturn($responseMock);
 
         $objectService->createItem(
@@ -879,7 +927,16 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
             array(
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
-                    . '?propertyId[0]=cmis:name&propertyValue[0]=name&cmisaction=createItem&succinct=false'
+                ),
+                array(
+                    'cmisaction' => 'createItem',
+                    'succinct' => 'false',
+                    'propertyId' => array(
+                        'cmis:name'
+                    ),
+                    'propertyValue' => array(
+                        'name'
+                    )
                 ),
                 'repositoryId',
                 $properties,
@@ -888,17 +945,48 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
             array(
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
-                    . '?propertyId[0]=cmis:name&propertyValue[0]=name&cmisaction=createItem'
-                    . '&succinct=false'
-                    . '&policy[0]=policyOne&policy[1]=policyTwo'
-                    . '&addACEPrincipal[0]=principalId1'
-                    . '&addACEPermission[0][0]=permissionValue1&addACEPermission[0][1]=permissionValue2'
-                    . '&addACEPrincipal[1]=principalId2'
-                    . '&addACEPermission[1][0]=permissionValue3&addACEPermission[1][1]=permissionValue4'
-                    . '&removeACEPrincipal[0]=principalId3'
-                    . '&removeACEPermission[0][0]=permissionValue5&removeACEPermission[0][1]=permissionValue6'
-                    . '&removeACEPrincipal[1]=principalId4'
-                    . '&removeACEPermission[1][0]=permissionValue7&removeACEPermission[1][1]=permissionValue8'
+                ),
+                array(
+                    'cmisaction' => 'createItem',
+                    'succinct' => 'false',
+                    'propertyId' => array(
+                        'cmis:name'
+                    ),
+                    'propertyValue' => array(
+                        'name'
+                    ),
+                    'addACEPrincipal' => array(
+                        'principalId1',
+                        'principalId2'
+                    ),
+                    'addACEPermission' => array(
+                        array(
+                            'permissionValue1',
+                            'permissionValue2'
+                        ),
+                        array(
+                            'permissionValue3',
+                            'permissionValue4'
+                        )
+                    ),
+                    'policy' => array(
+                        'policyOne',
+                        'policyTwo'
+                    ),
+                    'removeACEPrincipal' => array(
+                        'principalId3',
+                        'principalId4'
+                    ),
+                    'removeACEPermission' => array(
+                        array(
+                            'permissionValue5',
+                            'permissionValue6'
+                        ),
+                        array(
+                            'permissionValue7',
+                            'permissionValue8'
+                        )
+                    )
                 ),
                 'repositoryId',
                 $properties,
@@ -913,7 +1001,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
     /**
      * @dataProvider createDocumentFromSourceDataProvider
      * @param string $expectedUrl
-	 * @param array $expectedPostData
+     * @param array $expectedPostData
      * @param string $repositoryId
      * @param string $sourceId
      * @param PropertiesInterface $properties
@@ -926,7 +1014,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
      */
     public function testCreateDocumentFromSourceCallsPostFunctionWithParameterizedQuery(
         $expectedUrl,
-		array $expectedPostData,
+        array $expectedPostData,
         $repositoryId,
         $sourceId,
         PropertiesInterface $properties,
@@ -981,8 +1069,8 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         }
 
         $objectService->expects($this->atLeastOnce())->method('post')
-			->with($expectedUrl, $expectedPostData)
-			->willReturn($responseMock);
+            ->with($expectedUrl, $expectedPostData)
+            ->willReturn($responseMock);
 
         $this->assertSame(
             $dummyObjectData->getId(),
@@ -1032,17 +1120,17 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
                 ),
-				array(
-					'succinct' => 'false',
-					'cmisaction' => 'createDocumentFromSource',
-					'propertyId' => array(
-						'cmis:name'
-					),
-					'propertyValue' => array(
-						'name'
-					),
-					'sourceId' => 'sourceId'
-				),
+                array(
+                    'succinct' => 'false',
+                    'cmisaction' => 'createDocumentFromSource',
+                    'propertyId' => array(
+                        'cmis:name'
+                    ),
+                    'propertyValue' => array(
+                        'name'
+                    ),
+                    'sourceId' => 'sourceId'
+                ),
                 'repositoryId',
                 'sourceId',
                 $properties,
@@ -1052,35 +1140,35 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
                 ),
-				array(
-					'versioningState' => 'major',
-					'succinct' => 'false',
-					'cmisaction' => 'createDocumentFromSource',
-					'propertyId' => array(
-						'cmis:name'
-					),
-					'propertyValue' => array(
-						'name'
-					),
-					'policy' => array(
-						'policyOne', 'policyTwo'
-					),
-					'addACEPrincipal' => array(
-						'principalId1', 'principalId2'
-					),
-					'addACEPermission' => array(
-						array('permissionValue1', 'permissionValue2'),
-						array('permissionValue3', 'permissionValue4')
-					),
-					'removeACEPrincipal' => array(
-						'principalId3', 'principalId4'
-					),
-					'removeACEPermission' => array(
-						array('permissionValue5', 'permissionValue6'),
-						array('permissionValue7', 'permissionValue8')
-					),
-					'sourceId' => 'sourceId'
-				),
+                array(
+                    'versioningState' => 'major',
+                    'succinct' => 'false',
+                    'cmisaction' => 'createDocumentFromSource',
+                    'propertyId' => array(
+                        'cmis:name'
+                    ),
+                    'propertyValue' => array(
+                        'name'
+                    ),
+                    'policy' => array(
+                        'policyOne', 'policyTwo'
+                    ),
+                    'addACEPrincipal' => array(
+                        'principalId1', 'principalId2'
+                    ),
+                    'addACEPermission' => array(
+                        array('permissionValue1', 'permissionValue2'),
+                        array('permissionValue3', 'permissionValue4')
+                    ),
+                    'removeACEPrincipal' => array(
+                        'principalId3', 'principalId4'
+                    ),
+                    'removeACEPermission' => array(
+                        array('permissionValue5', 'permissionValue6'),
+                        array('permissionValue7', 'permissionValue8')
+                    ),
+                    'sourceId' => 'sourceId'
+                ),
                 'repositoryId',
                 'sourceId',
                 $properties,
@@ -1444,7 +1532,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
 
         $objectService->expects($this->atLeastOnce())->method('post')->with(
             $expectedUrl,
-            $contentStream
+            array('content' => $contentStream)
         )->willReturn($responseMock);
         $objectService->expects($this->atLeastOnce())->method('getSession')->willReturn($sessionMock);
 

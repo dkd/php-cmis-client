@@ -83,6 +83,48 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
     }
 
     /**
+     * @param string $action
+     * @param PropertiesInterface $properties
+     * @param string[] $policies
+     * @param AclInterface $addAces
+     * @param AclInterface $removeAces
+     * @param ExtensionDataInterface $extension
+     * @return array
+     */
+    protected function createQueryArray(
+        $action,
+        PropertiesInterface $properties,
+        array $policies = array(),
+        AclInterface $addAces = null,
+        AclInterface $removeAces = null,
+        ExtensionDataInterface $extension = null
+    ) {
+        $queryArray = array_replace(
+            array(
+                Constants::CONTROL_CMISACTION => $action,
+                Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
+            ),
+            $this->convertPropertiesToQueryArray($properties),
+            $this->convertPolicyIdArrayToQueryArray($policies)
+        );
+        if (!empty($removeAces)) {
+            $queryArray = array_replace($queryArray, $this->convertAclToQueryArray(
+                $removeAces,
+                Constants::CONTROL_REMOVE_ACE_PRINCIPAL,
+                Constants::CONTROL_REMOVE_ACE_PERMISSION
+            ));
+        }
+        if (!empty($addAces)) {
+            $queryArray = array_replace($queryArray, $this->convertAclToQueryArray(
+                $addAces,
+                Constants::CONTROL_ADD_ACE_PRINCIPAL,
+                Constants::CONTROL_ADD_ACE_PERMISSION
+            ));
+        }
+        return $queryArray;
+    }
+
+    /**
      * Creates a document object of the specified type (given by the cmis:objectTypeId property)
      * in the (optionally) specified location.
      *
@@ -133,31 +175,19 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
             );
         }
 
-        $queryArray = array_replace(
-			array(
-				Constants::CONTROL_CMISACTION => Constants::CMISACTION_CREATE_DOCUMENT,
-				Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
-				'content' => $contentStream
-			),
-			$this->convertPropertiesToQueryArray($properties),
-			$this->convertPolicyIdArrayToQueryArray($policies)
-		);
-		if (!empty($removeAces)) {
-			$queryArray = array_replace($queryArray, $this->convertAclToQueryArray(
-				$removeAces,
-				Constants::CONTROL_REMOVE_ACE_PRINCIPAL,
-				Constants::CONTROL_REMOVE_ACE_PERMISSION
-			));
-		}
-		if (!empty($addAces)) {
-			$queryArray = array_replace($queryArray, $this->convertAclToQueryArray(
-				$addAces,
-				Constants::CONTROL_ADD_ACE_PRINCIPAL,
-				Constants::CONTROL_ADD_ACE_PERMISSION
-			));
-		}
+        $queryArray = $this->createQueryArray(
+            Constants::CMISACTION_CREATE_DOCUMENT,
+            $properties,
+            $policies,
+            $addAces,
+            $removeAces,
+            $extension
+        );
         if ($versioningState !== null) {
             $queryArray[Constants::PARAM_VERSIONING_STATE] = (string) $versioningState;
+        }
+        if ($contentStream) {
+            $queryArray['content'] = $contentStream;
         }
         $responseData = $this->post(
             $url,
@@ -206,32 +236,18 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
             $url = $this->getObjectUrl($repositoryId, $folderId);
         }
 
-		$queryArray = array_replace(
-			array(
-				Constants::CONTROL_CMISACTION => Constants::CMISACTION_CREATE_DOCUMENT_FROM_SOURCE,
-				Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
-                Constants::PARAM_SOURCE_ID => (string) $sourceId
-			),
-			$this->convertPropertiesToQueryArray($properties),
-			$this->convertPolicyIdArrayToQueryArray($policies)
-		);
-		if (!empty($removeAces)) {
-			$queryArray = array_replace($queryArray, $this->convertAclToQueryArray(
-				$removeAces,
-				Constants::CONTROL_REMOVE_ACE_PRINCIPAL,
-				Constants::CONTROL_REMOVE_ACE_PERMISSION
-			));
-		}
-		if (!empty($addAces)) {
-			$queryArray = array_replace($queryArray, $this->convertAclToQueryArray(
-				$addAces,
-				Constants::CONTROL_ADD_ACE_PRINCIPAL,
-				Constants::CONTROL_ADD_ACE_PERMISSION
-			));
-		}
-		if ($versioningState !== null) {
-			$queryArray[Constants::PARAM_VERSIONING_STATE] = (string) $versioningState;
-		}
+        $queryArray = $this->createQueryArray(
+            Constants::CMISACTION_CREATE_DOCUMENT_FROM_SOURCE,
+            $properties,
+            $policies,
+            $addAces,
+            $removeAces,
+            $extension
+        );
+        $queryArray[Constants::PARAM_SOURCE_ID] = (string) $sourceId;
+        if ($versioningState !== null) {
+            $queryArray[Constants::PARAM_VERSIONING_STATE] = (string) $versioningState;
+        }
         $responseData = $this->post($url, $queryArray)->json();
 
         $newObject = $this->getJsonConverter()->convertObject($responseData);
@@ -267,20 +283,16 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         ExtensionDataInterface $extension = null
     ) {
         $url = $this->getObjectUrl($repositoryId, $folderId);
-        $url->getQuery()->modify(
-            array(
-                Constants::CONTROL_CMISACTION => Constants::CMISACTION_CREATE_FOLDER,
-                Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false'
-            )
+        $queryArray = $this->createQueryArray(
+            Constants::CMISACTION_CREATE_FOLDER,
+            $properties,
+            $policies,
+            $addAces,
+            $removeAces,
+            $extension
         );
 
-        $url->getQuery()->modify($this->convertPropertiesToQueryArray($properties));
-
-        $this->appendPoliciesToUrl($url, $policies);
-        $this->appendAddAcesToUrl($url, $addAces);
-        $this->appendRemoveAcesToUrl($url, $removeAces);
-
-        $responseData = $this->post($url)->json();
+        $responseData = $this->post($url, $queryArray)->json();
 
         $newObject = $this->getJsonConverter()->convertObject($responseData);
 
@@ -319,20 +331,16 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
             $url = $this->getObjectUrl($repositoryId, $folderId);
         }
 
-        $url->getQuery()->modify(
-            array(
-                Constants::CONTROL_CMISACTION => Constants::CMISACTION_CREATE_ITEM,
-                Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false'
-            )
+        $queryArray = $this->createQueryArray(
+            Constants::CMISACTION_CREATE_ITEM,
+            $properties,
+            $policies,
+            $addAces,
+            $removeAces,
+            $extension
         );
 
-        $url->getQuery()->modify($this->convertPropertiesToQueryArray($properties));
-
-        $this->appendPoliciesToUrl($url, $policies);
-        $this->appendAddAcesToUrl($url, $addAces);
-        $this->appendRemoveAcesToUrl($url, $removeAces);
-
-        $responseData = $this->post($url)->json();
+        $responseData = $this->post($url, $queryArray)->json();
 
         $newObject = $this->getJsonConverter()->convertObject($responseData);
 
@@ -392,19 +400,16 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
     ) {
         $url = $this->getRepositoryUrl($repositoryId);
 
-        $url->getQuery()->modify(
-            array(
-                Constants::CONTROL_CMISACTION => Constants::CMISACTION_CREATE_RELATIONSHIP,
-                Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false'
-            )
+        $queryArray = $this->createQueryArray(
+            Constants::CMISACTION_CREATE_RELATIONSHIP,
+            $properties,
+            $policies,
+            $addAces,
+            $removeAces,
+            $extension
         );
 
-        $url->getQuery()->modify($this->convertPropertiesToQueryArray($properties));
-        $this->appendPoliciesToUrl($url, $policies);
-        $this->appendAddAcesToUrl($url, $addAces);
-        $this->appendRemoveAcesToUrl($url, $removeAces);
-
-        $responseData = $this->post($url)->json();
+        $responseData = $this->post($url, $queryArray)->json();
 
         $newObject = $this->getJsonConverter()->convertObject($responseData);
 
