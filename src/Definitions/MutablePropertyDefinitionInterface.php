@@ -31,7 +31,7 @@ interface MutablePropertyDefinitionInterface extends PropertyDefinitionInterface
      *
      * @param ChoiceInterface[] $choices
      */
-    public function setChoices(array $choices);
+    public function setChoice(array $choices);
 
     /**
      * Sets the default value.

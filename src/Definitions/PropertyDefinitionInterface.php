@@ -31,7 +31,7 @@ interface PropertyDefinitionInterface
      *
      * @return ChoiceInterface[]
      */
-    public function getChoices();
+    public function getChoice();
 
     /**
      * Returns the default value.
