@@ -30,8 +30,8 @@ class ChoiceTest extends \PHPUnit_Framework_TestCase
     {
         /** @var ChoiceInterface $choice */
         $choice = $this->getMockForAbstractClass(self::CLASS_TO_TEST);
-        $this->choice->setChoice(array($choice));
-        $this->assertAttributeEquals(array($choice), 'choice', $this->choice);
+        $this->choice->setChoices(array($choice));
+        $this->assertAttributeEquals(array($choice), 'choices', $this->choice);
     }
 
     public function testSetChoiceThrowsExceptionIfChoiceListContainsInvalidValue()
@@ -39,18 +39,18 @@ class ChoiceTest extends \PHPUnit_Framework_TestCase
         /** @var ChoiceInterface $choice */
         $choice = $this->getMockForAbstractClass(self::CLASS_TO_TEST);
         $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', '', 1413440336);
-        $this->choice->setChoice(array($choice, new \stdClass()));
+        $this->choice->setChoices(array($choice, new \stdClass()));
     }
 
     /**
      * @depends testSetChoiceSetsPropertyValue
      */
-    public function testGetChoiceGetsPropertyValue()
+    public function testGetChoicesGetsPropertyValue()
     {
         $choice = $this->getMockForAbstractClass(self::CLASS_TO_TEST);
-        $this->choice->setChoice(array($choice));
+        $this->choice->setChoices(array($choice));
 
-        $this->assertEquals(array($choice), $this->choice->getChoice());
+        $this->assertEquals(array($choice), $this->choice->getChoices());
     }
 
     public function testSetDisplayNameSetsPropertyValue()

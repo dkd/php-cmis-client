@@ -33,26 +33,26 @@ class Choice implements ChoiceInterface
     /**
      * @var ChoiceInterface[]
      */
-    protected $choice = array();
+    protected $choices = array();
 
     /**
      * @return ChoiceInterface[]
      */
-    public function getChoice()
+    public function getChoices()
     {
-        return $this->choice;
+        return $this->choices;
     }
 
     /**
-     * @param ChoiceInterface[] $choice
+     * @param ChoiceInterface[] $choices
      */
-    public function setChoice(array $choice)
+    public function setChoices(array $choices)
     {
-        foreach ($choice as $value) {
+        foreach ($choices as $value) {
             $this->checkType('\\Dkd\\PhpCmis\\Definitions\\ChoiceInterface', $value);
         }
 
-        $this->choice = $choice;
+        $this->choices = $choices;
     }
 
     /**
