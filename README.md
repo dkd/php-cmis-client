@@ -65,12 +65,12 @@ Currently implemented Services
   - [x] query
   - [x] getContentChanges
 - VersioningService
-  - [ ] checkOut
-  - [ ] cancelCheckOut
-  - [ ] checkIn
-  - [ ] getObjectOfLatestVersion
-  - [ ] getPropertiesOfLatestVersion
-  - [ ] getAllVersions
+  - [x] checkOut
+  - [x] cancelCheckOut
+  - [x] checkIn
+  - [x] getObjectOfLatestVersion
+  - [x] getPropertiesOfLatestVersion
+  - [x] getAllVersions
 - RelationshipService
   - [x] getObjectRelationships
 - PolicyService
