@@ -18,12 +18,12 @@ interface ChoiceInterface
     /**
      * @return ChoiceInterface[]
      */
-    public function getChoice();
+    public function getChoices();
 
     /**
      * @param ChoiceInterface[] $choice
      */
-    public function setChoice(array $choice);
+    public function setChoices(array $choice);
 
     /**
      * Return the display name of the choice value.
