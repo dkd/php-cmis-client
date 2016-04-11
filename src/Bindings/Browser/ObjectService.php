@@ -37,6 +37,16 @@ use GuzzleHttp\Stream\StreamInterface;
 class ObjectService extends AbstractBrowserBindingService implements ObjectServiceInterface
 {
     /**
+     * L1 cache for objects. Fills with two levels:
+     *
+     * - First level key is the object ID, path or other singular identifier of object(s)
+     * - Second level key is a hash of context arguments used to retrieve the object(s)
+     *
+     * @var array
+     */
+    protected $objectCache = array();
+
+    /**
      * Appends the content stream to the content of the document.
      *
      * The stream in contentStream is consumed but not closed by this method.
@@ -436,6 +446,8 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
             throw new CmisInvalidArgumentException('Object id must not be empty!');
         }
 
+        $this->flushCached($objectId);
+
         $url = $this->getObjectUrl($repositoryId, $objectId);
 
         $url->getQuery()->modify(
@@ -489,6 +501,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         );
 
         $this->post($url);
+        $this->flushCached($objectId);
     }
 
     /**
@@ -626,6 +639,23 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         $includeAcl = false,
         ExtensionDataInterface $extension = null
     ) {
+        $cacheKey = $this->createCacheKey(
+            $objectId,
+            array(
+                $repositoryId,
+                $filter,
+                $includeAllowableActions,
+                $includeRelationships,
+                $renditionFilter,
+                $includePolicyIds,
+                $includeAcl,
+                $extension,
+                $this->getSuccinct()
+            )
+        );
+        if ($this->isCached($cacheKey)) {
+            return $this->getCached($cacheKey);
+        }
         $url = $this->getObjectUrl($repositoryId, $objectId, Constants::SELECTOR_OBJECT);
         $url->getQuery()->modify(
             array(
@@ -648,8 +678,10 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
 
         $responseData = $this->read($url)->json();
 
-        // TODO: Implement Cache
-        return $this->getJsonConverter()->convertObject($responseData);
+        return $this->cache(
+            $cacheKey,
+            $this->getJsonConverter()->convertObject($responseData)
+        );
     }
 
     /**
@@ -684,6 +716,24 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         $includeAcl = false,
         ExtensionDataInterface $extension = null
     ) {
+        $cacheKey = $this->createCacheKey(
+            $path,
+            array(
+                $repositoryId,
+                $filter,
+                $includeAllowableActions,
+                $includeRelationships,
+                $renditionFilter,
+                $includePolicyIds,
+                $includeAcl,
+                $extension,
+                $this->getSuccinct()
+            )
+        );
+        if ($this->isCached($cacheKey)) {
+            return $this->getCached($cacheKey);
+        }
+
         $url = $this->getPathUrl($repositoryId, $path, Constants::SELECTOR_OBJECT);
         $url->getQuery()->modify(
             array(
@@ -706,8 +756,10 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
 
         $responseData = $this->read($url)->json();
 
-        // TODO Implement Cache
-        return $this->getJsonConverter()->convertObject($responseData);
+        return $this->cache(
+            $cacheKey,
+            $this->getJsonConverter()->convertObject($responseData)
+        );
     }
 
     /**
@@ -726,6 +778,20 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         $filter = null,
         ExtensionDataInterface $extension = null
     ) {
+        $cacheKey = $this->createCacheKey(
+            $objectId,
+            array(
+                $repositoryId,
+                $filter,
+                $extension,
+                $this->getSuccinct()
+            )
+        );
+
+        if ($this->isCached($cacheKey)) {
+            return $this->getCached($cacheKey);
+        }
+
         $url = $this->getObjectUrl($repositoryId, $objectId, Constants::SELECTOR_PROPERTIES);
         $url->getQuery()->modify(
             array(
@@ -740,12 +806,16 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
 
         $responseData = $this->read($url)->json();
 
-        // TODO: Implement Cache
         if ($this->getSuccinct()) {
-            return $this->getJsonConverter()->convertSuccinctProperties($responseData);
+            $objectData = $this->getJsonConverter()->convertSuccinctProperties($responseData);
         } else {
-            return $this->getJsonConverter()->convertProperties($responseData);
+            $objectData = $this->getJsonConverter()->convertProperties($responseData);
         }
+
+        return $this->cache(
+            $cacheKey,
+            $objectData
+        );
     }
 
     /**
@@ -815,6 +885,8 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         $sourceFolderId,
         ExtensionDataInterface $extension = null
     ) {
+        $this->flushCached($objectId);
+
         $url = $this->getObjectUrl($repositoryId, $objectId);
         $url->getQuery()->modify(
             array(
@@ -860,6 +932,8 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         if (empty($objectId)) {
             throw new CmisInvalidArgumentException('Object id must not be empty!');
         }
+
+        $this->flushCached($objectId);
 
         $url = $this->getObjectUrl($repositoryId, $objectId);
 
@@ -917,6 +991,8 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
             throw new CmisInvalidArgumentException('Object id must not be empty!');
         }
 
+        $this->flushCached($objectId);
+
         $url = $this->getObjectUrl($repositoryId, $objectId);
 
         if ($changeToken !== null && !$this->getSession()->get(SessionParameter::OMIT_CHANGE_TOKENS, false)) {
@@ -941,4 +1017,83 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
             }
         }
     }
+
+    /**
+     * @param string $identifier
+     * @param mixed $additionalHashValues
+     * @return array
+     */
+    protected function createCacheKey($identifier, $additionalHashValues)
+    {
+        return array(
+            $identifier,
+            sha1(is_array($additionalHashValues) ? serialize($additionalHashValues) : $additionalHashValues)
+        );
+    }
+
+    /**
+     * Returns TRUE if an object with cache key $identifier is currently cached.
+     *
+     * @param array $identifier
+     * @return boolean
+     */
+    protected function isCached(array $identifier)
+    {
+        if (is_array($identifier)) {
+            return isset($this->objectCache[$identifier[0]][$identifier[1]]);
+        } elseif (isset($this->objectCache[$identifier])) {
+            return $this->objectCache[$identifier];
+        }
+        return false;
+    }
+
+    /**
+     * Gets the cached object with cache key $identifier.
+     *
+     * @param string $identifier
+     * @return mixed
+     */
+    protected function getCached(array $identifier)
+    {
+        if ($this->isCached($identifier)) {
+            return $this->objectCache[$identifier];
+        }
+        return null;
+    }
+
+	/**
+     * Gets the cached object with cache key $identifier.
+     *
+     * @param string $identifier
+     * @param mixed $object
+     * @return mixed
+     */
+    protected function cache(array $identifier, $object)
+    {
+        $this->objectCache[$identifier[0]][$identifier[1]] = $object;
+        return $object;
+    }
+
+	/**
+	 * Flushes all cached entries. This is implemented as a flush-all with
+	 * no way to flush individual entries due to the way CMIS object data
+	 * gets returned from CMIS. Two widely different object data sets may
+	 * contain a reference to the same item and even with extensive cross
+	 * referencing it would be technically unfeasible to selectively clear
+	 * or reload an object by identifier. Such flushing would be inevitably
+	 * flawed with edge cases of incomplete flushing or become so complex
+	 * that it defeats the purpose of caching in the first place.
+	 *
+	 * Note that cache flushing only happens when modifying the repository
+	 * contents - which should limit the negative impact. The cache is also
+	 * not persistent and will only affect the current request. As such, it
+	 * is implemented to optimise requests where the same object, type,
+	 * policy etc. gets accessed multiple times.
+	 *
+	 * @return void
+	 */
+	protected function flushCached()
+	{
+		$this->objectCache = array();
+	}
 }
