@@ -1039,12 +1039,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      */
     protected function isCached(array $identifier)
     {
-        if (is_array($identifier)) {
-            return isset($this->objectCache[$identifier[0]][$identifier[1]]);
-        } elseif (isset($this->objectCache[$identifier])) {
-            return $this->objectCache[$identifier];
-        }
-        return false;
+        return isset($this->objectCache[$identifier[0]][$identifier[1]]);
     }
 
     /**
@@ -1056,7 +1051,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
     protected function getCached(array $identifier)
     {
         if ($this->isCached($identifier)) {
-            return $this->objectCache[$identifier];
+            return $this->objectCache[$identifier[0]][$identifier[1]];
         }
         return null;
     }
