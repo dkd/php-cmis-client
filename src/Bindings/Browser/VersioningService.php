@@ -12,6 +12,7 @@ namespace Dkd\PhpCmis\Bindings\Browser;
 
 use Dkd\PhpCmis\Constants;
 use Dkd\PhpCmis\Data\AclInterface;
+use Dkd\PhpCmis\PropertyIds;
 use GuzzleHttp\Stream\StreamInterface;
 use Dkd\PhpCmis\Data\ExtensionDataInterface;
 use Dkd\PhpCmis\Data\ObjectDataInterface;
@@ -31,9 +32,18 @@ class VersioningService extends AbstractBrowserBindingService implements Version
      * @param string $objectId the identifier for the PWC
      * @param ExtensionDataInterface|null $extension
      */
-    public function cancelCheckOut($repositoryId, $objectId, ExtensionDataInterface $extension = null)
+    public function cancelCheckOut($repositoryId, & $objectId, ExtensionDataInterface $extension = null)
     {
-        // TODO: Implement cancelCheckOut() method.
+		$objectId = $this->getJsonConverter()->convertObject(
+			$this->post(
+				$this->getObjectUrl($repositoryId, $objectId),
+				$this->createQueryArray(
+					Constants::CMISACTION_CANCEL_CHECK_OUT,
+					array(),
+					$extension
+				)
+			)->json()
+		);
     }
 
     /**
@@ -56,7 +66,7 @@ class VersioningService extends AbstractBrowserBindingService implements Version
      */
     public function checkIn(
         $repositoryId,
-        $objectId,
+        & $objectId,
         $major = true,
         PropertiesInterface $properties = null,
         StreamInterface $contentStream = null,
@@ -66,7 +76,51 @@ class VersioningService extends AbstractBrowserBindingService implements Version
         AclInterface $removeAces = null,
         ExtensionDataInterface $extension = null
     ) {
-        // TODO: Implement checkIn() method.
+		$queryArray = $this->createQueryArray(
+			Constants::CMISACTION_CHECK_IN,
+			array(
+				Constants::PARAM_MAJOR => $major ? 'true' : 'false',
+			),
+			$extension
+		);
+		if ($properties) {
+			$queryArray = array_replace(
+				$queryArray,
+				$this->convertPropertiesToQueryArray($properties)
+			);
+		}
+		if ($checkinComment) {
+			$queryArray[Constants::PARAM_CHECKIN_COMMENT] = $checkinComment;
+		}
+		if (!empty($policies)) {
+			$queryArray = array_replace(
+				$queryArray,
+				$this->convertPolicyIdArrayToQueryArray($policies)
+			);
+		}
+		if (!empty($removeAces)) {
+			$queryArray = array_replace($queryArray, $this->convertAclToQueryArray(
+				$removeAces,
+				Constants::CONTROL_REMOVE_ACE_PRINCIPAL,
+				Constants::CONTROL_REMOVE_ACE_PERMISSION
+			));
+		}
+		if (!empty($addAces)) {
+			$queryArray = array_replace($queryArray, $this->convertAclToQueryArray(
+				$addAces,
+				Constants::CONTROL_ADD_ACE_PRINCIPAL,
+				Constants::CONTROL_ADD_ACE_PERMISSION
+			));
+		}
+		if ($contentStream) {
+			$queryArray['content'] = $contentStream;
+		}
+		$objectId = $this->getJsonConverter()->convertObject(
+			$this->post(
+				$this->getObjectUrl($repositoryId, $objectId),
+				$queryArray
+			)->json()
+        )->getId();
     }
 
     /**
@@ -85,7 +139,17 @@ class VersioningService extends AbstractBrowserBindingService implements Version
         ExtensionDataInterface $extension = null,
         $contentCopied = null
     ) {
-        // TODO: Implement checkOut() method.
+		$objectData = $this->getJsonConverter()->convertObject(
+			$this->post(
+				$this->getObjectUrl($repositoryId, $objectId),
+				$this->createQueryArray(
+					Constants::CMISACTION_CHECK_OUT,
+					array(),
+					$extension
+				)
+			)->json()
+		);
+		$objectId = $objectData->getId();
     }
 
     /**
@@ -110,7 +174,13 @@ class VersioningService extends AbstractBrowserBindingService implements Version
         $includeAllowableActions = false,
         ExtensionDataInterface $extension = null
     ) {
-        // TODO: Implement getAllVersions() method.
+        return $this->getJsonConverter()->convertObjectList(
+			array(
+				'objects' => $this->read(
+					$this->getObjectUrl($repositoryId, $objectId, Constants::SELECTOR_VERSIONS)
+				)->json()
+			)
+		)->getObjects();
     }
 
     /**
@@ -147,7 +217,13 @@ class VersioningService extends AbstractBrowserBindingService implements Version
         $includeAcl = false,
         ExtensionDataInterface $extension = null
     ) {
-        // TODO: Implement getObjectOfLatestVersion() method.
+		return $this->getJsonConverter()->convertObject(
+			reset(
+				$this->read(
+					$this->getObjectUrl($repositoryId, $objectId, Constants::SELECTOR_VERSIONS)
+				)->json()
+			)
+		);
     }
 
     /**
@@ -173,6 +249,35 @@ class VersioningService extends AbstractBrowserBindingService implements Version
         $filter = null,
         ExtensionDataInterface $extension = null
     ) {
-        // TODO: Implement getPropertiesOfLatestVersion() method.
+        return $this->getObjectOfLatestVersion(
+			$repositoryId,
+			$objectId,
+			$versionSeriesId,
+			$major,
+			$filter,
+			$extension
+		)->getProperties();
     }
+
+	/**
+	 * @param string $action
+	 * @param array $parameters
+	 * @param ExtensionDataInterface $extension
+	 * @return array
+	 */
+	protected function createQueryArray(
+		$action,
+		array $parameters = array(),
+		ExtensionDataInterface $extension = null
+	) {
+		$queryArray = array_replace(
+			$parameters,
+			array(
+				Constants::CONTROL_CMISACTION => $action,
+				Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
+			)
+		);
+		return $queryArray;
+	}
+
 }

@@ -22,6 +22,7 @@ use Dkd\PhpCmis\Enum\Updatability;
 use Dkd\PhpCmis\Enum\VersioningState;
 use Dkd\PhpCmis\Exception\CmisNotSupportedException;
 use Dkd\PhpCmis\Exception\CmisRuntimeException;
+use Dkd\PhpCmis\Exception\CmisVersioningException;
 use Dkd\PhpCmis\OperationContextInterface;
 use Dkd\PhpCmis\Data\PolicyInterface;
 use Dkd\PhpCmis\PropertyIds;
@@ -144,7 +145,7 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
             return null;
         }
 
-        $this->getSession()->createObjectId($newObjectId);
+        return $this->getSession()->createObjectId($newObjectId);
     }
 
     /**
@@ -375,12 +376,17 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
 
         $objectFactory = $this->getSession()->getObjectFactory();
         $result = array();
-        if (count($versions) !== null) {
+        if (count($versions)) {
             foreach ($versions as $objectData) {
                 $document = $objectFactory->convertObject($objectData, $context);
-                if (!(!$document instanceof DocumentInterface)) {
-                    // this should never happen
-                    continue;
+                if (!($document instanceof DocumentInterface)) {
+                    throw new CmisVersioningException(
+						sprintf(
+							'Repository yielded non-Document %s as version of Document %s - unsupported repository response',
+							$document->getId(),
+							$this->getId()
+						)
+					);
                 }
                 $result[] = $document;
             }
