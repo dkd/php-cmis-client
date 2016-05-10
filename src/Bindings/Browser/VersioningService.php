@@ -120,7 +120,7 @@ class VersioningService extends AbstractBrowserBindingService implements Version
 				$this->getObjectUrl($repositoryId, $objectId),
 				$queryArray
 			)->json()
-		);
+        )->getId();
     }
 
     /**

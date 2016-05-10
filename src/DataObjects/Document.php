@@ -136,7 +136,7 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
             $objectFactory->convertPolicies($policies),
             $objectFactory->convertAces($addAces),
             $objectFactory->convertAces($removeAces)
-        )->getId();
+        );
 
         // remove PWC from cache, it doesn't exist anymore
         $this->getSession()->removeObjectFromCache($this);
