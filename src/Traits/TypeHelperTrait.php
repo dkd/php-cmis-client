@@ -68,16 +68,21 @@ trait TypeHelperTrait
         try {
             $this->checkType($expectedType, $value, $nullIsValidValue);
         } catch (CmisInvalidArgumentException $exception) {
-            trigger_error(
-                sprintf(
-                    'Given value is of type "%s" but a value of type "%s" was expected.'
-                    . ' Value has been casted to the expected type.',
-                    gettype($value),
-                    $expectedType
-                ),
-                E_USER_NOTICE
-            );
-            settype($value, $expectedType);
+            if (PHP_INT_SIZE == 4 && $expectedType == 'integer' && is_double($value)) {
+                //TODO: 32bit - handle this specially?
+                settype($value, $expectedType);
+            } else {
+                trigger_error(
+                    sprintf(
+                        'Given value is of type "%s" but a value of type "%s" was expected.'
+                        . ' Value has been casted to the expected type.',
+                        gettype($value),
+                        $expectedType
+                    ),
+                    E_USER_NOTICE
+                );
+                settype($value, $expectedType);
+            }
         }
 
         return $value;

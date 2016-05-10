@@ -24,9 +24,16 @@ class PropertyInteger extends AbstractPropertyData implements MutablePropertyInt
      */
     public function setValues(array $values)
     {
-        foreach ($values as $value) {
+
+        foreach ($values as & $value) {
+            if (PHP_INT_SIZE == 4 && is_double($value)) {
+                //TODO: 32bit - handle this specially?
+                $value = $this->castValueToSimpleType('integer', $value);
+            }
+
             $this->checkType('integer', $value, true);
         }
+
         parent::setValues($values);
     }
 }
