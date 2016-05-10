@@ -66,6 +66,14 @@ class MultiFilingService extends AbstractBrowserBindingService implements MultiF
         ExtensionDataInterface $extension = null
     )
     {
-        // TODO: Implement removeObjectFromFolder() method.
+        $url = $this->getObjectUrl($repositoryId, $objectId);
+
+        $queryArray = array(
+            Constants::CONTROL_CMISACTION => Constants::CMISACTION_REMOVE_OBJECT_FROM_FOLDER,
+            Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
+            Constants::PARAM_FOLDER_ID => $folderId,
+        );
+
+        $this->post($url, $queryArray)->json();
     }
 }

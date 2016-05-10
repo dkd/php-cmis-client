@@ -59,8 +59,8 @@ Currently implemented Services
   - [ ] appendContentStream
   - [x] deleteContentStream
 - MultifilingService
-  - [ ] addObjectToFolder
-  - [ ] removeObjectFromFolder
+  - [x] addObjectToFolder
+  - [x] removeObjectFromFolder
 - DiscoveryService
   - [x] query
   - [x] getContentChanges
