@@ -82,9 +82,14 @@ Currently implemented Services
   - [ ] applyACL
 
 
+32/64-bit
+=======
+  The library is mainly targeting 64-bit environments. 32-bit should work, but no extensive testing is done.
+
 LICENSE
 =======
-   Copyright 2014 Sascha Egerer - dkd Internet Service GmbH <http://www.dkd.de>
+   Copyright 2014-2015 Sascha Egerer - dkd Internet Service GmbH <http://www.dkd.de>
+   Copyright 2015-2016 Johannes Goslar, Claus Due - dkd Internet Service GmbH <http://www.dkd.de>
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
