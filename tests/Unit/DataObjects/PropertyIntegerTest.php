@@ -38,7 +38,7 @@ class PropertyIntegerTest extends \PHPUnit_Framework_TestCase
             $expected = $value;
         }
 
-        if (!is_integer($value) && $value !== null) {
+        if (!is_integer($value) && $value !== null && !(PHP_INT_SIZE == 4 && is_double($value))) {
             $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', '', 1413440336);
         }
 
@@ -57,7 +57,7 @@ class PropertyIntegerTest extends \PHPUnit_Framework_TestCase
             $expected = $value;
         }
 
-        if (!is_integer($value) && $value !== null) {
+        if (!is_integer($value) && $value !== null && !(PHP_INT_SIZE == 4 && is_double($value))) {
             $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', '', 1413440336);
         }
 
