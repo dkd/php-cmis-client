@@ -238,6 +238,28 @@ abstract class AbstractPropertyDefinition extends AbstractExtensionData implemen
     }
 
     /**
+     * COMPATIBILITY: required by CMIS auto-property mapping; the "choices" property
+     * is sent in responses as "choice" (singular). PHP API allows properl plural name.
+     *
+     * @return ChoiceInterface[]
+     */
+    public function getChoice()
+    {
+        return $this->choices;
+    }
+
+    /**
+     * COMPATIBILITY: required by CMIS auto-property mapping; the "choices" property
+     * is sent in responses as "choice" (singular). PHP API allows properl plural name.
+     *
+     * @param ChoiceInterface[] $choices
+     */
+    public function setChoice(array $choices)
+    {
+        $this->choices = $choices;
+    }
+
+    /**
      * @return ChoiceInterface[]
      */
     public function getChoices()
