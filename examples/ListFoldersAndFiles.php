@@ -48,22 +48,24 @@ echo '+ [ROOT FOLDER]: ' . $rootFolder->getName() . "\n";
 
 printFolderContent($rootFolder);
 
-function printFolderContent(\Dkd\PhpCmis\Data\FolderInterface $folder, $levelIndention = ' ')
+function printFolderContent(\Dkd\PhpCmis\Data\FolderInterface $folder, $levelIndention = '  ')
 {
     $i = 0;
     foreach ($folder->getChildren() as $children) {
         echo $levelIndention;
         $i++;
-        if ($i > 5) {
+        if ($i > 10) {
             echo "| ...\n";
             break;
         }
 
         if ($children instanceof \Dkd\PhpCmis\Data\FolderInterface) {
             echo '+ [FOLDER]: ' . $children->getName() . "\n";
-            printFolderContent($children, $levelIndention . ' ');
+            printFolderContent($children, $levelIndention . '  ');
         } elseif ($children instanceof \Dkd\PhpCmis\Data\DocumentInterface) {
             echo '- [DOCUMENT]: ' . $children->getName() . "\n";
+        } else {
+            echo '- [ITEM]: ' . $children->getName() . "\n";
         }
     }
 }
