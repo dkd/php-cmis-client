@@ -213,7 +213,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $objectService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
             array($this->getSessionMock(), $cmisBindingsHelperMock)
         )->setMethods(
-            array('getObjectUrl', 'getRepositoryUrl', 'post')
+            array('getObjectUrl', 'getRepositoryUrl', 'post', 'setContentStream')
         )->getMock();
 
         if ($folderId === null) {
@@ -228,7 +228,10 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         }
 
         if ($expectedContentStream) {
-            $expectedPostData['content'] = $expectedContentStream;
+            $objectService->expects($this->once())->method('setContentStream')
+                ->with($repositoryId, 'foo-id', $this->anything());
+        } else {
+            $objectService->expects($this->never())->method('setContentStream');
         }
         $objectService->expects($this->atLeastOnce())->method('post')->with(
             $expectedUrl,

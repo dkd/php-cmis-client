@@ -196,9 +196,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         if ($versioningState !== null) {
             $queryArray[Constants::PARAM_VERSIONING_STATE] = (string) $versioningState;
         }
-        if ($contentStream) {
-            $queryArray['content'] = $contentStream;
-        }
+
         $responseData = $this->post(
             $url,
             $queryArray
@@ -206,7 +204,17 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
 
         $newObject = $this->getJsonConverter()->convertObject($responseData);
 
-        return ($newObject === null) ? null : $newObject->getId();
+        if ($newObject) {
+            $newObjectId = $newObject->getId();
+            if ($contentStream) {
+                if ($contentStream instanceof PostFile) {
+                    $contentStream = $contentStream->getContent();
+                }
+                $this->setContentStream($repositoryId, $newObjectId, $contentStream);
+            }
+            return $newObjectId;
+        }
+        return null;
     }
 
     /**
