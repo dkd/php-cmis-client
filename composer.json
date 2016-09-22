@@ -1,5 +1,6 @@
 {
     "name": "dkd/php-cmis",
+    "version": "1.0.0",
     "type": "library",
     "description": "PHP CMIS client library based on CMIS 1.1",
     "keywords": ["cmis"],
