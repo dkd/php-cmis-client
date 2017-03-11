@@ -31,7 +31,9 @@ use Dkd\PhpCmis\Exception\CmisProxyAuthenticationException;
 use Dkd\PhpCmis\Exception\CmisRuntimeException;
 use Dkd\PhpCmis\Exception\CmisUnauthorizedException;
 use Dkd\PhpCmis\SessionParameter;
-use Guzzle\Stream\StreamInterface;
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Stream\StreamInterface;
 use GuzzleHttp\Exception\RequestException;
 use League\Url\Url;
 
@@ -179,7 +181,10 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
         }
 
         $repositoryInfos = array();
-        $result = $this->read($url)->json();
+        $result = \json_decode(
+            $this->read($url)->getBody(),
+            true
+        );
         if (!is_array($result)) {
             throw new CmisConnectionException(
                 'Could not fetch repository info! Response is not a valid JSON.',
@@ -240,13 +245,13 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
      * Do a get request for the given url
      *
      * @param Url $url
-     * @return \GuzzleHttp\Message\Response
+     * @return Response
      * @throws CmisBaseException an more specific exception of this type could be thrown. For more details see
      * @see AbstractBrowserBindingService::convertStatusCode()
      */
     protected function read(Url $url)
     {
-        /** @var \GuzzleHttp\Message\Response $response */
+        /** @var Response $response */
         try {
             $response = $this->getHttpInvoker()->get((string) $url);
         } catch (RequestException $exception) {
@@ -269,11 +274,11 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
     /**
      * Get a HTTP Invoker instance
      *
-     * @return \GuzzleHttp\Client
+     * @return Client
      */
     protected function getHttpInvoker()
     {
-        /** @var \GuzzleHttp\Client $invoker */
+        /** @var Client $invoker */
         $invoker = $this->cmisBindingsHelper->getHttpInvoker($this->getSession());
 
         return $invoker;
@@ -407,16 +412,16 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
      * @param Url $url Request url
      * @param resource|string|StreamInterface|array $content Entity body data or an array for POST fields and files
      * @param array $headers Additional header options
-     * @return \GuzzleHttp\Message\Response
+     * @return Response
      * @throws CmisBaseException an more specific exception of this type could be thrown. For more details see
      * @see AbstractBrowserBindingService::convertStatusCode()
      */
     protected function post(Url $url, $content = array(), array $headers = array())
     {
-        $headers['body'] = $content;
+        $headers['form_params'] = $content;
 
         try {
-            /** @var \GuzzleHttp\Message\Response $response */
+            /** @var Response $response */
             $response = $this->getHttpInvoker()->post((string) $url, $headers);
         } catch (RequestException $exception) {
             throw $this->convertStatusCode(
@@ -451,7 +456,12 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
         $url = $this->getRepositoryUrl($repositoryId, Constants::SELECTOR_TYPE_DEFINITION);
         $url->getQuery()->modify(array(Constants::PARAM_TYPE_ID => $typeId));
 
-        return $this->getJsonConverter()->convertTypeDefinition($this->read($url)->json());
+        return $this->getJsonConverter()->convertTypeDefinition(
+            (array) \json_decode(
+                $this->read($url)->getBody(),
+                true
+            )
+        );
     }
 
     /**

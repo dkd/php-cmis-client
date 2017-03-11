@@ -73,7 +73,7 @@ class ObjectInFolderList extends AbstractExtensionData implements ObjectInFolder
     public function setObjects(array $objects)
     {
         foreach ($objects as $object) {
-            $this->checkType('\\Dkd\\PhpCmis\\Data\\ObjectInFolderDataInterface', $object);
+            $this->checkType(ObjectInFolderDataInterface::class, $object);
         }
 
         $this->objects = $objects;

@@ -56,7 +56,7 @@ class ObjectInFolderContainer extends AbstractExtensionData implements ObjectInF
     public function setChildren(array $children)
     {
         foreach ($children as $child) {
-            $this->checkType('\\Dkd\\PhpCmis\\Data\\ObjectInFolderContainerInterface', $child);
+            $this->checkType(ObjectInFolderContainerInterface::class, $child);
         }
 
         $this->children = $children;

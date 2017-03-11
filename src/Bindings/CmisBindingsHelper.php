@@ -17,6 +17,7 @@ use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
 use Dkd\PhpCmis\Exception\CmisRuntimeException;
 use Dkd\PhpCmis\SessionParameter;
 use Doctrine\Common\Cache\Cache;
+use GuzzleHttp\ClientInterface;
 
 /**
  * A collection of methods that are used in multiple places within the
@@ -104,7 +105,7 @@ class CmisBindingsHelper
             );
         }
 
-        if (!is_a($spiClass, '\\Dkd\\PhpCmis\\Bindings\\CmisInterface', true)) {
+        if (!is_a($spiClass, CmisInterface::class, true)) {
             throw new CmisRuntimeException(
                 sprintf('The given binding class "%s" does not implement required CmisInterface!', $spiClass)
             );
@@ -134,21 +135,21 @@ class CmisBindingsHelper
     {
         $invoker = $session->get(SessionParameter::HTTP_INVOKER_OBJECT);
 
-        if (is_object($invoker) && is_a($invoker, '\\GuzzleHttp\\ClientInterface')) {
+        if (is_object($invoker) && is_a($invoker, ClientInterface::class)) {
             return $invoker;
-        } elseif (is_object($invoker) && !is_a($invoker, '\\GuzzleHttp\\ClientInterface')) {
+        } elseif (is_object($invoker) && !is_a($invoker, ClientInterface::class)) {
             throw new CmisInvalidArgumentException(
                 sprintf(
-                    'Invalid HTTP invoker given. The given instance "%s" does not implement'
-                    . ' \\GuzzleHttp\\ClientInterface!',
-                    get_class($invoker)
+                    'Invalid HTTP invoker given. The given instance "%s" does not implement %s!',
+                    get_class($invoker),
+                    ClientInterface::class
                 ),
                 1415281262
             );
         }
 
         $invokerClass = $session->get(SessionParameter::HTTP_INVOKER_CLASS);
-        if (!is_a($invokerClass, '\\GuzzleHttp\\ClientInterface', true)) {
+        if (!is_a($invokerClass, ClientInterface::class, true)) {
             throw new CmisRuntimeException(
                 sprintf('The given HTTP Invoker class "%s" is not valid!', $invokerClass)
             );

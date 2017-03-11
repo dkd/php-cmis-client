@@ -39,7 +39,7 @@ class CreatablePropertyTypes extends AbstractExtensionData implements CreatableP
     public function setCanCreate(array $propertyTypeSet)
     {
         foreach ($propertyTypeSet as $propertyType) {
-            $this->checkType('\\Dkd\\PhpCmis\\Enum\\PropertyType', $propertyType);
+            $this->checkType(PropertyType::class, $propertyType);
         }
 
         $this->propertyTypeSet = $propertyTypeSet;

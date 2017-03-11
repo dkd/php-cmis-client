@@ -8,12 +8,11 @@ if (!is_file(__DIR__ . '/conf/Configuration.php')) {
 
 $httpInvoker = new \GuzzleHttp\Client(
     array(
-        'defaults' => array(
-            'auth' => array(
+        'auth' =>
+            array(
                 CMIS_BROWSER_USER,
                 CMIS_BROWSER_PASSWORD
             )
-        )
     )
 );
 

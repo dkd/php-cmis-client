@@ -72,22 +72,22 @@ class AclCapabilitiesTest extends \PHPUnit_Framework_TestCase
             array(
                 'string',
                 'Argument of type "string" given but argument of type '
-                . '"\\Dkd\\PhpCmis\\Definitions\\PermissionDefinitionInterface" was expected.'
+                . '"Dkd\\PhpCmis\\Definitions\\PermissionDefinitionInterface" was expected.'
             ),
             array(
                 0,
                 'Argument of type "integer" given but argument of type '
-                . '"\\Dkd\\PhpCmis\\Definitions\\PermissionDefinitionInterface" was expected.'
+                . '"Dkd\\PhpCmis\\Definitions\\PermissionDefinitionInterface" was expected.'
             ),
             array(
                 array(),
                 'Argument of type "array" given but argument of type '
-                . '"\\Dkd\\PhpCmis\\Definitions\\PermissionDefinitionInterface" was expected.'
+                . '"Dkd\\PhpCmis\\Definitions\\PermissionDefinitionInterface" was expected.'
             ),
             array(
                 new \stdClass(),
                 'Argument of type "stdClass" given but argument of type '
-                . '"\\Dkd\\PhpCmis\\Definitions\\PermissionDefinitionInterface" was expected.'
+                . '"Dkd\\PhpCmis\\Definitions\\PermissionDefinitionInterface" was expected.'
             )
         );
     }

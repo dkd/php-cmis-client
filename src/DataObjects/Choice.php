@@ -49,7 +49,7 @@ class Choice implements ChoiceInterface
     public function setChoices(array $choices)
     {
         foreach ($choices as $value) {
-            $this->checkType('\\Dkd\\PhpCmis\\Definitions\\ChoiceInterface', $value);
+            $this->checkType(ChoiceInterface::class, $value);
         }
 
         $this->choices = $choices;

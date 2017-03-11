@@ -53,7 +53,7 @@ class AbstractExtensionDataTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException(
             '\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException',
             'Argument of type "stdClass" given but argument of type '
-            . '"\\Dkd\\PhpCmis\\Data\\CmisExtensionElementInterface" was expected.'
+            . '"Dkd\\PhpCmis\\Data\\CmisExtensionElementInterface" was expected.'
         );
         $this->abstractExtensionData->setExtensions(array(new \stdClass()));
     }

@@ -75,7 +75,7 @@ class DiscoveryService extends AbstractBrowserBindingService implements Discover
             $url->getQuery()->modify(array(Constants::PARAM_MAX_ITEMS => (string) $maxItems));
         }
 
-        $responseData = $this->read($url)->json();
+        $responseData = (array) \json_decode($this->read($url)->getBody(), true);
 
         // $changeLogToken was passed by reference. The value is changed here
         if ($changeLogToken!==null && isset($responseData[JSONConstants::JSON_OBJECTLIST_CHANGE_LOG_TOKEN])) {
@@ -144,7 +144,7 @@ class DiscoveryService extends AbstractBrowserBindingService implements Discover
             $url->getQuery()->modify(array(Constants::PARAM_MAX_ITEMS => (string) $maxItems));
         }
 
-        $responseData = $this->post($url)->json();
+        $responseData = (array) \json_decode($this->post($url)->getBody(), true);
 
         return $this->getJsonConverter()->convertQueryResultList($responseData);
     }

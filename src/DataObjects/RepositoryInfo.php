@@ -137,7 +137,7 @@ class RepositoryInfo extends AbstractExtensionData implements RepositoryInfoInte
     public function setChangesOnType(array $changesOnType)
     {
         foreach ($changesOnType as $baseTypeId) {
-            $this->checkType('\\Dkd\\PhpCmis\\Enum\\BaseTypeId', $baseTypeId);
+            $this->checkType(BaseTypeId::class, $baseTypeId);
         }
         $this->changesOnType = $changesOnType;
     }
@@ -156,7 +156,7 @@ class RepositoryInfo extends AbstractExtensionData implements RepositoryInfoInte
     public function setExtensionFeatures(array $extensionFeatures)
     {
         foreach ($extensionFeatures as $extensionFeature) {
-            $this->checkType('\\Dkd\\PhpCmis\\Data\\ExtensionFeatureInterface', $extensionFeature);
+            $this->checkType(ExtensionFeatureInterface::class, $extensionFeature);
         }
         $this->extensionFeatures = $extensionFeatures;
     }

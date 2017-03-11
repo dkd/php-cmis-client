@@ -225,8 +225,9 @@ class Session implements SessionInterface
             if (!($cache instanceof CacheProvider)) {
                 throw new \RuntimeException(
                     sprintf(
-                        'Class %s does not subclass \\Doctrine\\Common\\Cache\\CacheProvider!',
-                        get_class($cache)
+                        'Class %s does not subclass %s!',
+                        get_class($cache),
+                        CacheProvider::class
                     ),
                     1408354124
                 );

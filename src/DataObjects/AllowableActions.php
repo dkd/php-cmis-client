@@ -37,7 +37,7 @@ class AllowableActions extends AbstractExtensionData implements AllowableActions
     public function setAllowableActions(array $allowableActions)
     {
         foreach ($allowableActions as $action) {
-            $this->checkType('\\Dkd\\PhpCmis\\Enum\\Action', $action);
+            $this->checkType(Action::class, $action);
         }
         $this->allowableActions = $allowableActions;
     }

@@ -10,9 +10,12 @@ namespace Dkd\PhpCmis\Test\Unit\Bindings\Browser;
  * file that was distributed with this source code.
  */
 
+use Dkd\PhpCmis\Bindings\BindingSessionInterface;
 use Dkd\PhpCmis\Bindings\Browser\AbstractBrowserBindingService;
 use Dkd\PhpCmis\Bindings\Browser\RepositoryUrlCache;
+use Dkd\PhpCmis\Bindings\CmisBindingsHelper;
 use Dkd\PhpCmis\Constants;
+use Dkd\PhpCmis\Converter\JsonConverter;
 use Dkd\PhpCmis\DataObjects\AccessControlEntry;
 use Dkd\PhpCmis\DataObjects\AccessControlList;
 use Dkd\PhpCmis\DataObjects\Principal;
@@ -24,25 +27,42 @@ use Dkd\PhpCmis\DataObjects\PropertyId;
 use Dkd\PhpCmis\DataObjects\PropertyString;
 use Dkd\PhpCmis\DataObjects\RepositoryInfoBrowserBinding;
 use Dkd\PhpCmis\Enum\DateTimeFormat;
+use Dkd\PhpCmis\Exception\CmisConnectionException;
+use Dkd\PhpCmis\Exception\CmisConstraintException;
+use Dkd\PhpCmis\Exception\CmisContentAlreadyExistsException;
+use Dkd\PhpCmis\Exception\CmisFilterNotValidException;
+use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
+use Dkd\PhpCmis\Exception\CmisNameConstraintViolationException;
+use Dkd\PhpCmis\Exception\CmisNotSupportedException;
+use Dkd\PhpCmis\Exception\CmisObjectNotFoundException;
+use Dkd\PhpCmis\Exception\CmisPermissionDeniedException;
+use Dkd\PhpCmis\Exception\CmisProxyAuthenticationException;
+use Dkd\PhpCmis\Exception\CmisRuntimeException;
+use Dkd\PhpCmis\Exception\CmisStorageException;
+use Dkd\PhpCmis\Exception\CmisStreamNotSupportedException;
+use Dkd\PhpCmis\Exception\CmisUnauthorizedException;
+use Dkd\PhpCmis\Exception\CmisUpdateConflictException;
+use Dkd\PhpCmis\Exception\CmisVersioningException;
 use Dkd\PhpCmis\SessionParameter;
-use Guzzle\Http\EntityBody;
-use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Message\Response;
+use GuzzleHttp\Message\RequestInterface;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Client;
 use League\Url\Url;
 use PHPUnit_Framework_MockObject_MockObject;
 
 class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTestCase
 {
-    const CLASS_TO_TEST = '\\Dkd\\PhpCmis\\Bindings\\Browser\\AbstractBrowserBindingService';
+    const CLASS_TO_TEST = AbstractBrowserBindingService::class;
 
     public function testConstructorSetsSessionAndBindingsHelper()
     {
         $sessionMock = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\Bindings\\BindingSessionInterface'
+            BindingSessionInterface::class
         )->setMockClassName('SessionMock')->getMockForAbstractClass();
 
-        $bindingHelper = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMockClassName(
+        $bindingHelper = $this->getMockBuilder(CmisBindingsHelper::class)->setMockClassName(
             'BindingHelperMock'
         )->getMockForAbstractClass();
 
@@ -120,7 +140,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
     public function testGetHttpInvokerGetsHttpInvokerFromCmisBindingsHelper()
     {
         $httpInvokerDummy = new Client();
-        $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
+        $cmisBindingsHelperMock = $this->getMockBuilder(CmisBindingsHelper::class)->setMethods(
             array('getHttpInvoker')
         )->getMock();
         $cmisBindingsHelperMock->expects($this->any())->method('getHttpInvoker')->willReturn($httpInvokerDummy);
@@ -145,14 +165,14 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         )->getMockForAbstractClass();
 
         $repositoryUrlCacheMock = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\Bindings\\Browser\\RepositoryUrlCache'
+            RepositoryUrlCache::class
         )->setMethods(array('getRepositoryUrl'))->getMock();
 
         $repositoryUrlCacheMock->expects($this->exactly(2))->method('getRepositoryUrl')->willReturn(null);
         $binding->expects($this->any())->method('getRepositoryUrlCache')->willReturn($repositoryUrlCacheMock);
         $binding->expects($this->once())->method('getRepositoriesInternal');
 
-        $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisObjectNotFoundException');
+        $this->setExpectedException(CmisObjectNotFoundException::class);
 
         $this->getMethod(self::CLASS_TO_TEST, 'getRepositoryUrl')->invokeArgs($binding, array('repository-id'));
     }
@@ -169,7 +189,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         )->getMockForAbstractClass();
 
         $repositoryUrlCacheMock = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\Bindings\\Browser\\RepositoryUrlCache'
+            RepositoryUrlCache::class
         )->setMethods(array('getRepositoryUrl'))->getMock();
 
         $url = Url::createFromUrl(self::BROWSER_URL_TEST);
@@ -195,14 +215,14 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         )->getMockForAbstractClass();
 
         $repositoryUrlCacheMock = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\Bindings\\Browser\\RepositoryUrlCache'
+            RepositoryUrlCache::class
         )->setMethods(array('getObjectUrl'))->getMock();
 
         $repositoryUrlCacheMock->expects($this->exactly(2))->method('getObjectUrl')->willReturn(null);
         $binding->expects($this->any())->method('getRepositoryUrlCache')->willReturn($repositoryUrlCacheMock);
         $binding->expects($this->once())->method('getRepositoriesInternal');
 
-        $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisObjectNotFoundException');
+        $this->setExpectedException(CmisObjectNotFoundException::class);
 
         $this->getMethod(self::CLASS_TO_TEST, 'getObjectUrl')->invokeArgs(
             $binding,
@@ -222,7 +242,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         )->getMockForAbstractClass();
 
         $repositoryUrlCacheMock = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\Bindings\\Browser\\RepositoryUrlCache'
+            RepositoryUrlCache::class
         )->setMethods(array('getObjectUrl'))->getMock();
 
         $url = Url::createFromUrl(self::BROWSER_URL_TEST);
@@ -251,14 +271,14 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         )->getMockForAbstractClass();
 
         $repositoryUrlCacheMock = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\Bindings\\Browser\\RepositoryUrlCache'
+            RepositoryUrlCache::class
         )->setMethods(array('getPathUrl'))->getMock();
 
         $repositoryUrlCacheMock->expects($this->exactly(2))->method('getPathUrl')->willReturn(null);
         $binding->expects($this->any())->method('getRepositoryUrlCache')->willReturn($repositoryUrlCacheMock);
         $binding->expects($this->once())->method('getRepositoriesInternal');
 
-        $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisObjectNotFoundException');
+        $this->setExpectedException(CmisObjectNotFoundException::class);
 
         $this->getMethod(self::CLASS_TO_TEST, 'getPathUrl')->invokeArgs($binding, array('repository-id', 'path'));
     }
@@ -275,7 +295,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         )->getMockForAbstractClass();
 
         $repositoryUrlCacheMock = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\Bindings\\Browser\\RepositoryUrlCache'
+            RepositoryUrlCache::class
         )->setMethods(array('getPathUrl'))->getMock();
 
         $url = Url::createFromUrl(self::BROWSER_URL_TEST);
@@ -351,134 +371,134 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         return array(
             // based on message
             array(
-                '\\Dkd\\PhpCmis\\Exception\\CmisConstraintException',
+                CmisConstraintException::class,
                 0,
                 '{"message":"Error message","exception":"constraint"}'
             ),
             array(
-                '\\Dkd\\PhpCmis\\Exception\\CmisContentAlreadyExistsException',
+                CmisContentAlreadyExistsException::class,
                 0,
                 '{"message":"Error message","exception":"contentAlreadyExists"}'
             ),
             array(
-                '\\Dkd\\PhpCmis\\Exception\\CmisFilterNotValidException',
+                CmisFilterNotValidException::class,
                 0,
                 '{"message":"Error message","exception":"filterNotValid"}'
             ),
             array(
-                '\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException',
+                CmisInvalidArgumentException::class,
                 0,
                 '{"message":"Error message","exception":"invalidArgument"}'
             ),
             array(
-                '\\Dkd\\PhpCmis\\Exception\\CmisNameConstraintViolationException',
+                CmisNameConstraintViolationException::class,
                 0,
                 '{"message":"Error message","exception":"nameConstraintViolation"}'
             ),
             array(
-                '\\Dkd\\PhpCmis\\Exception\\CmisNotSupportedException',
+                CmisNotSupportedException::class,
                 0,
                 '{"message":"Error message","exception":"notSupported"}'
             ),
             array(
-                '\\Dkd\\PhpCmis\\Exception\\CmisObjectNotFoundException',
+                CmisObjectNotFoundException::class,
                 0,
                 '{"message":"Error message","exception":"objectNotFound"}'
             ),
             array(
-                '\\Dkd\\PhpCmis\\Exception\\CmisPermissionDeniedException',
+                CmisPermissionDeniedException::class,
                 0,
                 '{"message":"Error message","exception":"permissionDenied"}'
             ),
             array(
-                '\\Dkd\\PhpCmis\\Exception\\CmisStorageException',
+                CmisStorageException::class,
                 0,
                 '{"message":"Error message","exception":"storage"}'
             ),
             array(
-                '\\Dkd\\PhpCmis\\Exception\\CmisStreamNotSupportedException',
+                CmisStreamNotSupportedException::class,
                 0,
                 '{"message":"Error message","exception":"streamNotSupported"}'
             ),
             array(
-                '\\Dkd\\PhpCmis\\Exception\\CmisUpdateConflictException',
+                CmisUpdateConflictException::class,
                 0,
                 '{"message":"Error message","exception":"updateConflict"}'
             ),
             array(
-                '\\Dkd\\PhpCmis\\Exception\\CmisVersioningException',
+                CmisVersioningException::class,
                 0,
                 '{"message":"Error message","exception":"versioning"}'
             ),
             // unknown exception name
             array(
-                '\\Dkd\\PhpCmis\\Exception\\CmisRuntimeException',
+                CmisRuntimeException::class,
                 399,
                 '{"message":"Error message","exception":"unknownExceptionNameFooBar"}'
             ),
             // bases on status code
             array(
-                '\\Dkd\\PhpCmis\\Exception\\CmisConnectionException',
+                CmisConnectionException::class,
                 301,
                 'error message'
             ),
             array(
-                '\\Dkd\\PhpCmis\\Exception\\CmisConnectionException',
+                CmisConnectionException::class,
                 302,
                 'error message'
             ),
             array(
-                '\\Dkd\\PhpCmis\\Exception\\CmisConnectionException',
+                CmisConnectionException::class,
                 303,
                 'error message'
             ),
             array(
-                '\\Dkd\\PhpCmis\\Exception\\CmisConnectionException',
+                CmisConnectionException::class,
                 307,
                 'error message'
             ),
             array(
-                '\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException',
+                CmisInvalidArgumentException::class,
                 400,
                 'error message'
             ),
             array(
-                '\\Dkd\\PhpCmis\\Exception\\CmisUnauthorizedException',
+                CmisUnauthorizedException::class,
                 401,
                 'error message'
             ),
             array(
-                '\\Dkd\\PhpCmis\\Exception\\CmisPermissionDeniedException',
+                CmisPermissionDeniedException::class,
                 403,
                 'error message'
             ),
             array(
-                '\\Dkd\\PhpCmis\\Exception\\CmisObjectNotFoundException',
+                CmisObjectNotFoundException::class,
                 404,
                 'error message'
             ),
             array(
-                '\\Dkd\\PhpCmis\\Exception\\CmisNotSupportedException',
+                CmisNotSupportedException::class,
                 405,
                 'error message'
             ),
             array(
-                '\\Dkd\\PhpCmis\\Exception\\CmisProxyAuthenticationException',
+                CmisProxyAuthenticationException::class,
                 407,
                 'error message'
             ),
             array(
-                '\\Dkd\\PhpCmis\\Exception\\CmisConstraintException',
+                CmisConstraintException::class,
                 409,
                 'error message'
             ),
             array(
-                '\\Dkd\\PhpCmis\\Exception\\CmisRuntimeException',
+                CmisRuntimeException::class,
                 500,
                 'error message'
             ),
             array(
-                '\\Dkd\\PhpCmis\\Exception\\CmisRuntimeException',
+                CmisRuntimeException::class,
                 9999,
                 'error message'
             ),
@@ -490,9 +510,8 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         $sessionMock = $this->getSessionMock();
 
         $testUrl = Url::createFromUrl(self::BROWSER_URL_TEST);
-        $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor()->getMock(
-        );
-        $httpInvokerMock = $this->getMockBuilder('\\GuzzleHttp\\Client')->disableOriginalConstructor()->setMethods(
+        $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->getMock();
+        $httpInvokerMock = $this->getMockBuilder(Client::class)->disableOriginalConstructor()->setMethods(
             array('get')
         )->getMock();
         $httpInvokerMock->expects($this->once())->method('get')->with((string) $testUrl)->willReturn(
@@ -516,14 +535,14 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         $sessionMock = $this->getSessionMock();
 
         $testUrl = Url::createFromUrl(self::BROWSER_URL_TEST);
-        $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor()->getMock(
+        $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->getMock(
         );
-        $httpInvokerMock = $this->getMockBuilder('\\GuzzleHttp\\Client')->disableOriginalConstructor()->setMethods(
+        $httpInvokerMock = $this->getMockBuilder(Client::class)->disableOriginalConstructor()->setMethods(
             array('get')
         )->getMock();
         /** @var RequestException|PHPUnit_Framework_MockObject_MockObject $exceptionMock */
-        $exceptionMock = $this->getMockBuilder('\\GuzzleHttp\\Exception\\RequestException')->disableOriginalConstructor(
-        )->setMethods(array('getResponse'))->getMock();
+        $exceptionMock = $this->getMockBuilder(RequestException::class)->disableOriginalConstructor()
+            ->setMethods(array('getResponse'))->getMock();
         $exceptionMock->expects($this->any())->method('getResponse')->willReturn($responseMock);
         $httpInvokerMock->expects($this->once())->method('get')->with($testUrl)->willThrowException(
             $exceptionMock
@@ -551,16 +570,13 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         $sessionMock = $this->getSessionMock();
 
         $testUrl = Url::createFromUrl(self::BROWSER_URL_TEST);
-        $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor()->getMock(
+        $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->getMock(
         );
-        $httpInvokerMock = $this->getMockBuilder('\\GuzzleHttp\\Client')->disableOriginalConstructor()->setMethods(
+        $httpInvokerMock = $this->getMockBuilder(Client::class)->disableOriginalConstructor()->setMethods(
             array('get')
         )->getMock();
         /** @var RequestException|PHPUnit_Framework_MockObject_MockObject $exceptionMock */
-        $exceptionMock = new \GuzzleHttp\Exception\RequestException(
-            'dummy message',
-            $this->getMockForAbstractClass('\\GuzzleHttp\\Message\\RequestInterface')
-        );
+        $exceptionMock = new RequestException('foobar', new Request('GET', static::BROWSER_URL_TEST), $responseMock);
         $httpInvokerMock->expects($this->once())->method('get')->with($testUrl)->willThrowException(
             $exceptionMock
         );
@@ -589,14 +605,13 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         $testUrl = Url::createFromUrl(self::BROWSER_URL_TEST);
         $content = 'fooBarBaz';
 
-        $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor()->getMock(
-        );
-        $httpInvokerMock = $this->getMockBuilder('\\GuzzleHttp\\Client')->disableOriginalConstructor()->setMethods(
+        $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->getMock();
+        $httpInvokerMock = $this->getMockBuilder(Client::class)->disableOriginalConstructor()->setMethods(
             array('post')
         )->getMock();
         $httpInvokerMock->expects($this->once())->method('post')->with(
             $testUrl,
-            array('body' => $content)
+            array('form_params' => $content)
         )->willReturn($responseMock);
 
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
@@ -615,21 +630,21 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
 
     public function testPostCatchesAllRequestExceptionsAndConvertsThemToACmisException()
     {
-        $testUrl = Url::createFromUrl(self::BROWSER_URL_TEST);
+        $testUrl = Url::createFromUrl('http://foo.bar.baz');
         $content = 'fooBarBaz';
 
-        $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor()->getMock(
+        $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->getMock(
         );
-        $httpInvokerMock = $this->getMockBuilder('\\GuzzleHttp\\Client')->disableOriginalConstructor()->setMethods(
+        $httpInvokerMock = $this->getMockBuilder(Client::class)->disableOriginalConstructor()->setMethods(
             array('post')
         )->getMock();
         /** @var RequestException|PHPUnit_Framework_MockObject_MockObject $exceptionMock */
-        $exceptionMock = $this->getMockBuilder('\\GuzzleHttp\\Exception\\RequestException')->disableOriginalConstructor(
+        $exceptionMock = $this->getMockBuilder(RequestException::class)->disableOriginalConstructor(
         )->setMethods(array('getResponse'))->getMock();
         $exceptionMock->expects($this->any())->method('getResponse')->willReturn($responseMock);
         $httpInvokerMock->expects($this->once())->method('post')->with(
             (string) $testUrl,
-            array('body' => $content)
+            array('form_params' => $content)
         )->willThrowException(
             $exceptionMock
         );
@@ -677,7 +692,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         )->setConstructorArgs(array($this->getSessionMock()))->getMockForAbstractClass();
 
         $this->assertInstanceOf(
-            '\\Dkd\\PhpCmis\\Bindings\\Browser\\RepositoryUrlCache',
+            RepositoryUrlCache::class,
             $this->getMethod(self::CLASS_TO_TEST, 'getRepositoryUrlCache')->invoke($binding)
         );
     }
@@ -686,13 +701,13 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
     {
         $repositoryId = 'repositoryId';
         $typeId = 'typeId';
-        $dummyResponse = $this->getMock(Response::class, array('json'), array('{"foo": "bar"}'));
+        $dummyResponse = new Response(200, [], '{"foo": "bar"}');
 
-        $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
+        $jsonConverterMock = $this->getMockBuilder(JsonConverter::class)->setMethods(
             array('convertTypeDefinition')
         )->getMock();
         $jsonConverterMock->expects($this->once())->method('convertTypeDefinition')->willReturn('TypeDefinitionResult');
-        $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
+        $cmisBindingsHelperMock = $this->getMockBuilder(CmisBindingsHelper::class)->setMethods(
             array('getJsonConverter')
         )->getMock();
         $cmisBindingsHelperMock->expects($this->any())->method('getJsonConverter')->willReturn($jsonConverterMock);
@@ -704,8 +719,8 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
             array('getRepositoryUrl', 'read')
         )->getMockForAbstractClass();
 
-        $urlDummy = Url::createFromUrl(self::BROWSER_URL_TEST . '?foo=bar');
-        $expectedUrl = Url::createFromUrl(self::BROWSER_URL_TEST . '?foo=bar&typeId=typeId');
+        $urlDummy = Url::createFromUrl('http://foo.bar.baz?foo=bar');
+        $expectedUrl = Url::createFromUrl('http://foo.bar.baz?foo=bar&typeId=typeId');
 
         $binding->expects($this->any())->method('getRepositoryUrl')->willReturn($urlDummy);
         $binding->expects($this->any())->method('read')->with($expectedUrl)->willReturn($dummyResponse);
@@ -724,7 +739,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         $repositoryId = null;
         $typeId = 'typeId';
 
-        $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->getMock();
+        $cmisBindingsHelperMock = $this->getMockBuilder(CmisBindingsHelper::class)->getMock();
 
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
@@ -732,7 +747,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         )->setConstructorArgs(array($this->getSessionMock(), $cmisBindingsHelperMock))->getMockForAbstractClass();
 
         $this->setExpectedException(
-            '\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException',
+            CmisInvalidArgumentException::class,
             'Repository id must not be empty!'
         );
 
@@ -747,7 +762,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         $repositoryId = 'repositoryId';
         $typeId = null;
 
-        $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->getMock();
+        $cmisBindingsHelperMock = $this->getMockBuilder(CmisBindingsHelper::class)->getMock();
 
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
@@ -755,7 +770,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         )->setConstructorArgs(array($this->getSessionMock(), $cmisBindingsHelperMock))->getMockForAbstractClass();
 
         $this->setExpectedException(
-            '\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException',
+            CmisInvalidArgumentException::class,
             'Type id must not be empty!'
         );
         $this->getMethod(self::CLASS_TO_TEST, 'getTypeDefinitionInternal')->invokeArgs(
@@ -766,9 +781,9 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
 
     public function testGetRepositoriesInternalThrowsExceptionIfRequestDoesNotReturnValidJson()
     {
-        $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
-        )->setMethods(array('json'))->getMock();
-        $responseMock->expects($this->any())->method('json')->willReturn(false);
+        $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
+        )->setMethods(array('getBody'))->getMock();
+        $responseMock->expects($this->any())->method('getBody')->willReturn(null);
 
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
@@ -778,7 +793,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         )->getMockForAbstractClass();
 
         $repositoryUrlCacheMock = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\Bindings\\Browser\\RepositoryUrlCache'
+            RepositoryUrlCache::class
         )->setMethods(array('buildUrl'))->getMock();
         $repositoryUrlCacheMock->expects($this->any())->method('buildUrl')->willReturn(
             Url::createFromUrl(self::BROWSER_URL_TEST)
@@ -788,15 +803,15 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         $binding->expects($this->any())->method('getServiceUrl')->willReturn(self::BROWSER_URL_TEST);
         $binding->expects($this->any())->method('read')->willReturn($responseMock);
 
-        $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisConnectionException', '', 1416343166);
+        $this->setExpectedException(CmisConnectionException::class, null, 1416343166);
         $this->getMethod(self::CLASS_TO_TEST, 'getRepositoriesInternal')->invoke($binding);
     }
 
     public function testGetRepositoriesInternalThrowsExceptionIfRequestDoesNotReturnAnItemArray()
     {
-        $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
-        )->setMethods(array('json'))->getMock();
-        $responseMock->expects($this->any())->method('json')->willReturn(array('invalidValue'));
+        $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
+        )->setMethods(array('getBody'))->getMock();
+        $responseMock->expects($this->any())->method('getBody')->willReturn('[1]');
 
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
@@ -806,7 +821,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         )->getMockForAbstractClass();
 
         $repositoryUrlCacheMock = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\Bindings\\Browser\\RepositoryUrlCache'
+            RepositoryUrlCache::class
         )->setMethods(array('buildUrl'))->getMock();
         $repositoryUrlCacheMock->expects($this->any())->method('buildUrl')->willReturn(
             Url::createFromUrl(self::BROWSER_URL_TEST)
@@ -816,7 +831,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         $binding->expects($this->any())->method('getServiceUrl')->willReturn(self::BROWSER_URL_TEST);
         $binding->expects($this->any())->method('read')->willReturn($responseMock);
 
-        $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisConnectionException', '', 1415187764);
+        $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisConnectionException', null, 1415187764);
         $this->getMethod(self::CLASS_TO_TEST, 'getRepositoriesInternal')->invoke($binding);
     }
 
@@ -826,7 +841,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
      */
     public function testGetRepositoriesInternalThrowsExceptionIfRepositoryInfosAreEmpty($repositoryInfo)
     {
-        $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
+        $jsonConverterMock = $this->getMockBuilder(JsonConverter::class)->setMethods(
             array('convertRepositoryInfo')
         )->getMock();
 
@@ -834,14 +849,14 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
             $repositoryInfo
         );
 
-        $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
+        $cmisBindingsHelperMock = $this->getMockBuilder(CmisBindingsHelper::class)->setMethods(
             array('getJsonConverter')
         )->getMock();
         $cmisBindingsHelperMock->expects($this->any())->method('getJsonConverter')->willReturn($jsonConverterMock);
 
-        $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
-        )->setMethods(array('json'))->getMock();
-        $responseMock->expects($this->any())->method('json')->willReturn(array(array('valid repository info stuff')));
+        $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
+        )->setMethods(array('getBody'))->getMock();
+        $responseMock->expects($this->any())->method('getBody')->willReturn(json_encode(array(array('valid repository info stuff'))));
 
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
@@ -851,7 +866,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         )->getMockForAbstractClass();
 
         $repositoryUrlCacheMock = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\Bindings\\Browser\\RepositoryUrlCache'
+            RepositoryUrlCache::class
         )->setMethods(array('buildUrl'))->getMock();
         $repositoryUrlCacheMock->expects($this->any())->method('buildUrl')->willReturn(
             Url::createFromUrl(self::BROWSER_URL_TEST)
@@ -861,7 +876,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         $binding->expects($this->any())->method('getServiceUrl')->willReturn(self::BROWSER_URL_TEST);
         $binding->expects($this->any())->method('read')->willReturn($responseMock);
 
-        $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisConnectionException', '', 1415187765);
+        $this->setExpectedException(CmisConnectionException::class, null, 1415187765);
         $this->getMethod(self::CLASS_TO_TEST, 'getRepositoriesInternal')->invoke($binding);
     }
 
@@ -893,7 +908,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
      */
     public function testGetRepositoriesInternalReturnsArrayOfRepositoryInfos($repositoryId, \PHPUnit_Framework_MockObject_MockObject $repositoryUrlCacheMock)
     {
-        $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
+        $jsonConverterMock = $this->getMockBuilder(JsonConverter::class)->setMethods(
             array('convertRepositoryInfo')
         )->getMock();
 
@@ -906,14 +921,14 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
             $repositoryInfoBrowserBinding
         );
 
-        $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
+        $cmisBindingsHelperMock = $this->getMockBuilder(CmisBindingsHelper::class)->setMethods(
             array('getJsonConverter')
         )->getMock();
         $cmisBindingsHelperMock->expects($this->any())->method('getJsonConverter')->willReturn($jsonConverterMock);
 
-        $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
-        )->setMethods(array('json'))->getMock();
-        $responseMock->expects($this->any())->method('json')->willReturn(array(array('valid repository info stuff')));
+        $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
+        )->setMethods(array('getBody'))->getMock();
+        $responseMock->expects($this->any())->method('getBody')->willReturn('[["some info"]]');
 
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
@@ -934,28 +949,21 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
 
     public function getRepositoriesInternalDataProvider()
     {
-        $mockBuilder = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\Bindings\\Browser\\RepositoryUrlCache'
-        )->setMethods(array('getRepositoryUrl', 'buildUrl', 'addRepository'))->disableProxyingToOriginalMethods();
-
-        $repositoryUrlCacheMockNoId = $mockBuilder->getMock();
-        $repositoryUrlCacheMockNoId->expects($this->any())->method('buildUrl')->willReturn(
-            Url::createFromUrl(self::BROWSER_URL_TEST)
-        );
-
-        $repositoryUrlCacheMock = $mockBuilder->getMock();
+        $repositoryUrlCacheMock = $this->getMockBuilder(
+            RepositoryUrlCache::class
+        )->setMethods(array('getRepositoryUrl', 'buildUrl', 'addRepository'))->disableProxyingToOriginalMethods(
+        )->getMock();
         $repositoryUrlCacheMock->expects($this->any())->method('buildUrl')->willReturn(
-            Url::createFromUrl(self::BROWSER_URL_TEST)
+            Url::createFromUrl('http://foo.bar.baz')
         );
-
-        $repositoryUrlCacheMockWithRepositoryUrlEntry = $mockBuilder->getMock();
+        $repositoryUrlCacheMockWithRepositoryUrlEntry = clone $repositoryUrlCacheMock;
         $repositoryUrlCacheMockWithRepositoryUrlEntry->expects($this->any())->method('getRepositoryUrl')->willReturn(
-            Url::createFromUrl(self::BROWSER_URL_TEST)
+            Url::createFromUrl('http://foo.bar.baz')
         );
         $repositoryUrlCacheMockWithRepositoryUrlEntry->expects($this->once())->method('addRepository');
 
         return array(
-            'no repository id - repository url cache builds url' => array(null, $repositoryUrlCacheMockNoId),
+            'no repository id - repository url cache builds url' => array(null, $repositoryUrlCacheMock),
             'with repository id - repository url cache does NOT return repository url - url is build' => array(
                 'repository-id',
                 $repositoryUrlCacheMock

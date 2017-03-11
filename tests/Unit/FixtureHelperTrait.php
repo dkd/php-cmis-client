@@ -10,8 +10,12 @@ namespace Dkd\PhpCmis\Test\Unit;
  * file that was distributed with this source code.
  */
 
-use GuzzleHttp\Message\MessageFactory;
+use Guzzle\Common\Exception\RuntimeException;
+use GuzzleHttp\Psr7\Response;
 
+/**
+ * Class FixtureHelperTrait
+ */
 trait FixtureHelperTrait
 {
     /**
@@ -22,17 +26,16 @@ trait FixtureHelperTrait
      */
     protected function getResponseFixtureContentAsArray($fixture)
     {
-        $messageFactory = new MessageFactory();
         $fixtureFilename = dirname(dirname(__FILE__)) . '/Fixtures/' . $fixture;
         if (!file_exists($fixtureFilename)) {
             $this->fail(sprintf('Fixture "%s" not found!', $fixtureFilename));
         }
-        $response = $messageFactory->fromMessage(file_get_contents($fixtureFilename));
+        $response = new Response(200, array(), file_get_contents($fixtureFilename));
 
         $result = array();
         try {
-            $result = $response->json();
-        } catch (\GuzzleHttp\Exception\ParseException $exception) {
+            $result = (array) \json_decode($response->getBody(), true);
+        } catch (RuntimeException $exception) {
             $this->fail(sprintf('Fixture "%s" does not contain a valid JSON body!', $fixtureFilename));
         }
 
