@@ -11,12 +11,15 @@ namespace Dkd\PhpCmis\Test\Unit\Bindings\Browser;
  */
 
 use Dkd\PhpCmis\Bindings\Browser\ObjectService;
+use Dkd\PhpCmis\Bindings\CmisBindingsHelper;
 use Dkd\PhpCmis\Constants;
+use Dkd\PhpCmis\Converter\JsonConverter;
 use Dkd\PhpCmis\Data\AclInterface;
 use Dkd\PhpCmis\Data\ExtensionDataInterface;
 use Dkd\PhpCmis\Data\PropertiesInterface;
 use Dkd\PhpCmis\DataObjects\AccessControlEntry;
 use Dkd\PhpCmis\DataObjects\AccessControlList;
+use Dkd\PhpCmis\DataObjects\FailedToDeleteData;
 use Dkd\PhpCmis\DataObjects\ObjectData;
 use Dkd\PhpCmis\DataObjects\Principal;
 use Dkd\PhpCmis\DataObjects\Properties;
@@ -27,14 +30,14 @@ use Dkd\PhpCmis\Enum\IncludeRelationships;
 use Dkd\PhpCmis\Enum\UnfileObject;
 use Dkd\PhpCmis\Enum\VersioningState;
 use Dkd\PhpCmis\SessionParameter;
-use GuzzleHttp\Post\PostFile;
+use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Stream\StreamInterface;
 use League\Url\Url;
 use PHPUnit_Framework_MockObject_MockObject;
 
 class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
 {
-    const CLASS_TO_TEST = '\\Dkd\\PhpCmis\\Bindings\\Browser\\ObjectService';
+    const CLASS_TO_TEST = ObjectService::class;
 
     /**
      * @dataProvider getObjectDataProvider
@@ -61,8 +64,8 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
     ) {
         $responseData = array('foo' => 'bar');
         $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
-        )->setMethods(array('json'))->getMock();
-        $responseMock->expects($this->any())->method('json')->willReturn($responseData);
+        )->setMethods(array('getBody'))->getMock();
+        $responseMock->expects($this->any())->method('getBody')->willReturn(json_encode($responseData));
 
         $dummyObjectData = new ObjectData();
         $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
@@ -185,14 +188,14 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         AclInterface $removeAces = null
     ) {
         $responseData = array('foo' => 'bar');
-        $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
-        )->setMethods(array('json'))->getMock();
-        $responseMock->expects($this->any())->method('json')->willReturn($responseData);
+        $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
+        )->setMethods(array('getBody'))->getMock();
+        $responseMock->expects($this->any())->method('getBody')->willReturn(json_encode($responseData));
 
-        $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
+        $jsonConverterMock = $this->getMockBuilder(JsonConverter::class)->setMethods(
             array('convertObject')
         )->getMock();
-        $dummyObjectData = $this->getMockBuilder('\\Dkd\\PhpCmis\\ObjectData\\ObjectData')->setMethods(
+        $dummyObjectData = $this->getMockBuilder(ObjectData::class)->setMethods(
             array('getId')
         )->getMock();
 
@@ -202,7 +205,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
             $dummyObjectData
         );
 
-        $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
+        $cmisBindingsHelperMock = $this->getMockBuilder(CmisBindingsHelper::class)->setMethods(
             array('getJsonConverter')
         )->getMock();
         $cmisBindingsHelperMock->expects($this->atLeastOnce())->method(
@@ -227,12 +230,8 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
             )->willReturn(Url::createFromUrl(self::BROWSER_URL_TEST));
         }
 
-        if ($expectedContentStream) {
-            $objectService->expects($this->once())->method('setContentStream')
-                ->with($repositoryId, 'foo-id', $this->anything());
-        } else {
-            $objectService->expects($this->never())->method('setContentStream');
-        }
+        $expectedPostData['body'] = $expectedContentStream;
+
         $objectService->expects($this->atLeastOnce())->method('post')->with(
             $expectedUrl,
             $expectedPostData
@@ -272,11 +271,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
             '/foo/bar/baz'
         );
 
-        $expectedPostStream = new PostFile(
-            'content',
-            $streamWithoutFileExtension,
-            'name.jpg'
-        );
+        $expectedPostStream = $this->getMockBuilder(StreamInterface::class)->disableOriginalConstructor()->getMock();
 
         $principal1 = new Principal('principalId1');
         $ace1 = new AccessControlEntry($principal1, array('permissionValue1', 'permissionValue2'));
@@ -387,7 +382,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
                         array('permissionValue7', 'permissionValue8')
                     ),
                 ),
-                $expectedPostStream,
+                $streamWithoutFileExtension,
                 'repositoryId',
                 $properties,
                 'folderId',
@@ -422,16 +417,16 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         AclInterface $removeAces = null
     ) {
         $responseData = array('foo' => 'bar');
-        $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
-        )->setMethods(array('json'))->getMock();
-        $responseMock->expects($this->any())->method('json')->willReturn($responseData);
+        $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
+        )->setMethods(array('getBody'))->getMock();
+        $responseMock->expects($this->any())->method('getBody')->willReturn(json_encode($responseData));
 
-        $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
+        $jsonConverterMock = $this->getMockBuilder(JsonConverter::class)->setMethods(
             array('convertObject')
         )->getMock();
 
         /** @var  ObjectData|PHPUnit_Framework_MockObject_MockObject $dummyObjectData */
-        $dummyObjectData = $this->getMockBuilder('\\Dkd\\PhpCmis\\ObjectData\\ObjectData')->setMethods(
+        $dummyObjectData = $this->getMockBuilder(ObjectData::class)->setMethods(
             array('getId')
         )->getMock();
         $dummyObjectData->expects($this->any())->method('getId')->willReturn('foo-id');
@@ -439,7 +434,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
             $dummyObjectData
         );
 
-        $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
+        $cmisBindingsHelperMock = $this->getMockBuilder(CmisBindingsHelper::class)->setMethods(
             array('getJsonConverter')
         )->getMock();
         $cmisBindingsHelperMock->expects($this->atLeastOnce())->method(
@@ -591,10 +586,10 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $allVersions = true
     ) {
         $responseMock = $this->getMockBuilder(
-            '\\GuzzleHttp\\Message\\Response'
+            Response::class
         )->disableOriginalConstructor()->getMock();
 
-        $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->getMock();
+        $cmisBindingsHelperMock = $this->getMockBuilder(CmisBindingsHelper::class)->getMock();
 
         /** @var ObjectService|PHPUnit_Framework_MockObject_MockObject $objectService */
         $objectService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
@@ -666,16 +661,16 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         ExtensionDataInterface $extension = null
     ) {
         $responseData = array('foo' => 'bar');
-        $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
-        )->setMethods(array('json'))->getMock();
-        $responseMock->expects($this->any())->method('json')->willReturn($responseData);
+        $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
+        )->setMethods(array('getBody'))->getMock();
+        $responseMock->expects($this->any())->method('getBody')->willReturn(json_encode($responseData));
 
-        $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
+        $jsonConverterMock = $this->getMockBuilder(JsonConverter::class)->setMethods(
             array('convertObject')
         )->getMock();
 
         /** @var  ObjectData|PHPUnit_Framework_MockObject_MockObject $dummyObjectData */
-        $dummyObjectData = $this->getMockBuilder('\\Dkd\\PhpCmis\\ObjectData\\ObjectData')->setMethods(
+        $dummyObjectData = $this->getMockBuilder(ObjectData::class)->setMethods(
             array('getId')
         )->getMock();
         $dummyObjectData->expects($this->any())->method('getId')->willReturn('foo-id');
@@ -683,7 +678,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
             $dummyObjectData
         );
 
-        $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
+        $cmisBindingsHelperMock = $this->getMockBuilder(CmisBindingsHelper::class)->setMethods(
             array('getJsonConverter')
         )->getMock();
         $cmisBindingsHelperMock->expects($this->atLeastOnce())->method(
@@ -756,19 +751,19 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         ExtensionDataInterface $extension = null
     ) {
         $responseData = array('foo' => 'bar');
-        $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
-        )->setMethods(array('json'))->getMock();
-        $responseMock->expects($this->any())->method('json')->willReturn($responseData);
+        $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
+        )->setMethods(array('getBody'))->getMock();
+        $responseMock->expects($this->any())->method('getBody')->willReturn(json_encode($responseData));
 
         $dummyProperties = new Properties();
-        $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
+        $jsonConverterMock = $this->getMockBuilder(JsonConverter::class)->setMethods(
             array('convertProperties')
         )->getMock();
         $jsonConverterMock->expects($this->once())->method('convertProperties')->with($responseData)->willReturn(
             $dummyProperties
         );
 
-        $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
+        $cmisBindingsHelperMock = $this->getMockBuilder(CmisBindingsHelper::class)->setMethods(
             array('getJsonConverter')
         )->getMock();
         $cmisBindingsHelperMock->expects($this->any())->method('getJsonConverter')->willReturn($jsonConverterMock);
@@ -848,16 +843,16 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         ExtensionDataInterface $extension = null
     ) {
         $responseData = array('foo' => 'bar');
-        $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
-        )->setMethods(array('json'))->getMock();
-        $responseMock->expects($this->any())->method('json')->willReturn($responseData);
+        $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
+        )->setMethods(array('getBody'))->getMock();
+        $responseMock->expects($this->any())->method('getBody')->willReturn(json_encode($responseData));
 
-        $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
+        $jsonConverterMock = $this->getMockBuilder(JsonConverter::class)->setMethods(
             array('convertObject')
         )->getMock();
 
         /** @var  ObjectData|PHPUnit_Framework_MockObject_MockObject $dummyObjectData */
-        $dummyObjectData = $this->getMockBuilder('\\Dkd\\PhpCmis\\ObjectData\\ObjectData')->setMethods(
+        $dummyObjectData = $this->getMockBuilder(ObjectData::class)->setMethods(
             array('getId')
         )->getMock();
         $dummyObjectData->expects($this->any())->method('getId')->willReturn('foo-id');
@@ -865,7 +860,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
             $dummyObjectData
         );
 
-        $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
+        $cmisBindingsHelperMock = $this->getMockBuilder(CmisBindingsHelper::class)->setMethods(
             array('getJsonConverter')
         )->getMock();
         $cmisBindingsHelperMock->expects($this->atLeastOnce())->method(
@@ -1029,14 +1024,14 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         ExtensionDataInterface $extension = null
     ) {
         $responseData = array('foo' => 'bar');
-        $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
-        )->setMethods(array('json'))->getMock();
-        $responseMock->expects($this->any())->method('json')->willReturn($responseData);
+        $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
+        )->setMethods(array('getBody'))->getMock();
+        $responseMock->expects($this->any())->method('getBody')->willReturn(json_encode($responseData));
 
-        $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
+        $jsonConverterMock = $this->getMockBuilder(JsonConverter::class)->setMethods(
             array('convertObject')
         )->getMock();
-        $dummyObjectData = $this->getMockBuilder('\\Dkd\\PhpCmis\\ObjectData\\ObjectData')->setMethods(
+        $dummyObjectData = $this->getMockBuilder(ObjectData::class)->setMethods(
             array('getId')
         )->getMock();
 
@@ -1046,7 +1041,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
             $dummyObjectData
         );
 
-        $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
+        $cmisBindingsHelperMock = $this->getMockBuilder(CmisBindingsHelper::class)->setMethods(
             array('getJsonConverter')
         )->getMock();
         $cmisBindingsHelperMock->expects($this->atLeastOnce())->method(
@@ -1071,9 +1066,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
             )->willReturn(Url::createFromUrl(self::BROWSER_URL_TEST));
         }
 
-        $objectService->expects($this->atLeastOnce())->method('post')
-            ->with($expectedUrl, $expectedPostData)
-            ->willReturn($responseMock);
+        $objectService->expects($this->atLeastOnce())->method('post')->with($expectedUrl)->willReturn($responseMock);
 
         $this->assertSame(
             $dummyObjectData->getId(),
@@ -1208,19 +1201,19 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $includeAcl = false
     ) {
         $responseData = array('foo' => 'bar');
-        $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
-        )->setMethods(array('json'))->getMock();
-        $responseMock->expects($this->once())->method('json')->willReturn($responseData);
+        $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
+        )->setMethods(array('getBody'))->getMock();
+        $responseMock->expects($this->once())->method('getBody')->willReturn(json_encode($responseData));
 
         $dummyObjectData = new ObjectData();
-        $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
+        $jsonConverterMock = $this->getMockBuilder(JsonConverter::class)->setMethods(
             array('convertObject')
         )->getMock();
         $jsonConverterMock->expects($this->any())->method('convertObject')->with($responseData)->willReturn(
             $dummyObjectData
         );
 
-        $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
+        $cmisBindingsHelperMock = $this->getMockBuilder(CmisBindingsHelper::class)->setMethods(
             array('getJsonConverter')
         )->getMock();
         $cmisBindingsHelperMock->expects($this->once())->method('getJsonConverter')->willReturn($jsonConverterMock);
@@ -1328,16 +1321,16 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $expectedUrl->setQuery($expectedPostData);
 
         $responseData = array('foo' => 'bar');
-        $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
-        )->setMethods(array('json'))->getMock();
-        $responseMock->expects($this->any())->method('json')->willReturn($responseData);
+        $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
+        )->setMethods(array('getBody'))->getMock();
+        $responseMock->expects($this->any())->method('getBody')->willReturn(json_encode($responseData));
 
-        $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
+        $jsonConverterMock = $this->getMockBuilder(JsonConverter::class)->setMethods(
             array('convertObject')
         )->getMock();
 
         /** @var  ObjectData|PHPUnit_Framework_MockObject_MockObject $dummyObjectData */
-        $dummyObjectData = $this->getMockBuilder('\\Dkd\\PhpCmis\\ObjectData\\ObjectData')->setMethods(
+        $dummyObjectData = $this->getMockBuilder(ObjectData::class)->setMethods(
             array('getId', 'getProperties')
         )->getMock();
 
@@ -1354,7 +1347,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
             $dummyObjectData
         );
 
-        $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
+        $cmisBindingsHelperMock = $this->getMockBuilder(CmisBindingsHelper::class)->setMethods(
             array('getJsonConverter')
         )->getMock();
         $cmisBindingsHelperMock->expects($this->atLeastOnce())->method(
@@ -1486,16 +1479,16 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $sessionParameterMap = array()
     ) {
         $responseData = array('foo' => 'bar');
-        $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
-        )->setMethods(array('json'))->getMock();
-        $responseMock->expects($this->any())->method('json')->willReturn($responseData);
+        $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
+        )->setMethods(array('getBody'))->getMock();
+        $responseMock->expects($this->any())->method('getBody')->willReturn(json_encode($responseData));
 
-        $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
+        $jsonConverterMock = $this->getMockBuilder(JsonConverter::class)->setMethods(
             array('convertObject')
         )->getMock();
 
         /** @var  ObjectData|PHPUnit_Framework_MockObject_MockObject $dummyObjectData */
-        $dummyObjectData = $this->getMockBuilder('\\Dkd\\PhpCmis\\ObjectData\\ObjectData')->setMethods(
+        $dummyObjectData = $this->getMockBuilder(ObjectData::class)->setMethods(
             array('getId', 'getProperties')
         )->getMock();
 
@@ -1512,7 +1505,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
             $dummyObjectData
         );
 
-        $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
+        $cmisBindingsHelperMock = $this->getMockBuilder(CmisBindingsHelper::class)->setMethods(
             array('getJsonConverter')
         )->getMock();
         $cmisBindingsHelperMock->expects($this->atLeastOnce())->method(
@@ -1560,7 +1553,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
      */
     public function setContentStreamDataProvider()
     {
-        $contentStream = $this->getMockForAbstractClass('\\GuzzleHttp\\Stream\\StreamInterface');
+        $contentStream = $this->getMockForAbstractClass(StreamInterface::class);
         return array(
             'Parameter set with defined changeToken and empty session parameters' => array(
                 Url::createFromUrl(
@@ -1624,16 +1617,16 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $sessionParameterMap = array()
     ) {
         $responseData = array('foo' => 'bar');
-        $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
-        )->setMethods(array('json'))->getMock();
-        $responseMock->expects($this->any())->method('json')->willReturn($responseData);
+        $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
+        )->setMethods(array('getBody'))->getMock();
+        $responseMock->expects($this->any())->method('getBody')->willReturn(json_encode($responseData));
 
-        $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
+        $jsonConverterMock = $this->getMockBuilder(JsonConverter::class)->setMethods(
             array('convertObject')
         )->getMock();
 
         /** @var  ObjectData|PHPUnit_Framework_MockObject_MockObject $dummyObjectData */
-        $dummyObjectData = $this->getMockBuilder('\\Dkd\\PhpCmis\\ObjectData\\ObjectData')->setMethods(
+        $dummyObjectData = $this->getMockBuilder(ObjectData::class)->setMethods(
             array('getId', 'getProperties')
         )->getMock();
 
@@ -1650,7 +1643,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
             $dummyObjectData
         );
 
-        $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
+        $cmisBindingsHelperMock = $this->getMockBuilder(CmisBindingsHelper::class)->setMethods(
             array('getJsonConverter')
         )->getMock();
         $cmisBindingsHelperMock->expects($this->atLeastOnce())->method(
@@ -1749,17 +1742,17 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $offset = null,
         $length = null
     ) {
-        $contentStream = $stream = $this->getMockForAbstractClass('\\GuzzleHttp\\Stream\\StreamInterface');
-        $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
+        $contentStream = $stream = $this->getMockForAbstractClass(StreamInterface::class);
+        $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
         )->setMethods(array('getBody'))->getMock();
         $responseMock->expects($this->any())->method('getBody')->willReturn($contentStream);
 
-        $httpInvoker = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
+        $httpInvoker = $this->getMockBuilder(CmisBindingsHelper::class)->setMethods(
             array('get')
         )->getMock();
         $httpInvoker->expects($this->any())->method('get')->willReturn($responseMock);
 
-        $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
+        $cmisBindingsHelperMock = $this->getMockBuilder(CmisBindingsHelper::class)->setMethods(
             array('getHttpInvoker')
         )->getMock();
         $cmisBindingsHelperMock->expects($this->any())->method('getHttpInvoker')->willReturn($httpInvoker);
@@ -1849,16 +1842,16 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $continueOnFailure = false
     ) {
         $responseData = array('foo' => 'bar');
-        $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
-        )->setMethods(array('json'))->getMock();
-        $responseMock->expects($this->any())->method('json')->willReturn($responseData);
+        $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
+        )->setMethods(array('getBody'))->getMock();
+        $responseMock->expects($this->any())->method('getBody')->willReturn(json_encode($responseData));
 
-        $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
+        $jsonConverterMock = $this->getMockBuilder(JsonConverter::class)->setMethods(
             array('convertFailedToDelete')
         )->getMock();
 
         /** @var  ObjectData|PHPUnit_Framework_MockObject_MockObject $dummyObjectData */
-        $dummyFailedToDeleteData = $this->getMock('\\Dkd\\PhpCmis\\ObjectData\\FailedToDeleteData');
+        $dummyFailedToDeleteData = $this->getMock(FailedToDeleteData::class);
 
         $jsonConverterMock->expects($this->atLeastOnce())->method(
             'convertFailedToDelete'
@@ -1965,19 +1958,19 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $skipCount = 0
     ) {
         $responseData = array('foo' => 'bar');
-        $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
-        )->setMethods(array('json'))->getMock();
-        $responseMock->expects($this->once())->method('json')->willReturn($responseData);
+        $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
+        )->setMethods(array('getBody'))->getMock();
+        $responseMock->expects($this->once())->method('getBody')->willReturn(json_encode($responseData));
 
         $dummyRenditionData = new RenditionData();
-        $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
+        $jsonConverterMock = $this->getMockBuilder(JsonConverter::class)->setMethods(
             array('convertRendition')
         )->getMock();
         $jsonConverterMock->expects($this->any())->method('convertRendition')->with($responseData)->willReturn(
             $dummyRenditionData
         );
 
-        $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
+        $cmisBindingsHelperMock = $this->getMockBuilder(CmisBindingsHelper::class)->setMethods(
             array('getJsonConverter')
         )->getMock();
         $cmisBindingsHelperMock->expects($this->once())->method('getJsonConverter')->willReturn($jsonConverterMock);

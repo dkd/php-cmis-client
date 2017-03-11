@@ -35,14 +35,17 @@ class VersioningService extends AbstractBrowserBindingService implements Version
     public function cancelCheckOut($repositoryId, & $objectId, ExtensionDataInterface $extension = null)
     {
 		$objectId = $this->getJsonConverter()->convertObject(
-			$this->post(
-				$this->getObjectUrl($repositoryId, $objectId),
-				$this->createQueryArray(
-					Constants::CMISACTION_CANCEL_CHECK_OUT,
-					array(),
-					$extension
-				)
-			)->json()
+            (array) \json_decode(
+                $this->post(
+                    $this->getObjectUrl($repositoryId, $objectId),
+                    $this->createQueryArray(
+                        Constants::CMISACTION_CANCEL_CHECK_OUT,
+                        array(),
+                        $extension
+                    )
+                )->getBody(),
+                true
+            )
 		);
     }
 
@@ -116,10 +119,13 @@ class VersioningService extends AbstractBrowserBindingService implements Version
 			$queryArray['content'] = $contentStream;
 		}
 		$objectId = $this->getJsonConverter()->convertObject(
-			$this->post(
-				$this->getObjectUrl($repositoryId, $objectId),
-				$queryArray
-			)->json()
+            (array) \json_decode(
+                $this->post(
+                    $this->getObjectUrl($repositoryId, $objectId),
+                    $queryArray
+                )->getBody(),
+                true
+            )
         )->getId();
     }
 
@@ -140,14 +146,17 @@ class VersioningService extends AbstractBrowserBindingService implements Version
         $contentCopied = null
     ) {
 		$objectData = $this->getJsonConverter()->convertObject(
-			$this->post(
-				$this->getObjectUrl($repositoryId, $objectId),
-				$this->createQueryArray(
-					Constants::CMISACTION_CHECK_OUT,
-					array(),
-					$extension
-				)
-			)->json()
+            (array) \json_decode(
+                $this->post(
+                    $this->getObjectUrl($repositoryId, $objectId),
+                    $this->createQueryArray(
+                        Constants::CMISACTION_CHECK_OUT,
+                        array(),
+                        $extension
+                    )
+                )->getBody(),
+                true
+            )
 		);
 		$objectId = $objectData->getId();
     }
@@ -176,9 +185,12 @@ class VersioningService extends AbstractBrowserBindingService implements Version
     ) {
         return $this->getJsonConverter()->convertObjectList(
 			array(
-				'objects' => $this->read(
-					$this->getObjectUrl($repositoryId, $objectId, Constants::SELECTOR_VERSIONS)
-				)->json()
+				'objects' => (array) \json_decode(
+                    $this->read(
+                        $this->getObjectUrl($repositoryId, $objectId, Constants::SELECTOR_VERSIONS)
+                    )->getBody(),
+                    true
+                )
 			)
 		)->getObjects();
     }
@@ -217,13 +229,13 @@ class VersioningService extends AbstractBrowserBindingService implements Version
         $includeAcl = false,
         ExtensionDataInterface $extension = null
     ) {
-		return $this->getJsonConverter()->convertObject(
-			reset(
-				$this->read(
-					$this->getObjectUrl($repositoryId, $objectId, Constants::SELECTOR_VERSIONS)
-				)->json()
-			)
-		);
+        $object = (array) \json_decode(
+            $this->read(
+                $this->getObjectUrl($repositoryId, $objectId, Constants::SELECTOR_VERSIONS)
+            )->getBody(),
+            true
+        );
+		return $this->getJsonConverter()->convertObject(reset($object));
     }
 
     /**

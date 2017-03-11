@@ -52,22 +52,22 @@ class CreatablePropertyTypesTest extends \PHPUnit_Framework_TestCase
             array(
                 'string',
                 'Argument of type "string" given but argument of type '
-                . '"\\Dkd\\PhpCmis\\Enum\\PropertyType" was expected.'
+                . '"Dkd\\PhpCmis\\Enum\\PropertyType" was expected.'
             ),
             array(
                 0,
                 'Argument of type "integer" given but argument of type '
-                . '"\\Dkd\\PhpCmis\\Enum\\PropertyType" was expected.'
+                . '"Dkd\\PhpCmis\\Enum\\PropertyType" was expected.'
             ),
             array(
                 array(),
                 'Argument of type "array" given but argument of type '
-                . '"\\Dkd\\PhpCmis\\Enum\\PropertyType" was expected.'
+                . '"Dkd\\PhpCmis\\Enum\\PropertyType" was expected.'
             ),
             array(
                 new \stdClass(),
                 'Argument of type "stdClass" given but argument of type '
-                . '"\\Dkd\\PhpCmis\\Enum\\PropertyType" was expected.'
+                . '"Dkd\\PhpCmis\\Enum\\PropertyType" was expected.'
             )
         );
     }

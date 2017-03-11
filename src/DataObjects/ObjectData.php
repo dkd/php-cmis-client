@@ -179,7 +179,7 @@ class ObjectData extends AbstractExtensionData implements ObjectDataInterface
     public function setRelationships(array $relationships)
     {
         foreach ($relationships as $relationship) {
-            $this->checkType('\\Dkd\\PhpCmis\\Data\\ObjectDataInterface', $relationship);
+            $this->checkType(ObjectDataInterface::class, $relationship);
         }
         $this->relationships = $relationships;
     }

@@ -20,7 +20,7 @@ use PHPUnit_Framework_MockObject_MockObject;
 
 class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
 {
-    const CLASS_TO_TEST = '\\Dkd\\PhpCmis\\Bindings\\Browser\\NavigationService';
+    const CLASS_TO_TEST = NavigationService::class;
 
     /**
      * @dataProvider getChildrenDataProvider
@@ -539,8 +539,8 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
     ) {
         $responseData = array('foo' => 'bar');
         $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
-        )->setMethods(array('json'))->getMock();
-        $responseMock->expects($this->any())->method('json')->willReturn($responseData);
+        )->setMethods(array('getBody'))->getMock();
+        $responseMock->expects($this->any())->method('getBody')->willReturn(json_encode($responseData));
 
         $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
             array($convertFunctionName)

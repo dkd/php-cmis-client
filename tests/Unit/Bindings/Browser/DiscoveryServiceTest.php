@@ -15,12 +15,13 @@ use Dkd\PhpCmis\Constants;
 use Dkd\PhpCmis\DataObjects\ObjectData;
 use Dkd\PhpCmis\DataObjects\ObjectList;
 use Dkd\PhpCmis\Enum\IncludeRelationships;
+use GuzzleHttp\Psr7\Response;
 use League\Url\Url;
 use PHPUnit_Framework_MockObject_MockObject;
 
 class DiscoveryServiceTest extends AbstractBrowserBindingServiceTestCase
 {
-    const CLASS_TO_TEST = '\\Dkd\\PhpCmis\\Bindings\\Browser\\DiscoveryService';
+    const CLASS_TO_TEST = DiscoveryService::class;
 
     /**
      * @dataProvider queryDataProvider
@@ -45,9 +46,9 @@ class DiscoveryServiceTest extends AbstractBrowserBindingServiceTestCase
         $maxItems = null,
         $skipCount = 0
     ) {
-        $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
-        )->setMethods(array('json'))->getMock();
-        $responseMock->expects($this->once())->method('json')->willReturn(array('foo' => 'bar'));
+        $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()
+            ->setMethods(array('getBody'))->getMock();
+        $responseMock->expects($this->once())->method('getbody')->willReturn('{}');
 
         $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->getMock();
 
@@ -107,9 +108,9 @@ class DiscoveryServiceTest extends AbstractBrowserBindingServiceTestCase
         $skipCount = 0
     ) {
         $responseData = array('foo' => 'bar');
-        $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
-        )->setMethods(array('json'))->getMock();
-        $responseMock->expects($this->once())->method('json')->willReturn($responseData);
+        $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
+        )->setMethods(array('getBody'))->getMock();
+        $responseMock->expects($this->once())->method('getBody')->willReturn(json_encode($responseData));
 
         $dummyObjectData = new ObjectData();
         $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
@@ -173,8 +174,8 @@ class DiscoveryServiceTest extends AbstractBrowserBindingServiceTestCase
     ) {
         $responseData = $this->getResponseFixtureContentAsArray('Cmis/v1.1/BrowserBinding/doQuery-response.log');
         $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
-        )->setMethods(array('json'))->getMock();
-        $responseMock->expects($this->once())->method('json')->willReturn($responseData);
+        )->setMethods(array('getBody'))->getMock();
+        $responseMock->expects($this->once())->method('getBody')->willReturn(json_encode($responseData));
 
         $dummyObjectData = new ObjectData();
 
@@ -301,8 +302,8 @@ class DiscoveryServiceTest extends AbstractBrowserBindingServiceTestCase
     ) {
         $responseData = array('foo' => 'bar');
         $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
-        )->setMethods(array('json'))->getMock();
-        $responseMock->expects($this->once())->method('json')->willReturn($responseData);
+        )->setMethods(array('getBody'))->getMock();
+        $responseMock->expects($this->once())->method('getBody')->willReturn(json_encode($responseData));
 
         $dummyObjectData = new ObjectData();
         $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
@@ -362,8 +363,8 @@ class DiscoveryServiceTest extends AbstractBrowserBindingServiceTestCase
             'Cmis/v1.1/BrowserBinding/getContentChanges-response.log'
         );
         $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
-        )->setMethods(array('json'))->getMock();
-        $responseMock->expects($this->once())->method('json')->willReturn($responseData);
+        )->setMethods(array('getBody'))->getMock();
+        $responseMock->expects($this->once())->method('getBody')->willReturn(json_encode($responseData));
 
         $dummyObjectData = new ObjectData();
 

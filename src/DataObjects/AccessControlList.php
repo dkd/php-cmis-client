@@ -50,7 +50,7 @@ class AccessControlList extends AbstractExtensionData implements MutableAclInter
     public function setAces(array $aces)
     {
         foreach ($aces as $ace) {
-            $this->checkType('\\Dkd\\PhpCmis\\Data\\AceInterface', $ace);
+            $this->checkType(AceInterface::class, $ace);
         }
 
         $this->aces = $aces;

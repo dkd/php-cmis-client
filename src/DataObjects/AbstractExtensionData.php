@@ -46,7 +46,7 @@ abstract class AbstractExtensionData implements ExtensionDataInterface
     public function setExtensions(array $extensions)
     {
         foreach ($extensions as $extension) {
-            $this->checkType('\\Dkd\\PhpCmis\\Data\\CmisExtensionElementInterface', $extension);
+            $this->checkType(CmisExtensionElementInterface::class, $extension);
         }
 
         $this->extensions = $extensions;

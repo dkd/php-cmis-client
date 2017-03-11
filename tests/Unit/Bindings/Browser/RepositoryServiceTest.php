@@ -11,10 +11,12 @@ namespace Dkd\PhpCmis\Test\Unit\Bindings\Browser;
  */
 
 use Dkd\PhpCmis\Bindings\Browser\RepositoryService;
+use Dkd\PhpCmis\Bindings\CmisBindingsHelper;
 use Dkd\PhpCmis\DataObjects\AbstractTypeDefinition;
 use Dkd\PhpCmis\DataObjects\ItemTypeDefinition;
 use Dkd\PhpCmis\DataObjects\RepositoryInfoBrowserBinding;
 use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
+use GuzzleHttp\Psr7\Response;
 use League\Url\Url;
 use PHPUnit_Framework_MockObject_MockObject;
 
@@ -117,8 +119,8 @@ class RepositoryServiceTest extends AbstractBrowserBindingServiceTestCase
     ) {
         $responseData = array('foo' => 'bar');
         $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
-        )->setMethods(array('json'))->getMock();
-        $responseMock->expects($this->any())->method('json')->willReturn($responseData);
+        )->setMethods(array('getBody'))->getMock();
+        $responseMock->expects($this->any())->method('getBody')->willReturn(json_encode($responseData));
 
         $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
             array('convertFromTypeDefinition','convertTypeDefinition')
@@ -194,10 +196,9 @@ class RepositoryServiceTest extends AbstractBrowserBindingServiceTestCase
         $repositoryId,
         $typeId
     ) {
-        $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
-        )->getMock();
+        $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->getMock();
 
-        $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->getMock();
+        $cmisBindingsHelperMock = $this->getMockBuilder(CmisBindingsHelper::class)->getMock();
 
         /** @var RepositoryService|PHPUnit_Framework_MockObject_MockObject $repositoryService */
         $repositoryService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
@@ -253,8 +254,8 @@ class RepositoryServiceTest extends AbstractBrowserBindingServiceTestCase
     ) {
         $responseData = array('foo' => 'bar');
         $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
-        )->setMethods(array('json'))->getMock();
-        $responseMock->expects($this->any())->method('json')->willReturn($responseData);
+        )->setMethods(array('getBody'))->getMock();
+        $responseMock->expects($this->any())->method('getBody')->willReturn(json_encode($responseData));
 
         $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
             array('convertFromTypeDefinition','convertTypeDefinition')

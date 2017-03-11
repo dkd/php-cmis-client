@@ -63,7 +63,7 @@ class AclCapabilities extends AbstractExtensionData implements AclCapabilitiesIn
     public function setPermissions(array $permissionDefinitionList)
     {
         foreach ($permissionDefinitionList as $permissionDefinition) {
-            $this->checkType('\\Dkd\\PhpCmis\\Definitions\\PermissionDefinitionInterface', $permissionDefinition);
+            $this->checkType(PermissionDefinitionInterface::class, $permissionDefinition);
         }
         $this->permissions = $permissionDefinitionList;
     }
@@ -90,7 +90,7 @@ class AclCapabilities extends AbstractExtensionData implements AclCapabilitiesIn
     public function setPermissionMapping(array $permissionMapping)
     {
         foreach ($permissionMapping as $permissionMappingItem) {
-            $this->checkType('\\Dkd\\PhpCmis\\Data\\PermissionMappingInterface', $permissionMappingItem);
+            $this->checkType(PermissionMappingInterface::class, $permissionMappingItem);
         }
         $this->permissionMapping = $permissionMapping;
     }

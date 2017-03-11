@@ -26,9 +26,9 @@ use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
 use Dkd\PhpCmis\ObjectServiceInterface;
 use Dkd\PhpCmis\PropertyIds;
 use Dkd\PhpCmis\SessionParameter;
-use GuzzleHttp\Post\PostFile;
 use GuzzleHttp\Stream\LimitStream;
 use GuzzleHttp\Message\Response;
+use GuzzleHttp\Stream\Stream;
 use GuzzleHttp\Stream\StreamInterface;
 
 /**
@@ -173,18 +173,6 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
             $url = $this->getObjectUrl($repositoryId, $folderId);
         }
 
-        // Guzzle gets the mime type for a file by the filename extension. Sometimes the filename does not contain
-        // the correct filename extension for example when a file is uploaded in php it gets a temporary name without
-        // a file extension. If the filename does not contain a file extension we use the given 'cmis:name' property
-        // as filename. See also https://github.com/guzzle/guzzle/issues/571
-        if ($contentStream !== null && pathinfo($contentStream->getMetadata('uri'), PATHINFO_EXTENSION) === '') {
-            $contentStream = new PostFile(
-                'content',
-                $contentStream,
-                $properties->getProperties()['cmis:name']->getFirstValue()
-            );
-        }
-
         $queryArray = $this->createQueryArray(
             Constants::CMISACTION_CREATE_DOCUMENT,
             $properties,
@@ -197,19 +185,22 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
             $queryArray[Constants::PARAM_VERSIONING_STATE] = (string) $versioningState;
         }
 
-        $responseData = $this->post(
-            $url,
-            $queryArray
-        )->json();
+        $responseData = (array) \json_decode(
+            $this->post(
+                $url,
+                array_merge(
+                    $queryArray,
+                    array('body' => $contentStream)
+                )
+            )->getBody(),
+            true
+        );
 
         $newObject = $this->getJsonConverter()->convertObject($responseData);
 
         if ($newObject) {
             $newObjectId = $newObject->getId();
             if ($contentStream) {
-                if ($contentStream instanceof PostFile) {
-                    $contentStream = $contentStream->getContent();
-                }
                 $this->setContentStream($repositoryId, $newObjectId, $contentStream);
             }
             return $newObjectId;
@@ -266,7 +257,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         if ($versioningState !== null) {
             $queryArray[Constants::PARAM_VERSIONING_STATE] = (string) $versioningState;
         }
-        $responseData = $this->post($url, $queryArray)->json();
+        $responseData = (array) \json_decode($this->post($url, $queryArray)->getBody(), true);
 
         $newObject = $this->getJsonConverter()->convertObject($responseData);
 
@@ -310,7 +301,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
             $extension
         );
 
-        $responseData = $this->post($url, $queryArray)->json();
+        $responseData = (array) \json_decode($this->post($url, $queryArray)->getBody(), true);
 
         $newObject = $this->getJsonConverter()->convertObject($responseData);
 
@@ -358,7 +349,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
             $extension
         );
 
-        $responseData = $this->post($url, $queryArray)->json();
+        $responseData = (array) \json_decode($this->post($url, $queryArray)->getBody(), true);
 
         $newObject = $this->getJsonConverter()->convertObject($responseData);
 
@@ -427,7 +418,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
             $extension
         );
 
-        $responseData = $this->post($url, $queryArray)->json();
+        $responseData = (array) \json_decode($this->post($url, $queryArray)->getBody(), true);
 
         $newObject = $this->getJsonConverter()->convertObject($responseData);
 
@@ -454,7 +445,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
             throw new CmisInvalidArgumentException('Object id must not be empty!');
         }
 
-        $this->flushCached($objectId);
+        $this->flushCached();
 
         $url = $this->getObjectUrl($repositoryId, $objectId);
 
@@ -469,7 +460,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
             $url->getQuery()->modify(array(Constants::PARAM_CHANGE_TOKEN => $changeToken));
         }
 
-        $responseData = $this->post($url)->json();
+        $responseData = (array) \json_decode($this->post($url)->getBody(), true);
         $newObject = $this->getJsonConverter()->convertObject($responseData);
 
         // $objectId was passed by reference. The value is changed here to new object id
@@ -509,7 +500,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         );
 
         $this->post($url);
-        $this->flushCached($objectId);
+        $this->flushCached();
     }
 
     /**
@@ -551,7 +542,12 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
 
         $response = $this->post($url);
 
-        return $this->getJsonConverter()->convertFailedToDelete((array) $response->json());
+        return $this->getJsonConverter()->convertFailedToDelete(
+            (array) (array) \json_decode(
+                $response->getBody(),
+                true
+            )
+        );
     }
 
     /**
@@ -684,7 +680,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
             $url->getQuery()->modify(array(Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships));
         }
 
-        $responseData = $this->read($url)->json();
+        $responseData = (array) \json_decode($this->read($url)->getBody(), true);
 
         return $this->cache(
             $cacheKey,
@@ -762,7 +758,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
             $url->getQuery()->modify(array(Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships));
         }
 
-        $responseData = $this->read($url)->json();
+        $responseData = (array) \json_decode($this->read($url)->getBody(), true);
 
         return $this->cache(
             $cacheKey,
@@ -812,7 +808,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
             $url->getQuery()->modify(array(Constants::PARAM_FILTER => (string) $filter));
         }
 
-        $responseData = $this->read($url)->json();
+        $responseData = (array) \json_decode($this->read($url)->getBody(), true);
 
         if ($this->getSuccinct()) {
             $objectData = $this->getJsonConverter()->convertSuccinctProperties($responseData);
@@ -870,7 +866,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
             $url->getQuery()->modify(array(Constants::PARAM_MAX_ITEMS => (string) $maxItems));
         }
 
-        $responseData = $this->read($url)->json();
+        $responseData = (array) \json_decode($this->read($url)->getBody(), true);
 
         return $this->getJsonConverter()->convertRenditions($responseData);
     }
@@ -893,7 +889,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         $sourceFolderId,
         ExtensionDataInterface $extension = null
     ) {
-        $this->flushCached($objectId);
+        $this->flushCached();
 
         $url = $this->getObjectUrl($repositoryId, $objectId);
         $url->getQuery()->modify(
@@ -905,7 +901,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
             )
         );
 
-        $responseData = $this->post($url)->json();
+        $responseData = (array) \json_decode($this->post($url)->getBody(), true);
         $newObject = $this->getJsonConverter()->convertObject($responseData);
 
         // $objectId was passed by reference. The value is changed here to new object id
@@ -941,7 +937,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
             throw new CmisInvalidArgumentException('Object id must not be empty!');
         }
 
-        $this->flushCached($objectId);
+        $this->flushCached();
 
         $url = $this->getObjectUrl($repositoryId, $objectId);
 
@@ -957,10 +953,10 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
             $url->getQuery()->modify(array(Constants::PARAM_CHANGE_TOKEN => $changeToken));
         }
 
-        $responseData = $this->post(
-            $url,
-            array('content' => $contentStream)
-        )->json();
+        $responseData = (array) \json_decode(
+            $this->post($url, array('content' => $contentStream))->getBody(),
+            true
+        );
 
         $newObject = $this->getJsonConverter()->convertObject($responseData);
 
@@ -999,7 +995,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
             throw new CmisInvalidArgumentException('Object id must not be empty!');
         }
 
-        $this->flushCached($objectId);
+        $this->flushCached();
 
         $url = $this->getObjectUrl($repositoryId, $objectId);
 
@@ -1010,7 +1006,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         $queryArray = $this->convertPropertiesToQueryArray($properties);
         $queryArray[Constants::CONTROL_CMISACTION] = Constants::CMISACTION_UPDATE_PROPERTIES;
         $queryArray[Constants::PARAM_SUCCINCT] = $this->getSuccinct() ? 'true' : 'false';
-        $responseData = $this->post($url, $queryArray)->json();
+        $responseData = (array) \json_decode($this->post($url, $queryArray)->getBody(), true);
         $newObject = $this->getJsonConverter()->convertObject($responseData);
 
         // $objectId was passed by reference. The value is changed here to new object id

@@ -46,7 +46,7 @@ class MultiFilingService extends AbstractBrowserBindingService implements MultiF
             Constants::PARAM_ALL_VERSIONS => $allVersions ? 'true' : 'false',
         );
 
-        $this->post($url, $queryArray)->json();
+        $this->post($url, $queryArray);
     }
 
     /**
@@ -74,6 +74,6 @@ class MultiFilingService extends AbstractBrowserBindingService implements MultiF
             Constants::PARAM_FOLDER_ID => $folderId,
         );
 
-        $this->post($url, $queryArray)->json();
+        $this->post($url, $queryArray);
     }
 }

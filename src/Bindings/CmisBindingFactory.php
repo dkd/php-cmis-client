@@ -10,9 +10,13 @@ namespace Dkd\PhpCmis\Bindings;
  * file that was distributed with this source code.
  */
 
+use Dkd\PhpCmis\Bindings\Browser\CmisBrowserBinding;
+use Dkd\PhpCmis\Converter\JsonConverter;
 use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
 use Dkd\PhpCmis\SessionParameter;
+use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\Cache;
+use GuzzleHttp\Client;
 
 /**
  * Default factory for a CMIS binding instance.
@@ -38,8 +42,7 @@ class CmisBindingFactory
     protected function validateCmisBrowserBindingParameters(array &$sessionParameters)
     {
         if (!isset($sessionParameters[SessionParameter::BINDING_CLASS])) {
-            $sessionParameters[SessionParameter::BINDING_CLASS] =
-                '\\Dkd\\PhpCmis\\Bindings\\Browser\\CmisBrowserBinding';
+            $sessionParameters[SessionParameter::BINDING_CLASS] = CmisBrowserBinding::class;
         }
         if (!isset($sessionParameters[SessionParameter::BROWSER_SUCCINCT])) {
             $sessionParameters[SessionParameter::BROWSER_SUCCINCT] = true;
@@ -65,13 +68,13 @@ class CmisBindingFactory
             $sessionParameters[SessionParameter::CACHE_SIZE_LINKS] = 400;
         }
         if (!isset($sessionParameters[SessionParameter::HTTP_INVOKER_CLASS])) {
-            $sessionParameters[SessionParameter::HTTP_INVOKER_CLASS] = '\\GuzzleHttp\\Client';
+            $sessionParameters[SessionParameter::HTTP_INVOKER_CLASS] = Client::class;
         }
         if (!isset($sessionParameters[SessionParameter::JSON_CONVERTER_CLASS])) {
-            $sessionParameters[SessionParameter::JSON_CONVERTER_CLASS] = '\\Dkd\\PhpCmis\\Converter\\JsonConverter';
+            $sessionParameters[SessionParameter::JSON_CONVERTER_CLASS] = JsonConverter::class;
         }
         if (!isset($sessionParameters[SessionParameter::TYPE_DEFINITION_CACHE_CLASS])) {
-            $sessionParameters[SessionParameter::TYPE_DEFINITION_CACHE_CLASS] = '\\Doctrine\\Common\\Cache\\ArrayCache';
+            $sessionParameters[SessionParameter::TYPE_DEFINITION_CACHE_CLASS] = ArrayCache::class;
         }
     }
 

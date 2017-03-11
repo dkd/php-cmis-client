@@ -72,7 +72,7 @@ class ObjectList extends AbstractExtensionData implements ObjectListInterface
     public function setObjects(array $objects)
     {
         foreach ($objects as $object) {
-            $this->checkType('\\Dkd\\PhpCmis\\Data\\ObjectDataInterface', $object);
+            $this->checkType(ObjectDataInterface::class, $object);
         }
 
         $this->objects = $objects;

@@ -51,7 +51,7 @@ class TypeDefinitionList extends AbstractExtensionData implements TypeDefinition
     public function setList(array $list)
     {
         foreach ($list as $item) {
-            $this->checkType('\\Dkd\\PhpCmis\\Definitions\\TypeDefinitionInterface', $item);
+            $this->checkType(TypeDefinitionInterface::class, $item);
         }
         $this->list = $list;
     }
