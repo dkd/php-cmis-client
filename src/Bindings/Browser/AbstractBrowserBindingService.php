@@ -180,7 +180,7 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
             }
         }
 
-        $repositoryInfos = array();
+        $repositoryInfos = [];
         $result = \json_decode(
             $this->read($url)->getBody(),
             true
@@ -416,7 +416,7 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
      * @throws CmisBaseException an more specific exception of this type could be thrown. For more details see
      * @see AbstractBrowserBindingService::convertStatusCode()
      */
-    protected function post(Url $url, $content = array(), array $headers = array())
+    protected function post(Url $url, $content = [], array $headers = [])
     {
         $headers['form_params'] = $content;
 
@@ -454,7 +454,7 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
 
         // build URL
         $url = $this->getRepositoryUrl($repositoryId, Constants::SELECTOR_TYPE_DEFINITION);
-        $url->getQuery()->modify(array(Constants::PARAM_TYPE_ID => $typeId));
+        $url->getQuery()->modify([Constants::PARAM_TYPE_ID => $typeId]);
 
         return $this->getJsonConverter()->convertTypeDefinition(
             (array) \json_decode(
@@ -505,11 +505,11 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
      */
     protected function convertPropertiesToQueryArray(PropertiesInterface $properties)
     {
-        $propertiesArray = array();
+        $propertiesArray = [];
 
         $propertyCounter = 0;
-        $propertiesArray[Constants::CONTROL_PROP_ID] = array();
-        $propertiesArray[Constants::CONTROL_PROP_VALUE] = array();
+        $propertiesArray[Constants::CONTROL_PROP_ID] = [];
+        $propertiesArray[Constants::CONTROL_PROP_VALUE] = [];
         foreach ($properties->getProperties() as $property) {
             $propertiesArray[Constants::CONTROL_PROP_ID][$propertyCounter] = $property->getId();
 
@@ -522,7 +522,7 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
                     );
             } elseif (count($propertyValues) > 1) {
                 $propertyValueCounter = 0;
-                $propertiesArray[Constants::CONTROL_PROP_VALUE][$propertyCounter] = array();
+                $propertiesArray[Constants::CONTROL_PROP_VALUE][$propertyCounter] = [];
                 foreach ($propertyValues as $propertyValue) {
                     $propertiesArray[Constants::CONTROL_PROP_VALUE][$propertyCounter][$propertyValueCounter] =
                         $this->convertPropertyValueToSimpleType(
@@ -572,7 +572,7 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
      */
     protected function convertAclToQueryArray(AclInterface $acl, $principalControl, $permissionControl)
     {
-        $acesArray = array();
+        $acesArray = [];
         $principalCounter = 0;
 
         foreach ($acl->getAces() as $ace) {
@@ -580,7 +580,7 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
             if ($ace->getPrincipal() !== null && $ace->getPrincipal()->getId() && !empty($permissions)) {
                 $acesArray[$principalControl][$principalCounter] = $ace->getPrincipal()->getId();
                 $permissionCounter = 0;
-                $acesArray[$permissionControl][$principalCounter] = array();
+                $acesArray[$permissionControl][$principalCounter] = [];
 
                 foreach ($permissions as $permission) {
                     $acesArray[$permissionControl][$principalCounter][$permissionCounter] = $permission;
@@ -602,7 +602,7 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
      */
     protected function convertPolicyIdArrayToQueryArray(array $policies)
     {
-        $policiesArray = array();
+        $policiesArray = [];
         $policyCounter = 0;
 
         foreach ($policies as $policy) {
@@ -711,7 +711,7 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
     {
         $result = $this->getRepositoryUrlCache()->getObjectUrl($repositoryId, $documentId, Constants::SELECTOR_CONTENT);
         if ($result !== null) {
-            $result->getQuery()->modify(array(Constants::PARAM_STREAM_ID => $streamId));
+            $result->getQuery()->modify([Constants::PARAM_STREAM_ID => $streamId]);
             $result = (string) $result;
         }
         return $result;

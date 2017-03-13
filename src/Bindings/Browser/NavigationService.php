@@ -62,29 +62,29 @@ class NavigationService extends AbstractBrowserBindingService implements Navigat
     ) {
         $url = $this->getObjectUrl($repositoryId, $folderId, Constants::SELECTOR_CHECKEDOUT);
         $url->getQuery()->modify(
-            array(
+            [
                 Constants::PARAM_ALLOWABLE_ACTIONS => $includeAllowableActions ? 'true' : 'false',
                 Constants::PARAM_RENDITION_FILTER => $renditionFilter,
                 Constants::PARAM_SKIP_COUNT => (string) $skipCount,
                 Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
                 Constants::PARAM_DATETIME_FORMAT => (string) $this->getDateTimeFormat()
-            )
+            ]
         );
 
         if (!empty($filter)) {
-            $url->getQuery()->modify(array(Constants::PARAM_FILTER => (string) $filter));
+            $url->getQuery()->modify([Constants::PARAM_FILTER => (string) $filter]);
         }
 
         if (!empty($orderBy)) {
-            $url->getQuery()->modify(array(Constants::PARAM_ORDER_BY => $orderBy));
+            $url->getQuery()->modify([Constants::PARAM_ORDER_BY => $orderBy]);
         }
 
         if ($maxItems > 0) {
-            $url->getQuery()->modify(array(Constants::PARAM_MAX_ITEMS => (string) $maxItems));
+            $url->getQuery()->modify([Constants::PARAM_MAX_ITEMS => (string) $maxItems]);
         }
 
         if ($includeRelationships !== null) {
-            $url->getQuery()->modify(array(Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships));
+            $url->getQuery()->modify([Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships]);
         }
 
         $responseData = (array) \json_decode($this->read($url)->getBody(), true);
@@ -133,30 +133,30 @@ class NavigationService extends AbstractBrowserBindingService implements Navigat
     ) {
         $url = $this->getObjectUrl($repositoryId, $folderId, Constants::SELECTOR_CHILDREN);
         $url->getQuery()->modify(
-            array(
+            [
                 Constants::PARAM_ALLOWABLE_ACTIONS => $includeAllowableActions ? 'true' : 'false',
                 Constants::PARAM_RENDITION_FILTER => $renditionFilter,
                 Constants::PARAM_PATH_SEGMENT => $includePathSegment ? 'true' : 'false',
                 Constants::PARAM_SKIP_COUNT => (string) $skipCount,
                 Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
                 Constants::PARAM_DATETIME_FORMAT => (string) $this->getDateTimeFormat()
-            )
+            ]
         );
 
         if (!empty($filter)) {
-            $url->getQuery()->modify(array(Constants::PARAM_FILTER => (string) $filter));
+            $url->getQuery()->modify([Constants::PARAM_FILTER => (string) $filter]);
         }
 
         if (!empty($orderBy)) {
-            $url->getQuery()->modify(array(Constants::PARAM_ORDER_BY => $orderBy));
+            $url->getQuery()->modify([Constants::PARAM_ORDER_BY => $orderBy]);
         }
 
         if ($maxItems > 0) {
-            $url->getQuery()->modify(array(Constants::PARAM_MAX_ITEMS => (string) $maxItems));
+            $url->getQuery()->modify([Constants::PARAM_MAX_ITEMS => (string) $maxItems]);
         }
 
         if ($includeRelationships !== null) {
-            $url->getQuery()->modify(array(Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships));
+            $url->getQuery()->modify([Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships]);
         }
 
         $responseData = (array) \json_decode($this->read($url)->getBody(), true);
@@ -197,22 +197,22 @@ class NavigationService extends AbstractBrowserBindingService implements Navigat
     ) {
         $url = $this->getObjectUrl($repositoryId, $folderId, Constants::SELECTOR_DESCENDANTS);
         $url->getQuery()->modify(
-            array(
+            [
                 Constants::PARAM_DEPTH => (string) $depth,
                 Constants::PARAM_ALLOWABLE_ACTIONS => $includeAllowableActions ? 'true' : 'false',
                 Constants::PARAM_RENDITION_FILTER => $renditionFilter,
                 Constants::PARAM_PATH_SEGMENT => $includePathSegment ? 'true' : 'false',
                 Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
                 Constants::PARAM_DATETIME_FORMAT => (string) $this->getDateTimeFormat()
-            )
+            ]
         );
 
         if (!empty($filter)) {
-            $url->getQuery()->modify(array(Constants::PARAM_FILTER => (string) $filter));
+            $url->getQuery()->modify([Constants::PARAM_FILTER => (string) $filter]);
         }
 
         if ($includeRelationships !== null) {
-            $url->getQuery()->modify(array(Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships));
+            $url->getQuery()->modify([Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships]);
         }
 
         $responseData = (array) \json_decode($this->read($url)->getBody(), true);
@@ -239,14 +239,14 @@ class NavigationService extends AbstractBrowserBindingService implements Navigat
     ) {
         $url = $this->getObjectUrl($repositoryId, $folderId, Constants::SELECTOR_PARENT);
         $url->getQuery()->modify(
-            array(
+            [
                 Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
                 Constants::PARAM_DATETIME_FORMAT => (string) $this->getDateTimeFormat()
-            )
+            ]
         );
 
         if (!empty($filter)) {
-            $url->getQuery()->modify(array(Constants::PARAM_FILTER => (string) $filter));
+            $url->getQuery()->modify([Constants::PARAM_FILTER => (string) $filter]);
         }
 
         $responseData = (array) \json_decode($this->read($url)->getBody(), true);
@@ -287,22 +287,22 @@ class NavigationService extends AbstractBrowserBindingService implements Navigat
     ) {
         $url = $this->getObjectUrl($repositoryId, $folderId, Constants::SELECTOR_FOLDER_TREE);
         $url->getQuery()->modify(
-            array(
+            [
                 Constants::PARAM_DEPTH => (string) $depth,
                 Constants::PARAM_ALLOWABLE_ACTIONS => $includeAllowableActions ? 'true' : 'false',
                 Constants::PARAM_RENDITION_FILTER => $renditionFilter,
                 Constants::PARAM_PATH_SEGMENT => $includePathSegment ? 'true' : 'false',
                 Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
                 Constants::PARAM_DATETIME_FORMAT => (string) $this->getDateTimeFormat()
-            )
+            ]
         );
 
         if (!empty($filter)) {
-            $url->getQuery()->modify(array(Constants::PARAM_FILTER => (string) $filter));
+            $url->getQuery()->modify([Constants::PARAM_FILTER => (string) $filter]);
         }
 
         if ($includeRelationships !== null) {
-            $url->getQuery()->modify(array(Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships));
+            $url->getQuery()->modify([Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships]);
         }
 
         $responseData = (array) \json_decode($this->read($url)->getBody(), true);
@@ -341,21 +341,21 @@ class NavigationService extends AbstractBrowserBindingService implements Navigat
     ) {
         $url = $this->getObjectUrl($repositoryId, $objectId, Constants::SELECTOR_PARENTS);
         $url->getQuery()->modify(
-            array(
+            [
                 Constants::PARAM_ALLOWABLE_ACTIONS => $includeAllowableActions ? 'true' : 'false',
                 Constants::PARAM_RENDITION_FILTER => $renditionFilter,
                 Constants::PARAM_RELATIVE_PATH_SEGMENT => $includeRelativePathSegment ? 'true' : 'false',
                 Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
                 Constants::PARAM_DATETIME_FORMAT => (string) $this->getDateTimeFormat()
-            )
+            ]
         );
 
         if (!empty($filter)) {
-            $url->getQuery()->modify(array(Constants::PARAM_FILTER => (string) $filter));
+            $url->getQuery()->modify([Constants::PARAM_FILTER => (string) $filter]);
         }
 
         if ($includeRelationships !== null) {
-            $url->getQuery()->modify(array(Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships));
+            $url->getQuery()->modify([Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships]);
         }
 
         $responseData = (array) \json_decode($this->read($url)->getBody(), true);

@@ -85,7 +85,7 @@ class Session implements SessionInterface
     /**
      * @var array
      */
-    protected $parameters = array();
+    protected $parameters = [];
 
     /**
      * @var Cache
@@ -100,12 +100,12 @@ class Session implements SessionInterface
     /**
      * @var Updatability[]
      */
-    protected static $createUpdatability = array();
+    protected static $createUpdatability = [];
 
     /**
      * @var Updatability[]
      */
-    protected static $createAndCheckoutUpdatability = array();
+    protected static $createAndCheckoutUpdatability = [];
 
     /**
      * @param array $parameters
@@ -152,16 +152,16 @@ class Session implements SessionInterface
             $this->parameters[SessionParameter::REPOSITORY_ID]
         );
 
-        self::$createUpdatability = array(
+        self::$createUpdatability = [
             Updatability::cast(Updatability::ONCREATE),
             Updatability::cast(Updatability::READWRITE)
-        );
+        ];
 
-        self::$createAndCheckoutUpdatability = array(
+        self::$createAndCheckoutUpdatability = [
             Updatability::cast(Updatability::ONCREATE),
             Updatability::cast(Updatability::READWRITE),
             Updatability::cast(Updatability::WHENCHECKEDOUT)
-        );
+        ];
     }
 
     /**
@@ -275,8 +275,8 @@ class Session implements SessionInterface
      */
     public function applyAcl(
         ObjectIdInterface $objectId,
-        $addAces = array(),
-        $removeAces = array(),
+        $addAces = [],
+        $removeAces = [],
         AclPropagation $aclPropagation = null
     ) {
         // TODO: Implement applyAcl() method.
@@ -358,9 +358,9 @@ class Session implements SessionInterface
         ObjectIdInterface $folderId = null,
         StreamInterface $contentStream = null,
         VersioningState $versioningState = null,
-        array $policies = array(),
-        array $addAces = array(),
-        array $removeAces = array()
+        array $policies = [],
+        array $addAces = [],
+        array $removeAces = []
     ) {
         if (empty($properties)) {
             throw new CmisInvalidArgumentException('Properties must not be empty!');
@@ -371,7 +371,7 @@ class Session implements SessionInterface
             $this->getObjectFactory()->convertProperties(
                 $properties,
                 null,
-                array(),
+                [],
                 self::$createAndCheckoutUpdatability
             ),
             $folderId === null ? null : $folderId->getId(),
@@ -424,12 +424,12 @@ class Session implements SessionInterface
      */
     public function createDocumentFromSource(
         ObjectIdInterface $source,
-        array $properties = array(),
+        array $properties = [],
         ObjectIdInterface $folderId = null,
         VersioningState $versioningState = null,
-        array $policies = array(),
-        array $addAces = array(),
-        array $removeAces = array()
+        array $policies = [],
+        array $addAces = [],
+        array $removeAces = []
     ) {
         if (!$source instanceof CmisObjectInterface) {
             $sourceObject = $this->getObject($source);
@@ -441,7 +441,7 @@ class Session implements SessionInterface
         $secondaryTypes = $sourceObject->getSecondaryTypes();
 
         if ($secondaryTypes === null) {
-            $secondaryTypes = array();
+            $secondaryTypes = [];
         }
 
         if (!BaseTypeId::cast($type->getBaseTypeId())->equals(BaseTypeId::CMIS_DOCUMENT)) {
@@ -487,9 +487,9 @@ class Session implements SessionInterface
     public function createFolder(
         array $properties,
         ObjectIdInterface $folderId,
-        array $policies = array(),
-        array $addAces = array(),
-        array $removeAces = array()
+        array $policies = [],
+        array $addAces = [],
+        array $removeAces = []
     ) {
         if (empty($properties)) {
             throw new CmisInvalidArgumentException('Properties must not be empty!');
@@ -523,9 +523,9 @@ class Session implements SessionInterface
     public function createItem(
         array $properties,
         ObjectIdInterface $folderId,
-        array $policies = array(),
-        array $addAces = array(),
-        array $removeAces = array()
+        array $policies = [],
+        array $addAces = [],
+        array $removeAces = []
     ) {
         if (empty($properties)) {
             throw new CmisInvalidArgumentException('Properties must not be empty!');
@@ -575,12 +575,12 @@ class Session implements SessionInterface
      * @return OperationContextInterface the newly created operation context object
      */
     public function createOperationContext(
-        $filter = array(),
+        $filter = [],
         $includeAcls = false,
         $includeAllowableActions = true,
         $includePolicies = false,
         IncludeRelationships $includeRelationships = null,
-        array $renditionFilter = array(),
+        array $renditionFilter = [],
         $includePathSegments = true,
         $orderBy = null,
         $cacheEnabled = false,
@@ -618,9 +618,9 @@ class Session implements SessionInterface
     public function createPolicy(
         array $properties,
         ObjectIdInterface $folderId,
-        array $policies = array(),
-        array $addAces = array(),
-        array $removeAces = array()
+        array $policies = [],
+        array $addAces = [],
+        array $removeAces = []
     ) {
         // TODO: Implement createPolicy() method.
     }
@@ -645,7 +645,7 @@ class Session implements SessionInterface
         array $selectPropertyIds,
         array $fromTypes,
         $whereClause = null,
-        array $orderByPropertyIds = array()
+        array $orderByPropertyIds = []
     ) {
         if (empty($selectPropertyIds)) {
             throw new CmisInvalidArgumentException('Select property IDs must not be empty');
@@ -669,9 +669,9 @@ class Session implements SessionInterface
      */
     public function createRelationship(
         array $properties,
-        array $policies = array(),
-        array $addAces = array(),
-        array $removeAces = array()
+        array $policies = [],
+        array $addAces = [],
+        array $removeAces = []
     ) {
         if (empty($properties)) {
             throw new CmisInvalidArgumentException('Properties must not be empty!');
@@ -679,7 +679,7 @@ class Session implements SessionInterface
 
         $newObjectId = $this->getBinding()->getObjectService()->createRelationship(
             $this->getRepositoryId(),
-            $this->getObjectFactory()->convertProperties($properties, null, array(), self::$createUpdatability),
+            $this->getObjectFactory()->convertProperties($properties, null, [], self::$createUpdatability),
             $this->getObjectFactory()->convertPolicies($policies),
             $this->getObjectFactory()->convertAces($addAces),
             $this->getObjectFactory()->convertAces($removeAces)
@@ -1142,7 +1142,7 @@ class Session implements SessionInterface
             $context = $this->getDefaultContext();
         }
 
-        $queryResults = array();
+        $queryResults = [];
         $skipCount = 0;
 
         $objectList = $this->getBinding()->getDiscoveryService()->query(
@@ -1214,7 +1214,7 @@ class Session implements SessionInterface
         $statement = 'SELECT ' . $querySelect . ' FROM ' . $typeDefinition->getQueryName() . $whereClause . $orderBy;
         $queryStatement = new QueryStatement($this, $statement);
 
-        $resultObjects = array();
+        $resultObjects = [];
         $skipCount = 0;
 
         $objectList = $this->getBinding()->getDiscoveryService()->query(

@@ -80,7 +80,7 @@ class ObjectFactory implements ObjectFactoryInterface
      * @param SessionInterface $session
      * @param string[] $parameters
      */
-    public function initialize(SessionInterface $session, $parameters = array())
+    public function initialize(SessionInterface $session, $parameters = [])
     {
         $this->session = $session;
     }
@@ -173,7 +173,7 @@ class ObjectFactory implements ObjectFactoryInterface
      */
     public function convertPolicies(array $policies)
     {
-        $result = array();
+        $result = [];
 
         foreach ($policies as $policy) {
             if ($policy->getId() !== null) {
@@ -206,7 +206,7 @@ class ObjectFactory implements ObjectFactoryInterface
         }
 
         // Iterate trough properties and convert them to Property objects
-        $result = array();
+        $result = [];
         foreach ($properties->getProperties() as $propertyKey => $propertyData) {
             // find property definition
             $apiProperty = $this->convertProperty($objectType, $secondaryTypes, $propertyData);
@@ -285,8 +285,8 @@ class ObjectFactory implements ObjectFactoryInterface
     public function convertProperties(
         array $properties,
         ObjectTypeInterface $type = null,
-        array $secondaryTypes = array(),
-        array $updatabilityFilter = array()
+        array $secondaryTypes = [],
+        array $updatabilityFilter = []
     ) {
         if (empty($properties)) {
             return null;
@@ -299,7 +299,7 @@ class ObjectFactory implements ObjectFactoryInterface
         }
 
         // get secondary types
-        $allSecondaryTypes = array();
+        $allSecondaryTypes = [];
         $secondaryTypeIds = $this->getValueFromArray(PropertyIds::SECONDARY_OBJECT_TYPE_IDS, $properties);
 
         if (is_array($secondaryTypeIds)) {
@@ -329,7 +329,7 @@ class ObjectFactory implements ObjectFactoryInterface
             $allSecondaryTypes = $secondaryTypes;
         }
 
-        $propertyList = array();
+        $propertyList = [];
 
         foreach ($properties as $propertyId => $propertyValue) {
             $value = $propertyValue;
@@ -379,7 +379,7 @@ class ObjectFactory implements ObjectFactoryInterface
                         sprintf('Property "%s" is not a single value property but single value given!', $propertyId)
                     );
                 }
-                $values = array();
+                $values = [];
                 $values[] = $value;
             }
 

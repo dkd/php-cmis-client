@@ -40,7 +40,7 @@ abstract class AbstractPropertyData extends AbstractExtensionData implements Mut
     /**
      * @var array
      */
-    protected $values = array();
+    protected $values = [];
 
     /**
      * @param string $id
@@ -134,7 +134,7 @@ abstract class AbstractPropertyData extends AbstractExtensionData implements Mut
      */
     public function setValues(array $values)
     {
-        $this->values = array();
+        $this->values = [];
         if (is_array($values)) {
             $this->values = array_values($values);
         }
@@ -145,7 +145,7 @@ abstract class AbstractPropertyData extends AbstractExtensionData implements Mut
      */
     final public function setValue($value)
     {
-        $this->setValues(array($value));
+        $this->setValues([$value]);
     }
 
     /**

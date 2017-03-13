@@ -60,7 +60,7 @@ interface VersioningServiceInterface
         PropertiesInterface $properties = null,
         StreamInterface $contentStream = null,
         $checkinComment = null,
-        array $policies = array(),
+        array $policies = [],
         AclInterface $addAces = null,
         AclInterface $removeAces = null,
         ExtensionDataInterface $extension = null

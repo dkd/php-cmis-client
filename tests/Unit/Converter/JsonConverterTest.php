@@ -94,20 +94,20 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->jsonConverter = new JsonConverter();
-        $this->cmisExtensionsDummy = array(new CmisExtensionElement(null, 'myCustomKey', array(), 'myCustomValue'));
+        $this->cmisExtensionsDummy = [new CmisExtensionElement(null, 'myCustomKey', [], 'myCustomValue')];
     }
 
     public function testConvertExtensionReturnsEmptyArrayIfGivenDataIsEmpty()
     {
-        $this->assertSame(array(), $this->jsonConverter->convertExtension(array()));
+        $this->assertSame([], $this->jsonConverter->convertExtension([]));
     }
 
     public function testConvertExtensionIgnoresValuesWithKeysThatAreGivenInCmisKeysParameter()
     {
-        $this->assertEmpty($this->jsonConverter->convertExtension(array('foo' => 'bar'), array('foo')));
+        $this->assertEmpty($this->jsonConverter->convertExtension(['foo' => 'bar'], ['foo']));
         $this->assertCount(
             1,
-            $this->jsonConverter->convertExtension(array('foo' => 'bar', 'bar' => 'foo'), array('foo'))
+            $this->jsonConverter->convertExtension(['foo' => 'bar', 'bar' => 'foo'], ['foo'])
         );
     }
 
@@ -117,20 +117,20 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
      */
     public function testConvertExtensionConvertsDataToCmisExtensionElementsAndReturnsArrayOfElements()
     {
-        $expected = array(
-            new CmisExtensionElement(null, 'cmis:foo', array(), 'foo'),
-            new CmisExtensionElement(null, 'cmis:bar', array(), 'bar'),
+        $expected = [
+            new CmisExtensionElement(null, 'cmis:foo', [], 'foo'),
+            new CmisExtensionElement(null, 'cmis:bar', [], 'bar'),
             new CmisExtensionElement(
                 null,
                 'cmis:baz',
-                array(),
+                [],
                 null,
-                array(new CmisExtensionElement(null, 'cmis:bazfoo', array(), 'bazfoo'))
+                [new CmisExtensionElement(null, 'cmis:bazfoo', [], 'bazfoo')]
             ),
-        );
+        ];
 
         $result = $this->jsonConverter->convertExtension(
-            array('cmis:foo' => 'foo', 'cmis:bar' => 'bar', 'cmis:baz' => array('cmis:bazfoo' => 'bazfoo'))
+            ['cmis:foo' => 'foo', 'cmis:bar' => 'bar', 'cmis:baz' => ['cmis:bazfoo' => 'bazfoo']]
         );
 
         $this->assertEquals($expected, $result);
@@ -138,7 +138,7 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
 
     public function testConvertRepositoryCapabilitiesReturnsNullIfGivenDataIsEmpty()
     {
-        $this->assertNull($this->jsonConverter->convertRepositoryCapabilities(array()));
+        $this->assertNull($this->jsonConverter->convertRepositoryCapabilities([]));
     }
 
     public function testConvertRepositoryCapabilitiesConvertsArrayToRepositoryCapabilitiesObject()
@@ -156,11 +156,11 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
         );
         $creatablePropertyTypes = new CreatablePropertyTypes();
         $creatablePropertyTypes->setCanCreate(
-            array(
+            [
                 PropertyType::cast(PropertyType::DATETIME),
                 PropertyType::cast(PropertyType::ID),
                 PropertyType::cast(PropertyType::HTML)
-            )
+            ]
         );
         $creatablePropertyTypes->setExtensions($this->cmisExtensionsDummy);
         $expectedCapabilities->setCreatablePropertyTypes($creatablePropertyTypes);
@@ -192,12 +192,12 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
 
     public function testConvertAllowableActionsReturnsNullIfEmptyArrayGiven()
     {
-        $this->assertNull($this->jsonConverter->convertAllowableActions(array()));
+        $this->assertNull($this->jsonConverter->convertAllowableActions([]));
     }
 
     public function testConvertAllowableActionsConvertsArrayToAllowableActionsObject()
     {
-        $actions = array(
+        $actions = [
             Action::cast(Action::CAN_GET_CONTENT_STREAM),
             Action::cast(Action::CAN_REMOVE_OBJECT_FROM_FOLDER),
             Action::cast(Action::CAN_MOVE_OBJECT),
@@ -208,7 +208,7 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
             Action::cast(Action::CAN_ADD_OBJECT_TO_FOLDER),
             Action::cast(Action::CAN_DELETE_OBJECT),
             Action::cast(Action::CAN_UPDATE_PROPERTIES)
-        );
+        ];
         $allowableActions = new AllowableActions();
         $allowableActions->setAllowableActions($actions);
         $allowableActions->setExtensions($this->cmisExtensionsDummy);
@@ -227,7 +227,7 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
     public function testConvertPolicyIdsConvertsArrayToPolicyIdsListObject()
     {
         $expectedPolicyIdsList = new PolicyIdList();
-        $expectedPolicyIdsList->setPolicyIds(array('id1', 'id2'));
+        $expectedPolicyIdsList->setPolicyIds(['id1', 'id2']);
         $expectedPolicyIdsList->setExtensions($this->cmisExtensionsDummy);
 
         $getObjectResponse = $this->getResponseFixtureContentAsArray('Cmis/v1.1/BrowserBinding/getObject-response.log');
@@ -240,7 +240,7 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
 
     public function testConvertAclReturnsNullIfEmptyArrayGiven()
     {
-        $this->assertNull($this->jsonConverter->convertAcl(array(), true));
+        $this->assertNull($this->jsonConverter->convertAcl([], true));
     }
 
     public function testConvertAclConvertsArrayToAclObject()
@@ -248,10 +248,10 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
 
         $principal = new Principal('anyone');
         $principal->setExtensions($this->cmisExtensionsDummy);
-        $ace = new AccessControlEntry($principal, array('cmis:all'));
+        $ace = new AccessControlEntry($principal, ['cmis:all']);
         $ace->setIsDirect(true);
         $ace->setExtensions($this->cmisExtensionsDummy);
-        $acl = new AccessControlList(array($ace));
+        $acl = new AccessControlList([$ace]);
         $acl->setIsExact(true);
         $acl->setExtensions($this->cmisExtensionsDummy);
 
@@ -283,7 +283,7 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
 
     public function testConvertRenditionReturnsNullIfEmptyDataArrayGiven()
     {
-        $this->assertNull($this->jsonConverter->convertRendition(array()));
+        $this->assertNull($this->jsonConverter->convertRendition([]));
     }
 
     public function testConvertRenditionConvertsArrayToRenditionObject()
@@ -309,7 +309,7 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
 
     public function testConvertRenditionsReturnsEmptyArrayIfEmptyDataArrayGiven()
     {
-        $this->assertSame(array(), $this->jsonConverter->convertRenditions(array()));
+        $this->assertSame([], $this->jsonConverter->convertRenditions([]));
     }
 
     public function testConvertRenditionsConvertsArrayToRenditionObjects()
@@ -341,14 +341,14 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
             $getObjectResponse[JSONConstants::JSON_OBJECT_RENDITIONS]
         );
 
-        $this->assertEquals(array($expectedRendition1, $expectedRendition2), $result);
+        $this->assertEquals([$expectedRendition1, $expectedRendition2], $result);
 
         return $result;
     }
 
     public function testConvertAclCapabilitiesReturnsNullIfEmptyArrayGiven()
     {
-        $this->assertNull($this->jsonConverter->convertAclCapabilities(array()));
+        $this->assertNull($this->jsonConverter->convertAclCapabilities([]));
     }
 
     public function testConvertAclCapabilitiesConvertsArrayToAclCapabilitiesObject()
@@ -358,14 +358,14 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
         $expectedAclCapabilities->setSupportedPermissions(SupportedPermissions::cast('basic'));
         $permissionMapping = new PermissionMapping();
         $permissionMapping->setKey('canGetDescendents.Folder');
-        $permissionMapping->setPermissions(array('cmis:read'));
+        $permissionMapping->setPermissions(['cmis:read']);
         $permissionMapping->setExtensions($this->cmisExtensionsDummy);
-        $expectedAclCapabilities->setPermissionMapping(array('canGetDescendents.Folder' => $permissionMapping));
+        $expectedAclCapabilities->setPermissionMapping(['canGetDescendents.Folder' => $permissionMapping]);
         $permissionDefinition = new PermissionDefinition();
         $permissionDefinition->setId('cmis:read');
         $permissionDefinition->setDescription('Read');
         $permissionDefinition->setExtensions($this->cmisExtensionsDummy);
-        $expectedAclCapabilities->setPermissions(array($permissionDefinition));
+        $expectedAclCapabilities->setPermissions([$permissionDefinition]);
         $expectedAclCapabilities->setExtensions($this->cmisExtensionsDummy);
 
         $repositoryInfoArray = current(
@@ -383,19 +383,19 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
 
     public function testConvertTypeDefinitionReturnsNullIfEmptyArrayGiven()
     {
-        $this->assertNull($this->jsonConverter->convertTypeDefinition(array()));
+        $this->assertNull($this->jsonConverter->convertTypeDefinition([]));
     }
 
     public function testConvertTypeDefinitionThrowsExceptionIfDataDoesNotContainTypeId()
     {
         $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException');
-        $this->assertNull($this->jsonConverter->convertTypeDefinition(array('foo' => 'bar')));
+        $this->assertNull($this->jsonConverter->convertTypeDefinition(['foo' => 'bar']));
     }
 
     public function testConvertTypeDefinitionThrowsExceptionIfDataDoesNotContainValidBaseTypeId()
     {
         $this->setExpectedException('\\Dkd\\Enumeration\\Exception\\InvalidEnumerationValueException');
-        $this->assertNull($this->jsonConverter->convertTypeDefinition(array(JSONConstants::JSON_TYPE_ID => 'bar')));
+        $this->assertNull($this->jsonConverter->convertTypeDefinition([JSONConstants::JSON_TYPE_ID => 'bar']));
     }
 
     /**
@@ -455,8 +455,8 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
 
         $relationshipTypeDefinition = new RelationshipTypeDefinition('cmis:relationship');
         $relationshipTypeDefinition->setBaseTypeId(BaseTypeId::cast(BaseTypeId::CMIS_RELATIONSHIP));
-        $relationshipTypeDefinition->setAllowedSourceTypeIds(array('foo'));
-        $relationshipTypeDefinition->setAllowedTargetTypeIds(array('bar'));
+        $relationshipTypeDefinition->setAllowedSourceTypeIds(['foo']);
+        $relationshipTypeDefinition->setAllowedTargetTypeIds(['bar']);
 
         $policyTypeDefinition = new PolicyTypeDefinition('cmis:policy');
         $policyTypeDefinition->setBaseTypeId(BaseTypeId::cast(BaseTypeId::CMIS_POLICY));
@@ -467,17 +467,17 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
         $secondaryTypeDefinition = new SecondaryTypeDefinition('cmis:secondary');
         $secondaryTypeDefinition->setBaseTypeId(BaseTypeId::cast(BaseTypeId::CMIS_SECONDARY));
 
-        return array(
-            'Folder type definition' => array(
+        return [
+            'Folder type definition' => [
                 $folderTypeDefinition,
-                array(
+                [
                     JSONConstants::JSON_TYPE_ID => 'cmis:folder',
                     JSONConstants::JSON_TYPE_BASE_ID => BaseTypeId::CMIS_FOLDER
-                )
-            ),
-            'Document type definition' => array(
+                ]
+            ],
+            'Document type definition' => [
                 $documentTypeDefinition,
-                array(
+                [
                     JSONConstants::JSON_TYPE_ID => 'cmis:document',
                     JSONConstants::JSON_TYPE_BASE_ID => BaseTypeId::CMIS_DOCUMENT,
                     JSONConstants::JSON_TYPE_CONTENTSTREAM_ALLOWED => ContentStreamAllowed::ALLOWED,
@@ -495,65 +495,65 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
                     JSONConstants::JSON_TYPE_FULLTEXT_INDEXED => true,
                     JSONConstants::JSON_TYPE_INCLUDE_IN_SUPERTYPE_QUERY => true,
                     JSONConstants::JSON_TYPE_QUERYABLE => true,
-                    JSONConstants::JSON_TYPE_TYPE_MUTABILITY => array(
+                    JSONConstants::JSON_TYPE_TYPE_MUTABILITY => [
                         JSONConstants::JSON_TYPE_TYPE_MUTABILITY_UPDATE => true,
                         JSONConstants::JSON_TYPE_TYPE_MUTABILITY_CREATE => true,
                         JSONConstants::JSON_TYPE_TYPE_MUTABILITY_DELETE => true
-                    ),
-                    JSONConstants::JSON_TYPE_PROPERTY_DEFINITIONS => array(
-                        array()
-                    )
-                )
-            ),
-            'Relationship type definition' => array(
+                    ],
+                    JSONConstants::JSON_TYPE_PROPERTY_DEFINITIONS => [
+                        []
+                    ]
+                ]
+            ],
+            'Relationship type definition' => [
                 $relationshipTypeDefinition,
-                array(
+                [
                     JSONConstants::JSON_TYPE_ID => 'cmis:relationship',
                     JSONConstants::JSON_TYPE_BASE_ID => 'cmis:relationship',
-                    JSONConstants::JSON_TYPE_ALLOWED_SOURCE_TYPES => array('foo', false, null, ''),
-                    JSONConstants::JSON_TYPE_ALLOWED_TARGET_TYPES => array('bar', false, null, ''),
-                )
-            ),
-            'Policy type definition' => array(
+                    JSONConstants::JSON_TYPE_ALLOWED_SOURCE_TYPES => ['foo', false, null, ''],
+                    JSONConstants::JSON_TYPE_ALLOWED_TARGET_TYPES => ['bar', false, null, ''],
+                ]
+            ],
+            'Policy type definition' => [
                 $policyTypeDefinition,
-                array(
+                [
                     JSONConstants::JSON_TYPE_ID => 'cmis:policy',
                     JSONConstants::JSON_TYPE_BASE_ID => 'cmis:policy'
-                )
-            ),
-            'Item type definition' => array(
+                ]
+            ],
+            'Item type definition' => [
                 $itemTypeDefinition,
-                array(
+                [
                     JSONConstants::JSON_TYPE_ID => 'cmis:item',
                     JSONConstants::JSON_TYPE_BASE_ID => 'cmis:item'
-                )
-            ),
-            'Secondary type definition' => array(
+                ]
+            ],
+            'Secondary type definition' => [
                 $secondaryTypeDefinition,
-                array(
+                [
                     JSONConstants::JSON_TYPE_ID => 'cmis:secondary',
                     JSONConstants::JSON_TYPE_BASE_ID => 'cmis:secondary'
-                )
-            )
-        );
+                ]
+            ]
+        ];
     }
 
     public function testConvertPropertiesReturnsNullIfEmptyDataGiven()
     {
-        $this->assertNull($this->jsonConverter->convertProperties(array()));
+        $this->assertNull($this->jsonConverter->convertProperties([]));
         $this->assertNull($this->jsonConverter->convertProperties(null));
     }
 
     public function testConvertPropertiesThrowsExceptionIfPropertyWithoutIdAndQueryNameGiven()
     {
         $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisRuntimeException');
-        $this->jsonConverter->convertProperties(array('foo' => array()));
+        $this->jsonConverter->convertProperties(['foo' => []]);
     }
 
     public function testConvertPropertiesThrowsExceptionIfPropertyWithInvalidTypeGiven()
     {
         $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisRuntimeException');
-        $this->jsonConverter->convertProperties(array('foo' => array('id' => 'id', 'type' => 'invalidType')));
+        $this->jsonConverter->convertProperties(['foo' => ['id' => 'id', 'type' => 'invalidType']]);
     }
 
     /**
@@ -583,10 +583,10 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
 
         $dateTimeMultiValueProperty = new PropertyDateTime(
             'DateTimePropMV',
-            array(
+            [
                 new \DateTime('@1342160128'),
                 new \DateTime('@1342170128')
-            )
+            ]
         );
         $dateTimeMultiValueProperty->setLocalName('DateTimePropMV');
         $dateTimeMultiValueProperty->setQueryName('DateTimePropMV');
@@ -605,7 +605,7 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
         $decimalProperty->setDisplayName('Sample Decimal Property');
         $properties->addProperty($decimalProperty);
 
-        $uriMultiValueProperty = new PropertyUri('UriPropMV', array('dummy value', 'dummy value'));
+        $uriMultiValueProperty = new PropertyUri('UriPropMV', ['dummy value', 'dummy value']);
         $uriMultiValueProperty->setLocalName('UriPropMV');
         $uriMultiValueProperty->setQueryName('UriPropMV');
         $uriMultiValueProperty->setDisplayName('Sample Uri multi-value Property');
@@ -617,7 +617,7 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
         $booleanProperty->setDisplayName('Sample Boolean Property');
         $properties->addProperty($booleanProperty);
 
-        $idMultiValueProperty = new PropertyId('IdPropMV', array('dummy value', 'dummy value'));
+        $idMultiValueProperty = new PropertyId('IdPropMV', ['dummy value', 'dummy value']);
         $idMultiValueProperty->setLocalName('IdPropMV');
         $idMultiValueProperty->setQueryName('IdPropMV');
         $idMultiValueProperty->setDisplayName('Sample Id Html multi-value Property');
@@ -629,7 +629,7 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
         $pickListProperty->setDisplayName('Sample Pick List Property');
         $properties->addProperty($pickListProperty);
 
-        $htmlMultiValueProperty = new PropertyHtml('HtmlPropMV', array('dummy value', 'dummy value'));
+        $htmlMultiValueProperty = new PropertyHtml('HtmlPropMV', ['dummy value', 'dummy value']);
         $htmlMultiValueProperty->setLocalName('HtmlPropMV');
         $htmlMultiValueProperty->setQueryName('HtmlPropMV');
         $htmlMultiValueProperty->setDisplayName('Sample Html multi-value Property');
@@ -647,7 +647,7 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
         $stringProperty->setDisplayName('Sample String Property');
         $properties->addProperty($stringProperty);
 
-        $decimalMultiValueProperty = new PropertyDecimal('DecimalPropMV', array(1.2, 2.3));
+        $decimalMultiValueProperty = new PropertyDecimal('DecimalPropMV', [1.2, 2.3]);
         $decimalMultiValueProperty->setLocalName('DecimalPropMV');
         $decimalMultiValueProperty->setQueryName('DecimalPropMV');
         $decimalMultiValueProperty->setDisplayName('Sample Decimal multi-value Property');
@@ -659,13 +659,13 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
         $dateTimeProperty->setDisplayName('Sample DateTime Property');
         $properties->addProperty($dateTimeProperty);
 
-        $booleanMultiValueProperty = new PropertyBoolean('BooleanPropMV', array(true, false));
+        $booleanMultiValueProperty = new PropertyBoolean('BooleanPropMV', [true, false]);
         $booleanMultiValueProperty->setLocalName('BooleanPropMV');
         $booleanMultiValueProperty->setQueryName('BooleanPropMV');
         $booleanMultiValueProperty->setDisplayName('Sample Boolean multi-value Property');
         $properties->addProperty($booleanMultiValueProperty);
 
-        $intMultiValueProperty = new PropertyInteger('IntPropMV', array(1, 2));
+        $intMultiValueProperty = new PropertyInteger('IntPropMV', [1, 2]);
         $intMultiValueProperty->setLocalName('IntPropMV');
         $intMultiValueProperty->setQueryName('IntPropMV');
         $intMultiValueProperty->setDisplayName('Sample Int multi-value Property');
@@ -731,12 +731,12 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
 
     public function testConvertObjectReturnsNullIfEmptyArrayGiven()
     {
-        $this->assertNull($this->jsonConverter->convertObject(array()));
+        $this->assertNull($this->jsonConverter->convertObject([]));
     }
 
     public function testConvertObjectsReturnsEmptyArrayIfEmptyArrayGiven()
     {
-        $this->assertCount(0, $this->jsonConverter->convertObjects(array()));
+        $this->assertCount(0, $this->jsonConverter->convertObjects([]));
     }
 
     /**
@@ -748,14 +748,14 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
     {
         $getObjectResponse = $this->getResponseFixtureContentAsArray('Cmis/v1.1/BrowserBinding/getObject-response.log');
 
-        $result = $this->jsonConverter->convertObjects(array($getObjectResponse, $getObjectResponse, null, array()));
+        $result = $this->jsonConverter->convertObjects([$getObjectResponse, $getObjectResponse, null, []]);
 
-        $this->assertEquals(array($object, $object), $result);
+        $this->assertEquals([$object, $object], $result);
     }
 
     public function testConvertRepositoryInfoReturnsNullIfGivenDataIsEmpty()
     {
-        $this->assertNull($this->jsonConverter->convertRepositoryInfo(array()));
+        $this->assertNull($this->jsonConverter->convertRepositoryInfo([]));
     }
 
     /**
@@ -795,11 +795,11 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
     public function testConvertDateTimeValuesConvertsGivenListToDatetimeObjects()
     {
         $method = $this->getMethod($this->jsonConverter, 'convertDateTimeValues');
-        $result = $method->invoke($this->jsonConverter, array(1416299867111, null, '2014-11-18 09:37:47'));
+        $result = $method->invoke($this->jsonConverter, [1416299867111, null, '2014-11-18 09:37:47']);
 
         $expectedDateTimeObject = new \DateTime('2014-11-18 09:37:47');
 
-        $this->assertEquals(array($expectedDateTimeObject, $expectedDateTimeObject), $result);
+        $this->assertEquals([$expectedDateTimeObject, $expectedDateTimeObject], $result);
     }
 
     public function testConvertDateTimeValueThrowsExceptionIfInvalidStringGiven()
@@ -813,7 +813,7 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisRuntimeException', '', 1416296901);
         $method = $this->getMethod($this->jsonConverter, 'convertDateTimeValue');
-        $method->invoke($this->jsonConverter, array());
+        $method->invoke($this->jsonConverter, []);
     }
 
     /**
@@ -844,7 +844,7 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
         $repositoryInfo->setCmisVersion(CmisVersion::cast('1.1'));
         $repositoryInfo->setChangesIncomplete(true);
         $repositoryInfo->setChangesOnType(
-            array(BaseTypeId::cast(BaseTypeId::CMIS_DOCUMENT))
+            [BaseTypeId::cast(BaseTypeId::CMIS_DOCUMENT)]
         );
         $repositoryInfo->setPrincipalIdAnonymous('anonymous');
         $repositoryInfo->setPrincipalIdAnyone('anyone');
@@ -857,9 +857,9 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
         $extensionFeature->setCommonName('commonName');
         $extensionFeature->setVersionLabel('versionLabel');
         $extensionFeature->setDescription('Description');
-        $extensionFeature->setFeatureData(array('foo' => 'bar'));
+        $extensionFeature->setFeatureData(['foo' => 'bar']);
         $extensionFeature->setExtensions($this->cmisExtensionsDummy);
-        $repositoryInfo->setExtensionFeatures(array($extensionFeature));
+        $repositoryInfo->setExtensionFeatures([$extensionFeature]);
 
         return $repositoryInfo;
     }
@@ -868,7 +868,7 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
     {
         /** @var  PHPUnit_Framework_MockObject_MockObject|JsonConverter $jsonConverterMock */
         $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
-            array('convertObject')
+            ['convertObject']
         )->getMock();
 
         $response = $this->getResponseFixtureContentAsArray('Cmis/v1.1/BrowserBinding/getChildren-response.log');
@@ -891,7 +891,7 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
     {
         /** @var  PHPUnit_Framework_MockObject_MockObject|JsonConverter $jsonConverterMock */
         $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
-            array('convertObjectInFolder')
+            ['convertObjectInFolder']
         )->getMock();
 
         $dummyObjectInFolderData = new ObjectInFolderData();
@@ -917,7 +917,7 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
     {
         /** @var  PHPUnit_Framework_MockObject_MockObject|JsonConverter $jsonConverterMock */
         $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
-            array('convertObjectParentData')
+            ['convertObjectParentData']
         )->getMock();
 
         $dummyObjectParentData = new ObjectParentData();
@@ -938,7 +938,7 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
     {
         /** @var  PHPUnit_Framework_MockObject_MockObject|JsonConverter $jsonConverterMock */
         $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
-            array('convertObject')
+            ['convertObject']
         )->getMock();
 
         $response = $this->getResponseFixtureContentAsArray('Cmis/v1.1/BrowserBinding/getObjectParents-response.log');
@@ -961,7 +961,7 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
     {
         /** @var  PHPUnit_Framework_MockObject_MockObject|JsonConverter $jsonConverterMock */
         $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
-            array('convertObject')
+            ['convertObject']
         )->getMock();
 
         $response = $this->getResponseFixtureContentAsArray('Cmis/v1.1/BrowserBinding/getContentChanges-response.log');
@@ -985,7 +985,7 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
     {
         /** @var  PHPUnit_Framework_MockObject_MockObject|JsonConverter $jsonConverterMock */
         $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
-            array('convertObject')
+            ['convertObject']
         )->getMock();
 
         $response = $this->getResponseFixtureContentAsArray('Cmis/v1.1/BrowserBinding/doQuery-response.log');
@@ -1009,7 +1009,7 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
     {
         /** @var  PHPUnit_Framework_MockObject_MockObject|JsonConverter $jsonConverterMock */
         $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
-            array('convertDescendant')
+            ['convertDescendant']
         )->getMock();
 
         $response = $this->getResponseFixtureContentAsArray('Cmis/v1.1/BrowserBinding/getDescendants-response.log');
@@ -1036,7 +1036,7 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
     {
         /** @var  PHPUnit_Framework_MockObject_MockObject|JsonConverter $jsonConverterMock */
         $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
-            array('convertObject')
+            ['convertObject']
         )->getMock();
 
         $response = $this->getResponseFixtureContentAsArray('Cmis/v1.1/BrowserBinding/getDescendants-response.log');
@@ -1101,7 +1101,7 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(
             '\\Dkd\\PhpCmis\\DataObjects\\FailedToDeleteData',
-            $this->jsonConverter->convertFailedToDelete(array())
+            $this->jsonConverter->convertFailedToDelete([])
         );
     }
 
@@ -1115,17 +1115,17 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
 
     public function testConvertFailedToDeleteConvertsArrayToFailedToDeleteObject()
     {
-        $ids = array('foo', 'bar');
+        $ids = ['foo', 'bar'];
         $failedToDelete = $this->jsonConverter->convertFailedToDelete(
-            array(
+            [
                 JSONConstants::JSON_FAILEDTODELETE_ID => $ids,
                 'customExtension' => 'foobar'
-            )
+            ]
         );
 
         $expectedObject = new FailedToDeleteData();
         $expectedObject->setIds($ids);
-        $expectedObject->setExtensions(array(new CmisExtensionElement('', 'customExtension', array(), 'foobar')));
+        $expectedObject->setExtensions([new CmisExtensionElement('', 'customExtension', [], 'foobar')]);
 
         $this->assertEquals($expectedObject, $failedToDelete);
     }
@@ -1142,27 +1142,27 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
 
     public function testPreparePropertyDefinitionDataConvertsValuesToExpectedValues()
     {
-        $input = array(
+        $input = [
             JSONConstants::JSON_PROPERTY_TYPE_PROPERTY_TYPE => 'boolean',
             JSONConstants::JSON_PROPERTY_TYPE_DEAULT_VALUE => true,
             JSONConstants::JSON_PROPERTY_TYPE_RESOLUTION => 'date',
             JSONConstants::JSON_PROPERTY_TYPE_PRECISION => '32',
             JSONConstants::JSON_PROPERTY_TYPE_CARDINALITY => 'single',
             JSONConstants::JSON_PROPERTY_TYPE_UPDATABILITY => 'readonly'
-        );
-        $expected = array(
+        ];
+        $expected = [
             JSONConstants::JSON_PROPERTY_TYPE_PROPERTY_TYPE => PropertyType::cast('boolean'),
-            JSONConstants::JSON_PROPERTY_TYPE_DEAULT_VALUE => array(true),
+            JSONConstants::JSON_PROPERTY_TYPE_DEAULT_VALUE => [true],
             JSONConstants::JSON_PROPERTY_TYPE_RESOLUTION => DateTimeResolution::cast('date'),
             JSONConstants::JSON_PROPERTY_TYPE_PRECISION => DecimalPrecision::cast('32'),
             JSONConstants::JSON_PROPERTY_TYPE_CARDINALITY => Cardinality::cast('single'),
             JSONConstants::JSON_PROPERTY_TYPE_UPDATABILITY => Updatability::cast('readonly')
-        );
+        ];
         $this->assertEquals(
             $expected,
             $this->getMethod(self::CLASS_TO_TEST, 'preparePropertyDefinitionData')->invokeArgs(
                 $this->jsonConverter,
-                array($input)
+                [$input]
             )
         );
     }
@@ -1177,12 +1177,12 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
         )['propertyDefinitions'];
         $expectedObjects = require(__DIR__ . '/../../Fixtures/Php/PropertyDefinitionsFixture.php');
 
-        $data = array(array(null, array()));
+        $data = [[null, []]];
         foreach ($propertyDefinitions as $key => $propertyDefinitionData) {
-            $data[] = array(
+            $data[] = [
                 $expectedObjects[$key],
                 $propertyDefinitionData
-            );
+            ];
         }
 
         return $data;

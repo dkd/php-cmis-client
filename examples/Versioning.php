@@ -10,22 +10,22 @@ if (!is_file(__DIR__ . '/conf/Configuration.php')) {
 $major = (boolean) isset($argv[1]) ? $argv[1] : false;
 
 $httpInvoker = new \GuzzleHttp\Client(
-	array(
-		'defaults' => array(
-			'auth' => array(
+	[
+		'defaults' => [
+			'auth' => [
 				CMIS_BROWSER_USER,
 				CMIS_BROWSER_PASSWORD
-			)
-		)
-	)
+			]
+		]
+	]
 );
 
-$parameters = array(
+$parameters = [
 	\Dkd\PhpCmis\SessionParameter::BINDING_TYPE => \Dkd\PhpCmis\Enum\BindingType::BROWSER,
 	\Dkd\PhpCmis\SessionParameter::BROWSER_URL => CMIS_BROWSER_URL,
 	\Dkd\PhpCmis\SessionParameter::BROWSER_SUCCINCT => false,
 	\Dkd\PhpCmis\SessionParameter::HTTP_INVOKER_OBJECT => $httpInvoker,
-);
+];
 
 $sessionFactory = new \Dkd\PhpCmis\SessionFactory();
 
@@ -57,10 +57,10 @@ try {
 	if (!$document) {
 		echo "[*] Create CMIS Document with file README.md\n";
 
-		$properties = array(
+		$properties = [
 			\Dkd\PhpCmis\PropertyIds::OBJECT_TYPE_ID => 'cmis:document',
 			\Dkd\PhpCmis\PropertyIds::NAME => 'Demo Object'
-		);
+		];
 
 		$document = $session->createDocument($properties, $rootFolder, $stream);
 		$document = $session->getObject($document);
@@ -92,9 +92,9 @@ try {
 
 	$checkedInDocumentId = $session->getObject($checkedOutDocumentId)->checkIn(
 		$major,
-		array(
+		[
 			\Dkd\PhpCmis\PropertyIds::DESCRIPTION => 'New description'
-		),
+		],
 		$stream,
 		'Checked out/in by system'
 	);

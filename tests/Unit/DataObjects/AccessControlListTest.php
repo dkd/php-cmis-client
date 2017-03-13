@@ -31,12 +31,12 @@ class AccessControlListTest extends \PHPUnit_Framework_TestCase
             '\\Dkd\\PhpCmis\\Data\\AceInterface'
         )->disableOriginalConstructor()->getMockForAbstractClass();
 
-        $this->acl = new AccessControlList(array($this->aceMock));
+        $this->acl = new AccessControlList([$this->aceMock]);
     }
 
     public function testSetAcesSetsProperty()
     {
-        $aces = array($this->aceMock);
+        $aces = [$this->aceMock];
         $this->acl->setAces($aces);
         $this->assertAttributeSame($aces, 'aces', $this->acl);
     }
@@ -44,7 +44,7 @@ class AccessControlListTest extends \PHPUnit_Framework_TestCase
     public function testSetAcesThrowsExceptionIfAGivenAceItemIsNotOfTypeAceInterface()
     {
         $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException');
-        $this->acl->setAces(array(new \stdClass()));
+        $this->acl->setAces([new \stdClass()]);
     }
 
     /**
@@ -52,14 +52,14 @@ class AccessControlListTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAcesReturnsPropertyValue()
     {
-        $aces = array($this->aceMock);
+        $aces = [$this->aceMock];
         $this->acl->setAces($aces);
         $this->assertSame($aces, $this->acl->getAces());
     }
 
     public function testConstructorSetsAces()
     {
-        $aces = array($this->aceMock);
+        $aces = [$this->aceMock];
         $acl = new AccessControlList($aces);
         $this->assertAttributeSame($aces, 'aces', $acl);
     }

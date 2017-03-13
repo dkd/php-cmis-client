@@ -26,18 +26,18 @@ class RepositoryInfoBrowserBindingTest extends RepositoryInfoTest
      */
     public function propertiesOfSutDataProvider()
     {
-        return array(
+        return [
             // string properties
-            array(
+            [
                 'propertyName' => 'repositoryUrl',
                 'validValue' => 'exampleString',
                 'invalidValue' => 123
-            ),
-            array(
+            ],
+            [
                 'propertyName' => 'rootUrl',
                 'validValue' => 'exampleString',
                 'invalidValue' => 123
-            )
-        );
+            ]
+        ];
     }
 }

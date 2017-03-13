@@ -27,33 +27,33 @@ class PropertyDecimalTest extends \PHPUnit_Framework_TestCase
 
     public function testSetValuesSetsProperty()
     {
-        $values = array(2.3, 5.0, null);
+        $values = [2.3, 5.0, null];
         $this->propertyDecimal->setValues($values);
         $this->assertAttributeSame($values, 'values', $this->propertyDecimal);
     }
 
     public function testSetValuesCastsIntegersSilentlyToDoublesAndSetsProperty()
     {
-        $values = array(2, 5);
+        $values = [2, 5];
         $this->propertyDecimal->setValues($values);
-        $this->assertAttributeSame(array(2.0, 5.0), 'values', $this->propertyDecimal);
+        $this->assertAttributeSame([2.0, 5.0], 'values', $this->propertyDecimal);
     }
 
     public function testSetValuesThrowsExceptionIfInvalidValuesGiven()
     {
         $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', '', 1413440336);
-        $this->propertyDecimal->setValues(array(''));
+        $this->propertyDecimal->setValues(['']);
     }
 
     public function testSetValueSetsValuesProperty()
     {
         $this->propertyDecimal->setValue(2.2);
-        $this->assertAttributeSame(array(2.2), 'values', $this->propertyDecimal);
+        $this->assertAttributeSame([2.2], 'values', $this->propertyDecimal);
     }
 
     public function testSetValueThrowsExceptionIfInvalidValueGiven()
     {
         $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', '', 1413440336);
-        $this->propertyDecimal->setValue(array(''));
+        $this->propertyDecimal->setValue(['']);
     }
 }

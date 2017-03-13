@@ -30,19 +30,19 @@ abstract class AbstractBrowserBindingServiceTestCase extends \PHPUnit_Framework_
      * @param array $sessionParameterMap
      * @return BindingSessionInterface|PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getSessionMock($sessionParameterMap = array())
+    protected function getSessionMock($sessionParameterMap = [])
     {
-        $map = array(
-            array(SessionParameter::BROWSER_SUCCINCT, null, false),
-            array(SessionParameter::BROWSER_URL, null, self::BROWSER_URL_TEST),
-            array(SessionParameter::TYPE_DEFINITION_CACHE_CLASS, null, '\\Doctrine\\Common\\Cache\\ArrayCache')
-        );
+        $map = [
+            [SessionParameter::BROWSER_SUCCINCT, null, false],
+            [SessionParameter::BROWSER_URL, null, self::BROWSER_URL_TEST],
+            [SessionParameter::TYPE_DEFINITION_CACHE_CLASS, null, '\\Doctrine\\Common\\Cache\\ArrayCache']
+        ];
 
         $map = array_merge($sessionParameterMap, $map);
 
         $sessionMock = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\Bindings\\BindingSessionInterface'
-        )->setMethods(array('get'))->getMockForAbstractClass();
+        )->setMethods(['get'])->getMockForAbstractClass();
 
         $sessionMock->expects($this->any())->method('get')->will($this->returnValueMap($map));
 

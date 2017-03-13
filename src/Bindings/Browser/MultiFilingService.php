@@ -39,12 +39,12 @@ class MultiFilingService extends AbstractBrowserBindingService implements MultiF
     {
         $url = $this->getObjectUrl($repositoryId, $objectId);
 
-        $queryArray = array(
+        $queryArray = [
             Constants::CONTROL_CMISACTION => Constants::CMISACTION_ADD_OBJECT_TO_FOLDER,
             Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
             Constants::PARAM_FOLDER_ID => $folderId,
             Constants::PARAM_ALL_VERSIONS => $allVersions ? 'true' : 'false',
-        );
+        ];
 
         $this->post($url, $queryArray);
     }
@@ -68,11 +68,11 @@ class MultiFilingService extends AbstractBrowserBindingService implements MultiF
     {
         $url = $this->getObjectUrl($repositoryId, $objectId);
 
-        $queryArray = array(
+        $queryArray = [
             Constants::CONTROL_CMISACTION => Constants::CMISACTION_REMOVE_OBJECT_FROM_FOLDER,
             Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
             Constants::PARAM_FOLDER_ID => $folderId,
-        );
+        ];
 
         $this->post($url, $queryArray);
     }

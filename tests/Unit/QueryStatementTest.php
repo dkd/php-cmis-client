@@ -57,7 +57,7 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
             $escapedString,
             $this->getMethod(self::CLASS_TO_TEST, 'escape')->invokeArgs(
                 $this->getQueryStatementObject(),
-                array($inputString)
+                [$inputString]
             )
         );
     }
@@ -69,18 +69,18 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
      */
     public function escapeDataProvider()
     {
-        return array(
-            array('\'', '\'\\\'\''),
-            array('\\', '\'\\\\\''),
-            array('\\\'', '\'\\\\\\\'\''),
-            array('\"', '\'\\\\"\''),
-            array('\%', '\'\\\\%\''),
-            array('\_', '\'\\\\_\''),
-            array('\*', '\'\\\\*\''),
-            array('\?', '\'\\\\?\''),
-            array('\\?', '\'\\\\?\''),
-            array('\foo', '\'\\\\foo\'')
-        );
+        return [
+            ['\'', '\'\\\'\''],
+            ['\\', '\'\\\\\''],
+            ['\\\'', '\'\\\\\\\'\''],
+            ['\"', '\'\\\\"\''],
+            ['\%', '\'\\\\%\''],
+            ['\_', '\'\\\\_\''],
+            ['\*', '\'\\\\*\''],
+            ['\?', '\'\\\\?\''],
+            ['\\?', '\'\\\\?\''],
+            ['\foo', '\'\\\\foo\'']
+        ];
     }
 
     /**
@@ -94,7 +94,7 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
             $escapedString,
             $this->getMethod(self::CLASS_TO_TEST, 'escapeLike')->invokeArgs(
                 $this->getQueryStatementObject(),
-                array($inputString)
+                [$inputString]
             )
         );
     }
@@ -106,18 +106,18 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
      */
     public function escapeLikeDataProvider()
     {
-        return array(
-            array('\'', '\'\\\'\''),
-            array('\\', '\'\\\\\''),
-            array('\\\'', '\'\\\\\\\'\''),
-            array('\"', '\'\\\\"\''),
-            array('\%', '\'\%\''),
-            array('\_', '\'\_\''),
-            array('\\\\%', '\'\\\\\\%\''),
-            array('\\\\_', '\'\\\\\\_\''),
-            array('\*', '\'\\\\*\''),
-            array('\?', '\'\\\\?\'')
-        );
+        return [
+            ['\'', '\'\\\'\''],
+            ['\\', '\'\\\\\''],
+            ['\\\'', '\'\\\\\\\'\''],
+            ['\"', '\'\\\\"\''],
+            ['\%', '\'\%\''],
+            ['\_', '\'\_\''],
+            ['\\\\%', '\'\\\\\\%\''],
+            ['\\\\_', '\'\\\\\\_\''],
+            ['\*', '\'\\\\*\''],
+            ['\?', '\'\\\\?\'']
+        ];
     }
 
     /**
@@ -131,7 +131,7 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
             $escapedString,
             $this->getMethod(self::CLASS_TO_TEST, 'escapeContains')->invokeArgs(
                 $this->getQueryStatementObject(),
-                array($inputString)
+                [$inputString]
             )
         );
     }
@@ -143,19 +143,19 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
      */
     public function escapeContainsDataProvider()
     {
-        return array(
-            array('\'', '\'\\\'\''),
-            array('\\', '\'\\\\\''),
-            array('\\\'', '\'\\\\\\\'\''),
-            array('"', '\'\"\''),
-            array('\"', '\'\\\\\\"\''),
-            array('\%', '\'\\\\%\''),
-            array('\_', '\'\\\\_\''),
-            array('\*', '\'\*\''),
-            array('\?', '\'\?\''),
-            array('\\\\*', '\'\\\\\\*\''),
-            array('\\\\?', '\'\\\\\\?\'')
-        );
+        return [
+            ['\'', '\'\\\'\''],
+            ['\\', '\'\\\\\''],
+            ['\\\'', '\'\\\\\\\'\''],
+            ['"', '\'\"\''],
+            ['\"', '\'\\\\\\"\''],
+            ['\%', '\'\\\\%\''],
+            ['\_', '\'\\\\_\''],
+            ['\*', '\'\*\''],
+            ['\?', '\'\?\''],
+            ['\\\\*', '\'\\\\\\*\''],
+            ['\\\\?', '\'\\\\\\?\'']
+        ];
     }
 
     public function testConstructorSetsSessionPropertyToGivenSession()
@@ -208,40 +208,40 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
      */
     public function getConstructorErrorArguments()
     {
-        return array(
-            'Statement null' => array(
-                array(null, array(), array(), null, array()),
+        return [
+            'Statement null' => [
+                [null, [], [], null, []],
                 1441286811
-            ),
-            'Statement empty' => array(
-                array('', array(), array(), null, array()),
+            ],
+            'Statement empty' => [
+                ['', [], [], null, []],
                 1441286811
-            ),
-            'Statement whitespace' => array(
-                array(' ', array(), array(), null, array()),
+            ],
+            'Statement whitespace' => [
+                [' ', [], [], null, []],
                 1441286811
-            ),
-            'Types empty' => array(
-                array(null, array('foobar'), array(), null, array()),
+            ],
+            'Types empty' => [
+                [null, ['foobar'], [], null, []],
                 1441286812
-            ),
-            'Manual statement cannot be used when properties are used' => array(
-                array('foobar', array('foobar'), array(), null, array()),
+            ],
+            'Manual statement cannot be used when properties are used' => [
+                ['foobar', ['foobar'], [], null, []],
                 1441286813
-            ),
-            'Manual statement cannot be used when types are used' => array(
-                array('foobar', array(), array('foobar'), null, array()),
+            ],
+            'Manual statement cannot be used when types are used' => [
+                ['foobar', [], ['foobar'], null, []],
                 1441286814
-            ),
-            'Manual statement cannot be used when clause is used' => array(
-                array('foobar', array(), array(), 'foobar', array()),
+            ],
+            'Manual statement cannot be used when clause is used' => [
+                ['foobar', [], [], 'foobar', []],
                 1441286815
-            ),
-            'Manual statement cannot be used when orderings are used' => array(
-                array('foobar', array(), array(), null, array('foobar')),
+            ],
+            'Manual statement cannot be used when orderings are used' => [
+                ['foobar', [], [], null, ['foobar']],
                 1441286816
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -253,11 +253,11 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
     {
         list ($p2, $p3, $p4, $p5, $p6) = $arguments;
         $type = $this->getMockBuilder('Dkd\\PhpCmis\\Definitions\\TypeDefinitionInterface')
-            ->setMethods(array('getQueryName'))
+            ->setMethods(['getQueryName'])
             ->getMockForAbstractClass();
         $type->expects($this->any())->method('getQueryName')->willReturn('t');
         $p1 = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')
-            ->setMethods(array('getTypeDefinition'))
+            ->setMethods(['getTypeDefinition'])
             ->getMockForAbstractClass();
         $p1->expects($this->any())->method('getTypeDefinition')->willReturn($type);
         $queryStatement = new QueryStatement($p1, $p2, $p3, $p4, $p5, $p6);
@@ -277,132 +277,132 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
         $typeDefinition1->setQueryName('t1-qn');
         $typeDefinition2 = new SecondaryTypeDefinition('t2');
         $typeDefinition2->setQueryName('t2-qn');
-        return array(
-            'Statement passed through if provided' => array(
-                array('foobar-statement', array(), array(), null, array()),
+        return [
+            'Statement passed through if provided' => [
+                ['foobar-statement', [], [], null, []],
                 'foobar-statement'
-            ),
-            'Single property from single type without clause without ordering' => array(
-                array(null, array('p1'), array('t1'), null, array()),
+            ],
+            'Single property from single type without clause without ordering' => [
+                [null, ['p1'], ['t1'], null, []],
                 'SELECT p1 FROM t primary'
-            ),
-            'Single property from single type with alias without clause without ordering' => array(
-                array(null, array('p1'), array('t1 alias1'), null, array()),
+            ],
+            'Single property from single type with alias without clause without ordering' => [
+                [null, ['p1'], ['t1 alias1'], null, []],
                 'SELECT p1 FROM t alias1'
-            ),
-            'Single property from single type with clause without ordering' => array(
-                array(null, array('p1'), array('t1'), '1=1', array()),
+            ],
+            'Single property from single type with clause without ordering' => [
+                [null, ['p1'], ['t1'], '1=1', []],
                 'SELECT p1 FROM t primary WHERE 1=1'
-            ),
-            'Single property from single type with clause with ordering' => array(
-                array(null, array('p1'), array('t1'), '1=1', array('p1 ASC')),
+            ],
+            'Single property from single type with clause with ordering' => [
+                [null, ['p1'], ['t1'], '1=1', ['p1 ASC']],
                 'SELECT p1 FROM t primary WHERE 1=1 ORDER BY p1 ASC'
-            ),
-            'Single property from two types without clause without ordering' => array(
-                array(null, array('p1'), array('t1', 't2'), null, array()),
+            ],
+            'Single property from two types without clause without ordering' => [
+                [null, ['p1'], ['t1', 't2'], null, []],
                 'SELECT p1 FROM t primary JOIN t AS a ON primary.cmis:objectId = a.cmis:objectId'
-            ),
-            'Two properties from single type without clause without ordering' => array(
-                array(null, array('p1', 'p2'), array('t1'), null, array()),
+            ],
+            'Two properties from single type without clause without ordering' => [
+                [null, ['p1', 'p2'], ['t1'], null, []],
                 'SELECT p1, p2 FROM t primary'
-            ),
-            'Two properties from two types without clause without ordering' => array(
-                array(null, array('p1', 'p2'), array('t1', 't2'), null, array()),
+            ],
+            'Two properties from two types without clause without ordering' => [
+                [null, ['p1', 'p2'], ['t1', 't2'], null, []],
                 'SELECT p1, p2 FROM t primary JOIN t AS a ON primary.cmis:objectId = a.cmis:objectId'
-            ),
-            'Two properties from two types with clause without ordering' => array(
-                array(null, array('p1', 'p2'), array('t1', 't2'), '1=1', array()),
+            ],
+            'Two properties from two types with clause without ordering' => [
+                [null, ['p1', 'p2'], ['t1', 't2'], '1=1', []],
                 'SELECT p1, p2 FROM t primary JOIN t AS a ON primary.cmis:objectId = a.cmis:objectId WHERE 1=1'
-            ),
-            'Two properties from two types with clause with ordering' => array(
-                array(null, array('p1', 'p2'), array('t1', 't2'), '1=1', array('p1 ASC')),
+            ],
+            'Two properties from two types with clause with ordering' => [
+                [null, ['p1', 'p2'], ['t1', 't2'], '1=1', ['p1 ASC']],
                 'SELECT p1, p2 FROM t primary JOIN t AS a ON primary.cmis:objectId = a.cmis:objectId WHERE 1=1' .
                     ' ORDER BY p1 ASC'
-            ),
-            'Multiple orderings without clause' => array(
-                array(null, array('p1', 'p2'), array('t1'), null, array('p1 ASC', 'p2 DESC')),
+            ],
+            'Multiple orderings without clause' => [
+                [null, ['p1', 'p2'], ['t1'], null, ['p1 ASC', 'p2 DESC']],
                 'SELECT p1, p2 FROM t primary ORDER BY p1 ASC, p2 DESC'
-            ),
-            'Multiple orderings with clause' => array(
-                array(null, array('p1', 'p2'), array('t1'), '1=1', array('p1 ASC', 'p2 DESC')),
+            ],
+            'Multiple orderings with clause' => [
+                [null, ['p1', 'p2'], ['t1'], '1=1', ['p1 ASC', 'p2 DESC']],
                 'SELECT p1, p2 FROM t primary WHERE 1=1 ORDER BY p1 ASC, p2 DESC'
-            ),
-            'Alias of tables provided for single table' => array(
-                array(null, array('p1'), array(array('t1', 'alias')), null, array()),
+            ],
+            'Alias of tables provided for single table' => [
+                [null, ['p1'], [['t1', 'alias']], null, []],
                 'SELECT p1 FROM t alias'
-            ),
-            'Alias of tables provided for multiple tables' => array(
-                array(null, array('p1'), array(array('t1', 'alias1'), array('t2', 'alias2')), null, array()),
+            ],
+            'Alias of tables provided for multiple tables' => [
+                [null, ['p1'], [['t1', 'alias1'], ['t2', 'alias2']], null, []],
                 'SELECT p1 FROM t alias1 JOIN t AS alias2 ON alias1.cmis:objectId = alias2.cmis:objectId'
-            ),
-            'TypeDefinition instance in property list' => array(
-                array(null, array($propertyDefinition1), array('t1'), null, array()),
+            ],
+            'TypeDefinition instance in property list' => [
+                [null, [$propertyDefinition1], ['t1'], null, []],
                 'SELECT p1-qn FROM t primary'
-            ),
-            'Multiple TypeDefinition instances in property list' => array(
-                array(null, array($propertyDefinition1, $propertyDefinition2), array('t1'), null, array()),
+            ],
+            'Multiple TypeDefinition instances in property list' => [
+                [null, [$propertyDefinition1, $propertyDefinition2], ['t1'], null, []],
                 'SELECT p1-qn, p2-qn FROM t primary'
-            ),
-            'TypeDefinition instance in types list' => array(
-                array(null, array('p1'), array($typeDefinition1), null, array()),
+            ],
+            'TypeDefinition instance in types list' => [
+                [null, ['p1'], [$typeDefinition1], null, []],
                 'SELECT p1 FROM t primary'
-            ),
-            'TypeDefinition instance with alias in types list' => array(
-                array(null, array('p1'), array(array($typeDefinition1, 'alias1')), null, array()),
+            ],
+            'TypeDefinition instance with alias in types list' => [
+                [null, ['p1'], [[$typeDefinition1, 'alias1']], null, []],
                 'SELECT p1 FROM t alias1'
-            ),
-            'Multiple TypeDefinition instances in types list' => array(
-                array(null, array('p1'), array($typeDefinition1, $typeDefinition2), null, array()),
+            ],
+            'Multiple TypeDefinition instances in types list' => [
+                [null, ['p1'], [$typeDefinition1, $typeDefinition2], null, []],
                 'SELECT p1 FROM t primary JOIN t AS a ON primary.cmis:objectId = a.cmis:objectId'
-            ),
-            'Multiple TypeDefinition instances with aliases in types list' => array(
-                array(
+            ],
+            'Multiple TypeDefinition instances with aliases in types list' => [
+                [
                     null,
-                    array('p1'),
-                    array(
-                        array($typeDefinition1, 'alias1'),
-                        array($typeDefinition2, 'alias2')
-                    ),
+                    ['p1'],
+                    [
+                        [$typeDefinition1, 'alias1'],
+                        [$typeDefinition2, 'alias2']
+                    ],
                     null,
-                    array()
-                ),
+                    []
+                ],
                 'SELECT p1 FROM t alias1 JOIN t AS alias2 ON alias1.cmis:objectId = alias2.cmis:objectId'
-            ),
-            'TypeDefinition instance in orderings list' => array(
-                array(null, array('p1'), array('t1'), null, array($propertyDefinition1)),
+            ],
+            'TypeDefinition instance in orderings list' => [
+                [null, ['p1'], ['t1'], null, [$propertyDefinition1]],
                 'SELECT p1 FROM t primary ORDER BY p1-qn ASC'
-            ),
-            'Multiple TypeDefinition instances in orderings list' => array(
-                array(null, array('p1'), array('t1'), null, array($propertyDefinition1, $propertyDefinition2)),
+            ],
+            'Multiple TypeDefinition instances in orderings list' => [
+                [null, ['p1'], ['t1'], null, [$propertyDefinition1, $propertyDefinition2]],
                 'SELECT p1 FROM t primary ORDER BY p1-qn ASC, p2-qn ASC'
-            ),
-            'Multiple TypeDefinition instances with direction in orderings list' => array(
-                array(
+            ],
+            'Multiple TypeDefinition instances with direction in orderings list' => [
+                [
                     null,
-                    array('p1'),
-                    array('t1'),
+                    ['p1'],
+                    ['t1'],
                     null,
-                    array(
-                        array($propertyDefinition1, 'DESC'),
-                        array($propertyDefinition2, 'DESC')
-                    ),
-                ),
+                    [
+                        [$propertyDefinition1, 'DESC'],
+                        [$propertyDefinition2, 'DESC']
+                    ],
+                ],
                 'SELECT p1 FROM t primary ORDER BY p1-qn DESC, p2-qn DESC'
-            ),
-        );
+            ],
+        ];
     }
 
     public function testGetQueryNameAndAliasForTypeReturnsInputIfObjectIsUnloadable()
     {
         $exception = new CmisObjectNotFoundException();
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')
-            ->setMethods(array('getTypeDefinition'))
+            ->setMethods(['getTypeDefinition'])
             ->getMockForAbstractClass();
         $sessionMock->expects($this->once())->method('getTypeDefinition')->willThrowException($exception);
         $queryStatement = new QueryStatement($sessionMock, 'foobar');
         $method = new \ReflectionMethod($queryStatement, 'getQueryNameAndAliasForType');
         $method->setAccessible(true);
-        $input = array('foobar-notfound', 'unused');
+        $input = ['foobar-notfound', 'unused'];
         $output = $method->invokeArgs($queryStatement, $input);
         $this->assertEquals($input, $output);
     }
@@ -427,7 +427,7 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
         $queryStatement->setBoolean($parameterIndex, $value);
 
         $this->assertAttributeSame(
-            array($parameterIndex => $expectedValue),
+            [$parameterIndex => $expectedValue],
             'parametersMap',
             $queryStatement
         );
@@ -440,10 +440,10 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
      */
     public function setBooleanDataProvider()
     {
-        return array(
-            array(1, true, 'TRUE'),
-            array(2, false, 'FALSE'),
-            array(
+        return [
+            [1, true, 'TRUE'],
+            [2, false, 'FALSE'],
+            [
                 '2',
                 false,
                 'FALSE',
@@ -453,8 +453,8 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
                         'Parameter index must be of type integer!'
                     );
                 }
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -477,7 +477,7 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
         $queryStatement->setDateTime($parameterIndex, $value);
 
         $this->assertAttributeSame(
-            array($parameterIndex => $expectedValue),
+            [$parameterIndex => $expectedValue],
             'parametersMap',
             $queryStatement
         );
@@ -490,10 +490,10 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
      */
     public function setDateTimeDataProvider()
     {
-        return array(
-            array(1, new \DateTime('2015-03-27 11:14:15.638276+02:00'), '2015-03-27T11:14:15.638276+02:00'),
-            array(2, new \DateTime('2015-02-26 10:21:25.523185+01:00'), '2015-02-26T10:21:25.523185+01:00'),
-            array(
+        return [
+            [1, new \DateTime('2015-03-27 11:14:15.638276+02:00'), '2015-03-27T11:14:15.638276+02:00'],
+            [2, new \DateTime('2015-02-26 10:21:25.523185+01:00'), '2015-02-26T10:21:25.523185+01:00'],
+            [
                 '2',
                 new \DateTime('2015-02-26 10:21:25.523185+01:00'),
                 '2015-02-26T10:21:25.523185+01:00',
@@ -503,8 +503,8 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
                         'Parameter index must be of type integer!'
                     );
                 }
-            )
-        );
+            ]
+        ];
     }
 
     /**
@@ -528,7 +528,7 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
         $queryStatement->setDateTimeTimestamp($parameterIndex, $value);
 
         $this->assertAttributeSame(
-            array($parameterIndex => $expectedValue),
+            [$parameterIndex => $expectedValue],
             'parametersMap',
             $queryStatement
         );
@@ -541,10 +541,10 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
      */
     public function setDateTimeTimestampDataProvider()
     {
-        return array(
-            array(1, new \DateTime('2015-03-27 11:14:15.638276+02:00'), 'TIMESTAMP 2015-03-27T11:14:15.638276+02:00'),
-            array(2, new \DateTime('2015-02-26 10:21:25.523185+01:00'), 'TIMESTAMP 2015-02-26T10:21:25.523185+01:00'),
-            array(
+        return [
+            [1, new \DateTime('2015-03-27 11:14:15.638276+02:00'), 'TIMESTAMP 2015-03-27T11:14:15.638276+02:00'],
+            [2, new \DateTime('2015-02-26 10:21:25.523185+01:00'), 'TIMESTAMP 2015-02-26T10:21:25.523185+01:00'],
+            [
                 '2',
                 new \DateTime('2015-02-26 10:21:25.523185+01:00'),
                 'TIMESTAMP 2015-02-26T10:21:25.523185+01:00',
@@ -554,8 +554,8 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
                         'Parameter index must be of type integer!'
                     );
                 }
-            )
-        );
+            ]
+        ];
     }
 
     /**
@@ -579,7 +579,7 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
         $queryStatement->setId($parameterIndex, $value);
 
         $this->assertAttributeSame(
-            array($parameterIndex => $expectedValue),
+            [$parameterIndex => $expectedValue],
             'parametersMap',
             $queryStatement
         );
@@ -602,11 +602,11 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()->getMock();
         $documentMock->expects($this->once())->method('getId')->willReturn('baz');
 
-        return array(
-            array(1, new ObjectId('foo'), '\'foo\''),
-            array(2, $folderMock, '\'bar\''),
-            array(3, $documentMock, '\'baz\''),
-            array(
+        return [
+            [1, new ObjectId('foo'), '\'foo\''],
+            [2, $folderMock, '\'bar\''],
+            [3, $documentMock, '\'baz\''],
+            [
                 '1',
                 new ObjectId('foo'),
                 '\'foo\'',
@@ -616,8 +616,8 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
                         'Parameter index must be of type integer!'
                     );
                 }
-            )
-        );
+            ]
+        ];
     }
 
     /**
@@ -641,7 +641,7 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
         $queryStatement->setNumber($parameterIndex, $value);
 
         $this->assertAttributeSame(
-            array($parameterIndex => $expectedValue),
+            [$parameterIndex => $expectedValue],
             'parametersMap',
             $queryStatement
         );
@@ -654,10 +654,10 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
      */
     public function setNumberDataProvider()
     {
-        return array(
-            array(1, 123, 123),
-            array(2, 456, 456),
-            array(
+        return [
+            [1, 123, 123],
+            [2, 456, 456],
+            [
                 2,
                 'abz',
                 456,
@@ -667,8 +667,8 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
                         'Number must be of type integer!'
                     );
                 }
-            ),
-            array(
+            ],
+            [
                 '1',
                 456,
                 456,
@@ -678,8 +678,8 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
                         'Parameter index must be of type integer!'
                     );
                 }
-            )
-        );
+            ]
+        ];
     }
 
     /**
@@ -703,7 +703,7 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
         $queryStatement->setProperty($parameterIndex, $value);
 
         $this->assertAttributeSame(
-            array($parameterIndex => $expectedValue),
+            [$parameterIndex => $expectedValue],
             'parametersMap',
             $queryStatement
         );
@@ -724,10 +724,10 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
 
         $propertyIdDefinitionWithEmptyQueryName = new PropertyIdDefinition('bar');
 
-        return array(
-            array(1, $propertyStringDefinition, '\'foo:bar\''),
-            array(2, $propertyIdDefinition, '\'bar:baz\''),
-            array(
+        return [
+            [1, $propertyStringDefinition, '\'foo:bar\''],
+            [2, $propertyIdDefinition, '\'bar:baz\''],
+            [
                 2,
                 $propertyIdDefinitionWithEmptyQueryName,
                 '\'bar:baz\'',
@@ -737,8 +737,8 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
                         'Property has no query name!'
                     );
                 }
-            ),
-            array(
+            ],
+            [
                 '2',
                 $propertyIdDefinition,
                 '\'bar:baz\'',
@@ -748,8 +748,8 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
                         'Parameter index must be of type integer!'
                     );
                 }
-            )
-        );
+            ]
+        ];
     }
 
     /**
@@ -773,7 +773,7 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
         $queryStatement->setString($parameterIndex, $value);
 
         $this->assertAttributeSame(
-            array($parameterIndex => $expectedValue),
+            [$parameterIndex => $expectedValue],
             'parametersMap',
             $queryStatement
         );
@@ -786,13 +786,13 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
      */
     public function setStringDataProvider()
     {
-        return array(
-            array(1, 'foo', '\'foo\''),
-            array(2, 'foo:bar', '\'foo:bar\''),
-            array(2, 'foo\'bar', '\'foo\\\'bar\''),
-            array(3, 'foo\bar\baz', '\'foo\\\\bar\\\\baz\''),
-            array(3, 'foo\\bar\\baz', '\'foo\\\\bar\\\\baz\''),
-            array(
+        return [
+            [1, 'foo', '\'foo\''],
+            [2, 'foo:bar', '\'foo:bar\''],
+            [2, 'foo\'bar', '\'foo\\\'bar\''],
+            [3, 'foo\bar\baz', '\'foo\\\\bar\\\\baz\''],
+            [3, 'foo\\bar\\baz', '\'foo\\\\bar\\\\baz\''],
+            [
                 3,
                 1,
                 '',
@@ -802,8 +802,8 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
                         'Parameter string must be of type string!'
                     );
                 }
-            ),
-            array(
+            ],
+            [
                 '3',
                 'foo\\bar\\baz',
                 '\'foo\\\\bar\\\\baz\'',
@@ -813,8 +813,8 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
                         'Parameter index must be of type integer!'
                     );
                 }
-            )
-        );
+            ]
+        ];
     }
 
     /**
@@ -837,7 +837,7 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
         $queryStatement->setStringContains($parameterIndex, $value);
 
         $this->assertAttributeSame(
-            array($parameterIndex => $expectedValue),
+            [$parameterIndex => $expectedValue],
             'parametersMap',
             $queryStatement
         );
@@ -850,16 +850,16 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
      */
     public function setStringContainsDataProvider()
     {
-        return array(
-            array(1, 'foo', '\'foo\''),
-            array(2, 'foo:bar', '\'foo:bar\''),
-            array(2, 'foo\'bar', '\'foo\\\'bar\''),
-            array(3, 'foo\bar\baz', '\'foo\\\\bar\\\\baz\''),
-            array(3, 'foo\*bar\\baz', '\'foo\\*bar\\\\baz\''),
-            array(3, 'foo\?"bar"', '\'foo\\?\\"bar\\"\''),
-            array(3, 'foo%bar\\baz', '\'foo%bar\\\\baz\''),
-            array(3, 'foo_?"bar"', '\'foo_?\\"bar\\"\''),
-            array(
+        return [
+            [1, 'foo', '\'foo\''],
+            [2, 'foo:bar', '\'foo:bar\''],
+            [2, 'foo\'bar', '\'foo\\\'bar\''],
+            [3, 'foo\bar\baz', '\'foo\\\\bar\\\\baz\''],
+            [3, 'foo\*bar\\baz', '\'foo\\*bar\\\\baz\''],
+            [3, 'foo\?"bar"', '\'foo\\?\\"bar\\"\''],
+            [3, 'foo%bar\\baz', '\'foo%bar\\\\baz\''],
+            [3, 'foo_?"bar"', '\'foo_?\\"bar\\"\''],
+            [
                 1,
                 1,
                 '',
@@ -869,8 +869,8 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
                         'Parameter string must be of type string!'
                     );
                 }
-            ),
-            array(
+            ],
+            [
                 '1',
                 'foo',
                 '\'foo\'',
@@ -880,8 +880,8 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
                         'Parameter index must be of type integer!'
                     );
                 }
-            )
-        );
+            ]
+        ];
     }
 
     /**
@@ -904,7 +904,7 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
         $queryStatement->setStringLike($parameterIndex, $value);
 
         $this->assertAttributeSame(
-            array($parameterIndex => $expectedValue),
+            [$parameterIndex => $expectedValue],
             'parametersMap',
             $queryStatement
         );
@@ -917,16 +917,16 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
      */
     public function setStringLikeDataProvider()
     {
-        return array(
-            array(1, 'foo', '\'foo\''),
-            array(2, 'foo:bar', '\'foo:bar\''),
-            array(2, 'foo\'bar', '\'foo\\\'bar\''),
-            array(3, 'foo\bar\baz', '\'foo\\\\bar\\\\baz\''),
-            array(3, 'foo\*bar\\baz', '\'foo\\\\*bar\\\\baz\''),
-            array(3, 'foo\?"bar"', '\'foo\\\\?"bar"\''),
-            array(3, 'foo%bar\%baz', '\'foo%bar\\%baz\''),
-            array(3, 'foo\_?"bar"', '\'foo\\_?"bar"\''),
-            array(
+        return [
+            [1, 'foo', '\'foo\''],
+            [2, 'foo:bar', '\'foo:bar\''],
+            [2, 'foo\'bar', '\'foo\\\'bar\''],
+            [3, 'foo\bar\baz', '\'foo\\\\bar\\\\baz\''],
+            [3, 'foo\*bar\\baz', '\'foo\\\\*bar\\\\baz\''],
+            [3, 'foo\?"bar"', '\'foo\\\\?"bar"\''],
+            [3, 'foo%bar\%baz', '\'foo%bar\\%baz\''],
+            [3, 'foo\_?"bar"', '\'foo\\_?"bar"\''],
+            [
                 1,
                 1,
                 '',
@@ -936,8 +936,8 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
                         'Parameter string must be of type string!'
                     );
                 }
-            ),
-            array(
+            ],
+            [
                 '1',
                 'foo',
                 '\'foo\'',
@@ -947,8 +947,8 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
                         'Parameter index must be of type integer!'
                     );
                 }
-            )
-        );
+            ]
+        ];
     }
 
     /**
@@ -972,7 +972,7 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
         $queryStatement->setType($parameterIndex, $value);
 
         $this->assertAttributeSame(
-            array($parameterIndex => $expectedValue),
+            [$parameterIndex => $expectedValue],
             'parametersMap',
             $queryStatement
         );
@@ -999,10 +999,10 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()->getMock();
         $documentTypeMock->expects($this->once())->method('getQueryName')->willReturn('bar:baz');
 
-        return array(
-            array(1, $folderTypeMock, '\'foo:bar\''),
-            array(2, $documentTypeMock, '\'bar:baz\''),
-            array(
+        return [
+            [1, $folderTypeMock, '\'foo:bar\''],
+            [2, $documentTypeMock, '\'bar:baz\''],
+            [
                 '1',
                 $folderTypeMock2,
                 '\'foo:bar\'',
@@ -1012,8 +1012,8 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
                         'Parameter index must be of type integer!'
                     );
                 }
-            )
-        );
+            ]
+        ];
     }
 
     /**
@@ -1044,30 +1044,30 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
      */
     public function toQueryStringDataProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 'SELECT * FROM foo:bar WHERE property1 = ? AND property2 > ? ',
-                array(
-                    'setString' => array(1, 'baz'),
-                    'setNumber' => array(2, 123)
-                ),
+                [
+                    'setString' => [1, 'baz'],
+                    'setNumber' => [2, 123]
+                ],
                 'SELECT * FROM foo:bar WHERE property1 = \'baz\' AND property2 > 123'
-            ),
-            array(
+            ],
+            [
                 'SELECT * FROM bar WHERE id = ?',
-                array(
-                    'setId' => array(1, new ObjectId('foobar'))
-                ),
+                [
+                    'setId' => [1, new ObjectId('foobar')]
+                ],
                 'SELECT * FROM bar WHERE id = \'foobar\''
-            ),
-            array(
+            ],
+            [
                 'SELECT * FROM bar WHERE property1 = \'as\\\'df\' AND id = ?',
-                array(
-                    'setId' => array(1, new ObjectId('foobar'))
-                ),
+                [
+                    'setId' => [1, new ObjectId('foobar')]
+                ],
                 'SELECT * FROM bar WHERE property1 = \'as\\\'df\' AND id = \'foobar\''
-            ),
-        );
+            ],
+        ];
     }
 
     public function testQueryExecutesQuery()
@@ -1075,7 +1075,7 @@ class QueryStatementTest extends \PHPUnit_Framework_TestCase
         $queryResultInterfaceMock = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\QueryResultInterface'
         )->getMockForAbstractClass();
-        $queryResultArray = array($queryResultInterfaceMock);
+        $queryResultArray = [$queryResultInterfaceMock];
         /** @var PHPUnit_Framework_MockObject_MockObject|SessionInterface $sessionMock */
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->getMockForAbstractClass();
         $sessionMock->expects($this->once())->method('query')->willReturn($queryResultArray);

@@ -42,7 +42,7 @@ class RelationshipTypeTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->setMethods(
-            array('getTypeDefinition')
+            ['getTypeDefinition']
         )->getMockForAbstractClass();
         $this->objectTypeDefinitionMock = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\Data\\ObjectTypeInterface'
@@ -72,7 +72,7 @@ class RelationshipTypeTest extends \PHPUnit_Framework_TestCase
          * @var RelationshipType|PHPUnit_Framework_MockObject_MockObject $relationshipType
          */
         $relationshipType = $this->getMockBuilder('\\Dkd\\PhpCmis\\DataObjects\\RelationshipType')->setMethods(
-            array('populate')
+            ['populate']
         )->disableOriginalConstructor()->getMock();
 
         $relationshipType->expects($this->once())->method('populate')->with(
@@ -84,24 +84,24 @@ class RelationshipTypeTest extends \PHPUnit_Framework_TestCase
     public function testSetAllowedSourceTypeIdsResetsAllowedSourceTypesParameter()
     {
         // set the property to a dummy value
-        $this->setProtectedProperty($this->relationshipType, 'allowedSourceTypes', array('foo', 'bar'));
+        $this->setProtectedProperty($this->relationshipType, 'allowedSourceTypes', ['foo', 'bar']);
 
-        $this->relationshipType->setAllowedSourceTypeIds(array('baz'));
+        $this->relationshipType->setAllowedSourceTypeIds(['baz']);
         $this->assertAttributeEquals(null, 'allowedSourceTypes', $this->relationshipType);
     }
 
     public function testSetAllowedTargetTypeIdsResetsAllowedTargetTypesParameter()
     {
         // set the property to a dummy value
-        $this->setProtectedProperty($this->relationshipType, 'allowedTargetTypes', array('foo', 'bar'));
+        $this->setProtectedProperty($this->relationshipType, 'allowedTargetTypes', ['foo', 'bar']);
 
-        $this->relationshipType->setAllowedTargetTypeIds(array('baz'));
+        $this->relationshipType->setAllowedTargetTypeIds(['baz']);
         $this->assertAttributeEquals(null, 'allowedTargetTypes', $this->relationshipType);
     }
 
     public function testGetAllowedSourceTypesReturnsPropertyValue()
     {
-        $allowedSourceTypes =  array('foo', 'bar');
+        $allowedSourceTypes =  ['foo', 'bar'];
         // set the property to a dummy value
         $this->setProtectedProperty($this->relationshipType, 'allowedSourceTypes', $allowedSourceTypes);
         $this->assertSame($allowedSourceTypes, $this->relationshipType->getAllowedSourceTypes());
@@ -109,13 +109,13 @@ class RelationshipTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAllowedSourceTypesSetsAllowedSourceTypesPropertyGeneratedOnIdsAndReturnsResult()
     {
-        $this->setProtectedProperty($this->relationshipType, 'allowedSourceTypeIds', array('foo'));
-        $this->assertSame(array($this->objectTypeDefinitionMock), $this->relationshipType->getAllowedSourceTypes());
+        $this->setProtectedProperty($this->relationshipType, 'allowedSourceTypeIds', ['foo']);
+        $this->assertSame([$this->objectTypeDefinitionMock], $this->relationshipType->getAllowedSourceTypes());
     }
 
     public function testGetAllowedTargetTypesReturnsPropertyValue()
     {
-        $allowedTargetTypes =  array('foo', 'bar');
+        $allowedTargetTypes =  ['foo', 'bar'];
         // set the property to a dummy value
         $this->setProtectedProperty($this->relationshipType, 'allowedTargetTypes', $allowedTargetTypes);
         $this->assertSame($allowedTargetTypes, $this->relationshipType->getAllowedTargetTypes());
@@ -123,7 +123,7 @@ class RelationshipTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAllowedTargetTypesSetsAllowedTargetTypesPropertyGeneratedOnIdsAndReturnsResult()
     {
-        $this->setProtectedProperty($this->relationshipType, 'allowedTargetTypeIds', array('foo'));
-        $this->assertSame(array($this->objectTypeDefinitionMock), $this->relationshipType->getAllowedTargetTypes());
+        $this->setProtectedProperty($this->relationshipType, 'allowedTargetTypeIds', ['foo']);
+        $this->assertSame([$this->objectTypeDefinitionMock], $this->relationshipType->getAllowedTargetTypes());
     }
 }

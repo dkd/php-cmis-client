@@ -26,7 +26,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             'No parameters provided!',
             1408115280
         );
-        new Session(array());
+        new Session([]);
     }
 
     /**
@@ -41,13 +41,13 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             '\\Dkd\\PhpCmis\\RelationshipServiceInterface'
         )->getMockForAbstractClass();
         $bindingMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingInterface')->setMethods(
-            array('getRepositoryService', 'getRelationshipService')
+            ['getRepositoryService', 'getRelationshipService']
         )->getMockForAbstractClass();
         $bindingMock->expects($this->any())->method('getRepositoryService')->willReturn($repositoryServiceMock);
         $bindingMock->expects($this->any())->method('getRelationshipService')->willReturn($relationshipServiceMock);
         /** @var CmisBindingsHelper|PHPUnit_Framework_MockObject_MockObject $bindingsHelperMock */
         $bindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
-            array('createBinding')
+            ['createBinding']
         )->getMockForAbstractClass();
         $bindingsHelperMock->expects($this->any())->method('createBinding')->willReturn($bindingMock);
 
@@ -57,7 +57,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     public function testObjectFactoryIsSetToDefaultObjectFactoryWhenNoObjectFactoryIsGivenOrDefined()
     {
         $session = new Session(
-            array(SessionParameter::REPOSITORY_ID => 'foo'),
+            [SessionParameter::REPOSITORY_ID => 'foo'],
             null,
             null,
             null,
@@ -72,7 +72,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         /** @var ObjectFactoryInterface $dummyObjectFactory */
         $dummyObjectFactory = $this->getMock('\\Dkd\\PhpCmis\\ObjectFactoryInterface');
         $session = new Session(
-            array(SessionParameter::REPOSITORY_ID => 'foo'),
+            [SessionParameter::REPOSITORY_ID => 'foo'],
             $dummyObjectFactory,
             null,
             null,
@@ -87,10 +87,10 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     {
         $objectFactory = $this->getMock('\\Dkd\\PhpCmis\\ObjectFactory');
         $session = new Session(
-            array(
+            [
                 SessionParameter::REPOSITORY_ID => 'foo',
                 SessionParameter::OBJECT_FACTORY_CLASS => get_class($objectFactory)
-            ),
+            ],
             null,
             null,
             null,
@@ -111,7 +111,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 
         $object = $this->getMock('\\stdClass');
         new Session(
-            array(SessionParameter::OBJECT_FACTORY_CLASS => get_class($object))
+            [SessionParameter::OBJECT_FACTORY_CLASS => get_class($object)]
         );
     }
 
@@ -126,7 +126,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         // Get mock, without the constructor being called
         $mock = $this->getMockBuilder($sessionClassName)
                      ->disableOriginalConstructor()
-                     ->setMethods(array('createDefaultObjectFactoryInstance'))
+                     ->setMethods(['createDefaultObjectFactoryInstance'])
                      ->getMock();
 
         // set createDefaultObjectFactoryInstance to return our object factory spy
@@ -139,7 +139,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $constructor = $reflectedClass->getConstructor();
         $constructor->invoke(
             $mock,
-            array(SessionParameter::REPOSITORY_ID => 'foo'),
+            [SessionParameter::REPOSITORY_ID => 'foo'],
             null,
             null,
             null,
@@ -152,26 +152,26 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException');
         $mock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Session')
-            ->setMethods(array('dummy'))
+            ->setMethods(['dummy'])
             ->disableOriginalConstructor()
             ->getMock();
-        $mock->createQueryStatement(array(), array('foobar'));
+        $mock->createQueryStatement([], ['foobar']);
     }
 
     public function testCreateQueryStatementThrowsErrorOnEmptyTypes()
     {
         $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException');
         $mock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Session')
-            ->setMethods(array('dummy'))
+            ->setMethods(['dummy'])
             ->disableOriginalConstructor()
             ->getMock();
-        $mock->createQueryStatement(array('foobar'), array());
+        $mock->createQueryStatement(['foobar'], []);
     }
 
     public function testCacheIsSetToDefaultCacheWhenNoCacheIsGivenOrDefined()
     {
         $session = new Session(
-            array(SessionParameter::REPOSITORY_ID => 'foo'),
+            [SessionParameter::REPOSITORY_ID => 'foo'],
             null,
             null,
             null,
@@ -186,7 +186,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         /** @var \Doctrine\Common\Cache\Cache $dummyCache */
         $dummyCache = $this->getMockForAbstractClass('\\Doctrine\\Common\\Cache\\Cache');
         $session = new Session(
-            array(SessionParameter::REPOSITORY_ID => 'foo'),
+            [SessionParameter::REPOSITORY_ID => 'foo'],
             null,
             $dummyCache,
             null,
@@ -201,7 +201,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         /** @var \Doctrine\Common\Cache\Cache $dummyCache */
         $cache = $this->getMockForAbstractClass('\\Doctrine\\Common\\Cache\\CacheProvider');
         $session = new Session(
-            array(SessionParameter::REPOSITORY_ID => 'foo', SessionParameter::CACHE_CLASS => get_class($cache)),
+            [SessionParameter::REPOSITORY_ID => 'foo', SessionParameter::CACHE_CLASS => get_class($cache)],
             null,
             null,
             null,
@@ -221,19 +221,19 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 
         $object = $this->getMock('\\stdClass');
         new Session(
-            array(SessionParameter::CACHE_CLASS => get_class($object))
+            [SessionParameter::CACHE_CLASS => get_class($object)]
         );
     }
 
     public function testGetRelationships()
     {
         $bindingsMock = $this->getBindingsHelperMock();
-        $bindingsMock->createBinding(array())->getRelationshipService()
+        $bindingsMock->createBinding([])->getRelationshipService()
             ->expects($this->once())
             ->method('getObjectRelationships')
             ->with();
         $session = new Session(
-            array(SessionParameter::REPOSITORY_ID => 'foo'),
+            [SessionParameter::REPOSITORY_ID => 'foo'],
             null,
             null,
             null,
@@ -241,11 +241,11 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             $bindingsMock
         );
         $repositoryInfo = $this->getMockBuilder('\\Dkd\\PhpCmis\\DataObjects\\RepositoryInfo')
-            ->setMethods(array('getId'))
+            ->setMethods(['getId'])
             ->getMock();
         $repositoryInfo->expects($this->once())->method('getId');
         $objectType = $this->getMockBuilder('\\Dkd\\PhpCmis\\Data\\ObjectTypeInterface')
-            ->setMethods(array('getId', '__toString'))
+            ->setMethods(['getId', '__toString'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $property = new \ReflectionProperty($session, 'repositoryInfo');

@@ -28,20 +28,20 @@ class AbstractPropertyDataTest extends \PHPUnit_Framework_TestCase
         $this->propertyDataMock = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\DataObjects\\AbstractPropertyData'
         )->setConstructorArgs(
-            array('foo', 'value')
+            ['foo', 'value']
         )->getMockForAbstractClass();
     }
 
     public function testConstructorSetsIdAndValueProperty()
     {
         $this->assertAttributeSame('foo', 'id', $this->propertyDataMock);
-        $this->assertAttributeSame(array('value'), 'values', $this->propertyDataMock);
+        $this->assertAttributeSame(['value'], 'values', $this->propertyDataMock);
 
 
         $propertyData = $this->getMockBuilder('\\Dkd\\PhpCmis\\DataObjects\\AbstractPropertyData')->setConstructorArgs(
-            array('foo', array('bar', 'value'))
+            ['foo', ['bar', 'value']]
         )->getMockForAbstractClass();
-        $this->assertAttributeSame(array('bar', 'value'), 'values', $propertyData);
+        $this->assertAttributeSame(['bar', 'value'], 'values', $propertyData);
     }
 
     /**
@@ -126,15 +126,15 @@ class AbstractPropertyDataTest extends \PHPUnit_Framework_TestCase
 
     public function testSetValuesSetsProperty()
     {
-        $this->propertyDataMock->setValues(array('value'));
-        $this->assertAttributeSame(array('value'), 'values', $this->propertyDataMock);
+        $this->propertyDataMock->setValues(['value']);
+        $this->assertAttributeSame(['value'], 'values', $this->propertyDataMock);
     }
 
     public function testSetValuesSetsPropertyAsIndexedArray()
     {
-        $values = array(0 => 'foo', 'a' => 'bar', 'baz');
+        $values = [0 => 'foo', 'a' => 'bar', 'baz'];
         $this->propertyDataMock->setValues($values);
-        $this->assertAttributeSame(array(0 => 'foo', 1 => 'bar', 2 => 'baz'), 'values', $this->propertyDataMock);
+        $this->assertAttributeSame([0 => 'foo', 1 => 'bar', 2 => 'baz'], 'values', $this->propertyDataMock);
     }
 
     /**
@@ -142,14 +142,14 @@ class AbstractPropertyDataTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetValuesGetsProperty()
     {
-        $this->propertyDataMock->setValues(array('value'));
-        $this->assertSame(array('value'), $this->propertyDataMock->getValues());
+        $this->propertyDataMock->setValues(['value']);
+        $this->assertSame(['value'], $this->propertyDataMock->getValues());
     }
 
     public function testSetValueSetsSingleValueAsArrayInProperty()
     {
         $this->propertyDataMock->setValue('value');
-        $this->assertAttributeSame(array('value'), 'values', $this->propertyDataMock);
+        $this->assertAttributeSame(['value'], 'values', $this->propertyDataMock);
     }
 
     /**
@@ -157,7 +157,7 @@ class AbstractPropertyDataTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetFirstValueReturnsFirstEntryOfValuesProperty()
     {
-        $this->propertyDataMock->setValues(array('value1', 'value2', 'value3'));
+        $this->propertyDataMock->setValues(['value1', 'value2', 'value3']);
         $this->assertSame('value1', $this->propertyDataMock->getFirstValue());
     }
 
@@ -166,7 +166,7 @@ class AbstractPropertyDataTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetFirstValueReturnsNullIfPropertyDoesNotContainValues()
     {
-        $this->propertyDataMock->setValues(array());
+        $this->propertyDataMock->setValues([]);
         $this->assertNull($this->propertyDataMock->getFirstValue());
     }
 }

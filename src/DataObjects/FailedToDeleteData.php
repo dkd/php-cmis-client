@@ -20,7 +20,7 @@ class FailedToDeleteData extends AbstractExtensionData implements FailedToDelete
     /**
      * @var string[]
      */
-    protected $ids = array();
+    protected $ids = [];
 
     /**
      * Returns the list of ids that could not be deleted.

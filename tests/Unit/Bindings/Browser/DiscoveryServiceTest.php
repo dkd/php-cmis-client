@@ -47,21 +47,21 @@ class DiscoveryServiceTest extends AbstractBrowserBindingServiceTestCase
         $skipCount = 0
     ) {
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()
-            ->setMethods(array('getBody'))->getMock();
+            ->setMethods(['getBody'])->getMock();
         $responseMock->expects($this->once())->method('getbody')->willReturn('{}');
 
         $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->getMock();
 
         $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
-            array('getJsonConverter')
+            ['getJsonConverter']
         )->getMock();
         $cmisBindingsHelperMock->expects($this->once())->method('getJsonConverter')->willReturn($jsonConverterMock);
 
         /** @var DiscoveryService|PHPUnit_Framework_MockObject_MockObject $discoveryService */
         $discoveryService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
-            array($this->getSessionMock(), $cmisBindingsHelperMock)
+            [$this->getSessionMock(), $cmisBindingsHelperMock]
         )->setMethods(
-            array('getRepositoryUrl', 'post')
+            ['getRepositoryUrl', 'post']
         )->getMock();
 
         $discoveryService->expects($this->once())->method('getRepositoryUrl')->with(
@@ -107,29 +107,29 @@ class DiscoveryServiceTest extends AbstractBrowserBindingServiceTestCase
         $maxItems = null,
         $skipCount = 0
     ) {
-        $responseData = array('foo' => 'bar');
+        $responseData = ['foo' => 'bar'];
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
-        )->setMethods(array('getBody'))->getMock();
+        )->setMethods(['getBody'])->getMock();
         $responseMock->expects($this->once())->method('getBody')->willReturn(json_encode($responseData));
 
         $dummyObjectData = new ObjectData();
         $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
-            array('convertQueryResultList')
+            ['convertQueryResultList']
         )->getMock();
         $jsonConverterMock->expects($this->once())->method('convertQueryResultList')->with($responseData)->willReturn(
             $dummyObjectData
         );
 
         $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
-            array('getJsonConverter')
+            ['getJsonConverter']
         )->getMock();
         $cmisBindingsHelperMock->expects($this->once())->method('getJsonConverter')->willReturn($jsonConverterMock);
 
         /** @var DiscoveryService|PHPUnit_Framework_MockObject_MockObject $discoveryService */
         $discoveryService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
-            array($this->getSessionMock(), $cmisBindingsHelperMock)
+            [$this->getSessionMock(), $cmisBindingsHelperMock]
         )->setMethods(
-            array('getRepositoryUrl', 'post')
+            ['getRepositoryUrl', 'post']
         )->getMock();
 
         $discoveryService->expects($this->once())->method('getRepositoryUrl')->with(
@@ -174,13 +174,13 @@ class DiscoveryServiceTest extends AbstractBrowserBindingServiceTestCase
     ) {
         $responseData = $this->getResponseFixtureContentAsArray('Cmis/v1.1/BrowserBinding/doQuery-response.log');
         $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
-        )->setMethods(array('getBody'))->getMock();
+        )->setMethods(['getBody'])->getMock();
         $responseMock->expects($this->once())->method('getBody')->willReturn(json_encode($responseData));
 
         $dummyObjectData = new ObjectData();
 
         $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
-            array('convertObject')
+            ['convertObject']
         )->getMock();
 
         $expectedNumberOfItems = 4;
@@ -189,15 +189,15 @@ class DiscoveryServiceTest extends AbstractBrowserBindingServiceTestCase
         );
 
         $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
-            array('getJsonConverter')
+            ['getJsonConverter']
         )->getMock();
         $cmisBindingsHelperMock->expects($this->once())->method('getJsonConverter')->willReturn($jsonConverterMock);
 
         /** @var DiscoveryService|PHPUnit_Framework_MockObject_MockObject $discoveryService */
         $discoveryService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
-            array($this->getSessionMock(), $cmisBindingsHelperMock)
+            [$this->getSessionMock(), $cmisBindingsHelperMock]
         )->setMethods(
-            array('getRepositoryUrl', 'post')
+            ['getRepositoryUrl', 'post']
         )->getMock();
 
         $discoveryService->expects($this->once())->method('getRepositoryUrl')->with(
@@ -232,8 +232,8 @@ class DiscoveryServiceTest extends AbstractBrowserBindingServiceTestCase
      */
     public function queryDataProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST . '?cmisaction=query&statement=SELECT%20*%20FROM%20cmis:document'
                     . '&searchAllVersions=true&includeRelationships=none&renditionFilter=foo:bar'
@@ -247,8 +247,8 @@ class DiscoveryServiceTest extends AbstractBrowserBindingServiceTestCase
                 true,
                 99,
                 0
-            ),
-            array(
+            ],
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST . '?cmisaction=query&statement=SELECT%20*%20FROM%20cmis:document'
                     . '&searchAllVersions=false&includeRelationships=both&renditionFilter=foo:bar'
@@ -262,8 +262,8 @@ class DiscoveryServiceTest extends AbstractBrowserBindingServiceTestCase
                 false,
                 null,
                 99
-            ),
-            array(
+            ],
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST . '?cmisaction=query&statement=SELECT%20*%20FROM%20cmis:document'
                     . '&searchAllVersions=false&renditionFilter=foo:bar'
@@ -277,8 +277,8 @@ class DiscoveryServiceTest extends AbstractBrowserBindingServiceTestCase
                 false,
                 0,
                 99
-            )
-        );
+            ]
+        ];
     }
 
     /**
@@ -300,29 +300,29 @@ class DiscoveryServiceTest extends AbstractBrowserBindingServiceTestCase
         $includeAcl = false,
         $maxItems = null
     ) {
-        $responseData = array('foo' => 'bar');
+        $responseData = ['foo' => 'bar'];
         $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
-        )->setMethods(array('getBody'))->getMock();
+        )->setMethods(['getBody'])->getMock();
         $responseMock->expects($this->once())->method('getBody')->willReturn(json_encode($responseData));
 
         $dummyObjectData = new ObjectData();
         $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
-            array('convertObjectList')
+            ['convertObjectList']
         )->getMock();
         $jsonConverterMock->expects($this->once())->method('convertObjectList')->with($responseData)->willReturn(
             $dummyObjectData
         );
 
         $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
-            array('getJsonConverter')
+            ['getJsonConverter']
         )->getMock();
         $cmisBindingsHelperMock->expects($this->once())->method('getJsonConverter')->willReturn($jsonConverterMock);
 
         /** @var DiscoveryService|PHPUnit_Framework_MockObject_MockObject $discoveryService */
         $discoveryService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
-            array($this->getSessionMock(), $cmisBindingsHelperMock)
+            [$this->getSessionMock(), $cmisBindingsHelperMock]
         )->setMethods(
-            array('getRepositoryUrl', 'read')
+            ['getRepositoryUrl', 'read']
         )->getMock();
 
         $discoveryService->expects($this->any())->method('getRepositoryUrl')->with(
@@ -363,13 +363,13 @@ class DiscoveryServiceTest extends AbstractBrowserBindingServiceTestCase
             'Cmis/v1.1/BrowserBinding/getContentChanges-response.log'
         );
         $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
-        )->setMethods(array('getBody'))->getMock();
+        )->setMethods(['getBody'])->getMock();
         $responseMock->expects($this->once())->method('getBody')->willReturn(json_encode($responseData));
 
         $dummyObjectData = new ObjectData();
 
         $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
-            array('convertObject')
+            ['convertObject']
         )->getMock();
 
         $expectedNumberOfItems = 39;
@@ -378,15 +378,15 @@ class DiscoveryServiceTest extends AbstractBrowserBindingServiceTestCase
         );
 
         $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
-            array('getJsonConverter')
+            ['getJsonConverter']
         )->getMock();
         $cmisBindingsHelperMock->expects($this->once())->method('getJsonConverter')->willReturn($jsonConverterMock);
 
         /** @var DiscoveryService|PHPUnit_Framework_MockObject_MockObject $discoveryService */
         $discoveryService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
-            array($this->getSessionMock(), $cmisBindingsHelperMock)
+            [$this->getSessionMock(), $cmisBindingsHelperMock]
         )->setMethods(
-            array('getRepositoryUrl', 'read')
+            ['getRepositoryUrl', 'read']
         )->getMock();
 
         $discoveryService->expects($this->once())->method('getRepositoryUrl')->with(
@@ -419,8 +419,8 @@ class DiscoveryServiceTest extends AbstractBrowserBindingServiceTestCase
      */
     public function getContentChangesDataProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST . '?changeLogToken=changeLogToken&includeProperties=false'
                     . '&includePolicyIds=false&includeACL=false&maxItems=99&succinct=false'
@@ -431,8 +431,8 @@ class DiscoveryServiceTest extends AbstractBrowserBindingServiceTestCase
                 false,
                 false,
                 99
-            ),
-            array(
+            ],
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST . '?includeProperties=true'
                     . '&includePolicyIds=true&includeACL=true&succinct=false'
@@ -443,7 +443,7 @@ class DiscoveryServiceTest extends AbstractBrowserBindingServiceTestCase
                 true,
                 true,
                 null
-            )
-        );
+            ]
+        ];
     }
 }

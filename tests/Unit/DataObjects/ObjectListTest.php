@@ -22,12 +22,12 @@ class ObjectListTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->objectList = new ObjectList(array($this->getObjectDataMock()));
+        $this->objectList = new ObjectList([$this->getObjectDataMock()]);
     }
 
     public function testSetObjectsSetsProperty()
     {
-        $objects = array($this->getObjectDataMock());
+        $objects = [$this->getObjectDataMock()];
         $this->objectList->setObjects($objects);
         $this->assertAttributeSame($objects, 'objects', $this->objectList);
     }
@@ -35,7 +35,7 @@ class ObjectListTest extends \PHPUnit_Framework_TestCase
     public function testSetObjectsThrowsExceptionIfAGivenObjectIsNotOfTypeObjectDataInterface()
     {
         $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException');
-        $this->objectList->setObjects(array(new \stdClass()));
+        $this->objectList->setObjects([new \stdClass()]);
     }
 
     /**
@@ -43,10 +43,10 @@ class ObjectListTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetObjectsReturnsPropertyValue()
     {
-        $objects = array(
+        $objects = [
             $this->getObjectDataMock(),
             $this->getObjectDataMock()
-        );
+        ];
         $this->objectList->setObjects($objects);
         $this->assertSame($objects, $this->objectList->getObjects());
     }

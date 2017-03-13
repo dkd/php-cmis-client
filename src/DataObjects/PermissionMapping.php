@@ -25,7 +25,7 @@ class PermissionMapping extends AbstractExtensionData implements PermissionMappi
     /**
      * @var string[]
      */
-    protected $permissions = array();
+    protected $permissions = [];
 
     /**
      * @return string

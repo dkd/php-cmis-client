@@ -44,7 +44,7 @@ class ItemTypeTest extends \PHPUnit_Framework_TestCase
          * @var ItemType|PHPUnit_Framework_MockObject_MockObject $itemType
          */
         $itemType = $this->getMockBuilder('\\Dkd\\PhpCmis\\DataObjects\\ItemType')->setMethods(
-            array('populate')
+            ['populate']
         )->disableOriginalConstructor()->getMock();
         $itemType->expects($this->once())->method('populate')->with(
             $itemTypeDefinition

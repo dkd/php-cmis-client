@@ -40,7 +40,7 @@ class VersioningService extends AbstractBrowserBindingService implements Version
                     $this->getObjectUrl($repositoryId, $objectId),
                     $this->createQueryArray(
                         Constants::CMISACTION_CANCEL_CHECK_OUT,
-                        array(),
+                        [],
                         $extension
                     )
                 )->getBody(),
@@ -74,16 +74,16 @@ class VersioningService extends AbstractBrowserBindingService implements Version
         PropertiesInterface $properties = null,
         StreamInterface $contentStream = null,
         $checkinComment = null,
-        array $policies = array(),
+        array $policies = [],
         AclInterface $addAces = null,
         AclInterface $removeAces = null,
         ExtensionDataInterface $extension = null
     ) {
 		$queryArray = $this->createQueryArray(
 			Constants::CMISACTION_CHECK_IN,
-			array(
+			[
 				Constants::PARAM_MAJOR => $major ? 'true' : 'false',
-			),
+			],
 			$extension
 		);
 		if ($properties) {
@@ -151,7 +151,7 @@ class VersioningService extends AbstractBrowserBindingService implements Version
                     $this->getObjectUrl($repositoryId, $objectId),
                     $this->createQueryArray(
                         Constants::CMISACTION_CHECK_OUT,
-                        array(),
+                        [],
                         $extension
                     )
                 )->getBody(),
@@ -184,14 +184,14 @@ class VersioningService extends AbstractBrowserBindingService implements Version
         ExtensionDataInterface $extension = null
     ) {
         return $this->getJsonConverter()->convertObjectList(
-			array(
+			[
 				'objects' => (array) \json_decode(
                     $this->read(
                         $this->getObjectUrl($repositoryId, $objectId, Constants::SELECTOR_VERSIONS)
                     )->getBody(),
                     true
                 )
-			)
+			]
 		)->getObjects();
     }
 
@@ -279,15 +279,15 @@ class VersioningService extends AbstractBrowserBindingService implements Version
 	 */
 	protected function createQueryArray(
 		$action,
-		array $parameters = array(),
+		array $parameters = [],
 		ExtensionDataInterface $extension = null
 	) {
 		$queryArray = array_replace(
 			$parameters,
-			array(
+			[
 				Constants::CONTROL_CMISACTION => $action,
 				Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
-			)
+			]
 		);
 		return $queryArray;
 	}

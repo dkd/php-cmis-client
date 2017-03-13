@@ -22,7 +22,7 @@ class PropertiesTest extends \PHPUnit_Framework_TestCase
 
         $properties->addProperty($stringProperty);
 
-        $this->assertAttributeSame(array($stringProperty->getId() => $stringProperty), 'properties', $properties);
+        $this->assertAttributeSame([$stringProperty->getId() => $stringProperty], 'properties', $properties);
     }
 
     /**
@@ -39,7 +39,7 @@ class PropertiesTest extends \PHPUnit_Framework_TestCase
 
         $properties->addProperty($stringProperty2);
 
-        $this->assertAttributeSame(array($stringProperty2->getId() => $stringProperty2), 'properties', $properties);
+        $this->assertAttributeSame([$stringProperty2->getId() => $stringProperty2], 'properties', $properties);
     }
 
     /**
@@ -52,7 +52,7 @@ class PropertiesTest extends \PHPUnit_Framework_TestCase
 
         $properties->addProperty($stringProperty);
 
-        $this->assertSame(array($stringProperty->getId() => $stringProperty), $properties->getProperties());
+        $this->assertSame([$stringProperty->getId() => $stringProperty], $properties->getProperties());
     }
 
     /**
@@ -70,7 +70,7 @@ class PropertiesTest extends \PHPUnit_Framework_TestCase
 
         $properties->removeProperty('stringProp');
 
-        $this->assertAttributeSame(array($stringProperty2->getId() => $stringProperty2), 'properties', $properties);
+        $this->assertAttributeSame([$stringProperty2->getId() => $stringProperty2], 'properties', $properties);
     }
 
     /**
@@ -86,14 +86,14 @@ class PropertiesTest extends \PHPUnit_Framework_TestCase
         $stringProperty2 = new PropertyString('stringProp2', 'stringPropValue2');
 
         $stringProperty3 = new PropertyString('stringProp3', 'stringPropValue3');
-        $properties->addProperties(array($stringProperty2, $stringProperty3));
+        $properties->addProperties([$stringProperty2, $stringProperty3]);
 
         $this->assertAttributeSame(
-            array(
+            [
                 $stringProperty->getId() => $stringProperty,
                 $stringProperty2->getId() => $stringProperty2,
                 $stringProperty3->getId() => $stringProperty3
-            ),
+            ],
             'properties',
             $properties
         );

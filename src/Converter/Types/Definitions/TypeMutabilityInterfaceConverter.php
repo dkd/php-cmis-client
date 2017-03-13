@@ -33,7 +33,7 @@ class TypeMutabilityInterfaceConverter implements TypeConverterInterface
             throw new CmisInvalidArgumentException('Given object must be of type TypeMutabilityInterface');
         }
 
-        $result = array();
+        $result = [];
         $result[JSONConstants::JSON_TYPE_TYPE_MUTABILITY_CREATE] = $object->canCreate();
         $result[JSONConstants::JSON_TYPE_TYPE_MUTABILITY_UPDATE] = $object->canUpdate();
         $result[JSONConstants::JSON_TYPE_TYPE_MUTABILITY_DELETE] = $object->canDelete();

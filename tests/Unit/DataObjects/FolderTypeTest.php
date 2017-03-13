@@ -44,7 +44,7 @@ class FolderTypeTest extends \PHPUnit_Framework_TestCase
          * @var FolderType|PHPUnit_Framework_MockObject_MockObject $folderType
          */
         $folderType = $this->getMockBuilder('\\Dkd\\PhpCmis\\DataObjects\\FolderType')->setMethods(
-            array('populate')
+            ['populate']
         )->disableOriginalConstructor()->getMock();
         $folderType->expects($this->once())->method('populate')->with(
             $folderTypeDefinition

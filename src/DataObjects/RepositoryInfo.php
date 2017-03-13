@@ -80,7 +80,7 @@ class RepositoryInfo extends AbstractExtensionData implements RepositoryInfoInte
     /**
      * @var BaseTypeId[]
      */
-    protected $changesOnType = array();
+    protected $changesOnType = [];
 
     /**
      * @var string
@@ -105,7 +105,7 @@ class RepositoryInfo extends AbstractExtensionData implements RepositoryInfoInte
     /**
      * @var ExtensionFeatureInterface[]
      */
-    protected $extensionFeatures = array();
+    protected $extensionFeatures = [];
 
     /**
      * @param AclCapabilitiesInterface $aclCapabilities

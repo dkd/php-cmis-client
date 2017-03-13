@@ -31,12 +31,12 @@ class ObjectInFolderListTest extends \PHPUnit_Framework_TestCase
             '\\Dkd\\PhpCmis\\Data\\ObjectInFolderDataInterface'
         )->disableOriginalConstructor()->getMockForAbstractClass();
 
-        $this->objectInFolderList = new ObjectInFolderList(array($this->objectInFolderData));
+        $this->objectInFolderList = new ObjectInFolderList([$this->objectInFolderData]);
     }
 
     public function testSetObjectsSetsProperty()
     {
-        $objects = array($this->objectInFolderData);
+        $objects = [$this->objectInFolderData];
         $this->objectInFolderList->setObjects($objects);
         $this->assertAttributeSame($objects, 'objects', $this->objectInFolderList);
     }
@@ -44,7 +44,7 @@ class ObjectInFolderListTest extends \PHPUnit_Framework_TestCase
     public function testSetObjectsThrowsExceptionIfAGivenObjectIsNotOfTypeObjectInFolderDataInterface()
     {
         $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException');
-        $this->objectInFolderList->setObjects(array(new \stdClass()));
+        $this->objectInFolderList->setObjects([new \stdClass()]);
     }
 
     /**
@@ -52,7 +52,7 @@ class ObjectInFolderListTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetObjectsReturnsPropertyValue()
     {
-        $objects = array($this->objectInFolderData);
+        $objects = [$this->objectInFolderData];
         $this->objectInFolderList->setObjects($objects);
         $this->assertSame($objects, $this->objectInFolderList->getObjects());
     }

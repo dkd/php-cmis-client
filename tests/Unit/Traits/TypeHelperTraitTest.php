@@ -49,7 +49,7 @@ class TypeHelperTraitTest extends \PHPUnit_Framework_TestCase
         }
 
         $method = $this->getMethod(self::CLASS_TO_TEST, 'checkType');
-        $result = $method->invokeArgs($this->typeHelperTrait, array($expectedType, $value, $nullAllowed));
+        $result = $method->invokeArgs($this->typeHelperTrait, [$expectedType, $value, $nullAllowed]);
 
         $this->assertTrue($result);
     }
@@ -59,34 +59,34 @@ class TypeHelperTraitTest extends \PHPUnit_Framework_TestCase
      */
     public function checkTypeDataProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 'string',
                 'foo'
-            ),
-            array(
+            ],
+            [
                 'integer',
                 2
-            ),
-            array(
+            ],
+            [
                 'integer',
                 0
-            ),
-            array(
+            ],
+            [
                 'integer',
                 null,
                 null,
                 true
-            ),
-            array(
+            ],
+            [
                 'double',
                 2.3
-            ),
-            array(
+            ],
+            [
                 'boolean',
                 true
-            ),
-            array(
+            ],
+            [
                 'string',
                 1,
                 function (TypeHelperTraitTest $parent) {
@@ -96,8 +96,8 @@ class TypeHelperTraitTest extends \PHPUnit_Framework_TestCase
                         1413440336
                     );
                 }
-            ),
-            array(
+            ],
+            [
                 'integer',
                 '1',
                 function (TypeHelperTraitTest $parent) {
@@ -107,8 +107,8 @@ class TypeHelperTraitTest extends \PHPUnit_Framework_TestCase
                         1413440336
                     );
                 }
-            ),
-            array(
+            ],
+            [
                 'double',
                 1,
                 function (TypeHelperTraitTest $parent) {
@@ -118,18 +118,18 @@ class TypeHelperTraitTest extends \PHPUnit_Framework_TestCase
                         1413440336
                     );
                 }
-            ),
-            array(
+            ],
+            [
                 '\\DateTime',
                 new \DateTime()
-            ),
-            array(
+            ],
+            [
                 '\\DateTime',
                 null,
                 null,
                 true
-            ),
-            array(
+            ],
+            [
                 '\\DateTime',
                 'now',
                 function (TypeHelperTraitTest $parent) {
@@ -139,8 +139,8 @@ class TypeHelperTraitTest extends \PHPUnit_Framework_TestCase
                         1413440336
                     );
                 }
-            )
-        );
+            ]
+        ];
     }
 
     /**
@@ -155,7 +155,7 @@ class TypeHelperTraitTest extends \PHPUnit_Framework_TestCase
         $value
     ) {
         $method = $this->getMethod(self::CLASS_TO_TEST, 'castValueToSimpleType');
-        $result = @$method->invokeArgs($this->typeHelperTrait, array($expectedType, $value));
+        $result = @$method->invokeArgs($this->typeHelperTrait, [$expectedType, $value]);
         $this->assertSame($expectedValue, $result);
     }
 
@@ -182,7 +182,7 @@ class TypeHelperTraitTest extends \PHPUnit_Framework_TestCase
             $this->setExpectedException('\\PHPUnit_Framework_Error_Notice');
         }
         $method = $this->getMethod(self::CLASS_TO_TEST, 'castValueToSimpleType');
-        $result = $method->invokeArgs($this->typeHelperTrait, array($expectedType, $value));
+        $result = $method->invokeArgs($this->typeHelperTrait, [$expectedType, $value]);
         $this->assertSame($expectedValue, $result);
     }
 
@@ -191,43 +191,43 @@ class TypeHelperTraitTest extends \PHPUnit_Framework_TestCase
      */
     public function castValueToSimpleTypeDataProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 'integer',
                 2,
                 2,
                 false
-            ),
-            array(
+            ],
+            [
                 'integer',
                 2,
                 '2',
                 true
-            ),
-            array(
+            ],
+            [
                 'integer',
                 2,
                 2.2,
                 true
-            ),
-            array(
+            ],
+            [
                 'string',
                 '2',
                 2,
                 true
-            ),
-            array(
+            ],
+            [
                 'string',
                 '2',
                 '2',
                 false
-            ),
-            array(
+            ],
+            [
                 'boolean',
                 true,
                 1,
                 true
-            )
-        );
+            ]
+        ];
     }
 }

@@ -27,7 +27,7 @@ class PolicyIdListTest extends \PHPUnit_Framework_TestCase
 
     public function testSetPolicyIdsSetsProperty()
     {
-        $policyIdsList = array('foo', 'bar');
+        $policyIdsList = ['foo', 'bar'];
         $this->policyIdList->setPolicyIds($policyIdsList);
         $this->assertAttributeSame($policyIdsList, 'policyIds', $this->policyIdList);
     }
@@ -37,7 +37,7 @@ class PolicyIdListTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPolicyIdsReturnsPropertyValue()
     {
-        $policyIdsList = array('foo', 'bar');
+        $policyIdsList = ['foo', 'bar'];
         $this->policyIdList->setPolicyIds($policyIdsList);
         $this->assertSame($policyIdsList, $this->policyIdList->getPolicyIds());
     }

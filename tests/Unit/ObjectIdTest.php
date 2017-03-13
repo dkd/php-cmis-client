@@ -31,14 +31,14 @@ class ObjectIdTest extends \PHPUnit_Framework_TestCase
      */
     public function invalidIdValuesDataProvider()
     {
-        return array(
-            array(''),
-            array(null),
-            array(0),
-            array(1),
-            array(array('foo')),
-            array(new \stdClass())
-        );
+        return [
+            [''],
+            [null],
+            [0],
+            [1],
+            [['foo']],
+            [new \stdClass()]
+        ];
     }
 
     public function testConstructorSetsIdProperty()

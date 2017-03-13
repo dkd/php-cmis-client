@@ -24,18 +24,18 @@ class RepositoryUrlCacheTest extends \PHPUnit_Framework_TestCase
     /**
      * @var array
      */
-    protected $dummyData = array(
-        array(
+    protected $dummyData = [
+        [
             'id' => 'repositoryId',
             'repositoryUrl' => 'http://foo.bar.baz/repositoryUrl',
             'rootUrl' => 'http://foo.bar.baz/rootUrl'
-        ),
-        array(
+        ],
+        [
             'id' => 'repositoryId2',
             'repositoryUrl' => 'http://foo.bar.baz/repositoryUrl2',
             'rootUrl' => 'http://foo.bar.baz/rootUrl2'
-        ),
-    );
+        ],
+    ];
 
     public function setUp()
     {
@@ -56,23 +56,23 @@ class RepositoryUrlCacheTest extends \PHPUnit_Framework_TestCase
 
     public function addRepositoryParameterDataProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 null,
                 'foo',
                 'bar'
-            ),
-            array(
+            ],
+            [
                 'foo',
                 null,
                 'bar'
-            ),
-            array(
+            ],
+            [
                 'foo',
                 'bar',
                 null
-            ),
-        );
+            ],
+        ];
     }
 
     public function testAddRepositoryAddsGivenUrlsToArrayCache()
@@ -84,12 +84,12 @@ class RepositoryUrlCacheTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertAttributeSame(
-            array($this->dummyData[0]['id'] => $this->dummyData[0]['repositoryUrl']),
+            [$this->dummyData[0]['id'] => $this->dummyData[0]['repositoryUrl']],
             'repositoryUrls',
             $this->repositoryUrlCache
         );
         $this->assertAttributeSame(
-            array($this->dummyData[0]['id'] => $this->dummyData[0]['rootUrl']),
+            [$this->dummyData[0]['id'] => $this->dummyData[0]['rootUrl']],
             'rootUrls',
             $this->repositoryUrlCache
         );
@@ -101,18 +101,18 @@ class RepositoryUrlCacheTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertAttributeSame(
-            array(
+            [
                 $this->dummyData[0]['id'] => $this->dummyData[0]['repositoryUrl'],
                 $this->dummyData[1]['id'] => $this->dummyData[1]['repositoryUrl']
-            ),
+            ],
             'repositoryUrls',
             $this->repositoryUrlCache
         );
         $this->assertAttributeSame(
-            array(
+            [
                 $this->dummyData[0]['id'] => $this->dummyData[0]['rootUrl'],
                 $this->dummyData[1]['id'] => $this->dummyData[1]['rootUrl']
-            ),
+            ],
             'rootUrls',
             $this->repositoryUrlCache
         );
@@ -130,12 +130,12 @@ class RepositoryUrlCacheTest extends \PHPUnit_Framework_TestCase
         $repositoryUrlCache->removeRepository($this->dummyData[1]['id']);
 
         $this->assertAttributeSame(
-            array($this->dummyData[0]['id'] => $this->dummyData[0]['repositoryUrl']),
+            [$this->dummyData[0]['id'] => $this->dummyData[0]['repositoryUrl']],
             'repositoryUrls',
             $repositoryUrlCache
         );
         $this->assertAttributeSame(
-            array($this->dummyData[0]['id'] => $this->dummyData[0]['rootUrl']),
+            [$this->dummyData[0]['id'] => $this->dummyData[0]['rootUrl']],
             'rootUrls',
             $repositoryUrlCache
         );

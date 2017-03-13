@@ -21,7 +21,7 @@ class AccessControlEntry extends AbstractExtensionData implements MutableAceInte
     /**
      * @var string[]
      */
-    protected $permissions = array();
+    protected $permissions = [];
 
     /**
      * @var PrincipalInterface

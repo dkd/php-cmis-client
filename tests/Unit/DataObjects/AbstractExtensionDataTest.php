@@ -37,11 +37,11 @@ class AbstractExtensionDataTest extends PHPUnit_Framework_TestCase
 
     public function testSetExtensionsSetsAttributeAndGetExtensionReturnsAttribute()
     {
-        $extensions = array(
+        $extensions = [
             $this->getMockBuilder(
                 '\\Dkd\\PhpCmis\\Data\\CmisExtensionElementInterface'
             )->getMockForAbstractClass()
-        );
+        ];
 
         $this->abstractExtensionData->setExtensions($extensions);
         $this->assertAttributeSame($extensions, 'extensions', $this->abstractExtensionData);
@@ -55,6 +55,6 @@ class AbstractExtensionDataTest extends PHPUnit_Framework_TestCase
             'Argument of type "stdClass" given but argument of type '
             . '"Dkd\\PhpCmis\\Data\\CmisExtensionElementInterface" was expected.'
         );
-        $this->abstractExtensionData->setExtensions(array(new \stdClass()));
+        $this->abstractExtensionData->setExtensions([new \stdClass()]);
     }
 }

@@ -36,7 +36,7 @@ abstract class AbstractDataConverter implements DataConverterInterface
      */
     protected function convertBooleanValues(array $source)
     {
-        $result = array();
+        $result = [];
         // we can't use array_map with boolval here because boolval is only available in php >= 5.5
         foreach ($source as $item) {
             $result[] = (boolean) $item;
@@ -72,7 +72,7 @@ abstract class AbstractDataConverter implements DataConverterInterface
      */
     protected function convertDateTimeValues($source)
     {
-        $result = array();
+        $result = [];
 
         if (is_array($source) && count($source) > 0) {
             foreach ($source as $item) {

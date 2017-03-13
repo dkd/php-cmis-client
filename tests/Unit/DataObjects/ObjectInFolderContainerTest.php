@@ -45,7 +45,7 @@ class ObjectInFolderContainerTest extends \PHPUnit_Framework_TestCase
 
     public function testSetObjectsSetsProperty()
     {
-        $children = array($this->getObjectInFolderContainerMock());
+        $children = [$this->getObjectInFolderContainerMock()];
 
         $this->objectInFolderContainer->setChildren($children);
         $this->assertAttributeSame($children, 'children', $this->objectInFolderContainer);
@@ -54,7 +54,7 @@ class ObjectInFolderContainerTest extends \PHPUnit_Framework_TestCase
     public function testSetChildrenThrowsExceptionIfAGivenObjectIsNotOfTypeObjectInFolderContainerInterface()
     {
         $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException');
-        $this->objectInFolderContainer->setChildren(array(new \stdClass()));
+        $this->objectInFolderContainer->setChildren([new \stdClass()]);
     }
 
     /**
@@ -62,7 +62,7 @@ class ObjectInFolderContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetObjectsReturnsPropertyValue()
     {
-        $children = array($this->getObjectInFolderContainerMock());
+        $children = [$this->getObjectInFolderContainerMock()];
 
         $this->objectInFolderContainer->setChildren($children);
         $this->assertSame($children, $this->objectInFolderContainer->getChildren());

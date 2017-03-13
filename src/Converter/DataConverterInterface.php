@@ -282,7 +282,7 @@ interface DataConverterInterface
      * @param array $extensions
      * @return PropertiesInterface
      */
-    public function convertProperties(array $data = null, $extensions = array());
+    public function convertProperties(array $data = null, $extensions = []);
 
     /**
      * Convert given input data to a AllowableActions object
@@ -339,7 +339,7 @@ interface DataConverterInterface
      * @param array $cmisKeys
      * @return CmisExtensionElementInterface[]
      */
-    public function convertExtension(array $data = null, array $cmisKeys = array());
+    public function convertExtension(array $data = null, array $cmisKeys = []);
 
     /**
      * Convert given input data to an ExtensionFeature object

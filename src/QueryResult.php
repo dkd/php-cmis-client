@@ -24,12 +24,12 @@ class QueryResult implements QueryResultInterface
     /**
      * @var PropertyDataInterface[]
      */
-    protected $propertiesById = array();
+    protected $propertiesById = [];
 
     /**
      * @var PropertyDataInterface[]
      */
-    protected $propertiesByQueryName = array();
+    protected $propertiesByQueryName = [];
 
     /**
      * @var AllowableActionsInterface|null
@@ -39,12 +39,12 @@ class QueryResult implements QueryResultInterface
     /**
      * @var RelationshipInterface[]
      */
-    protected $relationships = array();
+    protected $relationships = [];
 
     /**
      * @var RenditionInterface[]
      */
-    protected $renditions = array();
+    protected $renditions = [];
 
     /**
      * @param SessionInterface $session

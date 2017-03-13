@@ -21,7 +21,7 @@ class ObjectInFolderList extends AbstractExtensionData implements ObjectInFolder
     /**
      * @var ObjectInFolderDataInterface[]
      */
-    protected $objects = array();
+    protected $objects = [];
 
     /**
      * @var boolean

@@ -29,7 +29,7 @@ class PropertyDateTimeTest extends \PHPUnit_Framework_TestCase
 
     public function testSetValuesSetsProperty()
     {
-        $values = array(new \DateTime());
+        $values = [new \DateTime()];
         $this->propertyDateTime->setValues($values);
         $this->assertAttributeSame($values, 'values', $this->propertyDateTime);
     }
@@ -37,14 +37,14 @@ class PropertyDateTimeTest extends \PHPUnit_Framework_TestCase
     public function testSetValuesThrowsExceptionIfInvalidValuesGiven()
     {
         $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', '', 1413440336);
-        $this->propertyDateTime->setValues(array('now'));
+        $this->propertyDateTime->setValues(['now']);
     }
 
     public function testSetValueSetsValuesProperty()
     {
         $date = new \DateTime();
         $this->propertyDateTime->setValue($date);
-        $this->assertAttributeSame(array($date), 'values', $this->propertyDateTime);
+        $this->assertAttributeSame([$date], 'values', $this->propertyDateTime);
     }
 
     public function testSetValueThrowsExceptionIfInvalidValueGiven()

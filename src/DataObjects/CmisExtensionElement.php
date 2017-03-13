@@ -37,12 +37,12 @@ class CmisExtensionElement implements CmisExtensionElementInterface
     /**
      * @var array
      */
-    protected $attributes = array();
+    protected $attributes = [];
 
     /**
      * @var CmisExtensionElement[]
      */
-    protected $children = array();
+    protected $children = [];
 
     /**
      * @param string $namespace
@@ -55,9 +55,9 @@ class CmisExtensionElement implements CmisExtensionElementInterface
     public function __construct(
         $namespace,
         $name,
-        array $attributes = array(),
+        array $attributes = [],
         $value = null,
-        array $children = array()
+        array $children = []
     ) {
         if ($value !== null && count($children) > 0) {
             throw new \InvalidArgumentException('Value and children given! Only one of them is allowed.');

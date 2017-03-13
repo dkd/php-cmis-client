@@ -102,7 +102,7 @@ interface ObjectServiceInterface
         $folderId = null,
         StreamInterface $contentStream = null,
         VersioningState $versioningState = null,
-        array $policies = array(),
+        array $policies = [],
         AclInterface $addAces = null,
         AclInterface $removeAces = null,
         ExtensionDataInterface $extension = null
@@ -133,7 +133,7 @@ interface ObjectServiceInterface
         PropertiesInterface $properties,
         $folderId = null,
         VersioningState $versioningState = null,
-        array $policies = array(),
+        array $policies = [],
         AclInterface $addAces = null,
         AclInterface $removeAces = null,
         ExtensionDataInterface $extension = null
@@ -161,7 +161,7 @@ interface ObjectServiceInterface
         $repositoryId,
         PropertiesInterface $properties,
         $folderId,
-        array $policies = array(),
+        array $policies = [],
         AclInterface $addAces = null,
         AclInterface $removeAces = null,
         ExtensionDataInterface $extension = null
@@ -188,7 +188,7 @@ interface ObjectServiceInterface
         $repositoryId,
         PropertiesInterface $properties,
         $folderId = null,
-        array $policies = array(),
+        array $policies = [],
         AclInterface $addAces = null,
         AclInterface $removeAces = null,
         ExtensionDataInterface $extension = null
@@ -214,7 +214,7 @@ interface ObjectServiceInterface
         $repositoryId,
         PropertiesInterface $properties,
         $folderId = null,
-        array $policies = array(),
+        array $policies = [],
         AclInterface $addAces = null,
         AclInterface $removeAces = null,
         ExtensionDataInterface $extension = null
@@ -237,7 +237,7 @@ interface ObjectServiceInterface
     public function createRelationship(
         $repositoryId,
         PropertiesInterface $properties,
-        array $policies = array(),
+        array $policies = [],
         AclInterface $addAces = null,
         AclInterface $removeAces = null,
         ExtensionDataInterface $extension = null

@@ -112,14 +112,14 @@ class RenditionTest extends \PHPUnit_Framework_TestCase
         /** @var  RepositoryInfoInterface|PHPUnit_Framework_MockObject_MockObject $repositoryInfoMock */
         $repositoryInfoMock = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\Data\\RepositoryInfoInterface'
-        )->setMethods(array('getId'))->getMockForAbstractClass();
+        )->setMethods(['getId'])->getMockForAbstractClass();
         $repositoryInfoMock->expects($this->any())->method('getId')->willReturn('repositoryId');
 
         $streamMock = $this->getMockBuilder('\\GuzzleHttp\\Stream\\StreamInterface')->getMockForAbstractClass();
 
         $objectServiceMock = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\Bindings\\Browser\\ObjectService'
-        )->setMethods(array('getContentStream'))->disableOriginalConstructor()->getMockForAbstractClass();
+        )->setMethods(['getContentStream'])->disableOriginalConstructor()->getMockForAbstractClass();
 
         $objectServiceMock->expects($this->once())->method('getContentStream')->with(
             $repositoryInfoMock->getId(),
@@ -129,7 +129,7 @@ class RenditionTest extends \PHPUnit_Framework_TestCase
 
         $bindingMock = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\Bindings\\CmisBindingInterface'
-        )->setMethods(array('getObjectService'))->disableOriginalConstructor()->getMockForAbstractClass();
+        )->setMethods(['getObjectService'])->disableOriginalConstructor()->getMockForAbstractClass();
 
         $bindingMock->expects($this->once())->method('getObjectService')->willReturn($objectServiceMock);
 

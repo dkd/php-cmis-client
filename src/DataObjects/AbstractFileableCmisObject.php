@@ -70,7 +70,7 @@ abstract class AbstractFileableCmisObject extends AbstractCmisObject implements 
             null
         );
 
-        $parents = array();
+        $parents = [];
 
         foreach ($bindingParents as $parent) {
             if ($parent->getObject()->getProperties() === null) {
@@ -131,7 +131,7 @@ abstract class AbstractFileableCmisObject extends AbstractCmisObject implements 
             true,
             null
         );
-        $paths = array();
+        $paths = [];
         foreach ($bindingParents as $parent) {
             if ($parent->getObject()->getProperties() === null) {
                 // that should never happen but could in case of an faulty repository implementation

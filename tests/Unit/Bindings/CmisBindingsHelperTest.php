@@ -32,7 +32,7 @@ class CmisBindingsHelperTest extends \PHPUnit_Framework_TestCase
             '\\Dkd\\PhpCmis\\Exception\\CmisRuntimeException',
             'Session parameters must be set!'
         );
-        $this->cmisBindingsHelper->createBinding(array());
+        $this->cmisBindingsHelper->createBinding([]);
     }
 
     public function testCreateBindingThrowsExceptionIfNoBindingTypeSessionParameterIsGiven()
@@ -41,7 +41,7 @@ class CmisBindingsHelperTest extends \PHPUnit_Framework_TestCase
             '\\Dkd\\PhpCmis\\Exception\\CmisRuntimeException',
             'Required binding type is not configured!'
         );
-        $this->cmisBindingsHelper->createBinding(array('foo' => 'bar'));
+        $this->cmisBindingsHelper->createBinding(['foo' => 'bar']);
     }
 
     public function testCreateBindingThrowsExceptionIfInvalidBindingTypeSessionParameterIsGiven()
@@ -50,7 +50,7 @@ class CmisBindingsHelperTest extends \PHPUnit_Framework_TestCase
             '\\Dkd\\PhpCmis\\Exception\\CmisRuntimeException',
             'Invalid binding type given: bar'
         );
-        $this->cmisBindingsHelper->createBinding(array(SessionParameter::BINDING_TYPE => 'bar'));
+        $this->cmisBindingsHelper->createBinding([SessionParameter::BINDING_TYPE => 'bar']);
     }
 
     public function testCreateBindingThrowsExceptionIfGivenBindingTypeIsNotYetImplemented()
@@ -62,19 +62,19 @@ class CmisBindingsHelperTest extends \PHPUnit_Framework_TestCase
                 BindingType::CUSTOM
             )
         );
-        $this->cmisBindingsHelper->createBinding(array(SessionParameter::BINDING_TYPE => BindingType::CUSTOM));
+        $this->cmisBindingsHelper->createBinding([SessionParameter::BINDING_TYPE => BindingType::CUSTOM]);
     }
 
     public function testCreateBindingRequestsBindingFactoryForRequestedBinding()
     {
-        $parameters = array(SessionParameter::BINDING_TYPE => BindingType::BROWSER);
+        $parameters = [SessionParameter::BINDING_TYPE => BindingType::BROWSER];
 
         $cmisBindingsHelper = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
-            array('getCmisBindingFactory')
+            ['getCmisBindingFactory']
         )->getMock();
 
         $cmisBindingFactoryMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingFactory')->setMethods(
-            array('createCmisBrowserBinding')
+            ['createCmisBrowserBinding']
         )->getMock();
 
         $cmisBindingFactoryMock->expects($this->once())->method('createCmisBrowserBinding')->with(
@@ -97,7 +97,7 @@ class CmisBindingsHelperTest extends \PHPUnit_Framework_TestCase
     public function testGetSpiReturnsInstanceOfBindingClassAndStoresItToTheSession()
     {
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\BindingSessionInterface')->setMethods(
-            array('get', 'put')
+            ['get', 'put']
         )->getMockForAbstractClass();
 
         $bindingClassFixture = $this->getMockForAbstractClass('\\Dkd\\PhpCmis\\Bindings\\CmisInterface');
@@ -107,10 +107,10 @@ class CmisBindingsHelperTest extends \PHPUnit_Framework_TestCase
         // and second to get the name of the binding class that should be used for the spi.
         $sessionMock->expects($this->exactly(2))->method('get')->will(
             $this->returnValueMap(
-                array(
-                    array(CmisBindingsHelper::SPI_OBJECT, null, null),
-                    array(SessionParameter::BINDING_CLASS, null, $bindingClassFixtureClassName)
-                )
+                [
+                    [CmisBindingsHelper::SPI_OBJECT, null, null],
+                    [SessionParameter::BINDING_CLASS, null, $bindingClassFixtureClassName]
+                ]
             )
         );
 
@@ -128,7 +128,7 @@ class CmisBindingsHelperTest extends \PHPUnit_Framework_TestCase
     public function testGetSpiReturnsSpiFromSessionIfAlreadyExists()
     {
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\BindingSessionInterface')->setMethods(
-            array('get')
+            ['get']
         )->getMockForAbstractClass();
 
         $bindingClassFixture = $this->getMockForAbstractClass('\\Dkd\\PhpCmis\\Bindings\\CmisInterface');
@@ -143,14 +143,14 @@ class CmisBindingsHelperTest extends \PHPUnit_Framework_TestCase
     public function testGetSpiThrowsExceptionIfBindingClassIsNotConfiguredInSession()
     {
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\BindingSessionInterface')->setMethods(
-            array('get')
+            ['get']
         )->getMockForAbstractClass();
         $sessionMock->expects($this->exactly(2))->method('get')->will(
             $this->returnValueMap(
-                array(
-                    array(CmisBindingsHelper::SPI_OBJECT, null, null),
-                    array(SessionParameter::BINDING_CLASS, null, null)
-                )
+                [
+                    [CmisBindingsHelper::SPI_OBJECT, null, null],
+                    [SessionParameter::BINDING_CLASS, null, null]
+                ]
             )
         );
 
@@ -164,14 +164,14 @@ class CmisBindingsHelperTest extends \PHPUnit_Framework_TestCase
     public function testGetSpiThrowsExceptionIfGivenBindingClassDoesNotExist()
     {
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\BindingSessionInterface')->setMethods(
-            array('get')
+            ['get']
         )->getMockForAbstractClass();
         $sessionMock->expects($this->exactly(2))->method('get')->will(
             $this->returnValueMap(
-                array(
-                    array(CmisBindingsHelper::SPI_OBJECT, null, null),
-                    array(SessionParameter::BINDING_CLASS, null, 'ThisClassDoesNotExist')
-                )
+                [
+                    [CmisBindingsHelper::SPI_OBJECT, null, null],
+                    [SessionParameter::BINDING_CLASS, null, 'ThisClassDoesNotExist']
+                ]
             )
         );
 
@@ -185,16 +185,16 @@ class CmisBindingsHelperTest extends \PHPUnit_Framework_TestCase
     public function testGetSpiThrowsExceptionIfGivenBindingClassCouldNotBeInstantiated()
     {
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\BindingSessionInterface')->setMethods(
-            array('get')
+            ['get']
         )->getMockForAbstractClass();
 
         $spiClassName = '\\Dkd\\PhpCmis\\Test\\Fixtures\\Php\\Bindings\\CmisBindingConstructorThrowsException';
         $sessionMock->expects($this->exactly(2))->method('get')->will(
             $this->returnValueMap(
-                array(
-                    array(CmisBindingsHelper::SPI_OBJECT, null, null),
-                    array(SessionParameter::BINDING_CLASS, null, $spiClassName)
-                )
+                [
+                    [CmisBindingsHelper::SPI_OBJECT, null, null],
+                    [SessionParameter::BINDING_CLASS, null, $spiClassName]
+                ]
             )
         );
 
@@ -208,15 +208,15 @@ class CmisBindingsHelperTest extends \PHPUnit_Framework_TestCase
     public function testGetSpiThrowsExceptionIfGivenBindingClassDoesNotImplementCmisInterface()
     {
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\BindingSessionInterface')->setMethods(
-            array('get')
+            ['get']
         )->getMockForAbstractClass();
 
         $sessionMock->expects($this->exactly(2))->method('get')->will(
             $this->returnValueMap(
-                array(
-                    array(CmisBindingsHelper::SPI_OBJECT, null, null),
-                    array(SessionParameter::BINDING_CLASS, null, 'stdClass')
-                )
+                [
+                    [CmisBindingsHelper::SPI_OBJECT, null, null],
+                    [SessionParameter::BINDING_CLASS, null, 'stdClass']
+                ]
             )
         );
 
@@ -230,17 +230,17 @@ class CmisBindingsHelperTest extends \PHPUnit_Framework_TestCase
     public function testGetHttpInvokerReturnsInstanceOfInvokerClassAndStoresItToTheSession()
     {
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\BindingSessionInterface')->setMethods(
-            array('get', 'put')
+            ['get', 'put']
         )->getMockForAbstractClass();
 
         // ensure that $session->get() is called 2 times. Once to check if http invoker exists already in the session
         // and second to get the name of the http invoker class that should be used.
         $sessionMock->expects($this->exactly(2))->method('get')->will(
             $this->returnValueMap(
-                array(
-                    array(SessionParameter::HTTP_INVOKER_OBJECT, null, null),
-                    array(SessionParameter::HTTP_INVOKER_CLASS, null, '\\GuzzleHttp\\Client')
-                )
+                [
+                    [SessionParameter::HTTP_INVOKER_OBJECT, null, null],
+                    [SessionParameter::HTTP_INVOKER_CLASS, null, '\\GuzzleHttp\\Client']
+                ]
             )
         );
 
@@ -258,7 +258,7 @@ class CmisBindingsHelperTest extends \PHPUnit_Framework_TestCase
     public function testGetHttpInvokerReturnsHttpInvokerFromSessionIfAlreadyExists()
     {
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\BindingSessionInterface')->setMethods(
-            array('get')
+            ['get']
         )->getMockForAbstractClass();
 
         $httpInvokerFixture = $this->getMock('\\GuzzleHttp\\ClientInterface');
@@ -273,7 +273,7 @@ class CmisBindingsHelperTest extends \PHPUnit_Framework_TestCase
     public function testGetHttpInvokerThrowsExceptionIfInvokerDoesNotImplementExpectedInterface()
     {
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\BindingSessionInterface')->setMethods(
-            array('get')
+            ['get']
         )->getMockForAbstractClass();
 
         $httpInvokerFixture = $this->getMock('\\stdClass');
@@ -294,14 +294,14 @@ class CmisBindingsHelperTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Dkd\PhpCmis\Bindings\BindingSessionInterface|\PHPUnit_Framework_MockObject_MockObject $sessionMock */
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\BindingSessionInterface')->setMethods(
-            array('get')
+            ['get']
         )->getMockForAbstractClass();
         $sessionMock->expects($this->exactly(2))->method('get')->will(
             $this->returnValueMap(
-                array(
-                    array(SessionParameter::HTTP_INVOKER_OBJECT, null, null),
-                    array(SessionParameter::HTTP_INVOKER_CLASS, null, null)
-                )
+                [
+                    [SessionParameter::HTTP_INVOKER_OBJECT, null, null],
+                    [SessionParameter::HTTP_INVOKER_CLASS, null, null]
+                ]
             )
         );
 
@@ -316,14 +316,14 @@ class CmisBindingsHelperTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Dkd\PhpCmis\Bindings\BindingSessionInterface|\PHPUnit_Framework_MockObject_MockObject $sessionMock */
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\BindingSessionInterface')->setMethods(
-            array('get')
+            ['get']
         )->getMockForAbstractClass();
         $sessionMock->expects($this->exactly(2))->method('get')->will(
             $this->returnValueMap(
-                array(
-                    array(SessionParameter::HTTP_INVOKER_OBJECT, null, null),
-                    array(SessionParameter::HTTP_INVOKER_CLASS, null, 'ThisClassDoesNotExist')
-                )
+                [
+                    [SessionParameter::HTTP_INVOKER_OBJECT, null, null],
+                    [SessionParameter::HTTP_INVOKER_CLASS, null, 'ThisClassDoesNotExist']
+                ]
             )
         );
 
@@ -338,16 +338,16 @@ class CmisBindingsHelperTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Dkd\PhpCmis\Bindings\BindingSessionInterface|\PHPUnit_Framework_MockObject_MockObject $sessionMock */
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\BindingSessionInterface')->setMethods(
-            array('get')
+            ['get']
         )->getMockForAbstractClass();
 
         $httpInvokerClassName = '\\Dkd\\PhpCmis\\Test\\Fixtures\\Php\\HttpInvokerConstructorThrowsException';
         $sessionMock->expects($this->exactly(2))->method('get')->will(
             $this->returnValueMap(
-                array(
-                    array(SessionParameter::HTTP_INVOKER_OBJECT, null, null),
-                    array(SessionParameter::HTTP_INVOKER_CLASS, null, $httpInvokerClassName)
-                )
+                [
+                    [SessionParameter::HTTP_INVOKER_OBJECT, null, null],
+                    [SessionParameter::HTTP_INVOKER_CLASS, null, $httpInvokerClassName]
+                ]
             )
         );
 
@@ -361,17 +361,17 @@ class CmisBindingsHelperTest extends \PHPUnit_Framework_TestCase
     public function testGetJsonConverterReturnsInstanceOfConverterClassAndStoresItToTheSession()
     {
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\BindingSessionInterface')->setMethods(
-            array('get', 'put')
+            ['get', 'put']
         )->getMockForAbstractClass();
 
         // ensure that $session->get() is called 2 times. Once to check if JSON Converter exists already in the session
         // and second to get the name of the JSON Converter class that should be used.
         $sessionMock->expects($this->exactly(2))->method('get')->will(
             $this->returnValueMap(
-                array(
-                    array(SessionParameter::JSON_CONVERTER, null, null),
-                    array(SessionParameter::JSON_CONVERTER_CLASS, null, '\\GuzzleHttp\\Client')
-                )
+                [
+                    [SessionParameter::JSON_CONVERTER, null, null],
+                    [SessionParameter::JSON_CONVERTER_CLASS, null, '\\GuzzleHttp\\Client']
+                ]
             )
         );
 
@@ -389,7 +389,7 @@ class CmisBindingsHelperTest extends \PHPUnit_Framework_TestCase
     public function testGetJsonConverterReturnsJsonConverterFromSessionIfAlreadyExists()
     {
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\BindingSessionInterface')->setMethods(
-            array('get')
+            ['get']
         )->getMockForAbstractClass();
 
         $jsonConverterFixture = $this->getMock('\\stdClass');
@@ -405,14 +405,14 @@ class CmisBindingsHelperTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Dkd\PhpCmis\Bindings\BindingSessionInterface|\PHPUnit_Framework_MockObject_MockObject $sessionMock */
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\BindingSessionInterface')->setMethods(
-            array('get')
+            ['get']
         )->getMockForAbstractClass();
         $sessionMock->expects($this->exactly(2))->method('get')->will(
             $this->returnValueMap(
-                array(
-                    array(SessionParameter::JSON_CONVERTER, null, null),
-                    array(SessionParameter::JSON_CONVERTER_CLASS, null, null)
-                )
+                [
+                    [SessionParameter::JSON_CONVERTER, null, null],
+                    [SessionParameter::JSON_CONVERTER_CLASS, null, null]
+                ]
             )
         );
 
@@ -427,14 +427,14 @@ class CmisBindingsHelperTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Dkd\PhpCmis\Bindings\BindingSessionInterface|\PHPUnit_Framework_MockObject_MockObject $sessionMock */
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\BindingSessionInterface')->setMethods(
-            array('get')
+            ['get']
         )->getMockForAbstractClass();
         $sessionMock->expects($this->exactly(2))->method('get')->will(
             $this->returnValueMap(
-                array(
-                    array(SessionParameter::JSON_CONVERTER, null, null),
-                    array(SessionParameter::JSON_CONVERTER_CLASS, null, 'ThisClassDoesNotExist')
-                )
+                [
+                    [SessionParameter::JSON_CONVERTER, null, null],
+                    [SessionParameter::JSON_CONVERTER_CLASS, null, 'ThisClassDoesNotExist']
+                ]
             )
         );
 
@@ -449,16 +449,16 @@ class CmisBindingsHelperTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Dkd\PhpCmis\Bindings\BindingSessionInterface|\PHPUnit_Framework_MockObject_MockObject $sessionMock */
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\BindingSessionInterface')->setMethods(
-            array('get')
+            ['get']
         )->getMockForAbstractClass();
 
         $jsonConverterClassName = '\\Dkd\\PhpCmis\\Test\\Fixtures\\Php\\ConstructorThrowsException';
         $sessionMock->expects($this->exactly(2))->method('get')->will(
             $this->returnValueMap(
-                array(
-                    array(SessionParameter::JSON_CONVERTER, null, null),
-                    array(SessionParameter::JSON_CONVERTER_CLASS, null, $jsonConverterClassName)
-                )
+                [
+                    [SessionParameter::JSON_CONVERTER, null, null],
+                    [SessionParameter::JSON_CONVERTER_CLASS, null, $jsonConverterClassName]
+                ]
             )
         );
 

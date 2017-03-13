@@ -16,7 +16,7 @@ class FailedToDeleteDataTest extends \PHPUnit_Framework_TestCase
 {
     public function testSetIdsSetsIdsPropertyToGivenValue()
     {
-        $ids = array('foo', 'bar');
+        $ids = ['foo', 'bar'];
         $failedToDeleteData = new FailedToDeleteData();
         $failedToDeleteData->setIds($ids);
         $this->assertAttributeSame($ids, 'ids', $failedToDeleteData);
@@ -29,6 +29,6 @@ class FailedToDeleteDataTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetIdsReturnsIdsProperty($failedToDeleteData)
     {
-        $this->assertSame(array('foo', 'bar'), $failedToDeleteData->getIds());
+        $this->assertSame(['foo', 'bar'], $failedToDeleteData->getIds());
     }
 }

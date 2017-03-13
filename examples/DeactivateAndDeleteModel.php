@@ -7,22 +7,22 @@ if (!is_file(__DIR__ . '/conf/Configuration.php')) {
 }
 
 $httpInvoker = new \GuzzleHttp\Client(
-    array(
-        'defaults' => array(
-            'auth' => array(
+    [
+        'defaults' => [
+            'auth' => [
                 CMIS_BROWSER_USER,
                 CMIS_BROWSER_PASSWORD
-            )
-        )
-    )
+            ]
+        ]
+    ]
 );
 
-$parameters = array(
+$parameters = [
     \Dkd\PhpCmis\SessionParameter::BINDING_TYPE => \Dkd\PhpCmis\Enum\BindingType::BROWSER,
     \Dkd\PhpCmis\SessionParameter::BROWSER_URL => CMIS_BROWSER_URL,
     \Dkd\PhpCmis\SessionParameter::BROWSER_SUCCINCT => false,
     \Dkd\PhpCmis\SessionParameter::HTTP_INVOKER_OBJECT => $httpInvoker,
-);
+];
 
 $sessionFactory = new \Dkd\PhpCmis\SessionFactory();
 
@@ -40,9 +40,9 @@ echo "Deactivating and removing model 'examples/resources/custommodel.xml' from 
 
 try {
     $document = $session->getObjectByPath('/Data Dictionary/Models/custommodel.xml');
-    $updated = $session->getObject($document)->updateProperties(array(
+    $updated = $session->getObject($document)->updateProperties([
         'cm:modelActive' => false
-    ));
+    ]);
     if (!$updated->getPropertyValue('cm:modelActive')) {
         echo "Model '" . $document->getId() . "' was deactivated.\n";
     } else {

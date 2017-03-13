@@ -37,10 +37,10 @@ class RepositoryService extends AbstractBrowserBindingService implements Reposit
         $url = $this->getRepositoryUrl($repositoryId);
 
         $url->getQuery()->modify(
-            array(
+            [
                 Constants::CONTROL_CMISACTION => Constants::CMISACTION_CREATE_TYPE,
                 Constants::CONTROL_TYPE => $this->getJsonConverter()->convertFromTypeDefinition($type)
-            )
+            ]
         );
 
         $responseData = (array) \json_decode($this->post($url)->getBody(), true);
@@ -60,10 +60,10 @@ class RepositoryService extends AbstractBrowserBindingService implements Reposit
         $url = $this->getRepositoryUrl($repositoryId);
 
         $url->getQuery()->modify(
-            array(
+            [
                 Constants::CONTROL_CMISACTION => Constants::CMISACTION_DELETE_TYPE,
                 Constants::CONTROL_TYPE_ID => $typeId
-            )
+            ]
         );
 
         $this->post($url);
@@ -126,19 +126,19 @@ class RepositoryService extends AbstractBrowserBindingService implements Reposit
     ) {
         $url = $this->getRepositoryUrl($repositoryId, Constants::SELECTOR_TYPE_CHILDREN);
         $url->getQuery()->modify(
-            array(
+            [
                 Constants::PARAM_PROPERTY_DEFINITIONS => $includePropertyDefinitions ? 'true' : 'false',
                 Constants::PARAM_SKIP_COUNT => $skipCount,
                 Constants::PARAM_DATETIME_FORMAT => (string) $this->getDateTimeFormat()
-            )
+            ]
         );
 
         if ($typeId !== null) {
-            $url->getQuery()->modify(array(Constants::PARAM_TYPE_ID => $typeId));
+            $url->getQuery()->modify([Constants::PARAM_TYPE_ID => $typeId]);
         }
 
         if ($maxItems !== null) {
-            $url->getQuery()->modify(array(Constants::PARAM_MAX_ITEMS => $maxItems));
+            $url->getQuery()->modify([Constants::PARAM_MAX_ITEMS => $maxItems]);
         }
 
         $responseData = (array) \json_decode($this->read($url)->getBody(), true);
@@ -203,18 +203,18 @@ class RepositoryService extends AbstractBrowserBindingService implements Reposit
     ) {
         $url = $this->getRepositoryUrl($repositoryId, Constants::SELECTOR_TYPE_DESCENDANTS);
         $url->getQuery()->modify(
-            array(
+            [
                 Constants::PARAM_PROPERTY_DEFINITIONS => $includePropertyDefinitions ? 'true' : 'false',
                 Constants::PARAM_DATETIME_FORMAT => (string) $this->getDateTimeFormat()
-            )
+            ]
         );
 
         if ($typeId !== null) {
-            $url->getQuery()->modify(array(Constants::PARAM_TYPE_ID => $typeId));
+            $url->getQuery()->modify([Constants::PARAM_TYPE_ID => $typeId]);
         }
 
         if ($depth !== null) {
-            $url->getQuery()->modify(array(Constants::PARAM_DEPTH => $depth));
+            $url->getQuery()->modify([Constants::PARAM_DEPTH => $depth]);
         }
 
         $responseData = (array) \json_decode($this->read($url)->getBody(), true);
@@ -235,10 +235,10 @@ class RepositoryService extends AbstractBrowserBindingService implements Reposit
         $url = $this->getRepositoryUrl($repositoryId);
 
         $url->getQuery()->modify(
-            array(
+            [
                 Constants::CONTROL_CMISACTION => Constants::CMISACTION_UPDATE_TYPE,
                 Constants::CONTROL_TYPE => json_encode($this->getJsonConverter()->convertFromTypeDefinition($type))
-            )
+            ]
         );
 
         $responseData = (array) \json_decode($this->post($url)->getBody(), true);

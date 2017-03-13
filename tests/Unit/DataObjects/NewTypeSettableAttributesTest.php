@@ -31,47 +31,47 @@ class NewTypeSettableAttributesTest extends \PHPUnit_Framework_TestCase
      */
     public function propertiesOfSutDataProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 'propertyName' => 'canSetControllableAcl'
-            ),
-            array(
+            ],
+            [
                 'propertyName' => 'canSetControllablePolicy'
-            ),
-            array(
+            ],
+            [
                 'propertyName' => 'canSetCreatable'
-            ),
-            array(
+            ],
+            [
                 'propertyName' => 'canSetDescription'
-            ),
-            array(
+            ],
+            [
                 'propertyName' => 'canSetDisplayName'
-            ),
-            array(
+            ],
+            [
                 'propertyName' => 'canSetFileable'
-            ),
-            array(
+            ],
+            [
                 'propertyName' => 'canSetFulltextIndexed'
-            ),
-            array(
+            ],
+            [
                 'propertyName' => 'canSetId'
-            ),
-            array(
+            ],
+            [
                 'propertyName' => 'canSetIncludedInSupertypeQuery'
-            ),
-            array(
+            ],
+            [
                 'propertyName' => 'canSetLocalName'
-            ),
-            array(
+            ],
+            [
                 'propertyName' => 'canSetLocalNamespace'
-            ),
-            array(
+            ],
+            [
                 'propertyName' => 'canSetQueryable'
-            ),
-            array(
+            ],
+            [
                 'propertyName' => 'canSetQueryName'
-            )
-        );
+            ]
+        ];
     }
 
     /**
@@ -115,7 +115,7 @@ class NewTypeSettableAttributesTest extends \PHPUnit_Framework_TestCase
     {
         $setterName = 'set' . ucfirst($propertyName);
         $getterName = $propertyName;
-        $this->setDependencies(array('testSetPropertySetsProperty'));
+        $this->setDependencies(['testSetPropertySetsProperty']);
         $this->newTypeSettableAttributes->$setterName(true);
         $this->assertSame(true, $this->newTypeSettableAttributes->$getterName());
     }

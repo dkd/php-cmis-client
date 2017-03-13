@@ -21,7 +21,7 @@ class AccessControlList extends AbstractExtensionData implements MutableAclInter
     /**
      * @var AceInterface[]
      */
-    protected $aces = array();
+    protected $aces = [];
 
     /**
      * @var boolean

@@ -61,9 +61,9 @@ interface DocumentInterface extends FileableCmisObjectInterface, DocumentPropert
         array $properties,
         StreamInterface $contentStream,
         $checkinComment,
-        array $policies = array(),
-        array $addAces = array(),
-        array $removeAces = array()
+        array $policies = [],
+        array $addAces = [],
+        array $removeAces = []
     );
 
     /**
@@ -104,11 +104,11 @@ interface DocumentInterface extends FileableCmisObjectInterface, DocumentPropert
      */
     public function copy(
         ObjectIdInterface $targetFolderId = null,
-        array $properties = array(),
+        array $properties = [],
         VersioningState $versioningState = null,
-        array $policies = array(),
-        array $addAces = array(),
-        array $removeAces = array(),
+        array $policies = [],
+        array $addAces = [],
+        array $removeAces = [],
         OperationContextInterface $context = null
     );
 

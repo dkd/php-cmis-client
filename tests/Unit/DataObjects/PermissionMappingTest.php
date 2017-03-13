@@ -34,8 +34,8 @@ class PermissionMappingTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetPermissionsSetsProperty($expected, $value)
     {
-        $this->permissionMapping->setPermissions(array($value));
-        $this->assertAttributeSame(array($expected), 'permissions', $this->permissionMapping);
+        $this->permissionMapping->setPermissions([$value]);
+        $this->assertAttributeSame([$expected], 'permissions', $this->permissionMapping);
     }
 
     /**
@@ -43,8 +43,8 @@ class PermissionMappingTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPermissionsReturnsPropertyValue()
     {
-        $this->permissionMapping->setPermissions(array('foo'));
-        $this->assertSame(array('foo'), $this->permissionMapping->getPermissions());
+        $this->permissionMapping->setPermissions(['foo']);
+        $this->assertSame(['foo'], $this->permissionMapping->getPermissions());
     }
 
     /**

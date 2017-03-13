@@ -60,7 +60,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
     /**
      * @var PropertyInterface[]
      */
-    protected $properties = array();
+    protected $properties = [];
 
     /**
      * @var AllowableActionsInterface|null
@@ -70,7 +70,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
     /**
      * @var RenditionInterface[]
      */
-    protected $renditions = array();
+    protected $renditions = [];
 
     /**
      * @var AclInterface|null
@@ -80,12 +80,12 @@ abstract class AbstractCmisObject implements CmisObjectInterface
     /**
      * @var PolicyInterface[]
      */
-    protected $policies = array();
+    protected $policies = [];
 
     /**
      * @var RelationshipInterface[]
      */
-    protected $relationships = array();
+    protected $relationships = [];
 
     /**
      * A list that contains a list of <code>CmisExtensionElementInterface</code> identified by
@@ -96,7 +96,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
      * @see CmisExtensionElementInterface
      * @var array[]
      */
-    protected $extensions = array();
+    protected $extensions = [];
 
     /**
      * @var OperationContextInterface
@@ -204,7 +204,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
         // get secondary types
         $propertyList = $properties->getProperties();
         if (isset($propertyList[PropertyIds::SECONDARY_OBJECT_TYPE_IDS])) {
-            $this->secondaryTypes = array();
+            $this->secondaryTypes = [];
             foreach ($propertyList[PropertyIds::SECONDARY_OBJECT_TYPE_IDS]->getValues() as $secondaryTypeId) {
                 $type = $this->getSession()->getTypeDefinition($secondaryTypeId);
                 if ($type instanceof SecondaryTypeInterface) {
@@ -372,7 +372,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
         $objectId = $this->getId();
         $changeToken = $this->getChangeToken();
 
-        $updatability = array();
+        $updatability = [];
         $updatability[] = Updatability::cast(Updatability::READWRITE);
         if ((boolean) $this->getPropertyValue(PropertyIds::IS_VERSION_SERIES_CHECKED_OUT) === true) {
             $updatability[] = Updatability::cast(Updatability::WHENCHECKEDOUT);
@@ -425,10 +425,10 @@ abstract class AbstractCmisObject implements CmisObjectInterface
             throw new CmisInvalidArgumentException('New name must not be empty!');
         }
 
-        $properties = array(
+        $properties = [
             PropertyIds::NAME,
             $newName
-        );
+        ];
 
         $object = $this->updateProperties($properties, $refresh);
 
@@ -628,7 +628,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
      */
     public function findObjectType($id)
     {
-        $result = array();
+        $result = [];
 
         if ($this->getObjectType()->getPropertyDefinition($id) !== null) {
             $result[] = $this->getObjectType();
@@ -708,7 +708,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
      */
     public function addAcl(array $addAces, AclPropagation $aclPropagation)
     {
-        return $this->applyAcl($addAces, array(), $aclPropagation);
+        return $this->applyAcl($addAces, [], $aclPropagation);
     }
 
     /**
@@ -720,7 +720,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
      */
     public function removeAcl(array $removeAces, AclPropagation $aclPropagation)
     {
-        return $this->applyAcl(array(), $removeAces, $aclPropagation);
+        return $this->applyAcl([], $removeAces, $aclPropagation);
     }
 
     /**
@@ -767,7 +767,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
             throw new IllegalStateException('ACLs are not available');
         }
 
-        $result = array();
+        $result = [];
 
         foreach ($currentAcl->getAces() as $ace) {
             if ($principalId === $ace->getPrincipalId() && count($ace->getPermissions()) > 0) {

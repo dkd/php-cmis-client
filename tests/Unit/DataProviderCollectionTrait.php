@@ -19,16 +19,16 @@ trait DataProviderCollectionTrait
      */
     public function booleanCastDataProvider()
     {
-        return array(
-            array(true, true),
-            array(true, 1),
-            array(true, '1'),
-            array(true, 'string'),
-            array(false, false),
-            array(false, 0),
-            array(false, '0'),
-            array(false, null)
-        );
+        return [
+            [true, true],
+            [true, 1],
+            [true, '1'],
+            [true, 'string'],
+            [false, false],
+            [false, 0],
+            [false, '0'],
+            [false, null]
+        ];
     }
 
     /**
@@ -38,13 +38,13 @@ trait DataProviderCollectionTrait
      */
     public function integerCastDataProvider()
     {
-        return array(
-            array(0, ''),
-            array(2, '2'),
-            array(0, null),
-            array(3, 3),
-            array(3, 3.2)
-        );
+        return [
+            [0, ''],
+            [2, '2'],
+            [0, null],
+            [3, 3],
+            [3, 3.2]
+        ];
     }
 
     /**
@@ -54,15 +54,15 @@ trait DataProviderCollectionTrait
      */
     public function stringCastDataProvider()
     {
-        return array(
-            array('', ''),
-            array('foo', 'foo'),
-            array('', null),
-            array('3', 3),
-            array('3.2', 3.2),
-            array('1', true),
-            array('', false)
-        );
+        return [
+            ['', ''],
+            ['foo', 'foo'],
+            ['', null],
+            ['3', 3],
+            ['3.2', 3.2],
+            ['1', true],
+            ['', false]
+        ];
     }
 
     /**
@@ -73,20 +73,20 @@ trait DataProviderCollectionTrait
      */
     public function allTypesDataProvider(\Closure $filter = null)
     {
-        $values = array(
-            'string' => array('String'),
-            'integer' => array(1),
-            'float' => array(1.1),
-            'boolean' => array(true),
-            'object' => array(new \stdClass()),
-            'array' => array(array()),
-            'null' => array(null),
-            'callable' => array(
+        $values = [
+            'string' => ['String'],
+            'integer' => [1],
+            'float' => [1.1],
+            'boolean' => [true],
+            'object' => [new \stdClass()],
+            'array' => [[]],
+            'null' => [null],
+            'callable' => [
                 function () {
                     return true;
                 }
-            )
-        );
+            ]
+        ];
 
         if ($filter !== null) {
             $values = array_filter($values, $filter);

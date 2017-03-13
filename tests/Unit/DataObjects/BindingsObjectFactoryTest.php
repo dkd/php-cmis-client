@@ -38,7 +38,7 @@ class BindingsObjectFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreateAccessControlEntryReturnsAccessControlEntryObjectWithGivenProperties()
     {
         $principal = 'DummyPrincipal';
-        $permissions = array('perm1', 'perm2');
+        $permissions = ['perm1', 'perm2'];
         $ace = $this->bindingsObjectFactory->createAccessControlEntry($principal, $permissions);
 
         $this->assertInstanceOf('\\Dkd\\PhpCmis\\DataObjects\\AccessControlEntry', $ace);
@@ -48,14 +48,14 @@ class BindingsObjectFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateAccessControlListCreatesAnAccessControlListObjectWithGivenAces()
     {
-        $aces = array(
+        $aces = [
             $this->getMockBuilder(
                 '\\Dkd\\PhpCmis\\Data\\AceInterface'
             )->disableOriginalConstructor()->getMockForAbstractClass(),
             $this->getMockBuilder(
                 '\\Dkd\\PhpCmis\\Data\\AceInterface'
             )->disableOriginalConstructor()->getMockForAbstractClass()
-        );
+        ];
         $acl = $this->bindingsObjectFactory->createAccessControlList($aces);
 
         $this->assertInstanceOf('\\Dkd\\PhpCmis\\DataObjects\\AccessControlList', $acl);
@@ -65,15 +65,15 @@ class BindingsObjectFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreatePropertiesDataCreatesInstanceOfPropertiesObjectWithGivenProperties()
     {
         $property1 = $this->getMockBuilder('\\Dkd\\PhpCmis\\DataObjects\\AbstractPropertyData')->setConstructorArgs(
-            array('property1')
+            ['property1']
         )->getMockForAbstractClass();
         $property2 = $this->getMockBuilder('\\Dkd\\PhpCmis\\DataObjects\\AbstractPropertyData')->setConstructorArgs(
-            array('property2')
+            ['property2']
         )->getMockForAbstractClass();
-        $properties = $this->bindingsObjectFactory->createPropertiesData(array($property1, $property2));
+        $properties = $this->bindingsObjectFactory->createPropertiesData([$property1, $property2]);
         $this->assertInstanceOf('\\Dkd\\PhpCmis\\DataObjects\\Properties', $properties);
         $this->assertAttributeSame(
-            array('property1' => $property1, 'property2' => $property2),
+            ['property1' => $property1, 'property2' => $property2],
             'properties',
             $properties
         );
@@ -89,54 +89,54 @@ class BindingsObjectFactoryTest extends \PHPUnit_Framework_TestCase
             '\\Dkd\\PhpCmis\\Exception\\CmisRuntimeException',
             'Unknown property definition: InvalidPropertyDefinition'
         );
-        $this->bindingsObjectFactory->createPropertyData($invalidPropertyDefinition, array());
+        $this->bindingsObjectFactory->createPropertyData($invalidPropertyDefinition, []);
     }
 
     public function testCreatePropertyBooleanDataReturnsInstanceOfPropertyBoolean()
     {
-        $property = $this->bindingsObjectFactory->createPropertyBooleanData('myId', array(true));
+        $property = $this->bindingsObjectFactory->createPropertyBooleanData('myId', [true]);
         $this->assertInstanceOf('\\Dkd\\PhpCmis\\DataObjects\\PropertyBoolean', $property);
     }
 
     public function testCreatePropertyDateTimeDataReturnsInstanceOfPropertyDateTime()
     {
-        $property = $this->bindingsObjectFactory->createPropertyDateTimeData('myId', array(new \DateTime()));
+        $property = $this->bindingsObjectFactory->createPropertyDateTimeData('myId', [new \DateTime()]);
         $this->assertInstanceOf('\\Dkd\\PhpCmis\\DataObjects\\PropertyDateTime', $property);
     }
 
     public function testCreatePropertyDecimalDataReturnsInstanceOfPropertyDecimal()
     {
-        $property = $this->bindingsObjectFactory->createPropertyDecimalData('myId', array(1.2));
+        $property = $this->bindingsObjectFactory->createPropertyDecimalData('myId', [1.2]);
         $this->assertInstanceOf('\\Dkd\\PhpCmis\\DataObjects\\PropertyDecimal', $property);
     }
 
     public function testCreatePropertyHtmlDataReturnsInstanceOfPropertyHtml()
     {
-        $property = $this->bindingsObjectFactory->createPropertyHtmlData('myId', array('value'));
+        $property = $this->bindingsObjectFactory->createPropertyHtmlData('myId', ['value']);
         $this->assertInstanceOf('\\Dkd\\PhpCmis\\DataObjects\\PropertyHtml', $property);
     }
 
     public function testCreatePropertyIdDataReturnsInstanceOfPropertyId()
     {
-        $property = $this->bindingsObjectFactory->createPropertyIdData('myId', array('value'));
+        $property = $this->bindingsObjectFactory->createPropertyIdData('myId', ['value']);
         $this->assertInstanceOf('\\Dkd\\PhpCmis\\DataObjects\\PropertyId', $property);
     }
 
     public function testCreatePropertyIntegerDataReturnsInstanceOfPropertyInteger()
     {
-        $property = $this->bindingsObjectFactory->createPropertyIntegerData('myId', array(12));
+        $property = $this->bindingsObjectFactory->createPropertyIntegerData('myId', [12]);
         $this->assertInstanceOf('\\Dkd\\PhpCmis\\DataObjects\\PropertyInteger', $property);
     }
 
     public function testCreatePropertyStringDataReturnsInstanceOfPropertyString()
     {
-        $property = $this->bindingsObjectFactory->createPropertyStringData('myId', array('value'));
+        $property = $this->bindingsObjectFactory->createPropertyStringData('myId', ['value']);
         $this->assertInstanceOf('\\Dkd\\PhpCmis\\DataObjects\\PropertyString', $property);
     }
 
     public function testCreatePropertyUriDataReturnsInstanceOfPropertyUri()
     {
-        $property = $this->bindingsObjectFactory->createPropertyUriData('myId', array('value'));
+        $property = $this->bindingsObjectFactory->createPropertyUriData('myId', ['value']);
         $this->assertInstanceOf('\\Dkd\\PhpCmis\\DataObjects\\PropertyUri', $property);
     }
 
@@ -159,47 +159,47 @@ class BindingsObjectFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function createPropertyDataDataProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 new PropertyBooleanDefinition('testId'),
-                array(true),
+                [true],
                 '\\Dkd\\PhpCmis\\DataObjects\\PropertyBoolean'
-            ),
-            array(
+            ],
+            [
                 new PropertyDateTimeDefinition('testId'),
-                array(new \DateTime()),
+                [new \DateTime()],
                 '\\Dkd\\PhpCmis\\DataObjects\\PropertyDateTime'
-            ),
-            array(
+            ],
+            [
                 new PropertyDecimalDefinition('testId'),
-                array(1.2),
+                [1.2],
                 '\\Dkd\\PhpCmis\\DataObjects\\PropertyDecimal'
-            ),
-            array(
+            ],
+            [
                 new PropertyHtmlDefinition('testId'),
-                array('testValue'),
+                ['testValue'],
                 '\\Dkd\\PhpCmis\\DataObjects\\PropertyHtml'
-            ),
-            array(
+            ],
+            [
                 new PropertyIdDefinition('testId'),
-                array('testValue'),
+                ['testValue'],
                 '\\Dkd\\PhpCmis\\DataObjects\\PropertyId'
-            ),
-            array(
+            ],
+            [
                 new PropertyIntegerDefinition('testId'),
-                array(12),
+                [12],
                 '\\Dkd\\PhpCmis\\DataObjects\\PropertyInteger'
-            ),
-            array(
+            ],
+            [
                 new PropertyStringDefinition('testId'),
-                array('testValue'),
+                ['testValue'],
                 '\\Dkd\\PhpCmis\\DataObjects\\PropertyString'
-            ),
-            array(
+            ],
+            [
                 new PropertyUriDefinition('testId'),
-                array('testValue'),
+                ['testValue'],
                 '\\Dkd\\PhpCmis\\DataObjects\\PropertyUri'
-            ),
-        );
+            ],
+        ];
     }
 }

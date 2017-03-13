@@ -58,43 +58,43 @@ class CmisBrowserBindingTest extends \PHPUnit_Framework_TestCase
 
     public function servicesDataProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 '\\Dkd\\PhpCmis\\AclServiceInterface',
                 'aclService'
-            ),
-            array(
+            ],
+            [
                 '\\Dkd\\PhpCmis\\DiscoveryServiceInterface',
                 'discoveryService'
-            ),
-            array(
+            ],
+            [
                 '\\Dkd\\PhpCmis\\MultiFilingServiceInterface',
                 'multiFilingService'
-            ),
-            array(
+            ],
+            [
                 '\\Dkd\\PhpCmis\\NavigationServiceInterface',
                 'navigationService'
-            ),
-            array(
+            ],
+            [
                 '\\Dkd\\PhpCmis\\ObjectServiceInterface',
                 'objectService'
-            ),
-            array(
+            ],
+            [
                 '\\Dkd\\PhpCmis\\PolicyServiceInterface',
                 'policyService'
-            ),
-            array(
+            ],
+            [
                 '\\Dkd\\PhpCmis\\RelationshipServiceInterface',
                 'relationshipService'
-            ),
-            array(
+            ],
+            [
                 '\\Dkd\\PhpCmis\\RepositoryServiceInterface',
                 'repositoryService'
-            ),
-            array(
+            ],
+            [
                 '\\Dkd\\PhpCmis\\VersioningServiceInterface',
                 'versioningService'
-            )
-        );
+            ]
+        ];
     }
 }

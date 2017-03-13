@@ -38,12 +38,12 @@ class PropertyStringTest extends \PHPUnit_Framework_TestCase
             $expected = null;
         }
 
-        $values = array('foo', $value, null);
+        $values = ['foo', $value, null];
         if (!is_string($value) && $value !== null) {
             $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', '', 1413440336);
         }
         $this->subjectUnderTest->setValues($values);
-        $this->assertAttributeSame(array('foo', $expected, null), 'values', $this->subjectUnderTest);
+        $this->assertAttributeSame(['foo', $expected, null], 'values', $this->subjectUnderTest);
     }
 
     /**
@@ -61,6 +61,6 @@ class PropertyStringTest extends \PHPUnit_Framework_TestCase
             $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', '', 1413440336);
         }
         $this->subjectUnderTest->setValue($value);
-        $this->assertAttributeSame(array($expected), 'values', $this->subjectUnderTest);
+        $this->assertAttributeSame([$expected], 'values', $this->subjectUnderTest);
     }
 }

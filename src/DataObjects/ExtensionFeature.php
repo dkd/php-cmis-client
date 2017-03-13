@@ -30,7 +30,7 @@ class ExtensionFeature extends AbstractExtensionData implements ExtensionFeature
     /**
      * @var string[]
      */
-    protected $featureData = array();
+    protected $featureData = [];
 
     /**
      * @var string

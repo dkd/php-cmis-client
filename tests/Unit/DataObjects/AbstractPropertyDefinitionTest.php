@@ -25,33 +25,33 @@ class AbstractPropertyDefinitionTest extends \PHPUnit_Framework_TestCase
      */
     protected $abstractPropertyDefinition;
 
-    protected $stringProperties = array(
+    protected $stringProperties = [
         'id',
         'localName',
         'localNamespace',
         'queryName',
         'displayName',
         'description'
-    );
+    ];
 
-    protected $booleanProperties = array(
+    protected $booleanProperties = [
         'isInherited',
         'isQueryable',
         'isOrderable',
         'isRequired',
         'isOpenChoice',
-    );
+    ];
 
     public function setUp()
     {
         $this->abstractPropertyDefinition = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\DataObjects\\AbstractPropertyDefinition'
-        )->setConstructorArgs(array('testId'))->getMockForAbstractClass();
+        )->setConstructorArgs(['testId'])->getMockForAbstractClass();
     }
 
     public function stringPropertyDataProvider()
     {
-        $stringPropertyData = array();
+        $stringPropertyData = [];
         foreach ($this->stringProperties as $propertyName) {
             foreach ($this->stringCastDataProvider() as $stringPropertyTestValues) {
                 $testDataSet = $stringPropertyTestValues;
@@ -70,7 +70,7 @@ class AbstractPropertyDefinitionTest extends \PHPUnit_Framework_TestCase
 
     public function booleanPropertyDataProvider()
     {
-        $booleanPropertyData = array();
+        $booleanPropertyData = [];
         foreach ($this->booleanProperties as $propertyName) {
             foreach ($this->booleanCastDataProvider() as $booleanPropertyTestValues) {
                 $testDataSet = $booleanPropertyTestValues;
@@ -87,23 +87,23 @@ class AbstractPropertyDefinitionTest extends \PHPUnit_Framework_TestCase
         $propertyType = PropertyType::cast(PropertyType::ID);
         $cardinality = Cardinality::cast(Cardinality::MULTI);
         $updatability = Updatability::cast(Updatability::ONCREATE);
-        $choices = array(
+        $choices = [
             $this->getMockBuilder('\\Dkd\\PhpCmis\\Definitions\\ChoiceInterface')->getMockForAbstractClass()
-        );
+        ];
 
-        return array(
-            array('propertyType', $propertyType, $propertyType),
-            array('cardinality', $cardinality, $cardinality),
-            array('updatability', $updatability, $updatability),
-            array('choices', $choices, $choices),
-        );
+        return [
+            ['propertyType', $propertyType, $propertyType],
+            ['cardinality', $cardinality, $cardinality],
+            ['updatability', $updatability, $updatability],
+            ['choices', $choices, $choices],
+        ];
     }
 
     public function arrayPropertyDataProvider()
     {
-        return array(
-            array('defaultValue', array(123), array(123))
-        );
+        return [
+            ['defaultValue', [123], [123]]
+        ];
     }
 
     public function propertyDataProvider()

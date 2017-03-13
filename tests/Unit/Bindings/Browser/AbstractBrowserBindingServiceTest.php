@@ -68,7 +68,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
 
         $binding = $this->getMockBuilder(
             self::CLASS_TO_TEST
-        )->setConstructorArgs(array($sessionMock, $bindingHelper))->getMockForAbstractClass();
+        )->setConstructorArgs([$sessionMock, $bindingHelper])->getMockForAbstractClass();
 
         $this->assertAttributeInstanceOf('SessionMock', 'session', $binding);
         $this->assertAttributeInstanceOf('BindingHelperMock', 'cmisBindingsHelper', $binding);
@@ -80,15 +80,15 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
 
         $binding = $this->getMockBuilder(
             self::CLASS_TO_TEST
-        )->setConstructorArgs(array($sessionMock))->getMockForAbstractClass();
+        )->setConstructorArgs([$sessionMock])->getMockForAbstractClass();
 
         $this->assertAttributeSame(false, 'succinct', $binding);
 
-        $sessionMock = $this->getSessionMock(array(array(SessionParameter::BROWSER_SUCCINCT, null, true)));
+        $sessionMock = $this->getSessionMock([[SessionParameter::BROWSER_SUCCINCT, null, true]]);
 
         $binding = $this->getMockBuilder(
             self::CLASS_TO_TEST
-        )->setConstructorArgs(array($sessionMock))->getMockForAbstractClass();
+        )->setConstructorArgs([$sessionMock])->getMockForAbstractClass();
 
         $this->assertAttributeSame(true, 'succinct', $binding);
     }
@@ -97,11 +97,11 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
     {
         $sessionMock = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\Bindings\\BindingSessionInterface'
-        )->setMethods(array('get'))->getMockForAbstractClass();
+        )->setMethods(['get'])->getMockForAbstractClass();
 
         $binding = $this->getMockBuilder(
             self::CLASS_TO_TEST
-        )->setConstructorArgs(array($sessionMock))->getMockForAbstractClass();
+        )->setConstructorArgs([$sessionMock])->getMockForAbstractClass();
 
         $this->assertAttributeInstanceOf(
             '\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper',
@@ -116,7 +116,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
 
         $binding = $this->getMockBuilder(
             self::CLASS_TO_TEST
-        )->setConstructorArgs(array($sessionMock))->getMockForAbstractClass();
+        )->setConstructorArgs([$sessionMock])->getMockForAbstractClass();
 
         $this->assertAttributeSame(
             $this->getMethod(self::CLASS_TO_TEST, 'getSuccinct')->invoke($binding),
@@ -132,7 +132,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
             self::CLASS_TO_TEST
-        )->setConstructorArgs(array($sessionMock))->getMockForAbstractClass();
+        )->setConstructorArgs([$sessionMock])->getMockForAbstractClass();
 
         $this->assertSame($sessionMock, $binding->getSession());
     }
@@ -141,14 +141,14 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
     {
         $httpInvokerDummy = new Client();
         $cmisBindingsHelperMock = $this->getMockBuilder(CmisBindingsHelper::class)->setMethods(
-            array('getHttpInvoker')
+            ['getHttpInvoker']
         )->getMock();
         $cmisBindingsHelperMock->expects($this->any())->method('getHttpInvoker')->willReturn($httpInvokerDummy);
 
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
             self::CLASS_TO_TEST
-        )->setConstructorArgs(array($this->getSessionMock(), $cmisBindingsHelperMock))->getMockForAbstractClass();
+        )->setConstructorArgs([$this->getSessionMock(), $cmisBindingsHelperMock])->getMockForAbstractClass();
 
         $this->assertSame($httpInvokerDummy, $this->getMethod(self::CLASS_TO_TEST, 'getHttpInvoker')->invoke($binding));
     }
@@ -160,13 +160,13 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
             self::CLASS_TO_TEST
-        )->setConstructorArgs(array($sessionMock))->setMethods(
-            array('getRepositoriesInternal', 'getRepositoryUrlCache')
+        )->setConstructorArgs([$sessionMock])->setMethods(
+            ['getRepositoriesInternal', 'getRepositoryUrlCache']
         )->getMockForAbstractClass();
 
         $repositoryUrlCacheMock = $this->getMockBuilder(
             RepositoryUrlCache::class
-        )->setMethods(array('getRepositoryUrl'))->getMock();
+        )->setMethods(['getRepositoryUrl'])->getMock();
 
         $repositoryUrlCacheMock->expects($this->exactly(2))->method('getRepositoryUrl')->willReturn(null);
         $binding->expects($this->any())->method('getRepositoryUrlCache')->willReturn($repositoryUrlCacheMock);
@@ -174,7 +174,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
 
         $this->setExpectedException(CmisObjectNotFoundException::class);
 
-        $this->getMethod(self::CLASS_TO_TEST, 'getRepositoryUrl')->invokeArgs($binding, array('repository-id'));
+        $this->getMethod(self::CLASS_TO_TEST, 'getRepositoryUrl')->invokeArgs($binding, ['repository-id']);
     }
 
     public function testGetRepositoryUrlReturnsUrlFromRepositoryUrlCachet()
@@ -184,13 +184,13 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
             self::CLASS_TO_TEST
-        )->setConstructorArgs(array($sessionMock))->setMethods(
-            array('getRepositoriesInternal', 'getRepositoryUrlCache')
+        )->setConstructorArgs([$sessionMock])->setMethods(
+            ['getRepositoriesInternal', 'getRepositoryUrlCache']
         )->getMockForAbstractClass();
 
         $repositoryUrlCacheMock = $this->getMockBuilder(
             RepositoryUrlCache::class
-        )->setMethods(array('getRepositoryUrl'))->getMock();
+        )->setMethods(['getRepositoryUrl'])->getMock();
 
         $url = Url::createFromUrl(self::BROWSER_URL_TEST);
 
@@ -199,7 +199,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
 
         $this->assertSame(
             $url,
-            $this->getMethod(self::CLASS_TO_TEST, 'getRepositoryUrl')->invokeArgs($binding, array('repository-id'))
+            $this->getMethod(self::CLASS_TO_TEST, 'getRepositoryUrl')->invokeArgs($binding, ['repository-id'])
         );
     }
 
@@ -210,13 +210,13 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
             self::CLASS_TO_TEST
-        )->setConstructorArgs(array($sessionMock))->setMethods(
-            array('getRepositoriesInternal', 'getRepositoryUrlCache')
+        )->setConstructorArgs([$sessionMock])->setMethods(
+            ['getRepositoriesInternal', 'getRepositoryUrlCache']
         )->getMockForAbstractClass();
 
         $repositoryUrlCacheMock = $this->getMockBuilder(
             RepositoryUrlCache::class
-        )->setMethods(array('getObjectUrl'))->getMock();
+        )->setMethods(['getObjectUrl'])->getMock();
 
         $repositoryUrlCacheMock->expects($this->exactly(2))->method('getObjectUrl')->willReturn(null);
         $binding->expects($this->any())->method('getRepositoryUrlCache')->willReturn($repositoryUrlCacheMock);
@@ -226,7 +226,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
 
         $this->getMethod(self::CLASS_TO_TEST, 'getObjectUrl')->invokeArgs(
             $binding,
-            array('repository-id', 'object-id')
+            ['repository-id', 'object-id']
         );
     }
 
@@ -237,13 +237,13 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
             self::CLASS_TO_TEST
-        )->setConstructorArgs(array($sessionMock))->setMethods(
-            array('getRepositoriesInternal', 'getRepositoryUrlCache')
+        )->setConstructorArgs([$sessionMock])->setMethods(
+            ['getRepositoriesInternal', 'getRepositoryUrlCache']
         )->getMockForAbstractClass();
 
         $repositoryUrlCacheMock = $this->getMockBuilder(
             RepositoryUrlCache::class
-        )->setMethods(array('getObjectUrl'))->getMock();
+        )->setMethods(['getObjectUrl'])->getMock();
 
         $url = Url::createFromUrl(self::BROWSER_URL_TEST);
 
@@ -254,7 +254,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
             $url,
             $this->getMethod(self::CLASS_TO_TEST, 'getObjectUrl')->invokeArgs(
                 $binding,
-                array('repository-id', 'object-id')
+                ['repository-id', 'object-id']
             )
         );
     }
@@ -266,13 +266,13 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
             self::CLASS_TO_TEST
-        )->setConstructorArgs(array($sessionMock))->setMethods(
-            array('getRepositoriesInternal', 'getRepositoryUrlCache')
+        )->setConstructorArgs([$sessionMock])->setMethods(
+            ['getRepositoriesInternal', 'getRepositoryUrlCache']
         )->getMockForAbstractClass();
 
         $repositoryUrlCacheMock = $this->getMockBuilder(
             RepositoryUrlCache::class
-        )->setMethods(array('getPathUrl'))->getMock();
+        )->setMethods(['getPathUrl'])->getMock();
 
         $repositoryUrlCacheMock->expects($this->exactly(2))->method('getPathUrl')->willReturn(null);
         $binding->expects($this->any())->method('getRepositoryUrlCache')->willReturn($repositoryUrlCacheMock);
@@ -280,7 +280,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
 
         $this->setExpectedException(CmisObjectNotFoundException::class);
 
-        $this->getMethod(self::CLASS_TO_TEST, 'getPathUrl')->invokeArgs($binding, array('repository-id', 'path'));
+        $this->getMethod(self::CLASS_TO_TEST, 'getPathUrl')->invokeArgs($binding, ['repository-id', 'path']);
     }
 
     public function testGetPathUrlReturnsUrlFromRepositoryUrlCachet()
@@ -290,13 +290,13 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
             self::CLASS_TO_TEST
-        )->setConstructorArgs(array($sessionMock))->setMethods(
-            array('getRepositoriesInternal', 'getRepositoryUrlCache')
+        )->setConstructorArgs([$sessionMock])->setMethods(
+            ['getRepositoriesInternal', 'getRepositoryUrlCache']
         )->getMockForAbstractClass();
 
         $repositoryUrlCacheMock = $this->getMockBuilder(
             RepositoryUrlCache::class
-        )->setMethods(array('getPathUrl'))->getMock();
+        )->setMethods(['getPathUrl'])->getMock();
 
         $url = Url::createFromUrl(self::BROWSER_URL_TEST);
 
@@ -305,7 +305,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
 
         $this->assertSame(
             $url,
-            $this->getMethod(self::CLASS_TO_TEST, 'getPathUrl')->invokeArgs($binding, array('repository-id', 'path'))
+            $this->getMethod(self::CLASS_TO_TEST, 'getPathUrl')->invokeArgs($binding, ['repository-id', 'path'])
         );
     }
 
@@ -314,7 +314,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
             self::CLASS_TO_TEST
-        )->setConstructorArgs(array($this->getSessionMock()))->getMockForAbstractClass();
+        )->setConstructorArgs([$this->getSessionMock()])->getMockForAbstractClass();
 
         $this->assertSame(
             self::BROWSER_URL_TEST,
@@ -324,17 +324,17 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
 
     public function testGetServiceUrlReturnsNullIfNoStringCouldBeFetchedFromSession()
     {
-        $map = array(
-            array(SessionParameter::BROWSER_SUCCINCT, null, false),
-            array(SessionParameter::BROWSER_URL, null, 0)
-        );
+        $map = [
+            [SessionParameter::BROWSER_SUCCINCT, null, false],
+            [SessionParameter::BROWSER_URL, null, 0]
+        ];
 
         $sessionMock = $this->getSessionMock($map);
 
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
             self::CLASS_TO_TEST
-        )->setConstructorArgs(array($sessionMock))->getMockForAbstractClass();
+        )->setConstructorArgs([$sessionMock])->getMockForAbstractClass();
 
         $this->assertNull($this->getMethod(self::CLASS_TO_TEST, 'getServiceUrl')->invoke($binding));
     }
@@ -355,154 +355,154 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
             self::CLASS_TO_TEST
-        )->setConstructorArgs(array($sessionMock))->getMockForAbstractClass();
+        )->setConstructorArgs([$sessionMock])->getMockForAbstractClass();
 
         $this->assertInstanceOf(
             $expectedException,
             $this->getMethod(self::CLASS_TO_TEST, 'convertStatusCode')->invokeArgs(
                 $binding,
-                array($errorCode, $message)
+                [$errorCode, $message]
             )
         );
     }
 
     public function statusCodeExceptionDataProvider()
     {
-        return array(
+        return [
             // based on message
-            array(
+            [
                 CmisConstraintException::class,
                 0,
                 '{"message":"Error message","exception":"constraint"}'
-            ),
-            array(
+            ],
+            [
                 CmisContentAlreadyExistsException::class,
                 0,
                 '{"message":"Error message","exception":"contentAlreadyExists"}'
-            ),
-            array(
+            ],
+            [
                 CmisFilterNotValidException::class,
                 0,
                 '{"message":"Error message","exception":"filterNotValid"}'
-            ),
-            array(
+            ],
+            [
                 CmisInvalidArgumentException::class,
                 0,
                 '{"message":"Error message","exception":"invalidArgument"}'
-            ),
-            array(
+            ],
+            [
                 CmisNameConstraintViolationException::class,
                 0,
                 '{"message":"Error message","exception":"nameConstraintViolation"}'
-            ),
-            array(
+            ],
+            [
                 CmisNotSupportedException::class,
                 0,
                 '{"message":"Error message","exception":"notSupported"}'
-            ),
-            array(
+            ],
+            [
                 CmisObjectNotFoundException::class,
                 0,
                 '{"message":"Error message","exception":"objectNotFound"}'
-            ),
-            array(
+            ],
+            [
                 CmisPermissionDeniedException::class,
                 0,
                 '{"message":"Error message","exception":"permissionDenied"}'
-            ),
-            array(
+            ],
+            [
                 CmisStorageException::class,
                 0,
                 '{"message":"Error message","exception":"storage"}'
-            ),
-            array(
+            ],
+            [
                 CmisStreamNotSupportedException::class,
                 0,
                 '{"message":"Error message","exception":"streamNotSupported"}'
-            ),
-            array(
+            ],
+            [
                 CmisUpdateConflictException::class,
                 0,
                 '{"message":"Error message","exception":"updateConflict"}'
-            ),
-            array(
+            ],
+            [
                 CmisVersioningException::class,
                 0,
                 '{"message":"Error message","exception":"versioning"}'
-            ),
+            ],
             // unknown exception name
-            array(
+            [
                 CmisRuntimeException::class,
                 399,
                 '{"message":"Error message","exception":"unknownExceptionNameFooBar"}'
-            ),
+            ],
             // bases on status code
-            array(
+            [
                 CmisConnectionException::class,
                 301,
                 'error message'
-            ),
-            array(
+            ],
+            [
                 CmisConnectionException::class,
                 302,
                 'error message'
-            ),
-            array(
+            ],
+            [
                 CmisConnectionException::class,
                 303,
                 'error message'
-            ),
-            array(
+            ],
+            [
                 CmisConnectionException::class,
                 307,
                 'error message'
-            ),
-            array(
+            ],
+            [
                 CmisInvalidArgumentException::class,
                 400,
                 'error message'
-            ),
-            array(
+            ],
+            [
                 CmisUnauthorizedException::class,
                 401,
                 'error message'
-            ),
-            array(
+            ],
+            [
                 CmisPermissionDeniedException::class,
                 403,
                 'error message'
-            ),
-            array(
+            ],
+            [
                 CmisObjectNotFoundException::class,
                 404,
                 'error message'
-            ),
-            array(
+            ],
+            [
                 CmisNotSupportedException::class,
                 405,
                 'error message'
-            ),
-            array(
+            ],
+            [
                 CmisProxyAuthenticationException::class,
                 407,
                 'error message'
-            ),
-            array(
+            ],
+            [
                 CmisConstraintException::class,
                 409,
                 'error message'
-            ),
-            array(
+            ],
+            [
                 CmisRuntimeException::class,
                 500,
                 'error message'
-            ),
-            array(
+            ],
+            [
                 CmisRuntimeException::class,
                 9999,
                 'error message'
-            ),
-        );
+            ],
+        ];
     }
 
     public function testReadCallsHttpInvokerAndReturnsRequestResult()
@@ -512,7 +512,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         $testUrl = Url::createFromUrl(self::BROWSER_URL_TEST);
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->getMock();
         $httpInvokerMock = $this->getMockBuilder(Client::class)->disableOriginalConstructor()->setMethods(
-            array('get')
+            ['get']
         )->getMock();
         $httpInvokerMock->expects($this->once())->method('get')->with((string) $testUrl)->willReturn(
             $responseMock
@@ -521,12 +521,12 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
             self::CLASS_TO_TEST
-        )->setConstructorArgs(array($sessionMock))->setMethods(array('getHttpInvoker'))->getMockForAbstractClass();
+        )->setConstructorArgs([$sessionMock])->setMethods(['getHttpInvoker'])->getMockForAbstractClass();
         $binding->expects($this->any())->method('getHttpInvoker')->willReturn($httpInvokerMock);
 
         $this->assertSame(
             $responseMock,
-            $this->getMethod(self::CLASS_TO_TEST, 'read')->invokeArgs($binding, array($testUrl))
+            $this->getMethod(self::CLASS_TO_TEST, 'read')->invokeArgs($binding, [$testUrl])
         );
     }
 
@@ -538,11 +538,11 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->getMock(
         );
         $httpInvokerMock = $this->getMockBuilder(Client::class)->disableOriginalConstructor()->setMethods(
-            array('get')
+            ['get']
         )->getMock();
         /** @var RequestException|PHPUnit_Framework_MockObject_MockObject $exceptionMock */
         $exceptionMock = $this->getMockBuilder(RequestException::class)->disableOriginalConstructor()
-            ->setMethods(array('getResponse'))->getMock();
+            ->setMethods(['getResponse'])->getMock();
         $exceptionMock->expects($this->any())->method('getResponse')->willReturn($responseMock);
         $httpInvokerMock->expects($this->once())->method('get')->with($testUrl)->willThrowException(
             $exceptionMock
@@ -553,15 +553,15 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
             self::CLASS_TO_TEST
-        )->setConstructorArgs(array($sessionMock))->setMethods(
-            array('getHttpInvoker', 'convertStatusCode')
+        )->setConstructorArgs([$sessionMock])->setMethods(
+            ['getHttpInvoker', 'convertStatusCode']
         )->getMockForAbstractClass();
         $binding->expects($this->any())->method('getHttpInvoker')->willReturn($httpInvokerMock);
         $binding->expects($this->any())->method('convertStatusCode')->willReturn($exceptionMock);
 
         $this->assertSame(
             $responseMock,
-            $this->getMethod(self::CLASS_TO_TEST, 'read')->invokeArgs($binding, array($testUrl))
+            $this->getMethod(self::CLASS_TO_TEST, 'read')->invokeArgs($binding, [$testUrl])
         );
     }
 
@@ -573,7 +573,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->getMock(
         );
         $httpInvokerMock = $this->getMockBuilder(Client::class)->disableOriginalConstructor()->setMethods(
-            array('get')
+            ['get']
         )->getMock();
         /** @var RequestException|PHPUnit_Framework_MockObject_MockObject $exceptionMock */
         $exceptionMock = new RequestException('foobar', new Request('GET', static::BROWSER_URL_TEST), $responseMock);
@@ -586,8 +586,8 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
             self::CLASS_TO_TEST
-        )->setConstructorArgs(array($sessionMock))->setMethods(
-            array('getHttpInvoker', 'convertStatusCode')
+        )->setConstructorArgs([$sessionMock])->setMethods(
+            ['getHttpInvoker', 'convertStatusCode']
         )->getMockForAbstractClass();
         $binding->expects($this->any())->method('getHttpInvoker')->willReturn($httpInvokerMock);
         $binding->expects($this->any())->method('convertStatusCode')->with(0, null, $exceptionMock)->willReturn(
@@ -596,7 +596,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
 
         $this->assertSame(
             $responseMock,
-            $this->getMethod(self::CLASS_TO_TEST, 'read')->invokeArgs($binding, array($testUrl))
+            $this->getMethod(self::CLASS_TO_TEST, 'read')->invokeArgs($binding, [$testUrl])
         );
     }
 
@@ -607,24 +607,24 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
 
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->getMock();
         $httpInvokerMock = $this->getMockBuilder(Client::class)->disableOriginalConstructor()->setMethods(
-            array('post')
+            ['post']
         )->getMock();
         $httpInvokerMock->expects($this->once())->method('post')->with(
             $testUrl,
-            array('form_params' => $content)
+            ['form_params' => $content]
         )->willReturn($responseMock);
 
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
             self::CLASS_TO_TEST
-        )->setConstructorArgs(array($this->getSessionMock()))->setMethods(
-            array('getHttpInvoker')
+        )->setConstructorArgs([$this->getSessionMock()])->setMethods(
+            ['getHttpInvoker']
         )->getMockForAbstractClass();
         $binding->expects($this->any())->method('getHttpInvoker')->willReturn($httpInvokerMock);
 
         $this->assertSame(
             $responseMock,
-            $this->getMethod(self::CLASS_TO_TEST, 'post')->invokeArgs($binding, array($testUrl, $content))
+            $this->getMethod(self::CLASS_TO_TEST, 'post')->invokeArgs($binding, [$testUrl, $content])
         );
     }
 
@@ -636,15 +636,15 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->getMock(
         );
         $httpInvokerMock = $this->getMockBuilder(Client::class)->disableOriginalConstructor()->setMethods(
-            array('post')
+            ['post']
         )->getMock();
         /** @var RequestException|PHPUnit_Framework_MockObject_MockObject $exceptionMock */
         $exceptionMock = $this->getMockBuilder(RequestException::class)->disableOriginalConstructor(
-        )->setMethods(array('getResponse'))->getMock();
+        )->setMethods(['getResponse'])->getMock();
         $exceptionMock->expects($this->any())->method('getResponse')->willReturn($responseMock);
         $httpInvokerMock->expects($this->once())->method('post')->with(
             (string) $testUrl,
-            array('form_params' => $content)
+            ['form_params' => $content]
         )->willThrowException(
             $exceptionMock
         );
@@ -654,15 +654,15 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
             self::CLASS_TO_TEST
-        )->setConstructorArgs(array($this->getSessionMock()))->setMethods(
-            array('getHttpInvoker', 'convertStatusCode')
+        )->setConstructorArgs([$this->getSessionMock()])->setMethods(
+            ['getHttpInvoker', 'convertStatusCode']
         )->getMockForAbstractClass();
         $binding->expects($this->any())->method('getHttpInvoker')->willReturn($httpInvokerMock);
         $binding->expects($this->any())->method('convertStatusCode')->willReturn($exceptionMock);
 
         $this->assertSame(
             $responseMock,
-            $this->getMethod(self::CLASS_TO_TEST, 'post')->invokeArgs($binding, array($testUrl, $content))
+            $this->getMethod(self::CLASS_TO_TEST, 'post')->invokeArgs($binding, [$testUrl, $content])
         );
     }
 
@@ -670,13 +670,13 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
     {
         $repositoryUrlCache = new RepositoryUrlCache();
         $sessionMock = $this->getSessionMock(
-            array(array(SessionParameter::REPOSITORY_URL_CACHE, null, $repositoryUrlCache))
+            [[SessionParameter::REPOSITORY_URL_CACHE, null, $repositoryUrlCache]]
         );
 
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
             self::CLASS_TO_TEST
-        )->setConstructorArgs(array($sessionMock))->getMockForAbstractClass();
+        )->setConstructorArgs([$sessionMock])->getMockForAbstractClass();
 
         $this->assertSame(
             $repositoryUrlCache,
@@ -689,7 +689,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
             self::CLASS_TO_TEST
-        )->setConstructorArgs(array($this->getSessionMock()))->getMockForAbstractClass();
+        )->setConstructorArgs([$this->getSessionMock()])->getMockForAbstractClass();
 
         $this->assertInstanceOf(
             RepositoryUrlCache::class,
@@ -704,19 +704,19 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         $dummyResponse = new Response(200, [], '{"foo": "bar"}');
 
         $jsonConverterMock = $this->getMockBuilder(JsonConverter::class)->setMethods(
-            array('convertTypeDefinition')
+            ['convertTypeDefinition']
         )->getMock();
         $jsonConverterMock->expects($this->once())->method('convertTypeDefinition')->willReturn('TypeDefinitionResult');
         $cmisBindingsHelperMock = $this->getMockBuilder(CmisBindingsHelper::class)->setMethods(
-            array('getJsonConverter')
+            ['getJsonConverter']
         )->getMock();
         $cmisBindingsHelperMock->expects($this->any())->method('getJsonConverter')->willReturn($jsonConverterMock);
 
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
             self::CLASS_TO_TEST
-        )->setConstructorArgs(array($this->getSessionMock(), $cmisBindingsHelperMock))->setMethods(
-            array('getRepositoryUrl', 'read')
+        )->setConstructorArgs([$this->getSessionMock(), $cmisBindingsHelperMock])->setMethods(
+            ['getRepositoryUrl', 'read']
         )->getMockForAbstractClass();
 
         $urlDummy = Url::createFromUrl('http://foo.bar.baz?foo=bar');
@@ -729,7 +729,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
             'TypeDefinitionResult',
             $this->getMethod(self::CLASS_TO_TEST, 'getTypeDefinitionInternal')->invokeArgs(
                 $binding,
-                array($repositoryId, $typeId)
+                [$repositoryId, $typeId]
             )
         );
     }
@@ -744,7 +744,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
             self::CLASS_TO_TEST
-        )->setConstructorArgs(array($this->getSessionMock(), $cmisBindingsHelperMock))->getMockForAbstractClass();
+        )->setConstructorArgs([$this->getSessionMock(), $cmisBindingsHelperMock])->getMockForAbstractClass();
 
         $this->setExpectedException(
             CmisInvalidArgumentException::class,
@@ -753,7 +753,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
 
         $this->getMethod(self::CLASS_TO_TEST, 'getTypeDefinitionInternal')->invokeArgs(
             $binding,
-            array($repositoryId, $typeId)
+            [$repositoryId, $typeId]
         );
     }
 
@@ -767,7 +767,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
             self::CLASS_TO_TEST
-        )->setConstructorArgs(array($this->getSessionMock(), $cmisBindingsHelperMock))->getMockForAbstractClass();
+        )->setConstructorArgs([$this->getSessionMock(), $cmisBindingsHelperMock])->getMockForAbstractClass();
 
         $this->setExpectedException(
             CmisInvalidArgumentException::class,
@@ -775,26 +775,26 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         );
         $this->getMethod(self::CLASS_TO_TEST, 'getTypeDefinitionInternal')->invokeArgs(
             $binding,
-            array($repositoryId, $typeId)
+            [$repositoryId, $typeId]
         );
     }
 
     public function testGetRepositoriesInternalThrowsExceptionIfRequestDoesNotReturnValidJson()
     {
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
-        )->setMethods(array('getBody'))->getMock();
+        )->setMethods(['getBody'])->getMock();
         $responseMock->expects($this->any())->method('getBody')->willReturn(null);
 
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
             self::CLASS_TO_TEST
-        )->setConstructorArgs(array($this->getSessionMock()))->setMethods(
-            array('getRepositoryUrlCache', 'getServiceUrl', 'read')
+        )->setConstructorArgs([$this->getSessionMock()])->setMethods(
+            ['getRepositoryUrlCache', 'getServiceUrl', 'read']
         )->getMockForAbstractClass();
 
         $repositoryUrlCacheMock = $this->getMockBuilder(
             RepositoryUrlCache::class
-        )->setMethods(array('buildUrl'))->getMock();
+        )->setMethods(['buildUrl'])->getMock();
         $repositoryUrlCacheMock->expects($this->any())->method('buildUrl')->willReturn(
             Url::createFromUrl(self::BROWSER_URL_TEST)
         );
@@ -810,19 +810,19 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
     public function testGetRepositoriesInternalThrowsExceptionIfRequestDoesNotReturnAnItemArray()
     {
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
-        )->setMethods(array('getBody'))->getMock();
+        )->setMethods(['getBody'])->getMock();
         $responseMock->expects($this->any())->method('getBody')->willReturn('[1]');
 
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
             self::CLASS_TO_TEST
-        )->setConstructorArgs(array($this->getSessionMock()))->setMethods(
-            array('getRepositoryUrlCache', 'getServiceUrl', 'read')
+        )->setConstructorArgs([$this->getSessionMock()])->setMethods(
+            ['getRepositoryUrlCache', 'getServiceUrl', 'read']
         )->getMockForAbstractClass();
 
         $repositoryUrlCacheMock = $this->getMockBuilder(
             RepositoryUrlCache::class
-        )->setMethods(array('buildUrl'))->getMock();
+        )->setMethods(['buildUrl'])->getMock();
         $repositoryUrlCacheMock->expects($this->any())->method('buildUrl')->willReturn(
             Url::createFromUrl(self::BROWSER_URL_TEST)
         );
@@ -842,7 +842,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
     public function testGetRepositoriesInternalThrowsExceptionIfRepositoryInfosAreEmpty($repositoryInfo)
     {
         $jsonConverterMock = $this->getMockBuilder(JsonConverter::class)->setMethods(
-            array('convertRepositoryInfo')
+            ['convertRepositoryInfo']
         )->getMock();
 
         $jsonConverterMock->expects($this->once())->method('convertRepositoryInfo')->willReturn(
@@ -850,24 +850,24 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         );
 
         $cmisBindingsHelperMock = $this->getMockBuilder(CmisBindingsHelper::class)->setMethods(
-            array('getJsonConverter')
+            ['getJsonConverter']
         )->getMock();
         $cmisBindingsHelperMock->expects($this->any())->method('getJsonConverter')->willReturn($jsonConverterMock);
 
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
-        )->setMethods(array('getBody'))->getMock();
-        $responseMock->expects($this->any())->method('getBody')->willReturn(json_encode(array(array('valid repository info stuff'))));
+        )->setMethods(['getBody'])->getMock();
+        $responseMock->expects($this->any())->method('getBody')->willReturn(json_encode([['valid repository info stuff']]));
 
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
             self::CLASS_TO_TEST
-        )->setConstructorArgs(array($this->getSessionMock(), $cmisBindingsHelperMock))->setMethods(
-            array('getRepositoryUrlCache', 'getServiceUrl', 'read')
+        )->setConstructorArgs([$this->getSessionMock(), $cmisBindingsHelperMock])->setMethods(
+            ['getRepositoryUrlCache', 'getServiceUrl', 'read']
         )->getMockForAbstractClass();
 
         $repositoryUrlCacheMock = $this->getMockBuilder(
             RepositoryUrlCache::class
-        )->setMethods(array('buildUrl'))->getMock();
+        )->setMethods(['buildUrl'])->getMock();
         $repositoryUrlCacheMock->expects($this->any())->method('buildUrl')->willReturn(
             Url::createFromUrl(self::BROWSER_URL_TEST)
         );
@@ -894,11 +894,11 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         $repositoryInfoMissingRootUrl->setId('id');
         $repositoryInfoMissingRootUrl->setRepositoryUrl(self::BROWSER_URL_TEST);
 
-        return array(
-            array('repository Info Missing Id' => $repositoryInfoMissingId),
-            array('repository Info Missing Repository Url' => $repositoryInfoMissingRepositoryUrl),
-            array('repository Info Missing Root Url' => $repositoryInfoMissingRootUrl),
-        );
+        return [
+            ['repository Info Missing Id' => $repositoryInfoMissingId],
+            ['repository Info Missing Repository Url' => $repositoryInfoMissingRepositoryUrl],
+            ['repository Info Missing Root Url' => $repositoryInfoMissingRootUrl],
+        ];
     }
 
     /**
@@ -909,7 +909,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
     public function testGetRepositoriesInternalReturnsArrayOfRepositoryInfos($repositoryId, \PHPUnit_Framework_MockObject_MockObject $repositoryUrlCacheMock)
     {
         $jsonConverterMock = $this->getMockBuilder(JsonConverter::class)->setMethods(
-            array('convertRepositoryInfo')
+            ['convertRepositoryInfo']
         )->getMock();
 
         $repositoryInfoBrowserBinding = new RepositoryInfoBrowserBinding();
@@ -922,19 +922,19 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         );
 
         $cmisBindingsHelperMock = $this->getMockBuilder(CmisBindingsHelper::class)->setMethods(
-            array('getJsonConverter')
+            ['getJsonConverter']
         )->getMock();
         $cmisBindingsHelperMock->expects($this->any())->method('getJsonConverter')->willReturn($jsonConverterMock);
 
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
-        )->setMethods(array('getBody'))->getMock();
+        )->setMethods(['getBody'])->getMock();
         $responseMock->expects($this->any())->method('getBody')->willReturn('[["some info"]]');
 
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
             self::CLASS_TO_TEST
-        )->setConstructorArgs(array($this->getSessionMock(), $cmisBindingsHelperMock))->setMethods(
-            array('getRepositoryUrlCache', 'getServiceUrl', 'read')
+        )->setConstructorArgs([$this->getSessionMock(), $cmisBindingsHelperMock])->setMethods(
+            ['getRepositoryUrlCache', 'getServiceUrl', 'read']
         )->getMockForAbstractClass();
 
         $binding->expects($this->any())->method('getRepositoryUrlCache')->willReturn($repositoryUrlCacheMock);
@@ -942,8 +942,8 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         $binding->expects($this->any())->method('read')->willReturn($responseMock);
 
         $this->assertEquals(
-            array($repositoryInfoBrowserBinding),
-            $this->getMethod(self::CLASS_TO_TEST, 'getRepositoriesInternal')->invokeArgs($binding, array($repositoryId))
+            [$repositoryInfoBrowserBinding],
+            $this->getMethod(self::CLASS_TO_TEST, 'getRepositoriesInternal')->invokeArgs($binding, [$repositoryId])
         );
     }
 
@@ -951,7 +951,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
     {
         $repositoryUrlCacheMock = $this->getMockBuilder(
             RepositoryUrlCache::class
-        )->setMethods(array('getRepositoryUrl', 'buildUrl', 'addRepository'))->disableProxyingToOriginalMethods(
+        )->setMethods(['getRepositoryUrl', 'buildUrl', 'addRepository'])->disableProxyingToOriginalMethods(
         )->getMock();
         $repositoryUrlCacheMock->expects($this->any())->method('buildUrl')->willReturn(
             Url::createFromUrl('http://foo.bar.baz')
@@ -962,17 +962,17 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         );
         $repositoryUrlCacheMockWithRepositoryUrlEntry->expects($this->once())->method('addRepository');
 
-        return array(
-            'no repository id - repository url cache builds url' => array(null, $repositoryUrlCacheMock),
-            'with repository id - repository url cache does NOT return repository url - url is build' => array(
+        return [
+            'no repository id - repository url cache builds url' => [null, $repositoryUrlCacheMock],
+            'with repository id - repository url cache does NOT return repository url - url is build' => [
                 'repository-id',
                 $repositoryUrlCacheMock
-            ),
-            'with repository id - repository url cache does return repository url - url is fetched from cache' => array(
+            ],
+            'with repository id - repository url cache does return repository url - url is fetched from cache' => [
                 'repository-id',
                 $repositoryUrlCacheMockWithRepositoryUrlEntry
-            )
-        );
+            ]
+        ];
     }
 
     public function testConvertPropertiesToQueryArrayConvertsPropertiesIntoAnArray()
@@ -982,7 +982,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
             self::CLASS_TO_TEST
-        )->setConstructorArgs(array($sessionMock))->getMockForAbstractClass();
+        )->setConstructorArgs([$sessionMock])->getMockForAbstractClass();
 
         $properties = new Properties();
 
@@ -990,7 +990,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
 
         $singleValueStringProperty = new PropertyString('stringProp', 'stringValue');
 
-        $multiValueStringProperty = new PropertyString('stringProp2', array('stringValue1', 'stringValue2'));
+        $multiValueStringProperty = new PropertyString('stringProp2', ['stringValue1', 'stringValue2']);
 
         $singleValueBooleanProperty = new PropertyBoolean('booleanProp', true);
 
@@ -1001,43 +1001,43 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         $singleValueIdProperty = new PropertyId('idProp', 'idValue');
 
         $properties->addProperties(
-            array(
+            [
                 $singleValueStringProperty,
                 $multiValueStringProperty,
                 $singleValueBooleanProperty,
                 $singleValueDecimalProperty,
                 $singleValueDateTimeProperty,
                 $singleValueIdProperty
-            )
+            ]
         );
 
-        $expectedArray = array(
-            Constants::CONTROL_PROP_ID => array(
+        $expectedArray = [
+            Constants::CONTROL_PROP_ID => [
                 0 => 'stringProp',
                 1 => 'stringProp2',
                 2 => 'booleanProp',
                 3 => 'decimalProp',
                 4 => 'dateTimeProp',
                 5 => 'idProp'
-            ),
-            Constants::CONTROL_PROP_VALUE => array(
+            ],
+            Constants::CONTROL_PROP_VALUE => [
                 0 => 'stringValue',
-                1 => array(
+                1 => [
                     0 => 'stringValue1',
                     1 => 'stringValue2'
-                ),
+                ],
                 2 => 'true',
                 3 => 1.2,
                 4 => $currentTime->getTimestamp() * 1000,
                 5 => 'idValue'
-            )
-        );
+            ]
+        ];
 
         $this->assertEquals(
             $expectedArray,
             $this->getMethod(self::CLASS_TO_TEST, 'convertPropertiesToQueryArray')->invokeArgs(
                 $binding,
-                array($properties)
+                [$properties]
             )
         );
     }
@@ -1049,37 +1049,37 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
             self::CLASS_TO_TEST
-        )->setConstructorArgs(array($sessionMock))->getMockForAbstractClass();
+        )->setConstructorArgs([$sessionMock])->getMockForAbstractClass();
 
         $principal1 = new Principal('principalId1');
-        $ace1 = new AccessControlEntry($principal1, array('permissionValue1', 'permissionValue2'));
+        $ace1 = new AccessControlEntry($principal1, ['permissionValue1', 'permissionValue2']);
 
         $principal2 = new Principal('principalId2');
-        $ace2 = new AccessControlEntry($principal2, array('permissionValue3', 'permissionValue4'));
-        $acl = new AccessControlList(array($ace1, $ace2));
+        $ace2 = new AccessControlEntry($principal2, ['permissionValue3', 'permissionValue4']);
+        $acl = new AccessControlList([$ace1, $ace2]);
 
-        $expectedArray = array(
-            'removeACEPrincipal' => array(
+        $expectedArray = [
+            'removeACEPrincipal' => [
                 0 => 'principalId1',
                 1 => 'principalId2'
-            ),
-            'removeACEPermission' => array(
-                0 => array(
+            ],
+            'removeACEPermission' => [
+                0 => [
                     0 => 'permissionValue1',
                     1 => 'permissionValue2'
-                ),
-                1 => array(
+                ],
+                1 => [
                     0 => 'permissionValue3',
                     1 => 'permissionValue4'
-                )
-            )
-        );
+                ]
+            ]
+        ];
 
         $this->assertEquals(
             $expectedArray,
             $this->getMethod(self::CLASS_TO_TEST, 'convertAclToQueryArray')->invokeArgs(
                 $binding,
-                array($acl, Constants::CONTROL_REMOVE_ACE_PRINCIPAL, Constants::CONTROL_REMOVE_ACE_PERMISSION)
+                [$acl, Constants::CONTROL_REMOVE_ACE_PRINCIPAL, Constants::CONTROL_REMOVE_ACE_PERMISSION]
             )
         );
     }
@@ -1091,37 +1091,37 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
             self::CLASS_TO_TEST
-        )->setConstructorArgs(array($sessionMock))->getMockForAbstractClass();
+        )->setConstructorArgs([$sessionMock])->getMockForAbstractClass();
 
         $principal1 = new Principal('principalId1');
-        $ace1 = new AccessControlEntry($principal1, array('permissionValue1', 'permissionValue2'));
+        $ace1 = new AccessControlEntry($principal1, ['permissionValue1', 'permissionValue2']);
 
         $principal2 = new Principal('principalId2');
-        $ace2 = new AccessControlEntry($principal2, array('permissionValue3', 'permissionValue4'));
-        $acl = new AccessControlList(array($ace1, $ace2));
+        $ace2 = new AccessControlEntry($principal2, ['permissionValue3', 'permissionValue4']);
+        $acl = new AccessControlList([$ace1, $ace2]);
 
-        $expectedArray = array(
-            'addACEPrincipal' => array(
+        $expectedArray = [
+            'addACEPrincipal' => [
                 0 => 'principalId1',
                 1 => 'principalId2'
-            ),
-            'addACEPermission' => array(
-                0 => array(
+            ],
+            'addACEPermission' => [
+                0 => [
                     0 => 'permissionValue1',
                     1 => 'permissionValue2'
-                ),
-                1 => array(
+                ],
+                1 => [
                     0 => 'permissionValue3',
                     1 => 'permissionValue4'
-                )
-            )
-        );
+                ]
+            ]
+        ];
 
         $this->assertEquals(
             $expectedArray,
             $this->getMethod(self::CLASS_TO_TEST, 'convertAclToQueryArray')->invokeArgs(
                 $binding,
-                array($acl, Constants::CONTROL_ADD_ACE_PRINCIPAL, Constants::CONTROL_ADD_ACE_PERMISSION)
+                [$acl, Constants::CONTROL_ADD_ACE_PRINCIPAL, Constants::CONTROL_ADD_ACE_PERMISSION]
             )
         );
     }
@@ -1133,25 +1133,25 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
             self::CLASS_TO_TEST
-        )->setConstructorArgs(array($sessionMock))->getMockForAbstractClass();
+        )->setConstructorArgs([$sessionMock])->getMockForAbstractClass();
 
-        $policies = array(
+        $policies = [
             'policyOne',
             'policyTwo'
-        );
+        ];
 
-        $expectedArray = array(
-            'policy' => array(
+        $expectedArray = [
+            'policy' => [
                 0 => 'policyOne',
                 1 => 'policyTwo'
-            )
-        );
+            ]
+        ];
 
         $this->assertEquals(
             $expectedArray,
             $this->getMethod(self::CLASS_TO_TEST, 'convertPolicyIdArrayToQueryArray')->invokeArgs(
                 $binding,
-                array($policies)
+                [$policies]
             )
         );
     }
@@ -1163,7 +1163,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
             self::CLASS_TO_TEST
-        )->setConstructorArgs(array($sessionMock))->getMockForAbstractClass();
+        )->setConstructorArgs([$sessionMock])->getMockForAbstractClass();
 
         $this->assertAttributeSame(
             $binding->getDateTimeFormat(),
@@ -1179,7 +1179,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
             self::CLASS_TO_TEST
-        )->setConstructorArgs(array($sessionMock))->getMockForAbstractClass();
+        )->setConstructorArgs([$sessionMock])->getMockForAbstractClass();
 
         $dateTimeFormat = DateTimeFormat::cast(DateTimeFormat::EXTENDED);
         $binding->setDateTimeFormat($dateTimeFormat);
@@ -1196,30 +1196,30 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
 
         $binding = $this->getMockBuilder(
             self::CLASS_TO_TEST
-        )->setConstructorArgs(array($sessionMock))->getMockForAbstractClass();
+        )->setConstructorArgs([$sessionMock])->getMockForAbstractClass();
 
         $this->assertAttributeEquals(DateTimeFormat::cast(DateTimeFormat::SIMPLE), 'dateTimeFormat', $binding);
 
-        $sessionMock = $this->getSessionMock(array(array(
+        $sessionMock = $this->getSessionMock([[
             SessionParameter::BROWSER_DATETIME_FORMAT,
             null,
             DateTimeFormat::cast(DateTimeFormat::EXTENDED)
-        )));
+        ]]);
 
         $binding = $this->getMockBuilder(
             self::CLASS_TO_TEST
-        )->setConstructorArgs(array($sessionMock))->getMockForAbstractClass();
+        )->setConstructorArgs([$sessionMock])->getMockForAbstractClass();
 
         $this->assertAttributeEquals(DateTimeFormat::cast(DateTimeFormat::EXTENDED), 'dateTimeFormat', $binding);
     }
 
     public function testConstructorSetsDateTimeFormatPropertyBasedOnDefaultValue()
     {
-        $sessionMock = $this->getSessionMock(array(array(SessionParameter::BROWSER_DATETIME_FORMAT, null, null)));
+        $sessionMock = $this->getSessionMock([[SessionParameter::BROWSER_DATETIME_FORMAT, null, null]]);
 
         $binding = $this->getMockBuilder(
             self::CLASS_TO_TEST
-        )->setConstructorArgs(array($sessionMock))->getMockForAbstractClass();
+        )->setConstructorArgs([$sessionMock])->getMockForAbstractClass();
 
         $this->assertAttributeEquals(DateTimeFormat::cast(DateTimeFormat::SIMPLE), 'dateTimeFormat', $binding);
     }

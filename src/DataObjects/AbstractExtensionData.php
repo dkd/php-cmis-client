@@ -26,7 +26,7 @@ abstract class AbstractExtensionData implements ExtensionDataInterface
     /**
      * @var CmisExtensionElementInterface[]
      */
-    protected $extensions = array();
+    protected $extensions = [];
 
     /**
      * Returns the list of top-level extension elements.
