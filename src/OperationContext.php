@@ -22,7 +22,7 @@ class OperationContext implements OperationContextInterface
     /**
      * @var string[]
      */
-    private $filter = array();
+    private $filter = [];
 
     /**
      * @var boolean
@@ -52,7 +52,7 @@ class OperationContext implements OperationContextInterface
     /**
      * @var string[]
      */
-    private $renditionFilter = array();
+    private $renditionFilter = [];
 
     /**
      * @var boolean
@@ -79,7 +79,7 @@ class OperationContext implements OperationContextInterface
      */
     public function __construct()
     {
-        $this->setRenditionFilter(array());
+        $this->setRenditionFilter([]);
         $this->includeRelationships = IncludeRelationships::cast(IncludeRelationships::NONE);
     }
 
@@ -132,7 +132,7 @@ class OperationContext implements OperationContextInterface
      */
     public function setFilter(array $propertyFilters)
     {
-        $filters = array();
+        $filters = [];
         foreach ($propertyFilters as $filter) {
             $filter = trim((string) $filter);
             if ($filter === '') {
@@ -313,7 +313,7 @@ class OperationContext implements OperationContextInterface
      */
     public function setRenditionFilter(array $renditionFilter)
     {
-        $filters = array();
+        $filters = [];
         foreach ($renditionFilter as $filter) {
             $filter = trim((string) $filter);
             if ($filter === '') {
@@ -380,7 +380,7 @@ class OperationContext implements OperationContextInterface
     public function setFilterString($propertyFilter)
     {
         if (empty($propertyFilter)) {
-            $this->setFilter(array());
+            $this->setFilter([]);
         } else {
             $this->setFilter(explode(',', $propertyFilter));
         }
@@ -394,7 +394,7 @@ class OperationContext implements OperationContextInterface
     public function setRenditionFilterString($renditionFilter)
     {
         if (empty($renditionFilter)) {
-            $this->setRenditionFilter(array());
+            $this->setRenditionFilter([]);
         } else {
             $this->setRenditionFilter(explode(',', $renditionFilter));
         }

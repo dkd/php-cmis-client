@@ -52,7 +52,7 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
         $navigationService = $this->getNavigationServiceMockForParameterizedQueryTest(
             $expectedUrl,
             'convertObjectInFolderList',
-            array($repositoryId, $folderId, Constants::SELECTOR_CHILDREN)
+            [$repositoryId, $folderId, Constants::SELECTOR_CHILDREN]
         );
 
         $navigationService->getChildren(
@@ -76,8 +76,8 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
      */
     public function getChildrenDataProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST . '?filter=filter,123&orderBy=cmis:objectId&includeAllowableActions=true'
                     . '&includeRelationships=none&renditionFilter=cmis:none&includePathSegment=true&maxItems=99'
@@ -93,8 +93,8 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
                 true,
                 99,
                 0
-            ),
-            array(
+            ],
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST . '?orderBy=cmis:objectId&includeAllowableActions=false'
                     . '&renditionFilter=cmis:none&includePathSegment=false'
@@ -110,8 +110,8 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
                 false,
                 null,
                 20
-            ),
-            array(
+            ],
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST . '?filter=filter,123&includeAllowableActions=false'
                     . '&includeRelationships=both&renditionFilter=cmis:none&includePathSegment=false'
@@ -127,8 +127,8 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
                 false,
                 null,
                 20
-            )
-        );
+            ]
+        ];
     }
 
     /**
@@ -159,7 +159,7 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
         $navigationService = $this->getNavigationServiceMockForParameterizedQueryTest(
             $expectedUrl,
             'convertObjectList',
-            array($repositoryId, $folderId, Constants::SELECTOR_CHECKEDOUT)
+            [$repositoryId, $folderId, Constants::SELECTOR_CHECKEDOUT]
         );
 
         $navigationService->getCheckedOutDocs(
@@ -182,8 +182,8 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
      */
     public function getCheckedOutDocsDataProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST . '?filter=filter,123&orderBy=cmis:objectId&includeAllowableActions=true'
                     . '&includeRelationships=none&renditionFilter=cmis:none&maxItems=99'
@@ -198,8 +198,8 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
                 'cmis:none',
                 99,
                 0
-            ),
-            array(
+            ],
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST . '?includeAllowableActions=true&renditionFilter=cmis:none'
                     . '&skipCount=0&succinct=false&dateTimeFormat=simple'
@@ -213,8 +213,8 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
                 'cmis:none',
                 null,
                 0
-            )
-        );
+            ]
+        ];
     }
 
     /**
@@ -243,7 +243,7 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
         $navigationService = $this->getNavigationServiceMockForParameterizedQueryTest(
             $expectedUrl,
             'convertDescendants',
-            array($repositoryId, $folderId, Constants::SELECTOR_DESCENDANTS)
+            [$repositoryId, $folderId, Constants::SELECTOR_DESCENDANTS]
         );
 
         $navigationService->getDescendants(
@@ -265,8 +265,8 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
      */
     public function getDescendantsDataProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST . '?depth=5&filter=filter,123&includeAllowableActions=true'
                     . '&includeRelationships=none&renditionFilter=cmis:none&includePathSegment=true'
@@ -280,8 +280,8 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
                 IncludeRelationships::cast(IncludeRelationships::NONE),
                 'cmis:none',
                 true
-            ),
-            array(
+            ],
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST . '?depth=5&filter=filter,123&includeAllowableActions=true'
                     . '&includeRelationships=none&renditionFilter=cmis:none&includePathSegment=true'
@@ -295,8 +295,8 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
                 IncludeRelationships::cast(IncludeRelationships::NONE),
                 'cmis:none',
                 true
-            ),
-            array(
+            ],
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST . '?depth=5&includeAllowableActions=true'
                     . '&includeRelationships=none&renditionFilter=cmis:none&includePathSegment=true'
@@ -310,8 +310,8 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
                 IncludeRelationships::cast(IncludeRelationships::NONE),
                 'cmis:none',
                 true
-            )
-        );
+            ]
+        ];
     }
 
     /**
@@ -330,7 +330,7 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
         $navigationService = $this->getNavigationServiceMockForParameterizedQueryTest(
             $expectedUrl,
             'convertObject',
-            array($repositoryId, $folderId, Constants::SELECTOR_PARENT)
+            [$repositoryId, $folderId, Constants::SELECTOR_PARENT]
         );
 
         $navigationService->getFolderParent(
@@ -347,23 +347,23 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
      */
     public function getFolderParentDataProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST . '?filter=filter,123&succinct=false&dateTimeFormat=simple'
                 ),
                 'repositoryId',
                 'folderId',
                 'filter,123'
-            ),
-            array(
+            ],
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST . '?succinct=false&dateTimeFormat=simple'
                 ),
                 'repositoryId',
                 'folderId'
-            )
-        );
+            ]
+        ];
     }
 
     /**
@@ -392,7 +392,7 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
         $navigationService = $this->getNavigationServiceMockForParameterizedQueryTest(
             $expectedUrl,
             'convertDescendants',
-            array($repositoryId, $folderId, Constants::SELECTOR_FOLDER_TREE)
+            [$repositoryId, $folderId, Constants::SELECTOR_FOLDER_TREE]
         );
 
         $navigationService->getFolderTree(
@@ -414,8 +414,8 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
      */
     public function getFolderTreeDataProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST . '?depth=5&filter=filter,123&includeAllowableActions=true'
                     . '&includeRelationships=none&renditionFilter=cmis:none&includePathSegment=true'
@@ -429,8 +429,8 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
                 IncludeRelationships::cast(IncludeRelationships::NONE),
                 'cmis:none',
                 true
-            ),
-            array(
+            ],
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST . '?depth=5&includeAllowableActions=true'
                     . '&renditionFilter=cmis:none&includePathSegment=false'
@@ -444,8 +444,8 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
                 null,
                 'cmis:none',
                 false
-            )
-        );
+            ]
+        ];
     }
 
     /**
@@ -472,7 +472,7 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
         $navigationService = $this->getNavigationServiceMockForParameterizedQueryTest(
             $expectedUrl,
             'convertObjectParents',
-            array($repositoryId, $objectId, Constants::SELECTOR_PARENTS)
+            [$repositoryId, $objectId, Constants::SELECTOR_PARENTS]
         );
 
         $navigationService->getObjectParents(
@@ -493,8 +493,8 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
      */
     public function getObjectParentsDataProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST . '?filter=filter,123&includeAllowableActions=true'
                     . '&includeRelationships=none&renditionFilter=cmis:none&includeRelativePathSegment=true'
@@ -507,8 +507,8 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
                 IncludeRelationships::cast(IncludeRelationships::NONE),
                 'cmis:none',
                 true
-            ),
-            array(
+            ],
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST . '?includeAllowableActions=true'
                     . '&renditionFilter=cmis:none&includeRelativePathSegment=false'
@@ -521,8 +521,8 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
                 null,
                 'cmis:none',
                 false
-            )
-        );
+            ]
+        ];
     }
     /**
      * Get a navigation service mock that expects that the $expectedUrl is called once
@@ -537,13 +537,13 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
         $convertFunctionName,
         $getObjectUrlParams
     ) {
-        $responseData = array('foo' => 'bar');
+        $responseData = ['foo' => 'bar'];
         $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
-        )->setMethods(array('getBody'))->getMock();
+        )->setMethods(['getBody'])->getMock();
         $responseMock->expects($this->any())->method('getBody')->willReturn(json_encode($responseData));
 
         $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
-            array($convertFunctionName)
+            [$convertFunctionName]
         )->getMock();
 
         $dummyObjectData = new ObjectData();
@@ -552,15 +552,15 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
         );
 
         $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
-            array('getJsonConverter')
+            ['getJsonConverter']
         )->getMock();
         $cmisBindingsHelperMock->expects($this->any())->method('getJsonConverter')->willReturn($jsonConverterMock);
 
         /** @var NavigationService|PHPUnit_Framework_MockObject_MockObject $navigationService */
         $navigationService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
-            array($this->getSessionMock(), $cmisBindingsHelperMock)
+            [$this->getSessionMock(), $cmisBindingsHelperMock]
         )->setMethods(
-            array('getObjectUrl', 'read')
+            ['getObjectUrl', 'read']
         )->getMock();
 
         list($repositoryId, $objectId, $selector) = $getObjectUrlParams;

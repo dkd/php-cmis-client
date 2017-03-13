@@ -48,7 +48,7 @@ class DocumentTypeTest extends \PHPUnit_Framework_TestCase
          * @var DocumentType|PHPUnit_Framework_MockObject_MockObject $documentType
          */
         $documentType = $this->getMockBuilder('\\Dkd\\PhpCmis\\DataObjects\\DocumentType')->setMethods(
-            array('populate')
+            ['populate']
         )->disableOriginalConstructor()->getMock();
         $documentType->expects($this->once())->method('populate')->with(
             $documentTypeDefinition

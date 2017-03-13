@@ -30,9 +30,9 @@ trait FixtureHelperTrait
         if (!file_exists($fixtureFilename)) {
             $this->fail(sprintf('Fixture "%s" not found!', $fixtureFilename));
         }
-        $response = new Response(200, array(), file_get_contents($fixtureFilename));
+        $response = new Response(200, [], file_get_contents($fixtureFilename));
 
-        $result = array();
+        $result = [];
         try {
             $result = (array) \json_decode($response->getBody(), true);
         } catch (RuntimeException $exception) {

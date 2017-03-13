@@ -42,8 +42,8 @@ class PropertyIntegerTest extends \PHPUnit_Framework_TestCase
             $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', '', 1413440336);
         }
 
-        $this->propertyInteger->setValues(array($value));
-        $this->assertAttributeSame(array($expected), 'values', $this->propertyInteger);
+        $this->propertyInteger->setValues([$value]);
+        $this->assertAttributeSame([$expected], 'values', $this->propertyInteger);
     }
 
     /**
@@ -62,6 +62,6 @@ class PropertyIntegerTest extends \PHPUnit_Framework_TestCase
         }
 
         $this->propertyInteger->setValue($value);
-        $this->assertAttributeSame(array($expected), 'values', $this->propertyInteger);
+        $this->assertAttributeSame([$expected], 'values', $this->propertyInteger);
     }
 }

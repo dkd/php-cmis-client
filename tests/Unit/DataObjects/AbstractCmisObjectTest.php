@@ -46,7 +46,7 @@ class AbstractCmisObjectTest extends PHPUnit_Framework_TestCase
             PropertyIds::getBasePropertyKeys(),
             $this->getMethod(self::CLASS_TO_TEST, 'getMissingBaseProperties')->invokeArgs(
                 $this->abstractCmisObject,
-                array(null)
+                [null]
             )
         );
     }
@@ -57,14 +57,14 @@ class AbstractCmisObjectTest extends PHPUnit_Framework_TestCase
             PropertyIds::getBasePropertyKeys(),
             $this->getMethod(self::CLASS_TO_TEST, 'getMissingBaseProperties')->invokeArgs(
                 $this->abstractCmisObject,
-                array(array())
+                [[]]
             )
         );
     }
 
     public function testGetMissingBasePropertiesReturnsEmptyArrayIfAllKeysExist()
     {
-        $properties = array(
+        $properties = [
             new PropertyIdDefinition(PropertyIds::OBJECT_ID),
             new PropertyStringDefinition(PropertyIds::NAME),
             new PropertyString(PropertyIds::CHANGE_TOKEN),
@@ -74,39 +74,39 @@ class AbstractCmisObjectTest extends PHPUnit_Framework_TestCase
             new PropertyDateTimeDefinition(PropertyIds::CREATION_DATE),
             new PropertyStringDefinition(PropertyIds::LAST_MODIFIED_BY),
             new PropertyDateTimeDefinition(PropertyIds::LAST_MODIFICATION_DATE),
-        );
+        ];
 
         $this->assertEmpty(
             $this->getMethod(self::CLASS_TO_TEST, 'getMissingBaseProperties')->invokeArgs(
                 $this->abstractCmisObject,
-                array($properties)
+                [$properties]
             )
         );
     }
 
     public function testGetMissingBasePropertiesReturnsArrayOfMissingKeys()
     {
-        $properties = array(
+        $properties = [
             new PropertyIdDefinition(PropertyIds::OBJECT_ID),
             new PropertyStringDefinition(PropertyIds::NAME),
             new PropertyString(PropertyIds::CHANGE_TOKEN),
-        );
+        ];
 
-        $acceptedKeys = array(
+        $acceptedKeys = [
             PropertyIds::OBJECT_TYPE_ID,
             PropertyIds::BASE_TYPE_ID,
             PropertyIds::CREATED_BY,
             PropertyIds::CREATION_DATE,
             PropertyIds::LAST_MODIFIED_BY,
             PropertyIds::LAST_MODIFICATION_DATE,
-        );
+        ];
 
         $this->assertEquals(
             $acceptedKeys,
             array_values(
                 $this->getMethod(self::CLASS_TO_TEST, 'getMissingBaseProperties')->invokeArgs(
                     $this->abstractCmisObject,
-                    array($properties)
+                    [$properties]
                 )
             )
         );

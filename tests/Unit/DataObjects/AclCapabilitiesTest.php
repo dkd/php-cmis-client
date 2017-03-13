@@ -46,9 +46,9 @@ class AclCapabilitiesTest extends \PHPUnit_Framework_TestCase
 
     public function testSetPermissionsSetsProperty()
     {
-        $permissionDefinitions = array($this->getMockForAbstractClass(
+        $permissionDefinitions = [$this->getMockForAbstractClass(
             '\\Dkd\\PhpCmis\\Definitions\\PermissionDefinitionInterface'
-        ));
+        )];
         $this->aclCapabilities->setPermissions($permissionDefinitions);
         $this->assertAttributeSame($permissionDefinitions, 'permissions', $this->aclCapabilities);
     }
@@ -63,33 +63,33 @@ class AclCapabilitiesTest extends \PHPUnit_Framework_TestCase
         $expectedExceptionText
     ) {
         $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', $expectedExceptionText);
-        $this->aclCapabilities->setPermissions(array($permissionDefinition));
+        $this->aclCapabilities->setPermissions([$permissionDefinition]);
     }
 
     public function invalidPermissionDefinitionsDataProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 'string',
                 'Argument of type "string" given but argument of type '
                 . '"Dkd\\PhpCmis\\Definitions\\PermissionDefinitionInterface" was expected.'
-            ),
-            array(
+            ],
+            [
                 0,
                 'Argument of type "integer" given but argument of type '
                 . '"Dkd\\PhpCmis\\Definitions\\PermissionDefinitionInterface" was expected.'
-            ),
-            array(
-                array(),
+            ],
+            [
+                [],
                 'Argument of type "array" given but argument of type '
                 . '"Dkd\\PhpCmis\\Definitions\\PermissionDefinitionInterface" was expected.'
-            ),
-            array(
+            ],
+            [
                 new \stdClass(),
                 'Argument of type "stdClass" given but argument of type '
                 . '"Dkd\\PhpCmis\\Definitions\\PermissionDefinitionInterface" was expected.'
-            )
-        );
+            ]
+        ];
     }
 
     /**
@@ -100,15 +100,15 @@ class AclCapabilitiesTest extends \PHPUnit_Framework_TestCase
         $permissionDefinition = $this->getMockForAbstractClass(
             '\\Dkd\\PhpCmis\\Definitions\\PermissionDefinitionInterface'
         );
-        $this->aclCapabilities->setPermissions(array($permissionDefinition));
-        $this->assertSame(array($permissionDefinition), $this->aclCapabilities->getPermissions());
+        $this->aclCapabilities->setPermissions([$permissionDefinition]);
+        $this->assertSame([$permissionDefinition], $this->aclCapabilities->getPermissions());
     }
 
     public function testSetPermissionMappingSetsProperty()
     {
-        $permissionMapping = array($this->getMockForAbstractClass(
+        $permissionMapping = [$this->getMockForAbstractClass(
             '\\Dkd\\PhpCmis\\Data\\PermissionMappingInterface'
-        ));
+        )];
         $this->aclCapabilities->setPermissionMapping($permissionMapping);
         $this->assertAttributeSame($permissionMapping, 'permissionMapping', $this->aclCapabilities);
     }
@@ -123,33 +123,33 @@ class AclCapabilitiesTest extends \PHPUnit_Framework_TestCase
         $expectedExceptionText
     ) {
         $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', $expectedExceptionText);
-        $this->aclCapabilities->setPermissions(array($permissionDefinition));
+        $this->aclCapabilities->setPermissions([$permissionDefinition]);
     }
 
     public function invalidPermissionMappingsDataProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 'string',
                 'Argument of type "string" given but argument of type '
                 . '"\\Dkd\\PhpCmis\\Definitions\\PermissionMappingInterface" was expected.'
-            ),
-            array(
+            ],
+            [
                 0,
                 'Argument of type "integer" given but argument of type '
                 . '"\\Dkd\\PhpCmis\\Definitions\\PermissionMappingInterface" was expected.'
-            ),
-            array(
-                array(),
+            ],
+            [
+                [],
                 'Argument of type "array" given but argument of type '
                 . '"\\Dkd\\PhpCmis\\Definitions\\PermissionMappingInterface" was expected.'
-            ),
-            array(
+            ],
+            [
                 new \stdClass(),
                 'Argument of type "stdClass" given but argument of type '
                 . '"\\Dkd\\PhpCmis\\Definitions\\PermissionMappingInterface" was expected.'
-            )
-        );
+            ]
+        ];
     }
 
     /**
@@ -160,8 +160,8 @@ class AclCapabilitiesTest extends \PHPUnit_Framework_TestCase
         $permissionMapping = $this->getMockForAbstractClass(
             '\\Dkd\\PhpCmis\\Data\\PermissionMappingInterface'
         );
-        $this->aclCapabilities->setPermissionMapping(array($permissionMapping));
-        $this->assertSame(array($permissionMapping), $this->aclCapabilities->getPermissionMapping());
+        $this->aclCapabilities->setPermissionMapping([$permissionMapping]);
+        $this->assertSame([$permissionMapping], $this->aclCapabilities->getPermissionMapping());
     }
 
     public function testSetSupportedPermissionsSetsProperty()

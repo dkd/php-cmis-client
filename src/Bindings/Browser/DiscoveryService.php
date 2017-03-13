@@ -59,20 +59,20 @@ class DiscoveryService extends AbstractBrowserBindingService implements Discover
         $url = $this->getRepositoryUrl($repositoryId, Constants::SELECTOR_CONTENT_CHANGES);
 
         $url->getQuery()->modify(
-            array(
+            [
                 Constants::PARAM_PROPERTIES => $includeProperties ? 'true' : 'false',
                 Constants::PARAM_POLICY_IDS => $includePolicyIds ? 'true' : 'false',
                 Constants::PARAM_ACL => $includeAcl ? 'true' : 'false',
                 Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
-            )
+            ]
         );
 
         if ($changeLogToken !== null) {
-            $url->getQuery()->modify(array(Constants::PARAM_CHANGE_LOG_TOKEN => (string) $changeLogToken));
+            $url->getQuery()->modify([Constants::PARAM_CHANGE_LOG_TOKEN => (string) $changeLogToken]);
         }
 
         if ($maxItems > 0) {
-            $url->getQuery()->modify(array(Constants::PARAM_MAX_ITEMS => (string) $maxItems));
+            $url->getQuery()->modify([Constants::PARAM_MAX_ITEMS => (string) $maxItems]);
         }
 
         $responseData = (array) \json_decode($this->read($url)->getBody(), true);
@@ -125,7 +125,7 @@ class DiscoveryService extends AbstractBrowserBindingService implements Discover
         $url = $this->getRepositoryUrl($repositoryId);
 
         $url->getQuery()->modify(
-            array(
+            [
                 Constants::CONTROL_CMISACTION => Constants::CMISACTION_QUERY,
                 Constants::PARAM_STATEMENT => (string) $statement,
                 Constants::PARAM_SEARCH_ALL_VERSIONS => $searchAllVersions ? 'true' : 'false',
@@ -133,15 +133,15 @@ class DiscoveryService extends AbstractBrowserBindingService implements Discover
                 Constants::PARAM_RENDITION_FILTER => $renditionFilter,
                 Constants::PARAM_SKIP_COUNT => (string) $skipCount,
                 Constants::PARAM_DATETIME_FORMAT => (string) $this->getDateTimeFormat()
-            )
+            ]
         );
 
         if ($includeRelationships !== null) {
-            $url->getQuery()->modify(array(Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships));
+            $url->getQuery()->modify([Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships]);
         }
 
         if ($maxItems > 0) {
-            $url->getQuery()->modify(array(Constants::PARAM_MAX_ITEMS => (string) $maxItems));
+            $url->getQuery()->modify([Constants::PARAM_MAX_ITEMS => (string) $maxItems]);
         }
 
         $responseData = (array) \json_decode($this->post($url)->getBody(), true);

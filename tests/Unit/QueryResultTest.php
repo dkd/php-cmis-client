@@ -27,7 +27,7 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
     public function testConstructorSetsPropertiesByIdFromGivenObjectData()
     {
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->setMethods(
-            array('getObjectFactory', 'getDefaultContext')
+            ['getObjectFactory', 'getDefaultContext']
         )->getMockForAbstractClass();
 
         $objectFactory = new ObjectFactory();
@@ -44,17 +44,17 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
         $property2->setQueryName('baz:bar');
 
         $properties = new Properties();
-        $properties->addProperties(array($property1, $property2));
+        $properties->addProperties([$property1, $property2]);
 
         $objectData = new ObjectData();
         $objectData->setProperties($properties);
 
         $queryResult = new QueryResult($sessionMock, $objectData);
 
-        $expectedPropertiesById = array(
+        $expectedPropertiesById = [
             'foo' => $property1,
             'bar' => $property2
-        );
+        ];
 
         $this->assertAttributeEquals($expectedPropertiesById, 'propertiesById', $queryResult);
     }
@@ -62,7 +62,7 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
     public function testConstructorSetsPropertiesByQueryNameFromGivenObjectData()
     {
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->setMethods(
-            array('getObjectFactory', 'getDefaultContext')
+            ['getObjectFactory', 'getDefaultContext']
         )->getMockForAbstractClass();
 
         $objectFactory = new ObjectFactory();
@@ -79,17 +79,17 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
         $property2->setQueryName('baz:bar');
 
         $properties = new Properties();
-        $properties->addProperties(array($property1, $property2));
+        $properties->addProperties([$property1, $property2]);
 
         $objectData = new ObjectData();
         $objectData->setProperties($properties);
 
         $queryResult = new QueryResult($sessionMock, $objectData);
 
-        $expectedPropertiesByQueryName = array(
+        $expectedPropertiesByQueryName = [
             'baz:foo' => $property1,
             'baz:bar' => $property2
-        );
+        ];
 
         $this->assertAttributeEquals($expectedPropertiesByQueryName, 'propertiesByQueryName', $queryResult);
     }
@@ -97,12 +97,12 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
     public function testConstructorSetsRelationshipsFromGivenObjectData()
     {
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->setMethods(
-            array('getObjectFactory', 'getDefaultContext')
+            ['getObjectFactory', 'getDefaultContext']
         )->getMockForAbstractClass();
 
         /** @var ObjectFactory|PHPUnit_Framework_MockObject_MockObject $objectFactoryMock */
         $objectFactoryMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\ObjectFactory')->setMethods(
-            array('convertObject')
+            ['convertObject']
         )->getMock();
         $objectFactoryMock->initialize($sessionMock);
         $operationContext = new OperationContext();
@@ -123,22 +123,22 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
             '\\Dkd\\PhpCmis\\DataObjects\\Relationship'
         )->disableOriginalConstructor()->getMock();
 
-        $expectedRelationships = array($expectedRelationship1, $expectedRelationship2);
+        $expectedRelationships = [$expectedRelationship1, $expectedRelationship2];
 
         $sessionMock->expects($this->any())->method('getDefaultContext')->willReturn($operationContext);
         $sessionMock->expects($this->once())->method('getObjectFactory')->willReturn($objectFactoryMock);
 
         $objectFactoryMock->expects($this->any())->method('convertObject')->will(
             $this->returnValueMap(
-                array(
-                    array($relationshipObjectData1, $operationContext, $expectedRelationship1),
-                    array($relationshipObjectData2, $operationContext, $expectedRelationship2)
-                )
+                [
+                    [$relationshipObjectData1, $operationContext, $expectedRelationship1],
+                    [$relationshipObjectData2, $operationContext, $expectedRelationship2]
+                ]
             )
         );
 
         $objectData = new ObjectData();
-        $objectData->setRelationships(array($relationshipObjectData1, $relationshipObjectData2));
+        $objectData->setRelationships([$relationshipObjectData1, $relationshipObjectData2]);
 
         $queryResult = new QueryResult($sessionMock, $objectData);
 
@@ -148,12 +148,12 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
     public function testConstructorSetsRenditionsFromGivenObjectData()
     {
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->setMethods(
-            array('getObjectFactory', 'getDefaultContext')
+            ['getObjectFactory', 'getDefaultContext']
         )->getMockForAbstractClass();
 
         /** @var ObjectFactory|PHPUnit_Framework_MockObject_MockObject $objectFactoryMock */
         $objectFactoryMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\ObjectFactory')->setMethods(
-            array('convertRendition')
+            ['convertRendition']
         )->getMock();
         $objectFactoryMock->initialize($sessionMock);
         $operationContext = new OperationContext();
@@ -174,22 +174,22 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
             '\\Dkd\\PhpCmis\\DataObjects\\Rendition'
         )->disableOriginalConstructor()->getMock();
 
-        $expectedRenditions = array($expectedRendition1, $expectedRendition2);
+        $expectedRenditions = [$expectedRendition1, $expectedRendition2];
 
         $sessionMock->expects($this->any())->method('getDefaultContext')->willReturn($operationContext);
         $sessionMock->expects($this->once())->method('getObjectFactory')->willReturn($objectFactoryMock);
 
         $objectFactoryMock->expects($this->any())->method('convertRendition')->will(
             $this->returnValueMap(
-                array(
-                    array(null, $renditionData1, $expectedRendition1),
-                    array(null, $renditionData2, $expectedRendition2)
-                )
+                [
+                    [null, $renditionData1, $expectedRendition1],
+                    [null, $renditionData2, $expectedRendition2]
+                ]
             )
         );
 
         $objectData = new ObjectData();
-        $objectData->setRenditions(array($renditionData1, $renditionData2));
+        $objectData->setRenditions([$renditionData1, $renditionData2]);
 
         $queryResult = new QueryResult($sessionMock, $objectData);
 
@@ -199,7 +199,7 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
     public function testConstructorSetsAllowableActionsFromGivenObjectData()
     {
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->setMethods(
-            array('getObjectFactory', 'getDefaultContext')
+            ['getObjectFactory', 'getDefaultContext']
         )->getMockForAbstractClass();
 
         $objectFactory = new ObjectFactory();
@@ -220,7 +220,7 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
     public function testGetAllowableActionsReturnsAllowableActions()
     {
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->setMethods(
-            array('getObjectFactory', 'getDefaultContext')
+            ['getObjectFactory', 'getDefaultContext']
         )->getMockForAbstractClass();
 
         $objectFactory = new ObjectFactory();
@@ -241,7 +241,7 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
     public function testGetPropertiesReturnsProperties()
     {
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->setMethods(
-            array('getObjectFactory', 'getDefaultContext')
+            ['getObjectFactory', 'getDefaultContext']
         )->getMockForAbstractClass();
 
         $objectFactory = new ObjectFactory();
@@ -258,14 +258,14 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
         $property2->setQueryName('baz:bar');
 
         $properties = new Properties();
-        $properties->addProperties(array($property1, $property2));
+        $properties->addProperties([$property1, $property2]);
 
         $objectData = new ObjectData();
         $objectData->setProperties($properties);
 
         $queryResult = new QueryResult($sessionMock, $objectData);
 
-        $expectedProperties = array($property1, $property2);
+        $expectedProperties = [$property1, $property2];
 
         $this->assertEquals($expectedProperties, $queryResult->getProperties());
     }
@@ -273,7 +273,7 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
     public function testGetPropertyByIdReturnsSelectedProperty()
     {
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->setMethods(
-            array('getObjectFactory', 'getDefaultContext')
+            ['getObjectFactory', 'getDefaultContext']
         )->getMockForAbstractClass();
 
         $objectFactory = new ObjectFactory();
@@ -290,7 +290,7 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
         $property2->setQueryName('baz:bar');
 
         $properties = new Properties();
-        $properties->addProperties(array($property1, $property2));
+        $properties->addProperties([$property1, $property2]);
 
         $objectData = new ObjectData();
         $objectData->setProperties($properties);
@@ -305,7 +305,7 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
     public function testGetPropertyByQueryNameReturnsSelectedProperty()
     {
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->setMethods(
-            array('getObjectFactory', 'getDefaultContext')
+            ['getObjectFactory', 'getDefaultContext']
         )->getMockForAbstractClass();
 
         $objectFactory = new ObjectFactory();
@@ -322,7 +322,7 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
         $property2->setQueryName('baz:bar');
 
         $properties = new Properties();
-        $properties->addProperties(array($property1, $property2));
+        $properties->addProperties([$property1, $property2]);
 
         $objectData = new ObjectData();
         $objectData->setProperties($properties);
@@ -337,7 +337,7 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
     public function testGetPropertyMultivalueByIdReturnsPropertyValuesFromSelectedProperty()
     {
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->setMethods(
-            array('getObjectFactory', 'getDefaultContext')
+            ['getObjectFactory', 'getDefaultContext']
         )->getMockForAbstractClass();
 
         $objectFactory = new ObjectFactory();
@@ -347,16 +347,16 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
         $sessionMock->expects($this->once())->method('getObjectFactory')->willReturn($objectFactory);
         $sessionMock->expects($this->any())->method('getDefaultContext')->willReturn($operationContext);
 
-        $values1 = array('foobar', 'barbaz', 'foobaz');
+        $values1 = ['foobar', 'barbaz', 'foobaz'];
         $property1 = new PropertyString('foo', $values1);
         $property1->setQueryName('baz:foo');
 
-        $values2 = array(123, 234, 345);
+        $values2 = [123, 234, 345];
         $property2 = new PropertyInteger('bar', $values2);
         $property2->setQueryName('baz:bar');
 
         $properties = new Properties();
-        $properties->addProperties(array($property1, $property2));
+        $properties->addProperties([$property1, $property2]);
 
         $objectData = new ObjectData();
         $objectData->setProperties($properties);
@@ -371,7 +371,7 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
     public function testGetPropertyMultivalueByQueryNameReturnsPropertyValuesFromSelectedProperty()
     {
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->setMethods(
-            array('getObjectFactory', 'getDefaultContext')
+            ['getObjectFactory', 'getDefaultContext']
         )->getMockForAbstractClass();
 
         $objectFactory = new ObjectFactory();
@@ -381,16 +381,16 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
         $sessionMock->expects($this->once())->method('getObjectFactory')->willReturn($objectFactory);
         $sessionMock->expects($this->any())->method('getDefaultContext')->willReturn($operationContext);
 
-        $values1 = array('foobar', 'barbaz', 'foobaz');
+        $values1 = ['foobar', 'barbaz', 'foobaz'];
         $property1 = new PropertyString('foo', $values1);
         $property1->setQueryName('baz:foo');
 
-        $values2 = array(123, 234, 345);
+        $values2 = [123, 234, 345];
         $property2 = new PropertyInteger('bar', $values2);
         $property2->setQueryName('baz:bar');
 
         $properties = new Properties();
-        $properties->addProperties(array($property1, $property2));
+        $properties->addProperties([$property1, $property2]);
 
         $objectData = new ObjectData();
         $objectData->setProperties($properties);
@@ -405,7 +405,7 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
     public function testGetPropertyValueByIdReturnsFirstPropertyValueFromSelectedProperty()
     {
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->setMethods(
-            array('getObjectFactory', 'getDefaultContext')
+            ['getObjectFactory', 'getDefaultContext']
         )->getMockForAbstractClass();
 
         $objectFactory = new ObjectFactory();
@@ -415,16 +415,16 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
         $sessionMock->expects($this->once())->method('getObjectFactory')->willReturn($objectFactory);
         $sessionMock->expects($this->any())->method('getDefaultContext')->willReturn($operationContext);
 
-        $values1 = array('foobar', 'barbaz', 'foobaz');
+        $values1 = ['foobar', 'barbaz', 'foobaz'];
         $property1 = new PropertyString('foo', $values1);
         $property1->setQueryName('baz:foo');
 
-        $values2 = array(123, 234, 345);
+        $values2 = [123, 234, 345];
         $property2 = new PropertyInteger('bar', $values2);
         $property2->setQueryName('baz:bar');
 
         $properties = new Properties();
-        $properties->addProperties(array($property1, $property2));
+        $properties->addProperties([$property1, $property2]);
 
         $objectData = new ObjectData();
         $objectData->setProperties($properties);
@@ -439,7 +439,7 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
     public function testGetPropertyValueByQueryNameReturnsFirstPropertyValueFromSelectedProperty()
     {
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->setMethods(
-            array('getObjectFactory', 'getDefaultContext')
+            ['getObjectFactory', 'getDefaultContext']
         )->getMockForAbstractClass();
 
         $objectFactory = new ObjectFactory();
@@ -449,16 +449,16 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
         $sessionMock->expects($this->once())->method('getObjectFactory')->willReturn($objectFactory);
         $sessionMock->expects($this->any())->method('getDefaultContext')->willReturn($operationContext);
 
-        $values1 = array('foobar', 'barbaz', 'foobaz');
+        $values1 = ['foobar', 'barbaz', 'foobaz'];
         $property1 = new PropertyString('foo', $values1);
         $property1->setQueryName('baz:foo');
 
-        $values2 = array(123, 234, 345);
+        $values2 = [123, 234, 345];
         $property2 = new PropertyInteger('bar', $values2);
         $property2->setQueryName('baz:bar');
 
         $properties = new Properties();
-        $properties->addProperties(array($property1, $property2));
+        $properties->addProperties([$property1, $property2]);
 
         $objectData = new ObjectData();
         $objectData->setProperties($properties);
@@ -473,12 +473,12 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
     public function testGetRelationshipsReturnsRelationships()
     {
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->setMethods(
-            array('getObjectFactory', 'getDefaultContext')
+            ['getObjectFactory', 'getDefaultContext']
         )->getMockForAbstractClass();
 
         /** @var ObjectFactory|PHPUnit_Framework_MockObject_MockObject $objectFactoryMock */
         $objectFactoryMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\ObjectFactory')->setMethods(
-            array('convertObject')
+            ['convertObject']
         )->getMock();
         $objectFactoryMock->initialize($sessionMock);
         $operationContext = new OperationContext();
@@ -499,22 +499,22 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
             '\\Dkd\\PhpCmis\\DataObjects\\Relationship'
         )->disableOriginalConstructor()->getMock();
 
-        $expectedRelationships = array($expectedRelationship1, $expectedRelationship2);
+        $expectedRelationships = [$expectedRelationship1, $expectedRelationship2];
 
         $sessionMock->expects($this->any())->method('getDefaultContext')->willReturn($operationContext);
         $sessionMock->expects($this->once())->method('getObjectFactory')->willReturn($objectFactoryMock);
 
         $objectFactoryMock->expects($this->any())->method('convertObject')->will(
             $this->returnValueMap(
-                array(
-                    array($relationshipObjectData1, $operationContext, $expectedRelationship1),
-                    array($relationshipObjectData2, $operationContext, $expectedRelationship2)
-                )
+                [
+                    [$relationshipObjectData1, $operationContext, $expectedRelationship1],
+                    [$relationshipObjectData2, $operationContext, $expectedRelationship2]
+                ]
             )
         );
 
         $objectData = new ObjectData();
-        $objectData->setRelationships(array($relationshipObjectData1, $relationshipObjectData2));
+        $objectData->setRelationships([$relationshipObjectData1, $relationshipObjectData2]);
 
         $queryResult = new QueryResult($sessionMock, $objectData);
 
@@ -524,12 +524,12 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
     public function testGetRenditionsReturnsRenditions()
     {
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->setMethods(
-            array('getObjectFactory', 'getDefaultContext')
+            ['getObjectFactory', 'getDefaultContext']
         )->getMockForAbstractClass();
 
         /** @var ObjectFactory|PHPUnit_Framework_MockObject_MockObject $objectFactoryMock */
         $objectFactoryMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\ObjectFactory')->setMethods(
-            array('convertRendition')
+            ['convertRendition']
         )->getMock();
         $objectFactoryMock->initialize($sessionMock);
         $operationContext = new OperationContext();
@@ -550,22 +550,22 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
             '\\Dkd\\PhpCmis\\DataObjects\\Rendition'
         )->disableOriginalConstructor()->getMock();
 
-        $expectedRenditions = array($expectedRendition1, $expectedRendition2);
+        $expectedRenditions = [$expectedRendition1, $expectedRendition2];
 
         $sessionMock->expects($this->any())->method('getDefaultContext')->willReturn($operationContext);
         $sessionMock->expects($this->once())->method('getObjectFactory')->willReturn($objectFactoryMock);
 
         $objectFactoryMock->expects($this->any())->method('convertRendition')->will(
             $this->returnValueMap(
-                array(
-                    array(null, $renditionData1, $expectedRendition1),
-                    array(null, $renditionData2, $expectedRendition2)
-                )
+                [
+                    [null, $renditionData1, $expectedRendition1],
+                    [null, $renditionData2, $expectedRendition2]
+                ]
             )
         );
 
         $objectData = new ObjectData();
-        $objectData->setRenditions(array($renditionData1, $renditionData2));
+        $objectData->setRenditions([$renditionData1, $renditionData2]);
 
         $queryResult = new QueryResult($sessionMock, $objectData);
 

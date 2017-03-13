@@ -28,12 +28,12 @@ class Choice implements ChoiceInterface
     /**
      * @var ChoiceInterface[]|string[]|integer[]|boolean[]|float[]|\DateTime[]
      */
-    protected $value = array();
+    protected $value = [];
 
     /**
      * @var ChoiceInterface[]
      */
-    protected $choices = array();
+    protected $choices = [];
 
     /**
      * @return ChoiceInterface[]

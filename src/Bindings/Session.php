@@ -23,7 +23,7 @@ class Session implements BindingSessionInterface
     /**
      * @var array
      */
-    protected $data = array();
+    protected $data = [];
 
     /**
      * Creates a new session with a unique session id

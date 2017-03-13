@@ -27,7 +27,7 @@ class CreatablePropertyTypesTest extends \PHPUnit_Framework_TestCase
 
     public function testSetCanCreateSetsProperty()
     {
-        $types = array(PropertyType::cast(PropertyType::DATETIME));
+        $types = [PropertyType::cast(PropertyType::DATETIME)];
 
         $this->creatablePropertyTypes->setCanCreate($types);
         $this->assertAttributeSame($types, 'propertyTypeSet', $this->creatablePropertyTypes);
@@ -43,33 +43,33 @@ class CreatablePropertyTypesTest extends \PHPUnit_Framework_TestCase
         $expectedExceptionText
     ) {
         $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', $expectedExceptionText);
-        $this->creatablePropertyTypes->setCanCreate(array($propertyTypes));
+        $this->creatablePropertyTypes->setCanCreate([$propertyTypes]);
     }
 
     public function invalidPropertyTypesDataProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 'string',
                 'Argument of type "string" given but argument of type '
                 . '"Dkd\\PhpCmis\\Enum\\PropertyType" was expected.'
-            ),
-            array(
+            ],
+            [
                 0,
                 'Argument of type "integer" given but argument of type '
                 . '"Dkd\\PhpCmis\\Enum\\PropertyType" was expected.'
-            ),
-            array(
-                array(),
+            ],
+            [
+                [],
                 'Argument of type "array" given but argument of type '
                 . '"Dkd\\PhpCmis\\Enum\\PropertyType" was expected.'
-            ),
-            array(
+            ],
+            [
                 new \stdClass(),
                 'Argument of type "stdClass" given but argument of type '
                 . '"Dkd\\PhpCmis\\Enum\\PropertyType" was expected.'
-            )
-        );
+            ]
+        ];
     }
 
     /**
@@ -77,7 +77,7 @@ class CreatablePropertyTypesTest extends \PHPUnit_Framework_TestCase
      */
     public function testCanCreateReturnsProperty()
     {
-        $types = array(PropertyType::cast(PropertyType::DATETIME));
+        $types = [PropertyType::cast(PropertyType::DATETIME)];
         $this->creatablePropertyTypes->setCanCreate($types);
         $this->assertSame($types, $this->creatablePropertyTypes->canCreate());
     }

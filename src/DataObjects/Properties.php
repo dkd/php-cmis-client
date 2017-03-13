@@ -21,7 +21,7 @@ class Properties extends AbstractExtensionData implements PropertiesInterface
     /**
      * @var PropertyDataInterface[]
      */
-    protected $properties = array();
+    protected $properties = [];
 
     /**
      * Returns a map of properties (property ID => property).

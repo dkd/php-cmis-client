@@ -54,9 +54,9 @@ interface FolderInterface extends FileableCmisObjectInterface, FolderPropertiesI
         array $properties,
         StreamInterface $contentStream,
         VersioningState $versioningState,
-        array $policies = array(),
-        array $addAces = array(),
-        array $removeAces = array(),
+        array $policies = [],
+        array $addAces = [],
+        array $removeAces = [],
         OperationContextInterface $context = null
     );
 
@@ -92,9 +92,9 @@ interface FolderInterface extends FileableCmisObjectInterface, FolderPropertiesI
         ObjectIdInterface $source,
         array $properties,
         VersioningState $versioningState,
-        array $policies = array(),
-        array $addAces = array(),
-        array $removeAces = array(),
+        array $policies = [],
+        array $addAces = [],
+        array $removeAces = [],
         OperationContextInterface $context = null
     );
 
@@ -113,9 +113,9 @@ interface FolderInterface extends FileableCmisObjectInterface, FolderPropertiesI
      */
     public function createFolder(
         array $properties,
-        array $policies = array(),
-        array $addAces = array(),
-        array $removeAces = array(),
+        array $policies = [],
+        array $addAces = [],
+        array $removeAces = [],
         OperationContextInterface $context = null
     );
 
@@ -133,9 +133,9 @@ interface FolderInterface extends FileableCmisObjectInterface, FolderPropertiesI
      */
     public function createItem(
         array $properties,
-        array $policies = array(),
-        array $addAces = array(),
-        array $removeAces = array(),
+        array $policies = [],
+        array $addAces = [],
+        array $removeAces = [],
         OperationContextInterface $context = null
     );
 
@@ -153,9 +153,9 @@ interface FolderInterface extends FileableCmisObjectInterface, FolderPropertiesI
      */
     public function createPolicy(
         array $properties,
-        array $policies = array(),
-        array $addAces = array(),
-        array $removeAces = array(),
+        array $policies = [],
+        array $addAces = [],
+        array $removeAces = [],
         OperationContextInterface $context = null
     );
 

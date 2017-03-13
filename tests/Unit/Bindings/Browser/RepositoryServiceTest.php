@@ -29,7 +29,7 @@ class RepositoryServiceTest extends AbstractBrowserBindingServiceTestCase
         /** @var RepositoryService|PHPUnit_Framework_MockObject_MockObject $repositoryService */
         $repositoryService = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\Bindings\\Browser\\RepositoryService'
-        )->setMethods(array('getRepositoriesInternal'))->setConstructorArgs(array($this->getSessionMock()))->getMock();
+        )->setMethods(['getRepositoriesInternal'])->setConstructorArgs([$this->getSessionMock()])->getMock();
 
         $repositoryInfo1 = new RepositoryInfoBrowserBinding();
         $repositoryInfo1->setId('repository-id-1');
@@ -38,7 +38,7 @@ class RepositoryServiceTest extends AbstractBrowserBindingServiceTestCase
         $repositoryInfo2->setId('repository-id-2');
 
         $repositoryService->expects($this->any())->method('getRepositoriesInternal')->willReturn(
-            array($repositoryInfo1, $repositoryInfo2)
+            [$repositoryInfo1, $repositoryInfo2]
         );
 
         $this->assertSame($repositoryInfo2, $repositoryService->getRepositoryInfo('repository-id-2'));
@@ -51,13 +51,13 @@ class RepositoryServiceTest extends AbstractBrowserBindingServiceTestCase
         /** @var RepositoryService|PHPUnit_Framework_MockObject_MockObject $repositoryService */
         $repositoryService = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\Bindings\\Browser\\RepositoryService'
-        )->setMethods(array('getRepositoriesInternal'))->setConstructorArgs(array($this->getSessionMock()))->getMock();
+        )->setMethods(['getRepositoriesInternal'])->setConstructorArgs([$this->getSessionMock()])->getMock();
 
         $repositoryInfo1 = new RepositoryInfoBrowserBinding();
         $repositoryInfo1->setId('repository-id-1');
 
         $repositoryService->expects($this->any())->method('getRepositoriesInternal')->willReturn(
-            array($repositoryInfo1)
+            [$repositoryInfo1]
         );
 
         $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisObjectNotFoundException');
@@ -69,7 +69,7 @@ class RepositoryServiceTest extends AbstractBrowserBindingServiceTestCase
         /** @var RepositoryService|PHPUnit_Framework_MockObject_MockObject $repositoryService */
         $repositoryService = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\Bindings\\Browser\\RepositoryService'
-        )->setMethods(array('getRepositoriesInternal'))->setConstructorArgs(array($this->getSessionMock()))->getMock();
+        )->setMethods(['getRepositoriesInternal'])->setConstructorArgs([$this->getSessionMock()])->getMock();
 
         $repositoryInfo1 = new RepositoryInfoBrowserBinding();
         $repositoryInfo1->setId('repository-id-1');
@@ -78,10 +78,10 @@ class RepositoryServiceTest extends AbstractBrowserBindingServiceTestCase
         $repositoryInfo2->setId('repository-id-2');
 
         $repositoryService->expects($this->any())->method('getRepositoriesInternal')->willReturn(
-            array($repositoryInfo1, $repositoryInfo2)
+            [$repositoryInfo1, $repositoryInfo2]
         );
 
-        $this->assertSame(array($repositoryInfo1, $repositoryInfo2), $repositoryService->getRepositoryInfos());
+        $this->assertSame([$repositoryInfo1, $repositoryInfo2], $repositoryService->getRepositoryInfos());
     }
 
     public function testGetTypeDefinitionReturnsTypeDefinitionObjectForGivenTypeId()
@@ -89,8 +89,8 @@ class RepositoryServiceTest extends AbstractBrowserBindingServiceTestCase
         /** @var RepositoryService|PHPUnit_Framework_MockObject_MockObject $repositoryService */
         $repositoryService = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\Bindings\\Browser\\RepositoryService'
-        )->setMethods(array('getTypeDefinitionInternal'))->setConstructorArgs(
-            array($this->getSessionMock())
+        )->setMethods(['getTypeDefinitionInternal'])->setConstructorArgs(
+            [$this->getSessionMock()]
         )->getMock();
 
         $dummyTypeDefinition = $this->getMockBuilder(
@@ -117,13 +117,13 @@ class RepositoryServiceTest extends AbstractBrowserBindingServiceTestCase
         $repositoryId,
         TypeDefinitionInterface $type
     ) {
-        $responseData = array('foo' => 'bar');
+        $responseData = ['foo' => 'bar'];
         $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
-        )->setMethods(array('getBody'))->getMock();
+        )->setMethods(['getBody'])->getMock();
         $responseMock->expects($this->any())->method('getBody')->willReturn(json_encode($responseData));
 
         $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
-            array('convertFromTypeDefinition','convertTypeDefinition')
+            ['convertFromTypeDefinition','convertTypeDefinition']
         )->getMock();
 
         /** @var  AbstractTypeDefinition|PHPUnit_Framework_MockObject_MockObject $dummyTypeDefinition */
@@ -136,7 +136,7 @@ class RepositoryServiceTest extends AbstractBrowserBindingServiceTestCase
         );
 
         $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
-            array('getJsonConverter')
+            ['getJsonConverter']
         )->getMock();
         $cmisBindingsHelperMock->expects($this->exactly(2))->method(
             'getJsonConverter'
@@ -144,9 +144,9 @@ class RepositoryServiceTest extends AbstractBrowserBindingServiceTestCase
 
         /** @var RepositoryService|PHPUnit_Framework_MockObject_MockObject $repositoryService */
         $repositoryService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
-            array($this->getSessionMock(), $cmisBindingsHelperMock)
+            [$this->getSessionMock(), $cmisBindingsHelperMock]
         )->setMethods(
-            array('getRepositoryUrl', 'post')
+            ['getRepositoryUrl', 'post']
         )->getMock();
 
         $repositoryService->expects($this->atLeastOnce())->method('getRepositoryUrl')->with(
@@ -169,10 +169,10 @@ class RepositoryServiceTest extends AbstractBrowserBindingServiceTestCase
      */
     public function createTypeDataProvider()
     {
-        $typeDefinitionArrayRepresentation = array('foo' => 'bar', 'baz' => 'bazz');
+        $typeDefinitionArrayRepresentation = ['foo' => 'bar', 'baz' => 'bazz'];
 
-        return array(
-            array(
+        return [
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
                     . '?cmisaction=createType&type[foo]=bar&type[baz]=bazz'
@@ -180,8 +180,8 @@ class RepositoryServiceTest extends AbstractBrowserBindingServiceTestCase
                 $typeDefinitionArrayRepresentation,
                 'repositoryId',
                 new ItemTypeDefinition('typeId'),
-            )
-        );
+            ]
+        ];
     }
 
 
@@ -202,9 +202,9 @@ class RepositoryServiceTest extends AbstractBrowserBindingServiceTestCase
 
         /** @var RepositoryService|PHPUnit_Framework_MockObject_MockObject $repositoryService */
         $repositoryService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
-            array($this->getSessionMock(), $cmisBindingsHelperMock)
+            [$this->getSessionMock(), $cmisBindingsHelperMock]
         )->setMethods(
-            array('getRepositoryUrl', 'post')
+            ['getRepositoryUrl', 'post']
         )->getMock();
 
         $repositoryService->expects($this->atLeastOnce())->method('getRepositoryUrl')->with(
@@ -227,16 +227,16 @@ class RepositoryServiceTest extends AbstractBrowserBindingServiceTestCase
      */
     public function deleteTypeDataProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
                     . '?cmisaction=deleteType&typeId=typeId'
                 ),
                 'repositoryId',
                 'typeId',
-            )
-        );
+            ]
+        ];
     }
 
     /**
@@ -252,13 +252,13 @@ class RepositoryServiceTest extends AbstractBrowserBindingServiceTestCase
         $repositoryId,
         TypeDefinitionInterface $type
     ) {
-        $responseData = array('foo' => 'bar');
+        $responseData = ['foo' => 'bar'];
         $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
-        )->setMethods(array('getBody'))->getMock();
+        )->setMethods(['getBody'])->getMock();
         $responseMock->expects($this->any())->method('getBody')->willReturn(json_encode($responseData));
 
         $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
-            array('convertFromTypeDefinition','convertTypeDefinition')
+            ['convertFromTypeDefinition','convertTypeDefinition']
         )->getMock();
 
         /** @var  AbstractTypeDefinition|PHPUnit_Framework_MockObject_MockObject $dummyTypeDefinition */
@@ -271,7 +271,7 @@ class RepositoryServiceTest extends AbstractBrowserBindingServiceTestCase
         );
 
         $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
-            array('getJsonConverter')
+            ['getJsonConverter']
         )->getMock();
         $cmisBindingsHelperMock->expects($this->exactly(2))->method(
             'getJsonConverter'
@@ -279,9 +279,9 @@ class RepositoryServiceTest extends AbstractBrowserBindingServiceTestCase
 
         /** @var RepositoryService|PHPUnit_Framework_MockObject_MockObject $repositoryService */
         $repositoryService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
-            array($this->getSessionMock(), $cmisBindingsHelperMock)
+            [$this->getSessionMock(), $cmisBindingsHelperMock]
         )->setMethods(
-            array('getRepositoryUrl', 'post')
+            ['getRepositoryUrl', 'post']
         )->getMock();
 
         $repositoryService->expects($this->atLeastOnce())->method('getRepositoryUrl')->with(
@@ -304,11 +304,11 @@ class RepositoryServiceTest extends AbstractBrowserBindingServiceTestCase
      */
     public function updateTypeDataProvider()
     {
-        $typeDefinitionArrayRepresentation = array('foo' => 'bar');
+        $typeDefinitionArrayRepresentation = ['foo' => 'bar'];
         $typeDefinitionJsonRepresentation = '{"foo":"bar"}';
 
-        return array(
-            array(
+        return [
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
                     . '?cmisaction=updateType&type=' . $typeDefinitionJsonRepresentation
@@ -316,7 +316,7 @@ class RepositoryServiceTest extends AbstractBrowserBindingServiceTestCase
                 $typeDefinitionArrayRepresentation,
                 'repositoryId',
                 new ItemTypeDefinition('typeId'),
-            )
-        );
+            ]
+        ];
     }
 }

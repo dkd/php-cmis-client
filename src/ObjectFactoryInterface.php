@@ -112,8 +112,8 @@ interface ObjectFactoryInterface
     public function convertProperties(
         array $properties,
         ObjectTypeInterface $type = null,
-        array $secondaryTypes = array(),
-        array $updatabilityFilter = array()
+        array $secondaryTypes = [],
+        array $updatabilityFilter = []
     );
 
     /**
@@ -189,7 +189,7 @@ interface ObjectFactoryInterface
      * @param SessionInterface $session
      * @param string[] $parameters
      */
-    public function initialize(SessionInterface $session, $parameters = array());
+    public function initialize(SessionInterface $session, $parameters = []);
 
     /**
      * Create a type definition with all required properties.

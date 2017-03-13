@@ -129,8 +129,8 @@ class ExtensionFeatureTest extends \PHPUnit_Framework_TestCase
 
     public function testSetFeatureDataSetsProperty()
     {
-        $this->extensionFeature->setFeatureData(array(1, true, 'string'));
-        $this->assertAttributeSame(array('1', '1', 'string'), 'featureData', $this->extensionFeature);
+        $this->extensionFeature->setFeatureData([1, true, 'string']);
+        $this->assertAttributeSame(['1', '1', 'string'], 'featureData', $this->extensionFeature);
     }
 
     /**
@@ -138,7 +138,7 @@ class ExtensionFeatureTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetFeatureDataReturnsPropertyValue()
     {
-        $this->extensionFeature->setFeatureData(array('string'));
-        $this->assertSame(array('string'), $this->extensionFeature->getFeatureData());
+        $this->extensionFeature->setFeatureData(['string']);
+        $this->assertSame(['string'], $this->extensionFeature->getFeatureData());
     }
 }

@@ -7,20 +7,20 @@ if (!is_file(__DIR__ . '/conf/Configuration.php')) {
 }
 
 $httpInvoker = new \GuzzleHttp\Client(
-    array(
-        'auth' => array(
+    [
+        'auth' => [
             CMIS_BROWSER_USER,
             CMIS_BROWSER_PASSWORD
-        )
-    )
+        ]
+    ]
 );
 
-$parameters = array(
+$parameters = [
     \Dkd\PhpCmis\SessionParameter::BINDING_TYPE => \Dkd\PhpCmis\Enum\BindingType::BROWSER,
     \Dkd\PhpCmis\SessionParameter::BROWSER_URL => CMIS_BROWSER_URL,
     \Dkd\PhpCmis\SessionParameter::BROWSER_SUCCINCT => false,
     \Dkd\PhpCmis\SessionParameter::HTTP_INVOKER_OBJECT => $httpInvoker
-);
+];
 
 $sessionFactory = new \Dkd\PhpCmis\SessionFactory();
 

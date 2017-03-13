@@ -21,7 +21,7 @@ class TypeDefinitionList extends AbstractExtensionData implements TypeDefinition
     /**
      * @var TypeDefinitionInterface[]
      */
-    protected $list = array();
+    protected $list = [];
 
     /**
      * @var boolean

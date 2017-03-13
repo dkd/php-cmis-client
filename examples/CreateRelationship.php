@@ -10,7 +10,7 @@ if ($document !== null) {
 
     $secondDocument = $session->createDocumentFromSource(
         $documentObject,
-        array(\Dkd\PhpCmis\PropertyIds::NAME => 'Demo Object 2'),
+        [\Dkd\PhpCmis\PropertyIds::NAME => 'Demo Object 2'],
         $documentObject->getParents()[0]
     );
 
@@ -18,11 +18,11 @@ if ($document !== null) {
 
     echo "Create relationship for " . $document->getId() . " -> " . $secondDocument->getId() . "\n";
 
-    $properties = array(
+    $properties = [
         \Dkd\PhpCmis\PropertyIds::SOURCE_ID => $document->getId(),
         \Dkd\PhpCmis\PropertyIds::TARGET_ID => $secondDocument->getId(),
         \Dkd\PhpCmis\PropertyIds::OBJECT_TYPE_ID => 'R:cm:basis'
-    );
+    ];
 
     $relationshipId = $session->createRelationship($properties);
 

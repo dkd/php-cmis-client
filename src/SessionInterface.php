@@ -62,8 +62,8 @@ interface SessionInterface
      */
     public function applyAcl(
         ObjectIdInterface $objectId,
-        $addAces = array(),
-        $removeAces = array(),
+        $addAces = [],
+        $removeAces = [],
         AclPropagation $aclPropagation = null
     );
 
@@ -132,9 +132,9 @@ interface SessionInterface
         ObjectIdInterface $folderId = null,
         StreamInterface $contentStream = null,
         VersioningState $versioningState = null,
-        array $policies = array(),
-        array $addAces = array(),
-        array $removeAces = array()
+        array $policies = [],
+        array $addAces = [],
+        array $removeAces = []
     );
 
     /**
@@ -168,12 +168,12 @@ interface SessionInterface
      */
     public function createDocumentFromSource(
         ObjectIdInterface $source,
-        array $properties = array(),
+        array $properties = [],
         ObjectIdInterface $folderId = null,
         VersioningState $versioningState = null,
-        array $policies = array(),
-        array $addAces = array(),
-        array $removeAces = array()
+        array $policies = [],
+        array $addAces = [],
+        array $removeAces = []
     );
 
     /**
@@ -189,9 +189,9 @@ interface SessionInterface
     public function createFolder(
         array $properties,
         ObjectIdInterface $folderId,
-        array $policies = array(),
-        array $addAces = array(),
-        array $removeAces = array()
+        array $policies = [],
+        array $addAces = [],
+        array $removeAces = []
     );
 
     /**
@@ -207,9 +207,9 @@ interface SessionInterface
     public function createItem(
         array $properties,
         ObjectIdInterface $folderId,
-        array $policies = array(),
-        array $addAces = array(),
-        array $removeAces = array()
+        array $policies = [],
+        array $addAces = [],
+        array $removeAces = []
     );
 
     /**
@@ -240,12 +240,12 @@ interface SessionInterface
      * @return OperationContextInterface the newly created operation context object
      */
     public function createOperationContext(
-        $filter = array(),
+        $filter = [],
         $includeAcls = false,
         $includeAllowableActions = true,
         $includePolicies = false,
         IncludeRelationships $includeRelationships = null,
-        array $renditionFilter = array(),
+        array $renditionFilter = [],
         $includePathSegments = true,
         $orderBy = null,
         $cacheEnabled = false,
@@ -265,9 +265,9 @@ interface SessionInterface
     public function createPolicy(
         array $properties,
         ObjectIdInterface $folderId,
-        array $policies = array(),
-        array $addAces = array(),
-        array $removeAces = array()
+        array $policies = [],
+        array $addAces = [],
+        array $removeAces = []
     );
 
     /**
@@ -289,7 +289,7 @@ interface SessionInterface
         array $selectPropertyIds,
         array $fromTypes,
         $whereClause = null,
-        array $orderByPropertyIds = array()
+        array $orderByPropertyIds = []
     );
 
     /**
@@ -303,9 +303,9 @@ interface SessionInterface
      */
     public function createRelationship(
         array $properties,
-        array $policies = array(),
-        array $addAces = array(),
-        array $removeAces = array()
+        array $policies = [],
+        array $addAces = [],
+        array $removeAces = []
     );
 
     /**

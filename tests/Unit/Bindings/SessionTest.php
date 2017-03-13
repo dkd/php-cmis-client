@@ -33,9 +33,9 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     public function testPutAddsAValueToTheSession()
     {
         $session = new Session();
-        $this->assertAttributeEquals(array(), 'data', $session);
+        $this->assertAttributeEquals([], 'data', $session);
         $session->put('foo', 'bar');
-        $this->assertAttributeEquals(array('foo' => 'bar'), 'data', $session);
+        $this->assertAttributeEquals(['foo' => 'bar'], 'data', $session);
 
         return $session;
     }
@@ -48,7 +48,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $session = new Session();
         $session->put('bar', 'foo');
         $session->put('baz', 'foofoo');
-        $this->assertEquals(array('bar', 'baz'), $session->getKeys());
+        $this->assertEquals(['bar', 'baz'], $session->getKeys());
     }
 
     /**
@@ -61,9 +61,9 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $session->put('bar2', 'foobar');
         $session->put('bar3', 'foobar');
         $session->remove('bar3');
-        $this->assertAttributeEquals(array('bar1' => 'foobar', 'bar2' => 'foobar'), 'data', $session);
+        $this->assertAttributeEquals(['bar1' => 'foobar', 'bar2' => 'foobar'], 'data', $session);
         $session->remove('bar1');
-        $this->assertAttributeEquals(array('bar2' => 'foobar'), 'data', $session);
+        $this->assertAttributeEquals(['bar2' => 'foobar'], 'data', $session);
     }
 
     /**
@@ -78,39 +78,39 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $session = new Session();
         $session->put('int-1', 1);
         $session->put('string-2', 'foo');
-        $session->put('array-3', array('foobar'));
+        $session->put('array-3', ['foobar']);
 
         $this->assertSame($expected, $session->get($key, $defaultValue));
     }
 
     public function getFunctionDataProvider()
     {
-        return array(
-            'int-1 returns an integer 1' => array(
+        return [
+            'int-1 returns an integer 1' => [
                 'int-1',
                 null,
                 1
-            ),
-            'the given default value is returned if the key does not exist' => array(
+            ],
+            'the given default value is returned if the key does not exist' => [
                 'int-999',
                 123,
                 123
-            ),
-            'null is returned if the key does not exist and no default value is defined' => array(
+            ],
+            'null is returned if the key does not exist and no default value is defined' => [
                 'int-999',
                 null,
                 null
-            ),
-            'string value is returned as string' => array(
+            ],
+            'string value is returned as string' => [
                 'string-2',
                 null,
                 'foo'
-            ),
-            'array value is returned as array' => array(
+            ],
+            'array value is returned as array' => [
                 'array-3',
                 null,
-                array('foobar')
-            ),
-        );
+                ['foobar']
+            ],
+        ];
     }
 }

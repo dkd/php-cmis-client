@@ -7,22 +7,22 @@ if (!is_file(__DIR__ . '/conf/Configuration.php')) {
 }
 
 $httpInvoker = new \GuzzleHttp\Client(
-    array(
-        'defaults' => array(
-            'auth' => array(
+    [
+        'defaults' => [
+            'auth' => [
                 CMIS_BROWSER_USER,
                 CMIS_BROWSER_PASSWORD
-            )
-        )
-    )
+            ]
+        ]
+    ]
 );
 
-$parameters = array(
+$parameters = [
     \Dkd\PhpCmis\SessionParameter::BINDING_TYPE => \Dkd\PhpCmis\Enum\BindingType::BROWSER,
     \Dkd\PhpCmis\SessionParameter::BROWSER_URL => CMIS_BROWSER_URL,
     \Dkd\PhpCmis\SessionParameter::BROWSER_SUCCINCT => false,
     \Dkd\PhpCmis\SessionParameter::HTTP_INVOKER_OBJECT => $httpInvoker,
-);
+];
 
 $sessionFactory = new \Dkd\PhpCmis\SessionFactory();
 
@@ -38,15 +38,15 @@ $session = $sessionFactory->createSession($parameters);
 
 echo "Add and activate model 'examples/resources/custommodel.xml' as CMIS model\n\n";
 
-$properties = array(
+$properties = [
     \Dkd\PhpCmis\PropertyIds::OBJECT_TYPE_ID => 'D:cm:dictionaryModel',
-    \Dkd\PhpCmis\PropertyIds::SECONDARY_OBJECT_TYPE_IDS => array(
+    \Dkd\PhpCmis\PropertyIds::SECONDARY_OBJECT_TYPE_IDS => [
         'P:cm:titled'
-    ),
+    ],
     \Dkd\PhpCmis\PropertyIds::NAME => 'custommodel.xml',
     'cm:description' => 'Testing model',
     'cm:title' => 'Testing model 2'
-);
+];
 
 try {
     $document = $session->createDocument(
@@ -56,9 +56,9 @@ try {
     );
 
     echo "Model has been created in '/Data Dictionary/Models/'. Model Id: " . $document->getId() . "\n";
-    $updated = $session->getObject($document)->updateProperties(array(
+    $updated = $session->getObject($document)->updateProperties([
         'cm:modelActive' => true
-    ));
+    ]);
     if ($session->getObject($document)->getPropertyValue('cm:modelActive')) {
         echo "Model '" . $document->getId() . "' was activated.\n";
     } else {

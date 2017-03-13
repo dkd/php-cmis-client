@@ -62,29 +62,29 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $includePolicyIds = false,
         $includeAcl = false
     ) {
-        $responseData = array('foo' => 'bar');
+        $responseData = ['foo' => 'bar'];
         $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
-        )->setMethods(array('getBody'))->getMock();
+        )->setMethods(['getBody'])->getMock();
         $responseMock->expects($this->any())->method('getBody')->willReturn(json_encode($responseData));
 
         $dummyObjectData = new ObjectData();
         $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
-            array('convertObject')
+            ['convertObject']
         )->getMock();
         $jsonConverterMock->expects($this->once())->method('convertObject')->with($responseData)->willReturn(
             $dummyObjectData
         );
 
         $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
-            array('getJsonConverter')
+            ['getJsonConverter']
         )->getMock();
         $cmisBindingsHelperMock->expects($this->any())->method('getJsonConverter')->willReturn($jsonConverterMock);
 
         /** @var ObjectService|PHPUnit_Framework_MockObject_MockObject $objectService */
         $objectService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
-            array($this->getSessionMock(), $cmisBindingsHelperMock)
+            [$this->getSessionMock(), $cmisBindingsHelperMock]
         )->setMethods(
-            array('getObjectUrl', 'read')
+            ['getObjectUrl', 'read']
         )->getMock();
 
         $objectService->expects($this->any())->method('getObjectUrl')->with(
@@ -111,8 +111,8 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
 
     public function getObjectDataProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST . '?filter=filter,123&includeAllowableActions=true'
                     . '&includeRelationships=none&renditionFilter=foo:bar&includePolicyIds=true&includeACL=true'
@@ -126,8 +126,8 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
                 'foo:bar',
                 true,
                 true,
-            ),
-            array(
+            ],
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST . '?includeAllowableActions=false'
                     . '&includeRelationships=both&renditionFilter=foo:bar&includePolicyIds=false&includeACL=false'
@@ -141,8 +141,8 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
                 'foo:bar',
                 false,
                 false,
-            ),
-            array(
+            ],
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST . '?filter=filter,123&includeAllowableActions=false'
                     . '&renditionFilter=foo:bar&includePolicyIds=false&includeACL=false'
@@ -156,8 +156,8 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
                 'foo:bar',
                 false,
                 false,
-            )
-        );
+            ]
+        ];
     }
 
 
@@ -183,20 +183,20 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $folderId = null,
         StreamInterface $contentStream = null,
         VersioningState $versioningState = null,
-        array $policies = array(),
+        array $policies = [],
         AclInterface $addAces = null,
         AclInterface $removeAces = null
     ) {
-        $responseData = array('foo' => 'bar');
+        $responseData = ['foo' => 'bar'];
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
-        )->setMethods(array('getBody'))->getMock();
+        )->setMethods(['getBody'])->getMock();
         $responseMock->expects($this->any())->method('getBody')->willReturn(json_encode($responseData));
 
         $jsonConverterMock = $this->getMockBuilder(JsonConverter::class)->setMethods(
-            array('convertObject')
+            ['convertObject']
         )->getMock();
         $dummyObjectData = $this->getMockBuilder(ObjectData::class)->setMethods(
-            array('getId')
+            ['getId']
         )->getMock();
 
         /** @var  ObjectData|PHPUnit_Framework_MockObject_MockObject $dummyObjectData */
@@ -206,7 +206,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         );
 
         $cmisBindingsHelperMock = $this->getMockBuilder(CmisBindingsHelper::class)->setMethods(
-            array('getJsonConverter')
+            ['getJsonConverter']
         )->getMock();
         $cmisBindingsHelperMock->expects($this->atLeastOnce())->method(
             'getJsonConverter'
@@ -214,9 +214,9 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
 
         /** @var ObjectService|PHPUnit_Framework_MockObject_MockObject $objectService */
         $objectService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
-            array($this->getSessionMock(), $cmisBindingsHelperMock)
+            [$this->getSessionMock(), $cmisBindingsHelperMock]
         )->setMethods(
-            array('getObjectUrl', 'getRepositoryUrl', 'post', 'setContentStream')
+            ['getObjectUrl', 'getRepositoryUrl', 'post', 'setContentStream']
         )->getMock();
 
         if ($folderId === null) {
@@ -258,14 +258,14 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $properties = new Properties();
         $properties->addProperty($property);
         $streamWithFileExtension = $this->getMockBuilder('\\GuzzleHttp\\Stream\\StreamInterface')->setMethods(
-            array('getMetadata')
+            ['getMetadata']
         )->getMockForAbstractClass();
         $streamWithFileExtension->expects($this->any())->method('getMetadata')->with('uri')->willReturn(
             '/foo/bar/baz.jpg'
         );
 
         $streamWithoutFileExtension = $this->getMockBuilder('\\GuzzleHttp\\Stream\\StreamInterface')->setMethods(
-            array('getMetadata')
+            ['getMetadata']
         )->getMockForAbstractClass();
         $streamWithoutFileExtension->expects($this->any())->method('getMetadata')->with('uri')->willReturn(
             '/foo/bar/baz'
@@ -274,125 +274,125 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $expectedPostStream = $this->getMockBuilder(StreamInterface::class)->disableOriginalConstructor()->getMock();
 
         $principal1 = new Principal('principalId1');
-        $ace1 = new AccessControlEntry($principal1, array('permissionValue1', 'permissionValue2'));
+        $ace1 = new AccessControlEntry($principal1, ['permissionValue1', 'permissionValue2']);
 
         $principal2 = new Principal('principalId2');
-        $ace2 = new AccessControlEntry($principal2, array('permissionValue3', 'permissionValue4'));
+        $ace2 = new AccessControlEntry($principal2, ['permissionValue3', 'permissionValue4']);
 
-        $addAcl = new AccessControlList(array($ace1, $ace2));
+        $addAcl = new AccessControlList([$ace1, $ace2]);
 
         $principal3 = new Principal('principalId3');
-        $ace3 = new AccessControlEntry($principal3, array('permissionValue5', 'permissionValue6'));
+        $ace3 = new AccessControlEntry($principal3, ['permissionValue5', 'permissionValue6']);
 
         $principal4 = new Principal('principalId4');
-        $ace4 = new AccessControlEntry($principal4, array('permissionValue7', 'permissionValue8'));
+        $ace4 = new AccessControlEntry($principal4, ['permissionValue7', 'permissionValue8']);
 
-        $removeAcl = new AccessControlList(array($ace3, $ace4));
+        $removeAcl = new AccessControlList([$ace3, $ace4]);
 
-        return array(
-            'Create document without stream' => array(
+        return [
+            'Create document without stream' => [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
                 ),
-                array(
+                [
                     'cmisaction' => 'createDocument',
                     'succinct' => 'false',
-                    'propertyId' => array(
+                    'propertyId' => [
                         'cmis:name'
-                    ),
-                    'propertyValue' => array(
+                    ],
+                    'propertyValue' => [
                         'name.jpg'
-                    )
-                ),
+                    ]
+                ],
                 null,
                 'repositoryId',
                 $properties
-            ),
-            'Create document with a stream where the uri contains a file extension' => array(
+            ],
+            'Create document with a stream where the uri contains a file extension' => [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
                 ),
-                array(
+                [
                     'versioningState' => 'major',
                     'succinct' => 'false',
                     'cmisaction' => 'createDocument',
-                    'propertyId' => array(
+                    'propertyId' => [
                         'cmis:name'
-                    ),
-                    'propertyValue' => array(
+                    ],
+                    'propertyValue' => [
                         'name.jpg'
-                    ),
-                    'policy' => array(
+                    ],
+                    'policy' => [
                         'policyOne', 'policyTwo'
-                    ),
-                    'addACEPrincipal' => array(
+                    ],
+                    'addACEPrincipal' => [
                         'principalId1', 'principalId2'
-                    ),
-                    'addACEPermission' => array(
-                        array('permissionValue1', 'permissionValue2'),
-                        array('permissionValue3', 'permissionValue4')
-                    ),
-                    'removeACEPrincipal' => array(
+                    ],
+                    'addACEPermission' => [
+                        ['permissionValue1', 'permissionValue2'],
+                        ['permissionValue3', 'permissionValue4']
+                    ],
+                    'removeACEPrincipal' => [
                         'principalId3', 'principalId4'
-                    ),
-                    'removeACEPermission' => array(
-                        array('permissionValue5', 'permissionValue6'),
-                        array('permissionValue7', 'permissionValue8')
-                    ),
-                ),
+                    ],
+                    'removeACEPermission' => [
+                        ['permissionValue5', 'permissionValue6'],
+                        ['permissionValue7', 'permissionValue8']
+                    ],
+                ],
                 $streamWithFileExtension,
                 'repositoryId',
                 $properties,
                 'folderId',
                 $streamWithFileExtension,
                 VersioningState::cast(VersioningState::MAJOR),
-                array('policyOne', 'policyTwo'),
+                ['policyOne', 'policyTwo'],
                 $addAcl,
                 $removeAcl
-            ),
-            'Create document with a stream where the uri does not have a file extension' => array(
+            ],
+            'Create document with a stream where the uri does not have a file extension' => [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
                 ),
-                array(
+                [
                     'versioningState' => 'major',
                     'succinct' => 'false',
                     'cmisaction' => 'createDocument',
-                    'propertyId' => array(
+                    'propertyId' => [
                         'cmis:name'
-                    ),
-                    'propertyValue' => array(
+                    ],
+                    'propertyValue' => [
                         'name.jpg'
-                    ),
-                    'policy' => array(
+                    ],
+                    'policy' => [
                         'policyOne', 'policyTwo'
-                    ),
-                    'addACEPrincipal' => array(
+                    ],
+                    'addACEPrincipal' => [
                         'principalId1', 'principalId2'
-                    ),
-                    'addACEPermission' => array(
-                        array('permissionValue1', 'permissionValue2'),
-                        array('permissionValue3', 'permissionValue4')
-                    ),
-                    'removeACEPrincipal' => array(
+                    ],
+                    'addACEPermission' => [
+                        ['permissionValue1', 'permissionValue2'],
+                        ['permissionValue3', 'permissionValue4']
+                    ],
+                    'removeACEPrincipal' => [
                         'principalId3', 'principalId4'
-                    ),
-                    'removeACEPermission' => array(
-                        array('permissionValue5', 'permissionValue6'),
-                        array('permissionValue7', 'permissionValue8')
-                    ),
-                ),
+                    ],
+                    'removeACEPermission' => [
+                        ['permissionValue5', 'permissionValue6'],
+                        ['permissionValue7', 'permissionValue8']
+                    ],
+                ],
                 $streamWithoutFileExtension,
                 'repositoryId',
                 $properties,
                 'folderId',
                 $streamWithoutFileExtension,
                 VersioningState::cast(VersioningState::MAJOR),
-                array('policyOne', 'policyTwo'),
+                ['policyOne', 'policyTwo'],
                 $addAcl,
                 $removeAcl
-            )
-        );
+            ]
+        ];
     }
 
     /**
@@ -412,22 +412,22 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $repositoryId,
         PropertiesInterface $properties,
         $folderId,
-        array $policies = array(),
+        array $policies = [],
         AclInterface $addAces = null,
         AclInterface $removeAces = null
     ) {
-        $responseData = array('foo' => 'bar');
+        $responseData = ['foo' => 'bar'];
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
-        )->setMethods(array('getBody'))->getMock();
+        )->setMethods(['getBody'])->getMock();
         $responseMock->expects($this->any())->method('getBody')->willReturn(json_encode($responseData));
 
         $jsonConverterMock = $this->getMockBuilder(JsonConverter::class)->setMethods(
-            array('convertObject')
+            ['convertObject']
         )->getMock();
 
         /** @var  ObjectData|PHPUnit_Framework_MockObject_MockObject $dummyObjectData */
         $dummyObjectData = $this->getMockBuilder(ObjectData::class)->setMethods(
-            array('getId')
+            ['getId']
         )->getMock();
         $dummyObjectData->expects($this->any())->method('getId')->willReturn('foo-id');
         $jsonConverterMock->expects($this->atLeastOnce())->method('convertObject')->with($responseData)->willReturn(
@@ -435,7 +435,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         );
 
         $cmisBindingsHelperMock = $this->getMockBuilder(CmisBindingsHelper::class)->setMethods(
-            array('getJsonConverter')
+            ['getJsonConverter']
         )->getMock();
         $cmisBindingsHelperMock->expects($this->atLeastOnce())->method(
             'getJsonConverter'
@@ -443,9 +443,9 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
 
         /** @var ObjectService|PHPUnit_Framework_MockObject_MockObject $objectService */
         $objectService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
-            array($this->getSessionMock(), $cmisBindingsHelperMock)
+            [$this->getSessionMock(), $cmisBindingsHelperMock]
         )->setMethods(
-            array('getObjectUrl', 'post')
+            ['getObjectUrl', 'post']
         )->getMock();
 
         $objectService->expects($this->atLeastOnce())->method('getObjectUrl')->with(
@@ -482,94 +482,94 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $properties->addProperty($property);
 
         $principal1 = new Principal('principalId1');
-        $ace1 = new AccessControlEntry($principal1, array('permissionValue1', 'permissionValue2'));
+        $ace1 = new AccessControlEntry($principal1, ['permissionValue1', 'permissionValue2']);
 
         $principal2 = new Principal('principalId2');
-        $ace2 = new AccessControlEntry($principal2, array('permissionValue3', 'permissionValue4'));
+        $ace2 = new AccessControlEntry($principal2, ['permissionValue3', 'permissionValue4']);
 
-        $addAcl = new AccessControlList(array($ace1, $ace2));
+        $addAcl = new AccessControlList([$ace1, $ace2]);
 
         $principal3 = new Principal('principalId3');
-        $ace3 = new AccessControlEntry($principal3, array('permissionValue5', 'permissionValue6'));
+        $ace3 = new AccessControlEntry($principal3, ['permissionValue5', 'permissionValue6']);
 
         $principal4 = new Principal('principalId4');
-        $ace4 = new AccessControlEntry($principal4, array('permissionValue7', 'permissionValue8'));
+        $ace4 = new AccessControlEntry($principal4, ['permissionValue7', 'permissionValue8']);
 
-        $removeAcl = new AccessControlList(array($ace3, $ace4));
+        $removeAcl = new AccessControlList([$ace3, $ace4]);
 
-        return array(
-            array(
+        return [
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
                 ),
-                array(
+                [
                     'cmisaction' => 'createFolder',
                     'succinct' => 'false',
-                    'propertyId' => array(
+                    'propertyId' => [
                         'cmis:name'
-                    ),
-                    'propertyValue' => array(
+                    ],
+                    'propertyValue' => [
                         'name'
-                    )
-                ),
+                    ]
+                ],
                 'repositoryId',
                 $properties,
                 'parentFolderId'
-            ),
-            array(
+            ],
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
                 ),
-                array(
+                [
                     'cmisaction' => 'createFolder',
                     'succinct' => 'false',
-                    'propertyId' => array(
+                    'propertyId' => [
                         'cmis:name'
-                    ),
-                    'propertyValue' => array(
+                    ],
+                    'propertyValue' => [
                         'name'
-                    ),
-                    'addACEPrincipal' => array(
+                    ],
+                    'addACEPrincipal' => [
                         'principalId1',
                         'principalId2'
-                    ),
-                    'addACEPermission' => array(
-                        array(
+                    ],
+                    'addACEPermission' => [
+                        [
                             'permissionValue1',
                             'permissionValue2'
-                        ),
-                        array(
+                        ],
+                        [
                             'permissionValue3',
                             'permissionValue4'
-                        )
-                    ),
-                    'policy' => array(
+                        ]
+                    ],
+                    'policy' => [
                         'policyOne',
                         'policyTwo'
-                    ),
-                    'removeACEPrincipal' => array(
+                    ],
+                    'removeACEPrincipal' => [
                         'principalId3',
                         'principalId4'
-                    ),
-                    'removeACEPermission' => array(
-                        array(
+                    ],
+                    'removeACEPermission' => [
+                        [
                             'permissionValue5',
                             'permissionValue6'
-                        ),
-                        array(
+                        ],
+                        [
                             'permissionValue7',
                             'permissionValue8'
-                        )
-                    )
-                ),
+                        ]
+                    ]
+                ],
                 'repositoryId',
                 $properties,
                 'parentFolderId',
-                array('policyOne', 'policyTwo'),
+                ['policyOne', 'policyTwo'],
                 $addAcl,
                 $removeAcl
-            )
-        );
+            ]
+        ];
     }
 
     /**
@@ -593,9 +593,9 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
 
         /** @var ObjectService|PHPUnit_Framework_MockObject_MockObject $objectService */
         $objectService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
-            array($this->getSessionMock(), $cmisBindingsHelperMock)
+            [$this->getSessionMock(), $cmisBindingsHelperMock]
         )->setMethods(
-            array('getObjectUrl', 'post')
+            ['getObjectUrl', 'post']
         )->getMock();
 
         $objectService->expects($this->atLeastOnce())->method('getObjectUrl')->with(
@@ -620,8 +620,8 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
      */
     public function deleteObjectDataProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
                     . '?cmisaction=delete&allVersions=true'
@@ -629,8 +629,8 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
                 'repositoryId',
                 'objectId',
                 true
-            ),
-            array(
+            ],
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
                     . '?cmisaction=delete&allVersions=false'
@@ -638,8 +638,8 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
                 'repositoryId',
                 'objectId',
                 false
-            )
-        );
+            ]
+        ];
     }
 
 
@@ -660,18 +660,18 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $sourceFolderId,
         ExtensionDataInterface $extension = null
     ) {
-        $responseData = array('foo' => 'bar');
+        $responseData = ['foo' => 'bar'];
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
-        )->setMethods(array('getBody'))->getMock();
+        )->setMethods(['getBody'])->getMock();
         $responseMock->expects($this->any())->method('getBody')->willReturn(json_encode($responseData));
 
         $jsonConverterMock = $this->getMockBuilder(JsonConverter::class)->setMethods(
-            array('convertObject')
+            ['convertObject']
         )->getMock();
 
         /** @var  ObjectData|PHPUnit_Framework_MockObject_MockObject $dummyObjectData */
         $dummyObjectData = $this->getMockBuilder(ObjectData::class)->setMethods(
-            array('getId')
+            ['getId']
         )->getMock();
         $dummyObjectData->expects($this->any())->method('getId')->willReturn('foo-id');
         $jsonConverterMock->expects($this->atLeastOnce())->method('convertObject')->with($responseData)->willReturn(
@@ -679,7 +679,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         );
 
         $cmisBindingsHelperMock = $this->getMockBuilder(CmisBindingsHelper::class)->setMethods(
-            array('getJsonConverter')
+            ['getJsonConverter']
         )->getMock();
         $cmisBindingsHelperMock->expects($this->atLeastOnce())->method(
             'getJsonConverter'
@@ -687,9 +687,9 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
 
         /** @var ObjectService|PHPUnit_Framework_MockObject_MockObject $objectService */
         $objectService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
-            array($this->getSessionMock(), $cmisBindingsHelperMock)
+            [$this->getSessionMock(), $cmisBindingsHelperMock]
         )->setMethods(
-            array('getObjectUrl', 'post')
+            ['getObjectUrl', 'post']
         )->getMock();
 
         $objectService->expects($this->atLeastOnce())->method('getObjectUrl')->with(
@@ -721,8 +721,8 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
      */
     public static function moveObjectDataProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
                     . '?cmisaction=move&targetFolderId=targetFolderId&sourceFolderId=sourceFolderId&succinct=false'
@@ -731,8 +731,8 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
                 'objectId',
                 'targetFolderId',
                 'sourceFolderId'
-            )
-        );
+            ]
+        ];
     }
 
     /**
@@ -750,29 +750,29 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $filter = null,
         ExtensionDataInterface $extension = null
     ) {
-        $responseData = array('foo' => 'bar');
+        $responseData = ['foo' => 'bar'];
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
-        )->setMethods(array('getBody'))->getMock();
+        )->setMethods(['getBody'])->getMock();
         $responseMock->expects($this->any())->method('getBody')->willReturn(json_encode($responseData));
 
         $dummyProperties = new Properties();
         $jsonConverterMock = $this->getMockBuilder(JsonConverter::class)->setMethods(
-            array('convertProperties')
+            ['convertProperties']
         )->getMock();
         $jsonConverterMock->expects($this->once())->method('convertProperties')->with($responseData)->willReturn(
             $dummyProperties
         );
 
         $cmisBindingsHelperMock = $this->getMockBuilder(CmisBindingsHelper::class)->setMethods(
-            array('getJsonConverter')
+            ['getJsonConverter']
         )->getMock();
         $cmisBindingsHelperMock->expects($this->any())->method('getJsonConverter')->willReturn($jsonConverterMock);
 
         /** @var ObjectService|PHPUnit_Framework_MockObject_MockObject $objectService */
         $objectService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
-            array($this->getSessionMock(), $cmisBindingsHelperMock)
+            [$this->getSessionMock(), $cmisBindingsHelperMock]
         )->setMethods(
-            array('getObjectUrl', 'read')
+            ['getObjectUrl', 'read']
         )->getMock();
 
         $objectService->expects($this->any())->method('getObjectUrl')->with(
@@ -797,8 +797,8 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
      */
     public static function getPropertiesDataProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
                     . '?filter=filter,123&succinct=false&dateTimeFormat=simple'
@@ -806,16 +806,16 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
                 'repositoryId',
                 'objectId',
                 'filter,123'
-            ),
-            array(
+            ],
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
                     . '?succinct=false&dateTimeFormat=simple'
                 ),
                 'repositoryId',
                 'objectId'
-            )
-        );
+            ]
+        ];
 
     }
 
@@ -837,23 +837,23 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $repositoryId,
         PropertiesInterface $properties,
         $folderId = null,
-        array $policies = array(),
+        array $policies = [],
         AclInterface $addAces = null,
         AclInterface $removeAces = null,
         ExtensionDataInterface $extension = null
     ) {
-        $responseData = array('foo' => 'bar');
+        $responseData = ['foo' => 'bar'];
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
-        )->setMethods(array('getBody'))->getMock();
+        )->setMethods(['getBody'])->getMock();
         $responseMock->expects($this->any())->method('getBody')->willReturn(json_encode($responseData));
 
         $jsonConverterMock = $this->getMockBuilder(JsonConverter::class)->setMethods(
-            array('convertObject')
+            ['convertObject']
         )->getMock();
 
         /** @var  ObjectData|PHPUnit_Framework_MockObject_MockObject $dummyObjectData */
         $dummyObjectData = $this->getMockBuilder(ObjectData::class)->setMethods(
-            array('getId')
+            ['getId']
         )->getMock();
         $dummyObjectData->expects($this->any())->method('getId')->willReturn('foo-id');
         $jsonConverterMock->expects($this->atLeastOnce())->method('convertObject')->with($responseData)->willReturn(
@@ -861,7 +861,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         );
 
         $cmisBindingsHelperMock = $this->getMockBuilder(CmisBindingsHelper::class)->setMethods(
-            array('getJsonConverter')
+            ['getJsonConverter']
         )->getMock();
         $cmisBindingsHelperMock->expects($this->atLeastOnce())->method(
             'getJsonConverter'
@@ -869,9 +869,9 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
 
         /** @var ObjectService|PHPUnit_Framework_MockObject_MockObject $objectService */
         $objectService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
-            array($this->getSessionMock(), $cmisBindingsHelperMock)
+            [$this->getSessionMock(), $cmisBindingsHelperMock]
         )->setMethods(
-            array('getObjectUrl', 'post')
+            ['getObjectUrl', 'post']
         )->getMock();
 
         $objectService->expects($this->atLeastOnce())->method('getObjectUrl')->with(
@@ -906,94 +906,94 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $properties->addProperty($property);
 
         $principal1 = new Principal('principalId1');
-        $ace1 = new AccessControlEntry($principal1, array('permissionValue1', 'permissionValue2'));
+        $ace1 = new AccessControlEntry($principal1, ['permissionValue1', 'permissionValue2']);
 
         $principal2 = new Principal('principalId2');
-        $ace2 = new AccessControlEntry($principal2, array('permissionValue3', 'permissionValue4'));
+        $ace2 = new AccessControlEntry($principal2, ['permissionValue3', 'permissionValue4']);
 
-        $addAcl = new AccessControlList(array($ace1, $ace2));
+        $addAcl = new AccessControlList([$ace1, $ace2]);
 
         $principal3 = new Principal('principalId3');
-        $ace3 = new AccessControlEntry($principal3, array('permissionValue5', 'permissionValue6'));
+        $ace3 = new AccessControlEntry($principal3, ['permissionValue5', 'permissionValue6']);
 
         $principal4 = new Principal('principalId4');
-        $ace4 = new AccessControlEntry($principal4, array('permissionValue7', 'permissionValue8'));
+        $ace4 = new AccessControlEntry($principal4, ['permissionValue7', 'permissionValue8']);
 
-        $removeAcl = new AccessControlList(array($ace3, $ace4));
+        $removeAcl = new AccessControlList([$ace3, $ace4]);
 
-        return array(
-            array(
+        return [
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
                 ),
-                array(
+                [
                     'cmisaction' => 'createItem',
                     'succinct' => 'false',
-                    'propertyId' => array(
+                    'propertyId' => [
                         'cmis:name'
-                    ),
-                    'propertyValue' => array(
+                    ],
+                    'propertyValue' => [
                         'name'
-                    )
-                ),
+                    ]
+                ],
                 'repositoryId',
                 $properties,
                 'folderId'
-            ),
-            array(
+            ],
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
                 ),
-                array(
+                [
                     'cmisaction' => 'createItem',
                     'succinct' => 'false',
-                    'propertyId' => array(
+                    'propertyId' => [
                         'cmis:name'
-                    ),
-                    'propertyValue' => array(
+                    ],
+                    'propertyValue' => [
                         'name'
-                    ),
-                    'addACEPrincipal' => array(
+                    ],
+                    'addACEPrincipal' => [
                         'principalId1',
                         'principalId2'
-                    ),
-                    'addACEPermission' => array(
-                        array(
+                    ],
+                    'addACEPermission' => [
+                        [
                             'permissionValue1',
                             'permissionValue2'
-                        ),
-                        array(
+                        ],
+                        [
                             'permissionValue3',
                             'permissionValue4'
-                        )
-                    ),
-                    'policy' => array(
+                        ]
+                    ],
+                    'policy' => [
                         'policyOne',
                         'policyTwo'
-                    ),
-                    'removeACEPrincipal' => array(
+                    ],
+                    'removeACEPrincipal' => [
                         'principalId3',
                         'principalId4'
-                    ),
-                    'removeACEPermission' => array(
-                        array(
+                    ],
+                    'removeACEPermission' => [
+                        [
                             'permissionValue5',
                             'permissionValue6'
-                        ),
-                        array(
+                        ],
+                        [
                             'permissionValue7',
                             'permissionValue8'
-                        )
-                    )
-                ),
+                        ]
+                    ]
+                ],
                 'repositoryId',
                 $properties,
                 'folderId',
-                array('policyOne', 'policyTwo'),
+                ['policyOne', 'policyTwo'],
                 $addAcl,
                 $removeAcl
-            )
-        );
+            ]
+        ];
     }
 
     /**
@@ -1018,21 +1018,21 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         PropertiesInterface $properties,
         $folderId = null,
         VersioningState $versioningState = null,
-        array $policies = array(),
+        array $policies = [],
         AclInterface $addAces = null,
         AclInterface $removeAces = null,
         ExtensionDataInterface $extension = null
     ) {
-        $responseData = array('foo' => 'bar');
+        $responseData = ['foo' => 'bar'];
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
-        )->setMethods(array('getBody'))->getMock();
+        )->setMethods(['getBody'])->getMock();
         $responseMock->expects($this->any())->method('getBody')->willReturn(json_encode($responseData));
 
         $jsonConverterMock = $this->getMockBuilder(JsonConverter::class)->setMethods(
-            array('convertObject')
+            ['convertObject']
         )->getMock();
         $dummyObjectData = $this->getMockBuilder(ObjectData::class)->setMethods(
-            array('getId')
+            ['getId']
         )->getMock();
 
         /** @var  ObjectData|PHPUnit_Framework_MockObject_MockObject $dummyObjectData */
@@ -1042,7 +1042,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         );
 
         $cmisBindingsHelperMock = $this->getMockBuilder(CmisBindingsHelper::class)->setMethods(
-            array('getJsonConverter')
+            ['getJsonConverter']
         )->getMock();
         $cmisBindingsHelperMock->expects($this->atLeastOnce())->method(
             'getJsonConverter'
@@ -1050,9 +1050,9 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
 
         /** @var ObjectService|PHPUnit_Framework_MockObject_MockObject $objectService */
         $objectService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
-            array($this->getSessionMock(), $cmisBindingsHelperMock)
+            [$this->getSessionMock(), $cmisBindingsHelperMock]
         )->setMethods(
-            array('getObjectUrl', 'getRepositoryUrl', 'post')
+            ['getObjectUrl', 'getRepositoryUrl', 'post']
         )->getMock();
 
         if ($folderId === null) {
@@ -1096,85 +1096,85 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $properties->addProperty($property);
 
         $principal1 = new Principal('principalId1');
-        $ace1 = new AccessControlEntry($principal1, array('permissionValue1', 'permissionValue2'));
+        $ace1 = new AccessControlEntry($principal1, ['permissionValue1', 'permissionValue2']);
 
         $principal2 = new Principal('principalId2');
-        $ace2 = new AccessControlEntry($principal2, array('permissionValue3', 'permissionValue4'));
+        $ace2 = new AccessControlEntry($principal2, ['permissionValue3', 'permissionValue4']);
 
-        $addAcl = new AccessControlList(array($ace1, $ace2));
+        $addAcl = new AccessControlList([$ace1, $ace2]);
 
         $principal3 = new Principal('principalId3');
-        $ace3 = new AccessControlEntry($principal3, array('permissionValue5', 'permissionValue6'));
+        $ace3 = new AccessControlEntry($principal3, ['permissionValue5', 'permissionValue6']);
 
         $principal4 = new Principal('principalId4');
-        $ace4 = new AccessControlEntry($principal4, array('permissionValue7', 'permissionValue8'));
+        $ace4 = new AccessControlEntry($principal4, ['permissionValue7', 'permissionValue8']);
 
-        $removeAcl = new AccessControlList(array($ace3, $ace4));
+        $removeAcl = new AccessControlList([$ace3, $ace4]);
 
-        return array(
-            array(
+        return [
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
                 ),
-                array(
+                [
                     'succinct' => 'false',
                     'cmisaction' => 'createDocumentFromSource',
-                    'propertyId' => array(
+                    'propertyId' => [
                         'cmis:name'
-                    ),
-                    'propertyValue' => array(
+                    ],
+                    'propertyValue' => [
                         'name'
-                    ),
+                    ],
                     'sourceId' => 'sourceId'
-                ),
+                ],
                 'repositoryId',
                 'sourceId',
                 $properties,
                 'folderId'
-            ),
-            array(
+            ],
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
                 ),
-                array(
+                [
                     'versioningState' => 'major',
                     'succinct' => 'false',
                     'cmisaction' => 'createDocumentFromSource',
-                    'propertyId' => array(
+                    'propertyId' => [
                         'cmis:name'
-                    ),
-                    'propertyValue' => array(
+                    ],
+                    'propertyValue' => [
                         'name'
-                    ),
-                    'policy' => array(
+                    ],
+                    'policy' => [
                         'policyOne', 'policyTwo'
-                    ),
-                    'addACEPrincipal' => array(
+                    ],
+                    'addACEPrincipal' => [
                         'principalId1', 'principalId2'
-                    ),
-                    'addACEPermission' => array(
-                        array('permissionValue1', 'permissionValue2'),
-                        array('permissionValue3', 'permissionValue4')
-                    ),
-                    'removeACEPrincipal' => array(
+                    ],
+                    'addACEPermission' => [
+                        ['permissionValue1', 'permissionValue2'],
+                        ['permissionValue3', 'permissionValue4']
+                    ],
+                    'removeACEPrincipal' => [
                         'principalId3', 'principalId4'
-                    ),
-                    'removeACEPermission' => array(
-                        array('permissionValue5', 'permissionValue6'),
-                        array('permissionValue7', 'permissionValue8')
-                    ),
+                    ],
+                    'removeACEPermission' => [
+                        ['permissionValue5', 'permissionValue6'],
+                        ['permissionValue7', 'permissionValue8']
+                    ],
                     'sourceId' => 'sourceId'
-                ),
+                ],
                 'repositoryId',
                 'sourceId',
                 $properties,
                 'folderId',
                 VersioningState::cast(VersioningState::MAJOR),
-                array('policyOne', 'policyTwo'),
+                ['policyOne', 'policyTwo'],
                 $addAcl,
                 $removeAcl
-            )
-        );
+            ]
+        ];
     }
 
     /**
@@ -1200,29 +1200,29 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $includePolicyIds = false,
         $includeAcl = false
     ) {
-        $responseData = array('foo' => 'bar');
+        $responseData = ['foo' => 'bar'];
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
-        )->setMethods(array('getBody'))->getMock();
+        )->setMethods(['getBody'])->getMock();
         $responseMock->expects($this->once())->method('getBody')->willReturn(json_encode($responseData));
 
         $dummyObjectData = new ObjectData();
         $jsonConverterMock = $this->getMockBuilder(JsonConverter::class)->setMethods(
-            array('convertObject')
+            ['convertObject']
         )->getMock();
         $jsonConverterMock->expects($this->any())->method('convertObject')->with($responseData)->willReturn(
             $dummyObjectData
         );
 
         $cmisBindingsHelperMock = $this->getMockBuilder(CmisBindingsHelper::class)->setMethods(
-            array('getJsonConverter')
+            ['getJsonConverter']
         )->getMock();
         $cmisBindingsHelperMock->expects($this->once())->method('getJsonConverter')->willReturn($jsonConverterMock);
 
         /** @var ObjectService|PHPUnit_Framework_MockObject_MockObject $objectService */
         $objectService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
-            array($this->getSessionMock(), $cmisBindingsHelperMock)
+            [$this->getSessionMock(), $cmisBindingsHelperMock]
         )->setMethods(
-            array('getPathUrl', 'read')
+            ['getPathUrl', 'read']
         )->getMock();
 
         $objectService->expects($this->once())->method('getPathUrl')->with(
@@ -1251,8 +1251,8 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
      */
     public function getObjectByPathDataProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST . '?filter=filter,123&includeAllowableActions=true'
                     . '&includeRelationships=none&renditionFilter=foo:bar&includePolicyIds=true&includeACL=true'
@@ -1266,8 +1266,8 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
                 'foo:bar',
                 true,
                 true,
-            ),
-            array(
+            ],
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST . '?includeAllowableActions=false'
                     . '&includeRelationships=both&renditionFilter=foo:bar&includePolicyIds=false&includeACL=false'
@@ -1281,8 +1281,8 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
                 'foo:bar',
                 false,
                 false,
-            ),
-            array(
+            ],
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST . '?filter=filter,345&includeAllowableActions=false'
                     . '&renditionFilter=foo:bar&includePolicyIds=false&includeACL=false'
@@ -1296,8 +1296,8 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
                 'foo:bar',
                 false,
                 false,
-            )
-        );
+            ]
+        ];
     }
 
     /**
@@ -1316,22 +1316,22 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $objectId,
         PropertiesInterface $properties,
         $changeToken = null,
-        $sessionParameterMap = array()
+        $sessionParameterMap = []
     ) {
         $expectedUrl->setQuery($expectedPostData);
 
-        $responseData = array('foo' => 'bar');
+        $responseData = ['foo' => 'bar'];
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
-        )->setMethods(array('getBody'))->getMock();
+        )->setMethods(['getBody'])->getMock();
         $responseMock->expects($this->any())->method('getBody')->willReturn(json_encode($responseData));
 
         $jsonConverterMock = $this->getMockBuilder(JsonConverter::class)->setMethods(
-            array('convertObject')
+            ['convertObject']
         )->getMock();
 
         /** @var  ObjectData|PHPUnit_Framework_MockObject_MockObject $dummyObjectData */
         $dummyObjectData = $this->getMockBuilder(ObjectData::class)->setMethods(
-            array('getId', 'getProperties')
+            ['getId', 'getProperties']
         )->getMock();
 
         $newObjectId = 'foo-id';
@@ -1348,7 +1348,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         );
 
         $cmisBindingsHelperMock = $this->getMockBuilder(CmisBindingsHelper::class)->setMethods(
-            array('getJsonConverter')
+            ['getJsonConverter']
         )->getMock();
         $cmisBindingsHelperMock->expects($this->atLeastOnce())->method(
             'getJsonConverter'
@@ -1358,9 +1358,9 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
 
         /** @var ObjectService|PHPUnit_Framework_MockObject_MockObject $objectService */
         $objectService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
-            array($sessionMock, $cmisBindingsHelperMock)
+            [$sessionMock, $cmisBindingsHelperMock]
         )->setMethods(
-            array('getObjectUrl', 'post', 'getSession')
+            ['getObjectUrl', 'post', 'getSession']
         )->getMock();
 
         $objectService->expects($this->atLeastOnce())->method('getObjectUrl')->with(
@@ -1393,70 +1393,70 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
     {
         $propertySet1 = new Properties();
         $propertySet1->addProperties(
-            array(
+            [
                 new PropertyString('cmis:name', 'name'),
                 new PropertyString('cmis:description', 'description')
-            )
+            ]
         );
 
         $propertySet2 = new Properties();
         $propertySet2->addProperties(
-            array(
+            [
                 new PropertyString('cmis:name', 'foo'),
                 new PropertyString('cmis:description', 'bar')
-            )
+            ]
         );
 
-        return array(
-            'Parameter set with defined changeToken and empty session parameters' => array(
+        return [
+            'Parameter set with defined changeToken and empty session parameters' => [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
                     . '?propertyId[0]=cmis:name&propertyValue[0]=name'
                     . '&propertyId[1]=cmis:description&propertyValue[1]=description'
                     . '&changeToken=changeToken&cmisaction=update&succinct=false'
                 ),
-                array(
+                [
                     'changeToken' => 'changeToken'
-                ),
+                ],
                 'repositoryId',
                 'objectId',
                 $propertySet1,
                 'changeToken',
-                array()
-            ),
-            'Parameter set with empty changeToken and defined session parameter' => array(
+                []
+            ],
+            'Parameter set with empty changeToken and defined session parameter' => [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
                     . '?propertyId[0]=cmis:name&propertyValue[0]=foo'
                     . '&propertyId[1]=cmis:description&propertyValue[1]=bar'
                     . '&cmisaction=update&succinct=true'
                 ),
-                array(),
+                [],
                 'repositoryId',
                 'objectId',
                 $propertySet2,
                 null,
-                array(
-                    array(SessionParameter::BROWSER_SUCCINCT, null, true)
-                )
-            ),
-            'Parameter set with defined changeToken and defined OMIT_CHANGE_TOKENS session parameter' => array(
+                [
+                    [SessionParameter::BROWSER_SUCCINCT, null, true]
+                ]
+            ],
+            'Parameter set with defined changeToken and defined OMIT_CHANGE_TOKENS session parameter' => [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
                     . '?propertyId[0]=cmis:name&propertyValue[0]=foo'
                     . '&propertyId[1]=cmis:description&propertyValue[1]=bar'
                     . '&cmisaction=update&succinct=false'
                 ),
-                array(),
+                [],
                 'repositoryId',
                 'objectId',
                 $propertySet2,
                 'changeToken',
-                array(
-                    array(SessionParameter::OMIT_CHANGE_TOKENS, false, true)
-                )
-            )
-        );
+                [
+                    [SessionParameter::OMIT_CHANGE_TOKENS, false, true]
+                ]
+            ]
+        ];
     }
 
     /**
@@ -1476,20 +1476,20 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         StreamInterface $contentStream,
         $overwriteFlag = true,
         $changeToken = null,
-        $sessionParameterMap = array()
+        $sessionParameterMap = []
     ) {
-        $responseData = array('foo' => 'bar');
+        $responseData = ['foo' => 'bar'];
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
-        )->setMethods(array('getBody'))->getMock();
+        )->setMethods(['getBody'])->getMock();
         $responseMock->expects($this->any())->method('getBody')->willReturn(json_encode($responseData));
 
         $jsonConverterMock = $this->getMockBuilder(JsonConverter::class)->setMethods(
-            array('convertObject')
+            ['convertObject']
         )->getMock();
 
         /** @var  ObjectData|PHPUnit_Framework_MockObject_MockObject $dummyObjectData */
         $dummyObjectData = $this->getMockBuilder(ObjectData::class)->setMethods(
-            array('getId', 'getProperties')
+            ['getId', 'getProperties']
         )->getMock();
 
         $newObjectId = 'foo-id';
@@ -1506,7 +1506,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         );
 
         $cmisBindingsHelperMock = $this->getMockBuilder(CmisBindingsHelper::class)->setMethods(
-            array('getJsonConverter')
+            ['getJsonConverter']
         )->getMock();
         $cmisBindingsHelperMock->expects($this->atLeastOnce())->method(
             'getJsonConverter'
@@ -1516,9 +1516,9 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
 
         /** @var ObjectService|PHPUnit_Framework_MockObject_MockObject $objectService */
         $objectService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
-            array($sessionMock, $cmisBindingsHelperMock)
+            [$sessionMock, $cmisBindingsHelperMock]
         )->setMethods(
-            array('getObjectUrl', 'post', 'getSession')
+            ['getObjectUrl', 'post', 'getSession']
         )->getMock();
 
         $objectService->expects($this->atLeastOnce())->method('getObjectUrl')->with(
@@ -1528,7 +1528,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
 
         $objectService->expects($this->atLeastOnce())->method('post')->with(
             $expectedUrl,
-            array('content' => $contentStream)
+            ['content' => $contentStream]
         )->willReturn($responseMock);
         $objectService->expects($this->atLeastOnce())->method('getSession')->willReturn($sessionMock);
 
@@ -1554,8 +1554,8 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
     public function setContentStreamDataProvider()
     {
         $contentStream = $this->getMockForAbstractClass(StreamInterface::class);
-        return array(
-            'Parameter set with defined changeToken and empty session parameters' => array(
+        return [
+            'Parameter set with defined changeToken and empty session parameters' => [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
                     . '?cmisaction=setContent&overwriteFlag=true'
@@ -1566,9 +1566,9 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
                 $contentStream,
                 true,
                 'changeToken',
-                array()
-            ),
-            'Parameter set with empty changeToken and defined session parameter' => array(
+                []
+            ],
+            'Parameter set with empty changeToken and defined session parameter' => [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
                     . '?cmisaction=setContent&overwriteFlag=true&succinct=true'
@@ -1578,11 +1578,11 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
                 $contentStream,
                 true,
                 null,
-                array(
-                    array(SessionParameter::BROWSER_SUCCINCT, null, true)
-                )
-            ),
-            'Parameter set with defined changeToken and defined OMIT_CHANGE_TOKENS session parameter' => array(
+                [
+                    [SessionParameter::BROWSER_SUCCINCT, null, true]
+                ]
+            ],
+            'Parameter set with defined changeToken and defined OMIT_CHANGE_TOKENS session parameter' => [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
                     . '?cmisaction=setContent&overwriteFlag=false&succinct=false'
@@ -1592,11 +1592,11 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
                 $contentStream,
                 false,
                 'changeToken',
-                array(
-                    array(SessionParameter::OMIT_CHANGE_TOKENS, false, true)
-                )
-            )
-        );
+                [
+                    [SessionParameter::OMIT_CHANGE_TOKENS, false, true]
+                ]
+            ]
+        ];
     }
 
     /**
@@ -1614,20 +1614,20 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $repositoryId,
         $objectId,
         $changeToken = null,
-        $sessionParameterMap = array()
+        $sessionParameterMap = []
     ) {
-        $responseData = array('foo' => 'bar');
+        $responseData = ['foo' => 'bar'];
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
-        )->setMethods(array('getBody'))->getMock();
+        )->setMethods(['getBody'])->getMock();
         $responseMock->expects($this->any())->method('getBody')->willReturn(json_encode($responseData));
 
         $jsonConverterMock = $this->getMockBuilder(JsonConverter::class)->setMethods(
-            array('convertObject')
+            ['convertObject']
         )->getMock();
 
         /** @var  ObjectData|PHPUnit_Framework_MockObject_MockObject $dummyObjectData */
         $dummyObjectData = $this->getMockBuilder(ObjectData::class)->setMethods(
-            array('getId', 'getProperties')
+            ['getId', 'getProperties']
         )->getMock();
 
         $newObjectId = 'foo-id';
@@ -1644,7 +1644,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         );
 
         $cmisBindingsHelperMock = $this->getMockBuilder(CmisBindingsHelper::class)->setMethods(
-            array('getJsonConverter')
+            ['getJsonConverter']
         )->getMock();
         $cmisBindingsHelperMock->expects($this->atLeastOnce())->method(
             'getJsonConverter'
@@ -1654,9 +1654,9 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
 
         /** @var ObjectService|PHPUnit_Framework_MockObject_MockObject $objectService */
         $objectService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
-            array($sessionMock, $cmisBindingsHelperMock)
+            [$sessionMock, $cmisBindingsHelperMock]
         )->setMethods(
-            array('getObjectUrl', 'post', 'getSession')
+            ['getObjectUrl', 'post', 'getSession']
         )->getMock();
 
         $objectService->expects($this->atLeastOnce())->method('getObjectUrl')->with(
@@ -1686,8 +1686,8 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
      */
     public function deleteContentStreamDataProvider()
     {
-        return array(
-            'Parameter set with defined changeToken and empty session parameters' => array(
+        return [
+            'Parameter set with defined changeToken and empty session parameters' => [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
                     . '?cmisaction=deleteContent&changeToken=changeToken&succinct=false'
@@ -1695,9 +1695,9 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
                 'repositoryId',
                 'objectId',
                 'changeToken',
-                array()
-            ),
-            'Parameter set with empty changeToken and defined session parameter' => array(
+                []
+            ],
+            'Parameter set with empty changeToken and defined session parameter' => [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
                     . '?cmisaction=deleteContent&succinct=true'
@@ -1705,11 +1705,11 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
                 'repositoryId',
                 'objectId',
                 null,
-                array(
-                    array(SessionParameter::BROWSER_SUCCINCT, null, true)
-                )
-            ),
-            'Parameter set with defined changeToken and defined OMIT_CHANGE_TOKENS session parameter' => array(
+                [
+                    [SessionParameter::BROWSER_SUCCINCT, null, true]
+                ]
+            ],
+            'Parameter set with defined changeToken and defined OMIT_CHANGE_TOKENS session parameter' => [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
                     . '?cmisaction=deleteContent&succinct=false'
@@ -1717,11 +1717,11 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
                 'repositoryId',
                 'objectId',
                 'changeToken',
-                array(
-                    array(SessionParameter::OMIT_CHANGE_TOKENS, false, true)
-                )
-            )
-        );
+                [
+                    [SessionParameter::OMIT_CHANGE_TOKENS, false, true]
+                ]
+            ]
+        ];
     }
 
     /**
@@ -1744,24 +1744,24 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
     ) {
         $contentStream = $stream = $this->getMockForAbstractClass(StreamInterface::class);
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
-        )->setMethods(array('getBody'))->getMock();
+        )->setMethods(['getBody'])->getMock();
         $responseMock->expects($this->any())->method('getBody')->willReturn($contentStream);
 
         $httpInvoker = $this->getMockBuilder(CmisBindingsHelper::class)->setMethods(
-            array('get')
+            ['get']
         )->getMock();
         $httpInvoker->expects($this->any())->method('get')->willReturn($responseMock);
 
         $cmisBindingsHelperMock = $this->getMockBuilder(CmisBindingsHelper::class)->setMethods(
-            array('getHttpInvoker')
+            ['getHttpInvoker']
         )->getMock();
         $cmisBindingsHelperMock->expects($this->any())->method('getHttpInvoker')->willReturn($httpInvoker);
 
         /** @var ObjectService|PHPUnit_Framework_MockObject_MockObject $objectService */
         $objectService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
-            array($this->getSessionMock(), $cmisBindingsHelperMock)
+            [$this->getSessionMock(), $cmisBindingsHelperMock]
         )->setMethods(
-            array('getObjectUrl')
+            ['getObjectUrl']
         )->getMock();
 
         $objectService->expects($this->any())->method('getObjectUrl')->with(
@@ -1793,15 +1793,15 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
      */
     public function getContentStreamDataProvider()
     {
-        return array(
-            'Parameter set without optional parameters' => array(
+        return [
+            'Parameter set without optional parameters' => [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
                 ),
                 'repositoryId',
                 'objectId',
-            ),
-            'Parameter set with streamId' => array(
+            ],
+            'Parameter set with streamId' => [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
                     . '?streamId=streamId'
@@ -1809,8 +1809,8 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
                 'repositoryId',
                 'objectId',
                 'streamId'
-            ),
-            'Parameter set with offset and length' => array(
+            ],
+            'Parameter set with offset and length' => [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
                     . '?streamId=streamId'
@@ -1820,8 +1820,8 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
                 null,
                 0,
                 20
-            )
-        );
+            ]
+        ];
     }
 
     /**
@@ -1841,13 +1841,13 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         UnfileObject $unfileObjects = null,
         $continueOnFailure = false
     ) {
-        $responseData = array('foo' => 'bar');
+        $responseData = ['foo' => 'bar'];
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
-        )->setMethods(array('getBody'))->getMock();
+        )->setMethods(['getBody'])->getMock();
         $responseMock->expects($this->any())->method('getBody')->willReturn(json_encode($responseData));
 
         $jsonConverterMock = $this->getMockBuilder(JsonConverter::class)->setMethods(
-            array('convertFailedToDelete')
+            ['convertFailedToDelete']
         )->getMock();
 
         /** @var  ObjectData|PHPUnit_Framework_MockObject_MockObject $dummyObjectData */
@@ -1863,9 +1863,9 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
 
         /** @var ObjectService|PHPUnit_Framework_MockObject_MockObject $objectService */
         $objectService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
-            array($sessionMock)
+            [$sessionMock]
         )->setMethods(
-            array('getObjectUrl', 'post', 'getJsonConverter')
+            ['getObjectUrl', 'post', 'getJsonConverter']
         )->getMock();
 
         $objectService->expects($this->atLeastOnce())->method('getObjectUrl')->with(
@@ -1892,8 +1892,8 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
      */
     public function deleteTreeDataProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
                     . '?cmisaction=deleteTree&folderId=folderIdValue&allVersions=true'
@@ -1901,8 +1901,8 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
                 ),
                 'repositoryIdValue',
                 'folderIdValue'
-            ),
-            array(
+            ],
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
                     . '?cmisaction=deleteTree&folderId=folderIdValue&allVersions=false'
@@ -1911,8 +1911,8 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
                 'repositoryIdValue',
                 'folderIdValue',
                 false
-            ),
-            array(
+            ],
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
                     . '?cmisaction=deleteTree&folderId=folderIdValue&allVersions=true'
@@ -1923,8 +1923,8 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
                 true,
                 null,
                 true
-            ),
-            array(
+            ],
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
                     . '?cmisaction=deleteTree&folderId=folderIdValue&allVersions=true'
@@ -1935,8 +1935,8 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
                 true,
                 UnfileObject::cast(UnfileObject::DELETE),
                 true
-            )
-        );
+            ]
+        ];
     }
 
 
@@ -1957,29 +1957,29 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $maxItems = null,
         $skipCount = 0
     ) {
-        $responseData = array('foo' => 'bar');
+        $responseData = ['foo' => 'bar'];
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
-        )->setMethods(array('getBody'))->getMock();
+        )->setMethods(['getBody'])->getMock();
         $responseMock->expects($this->once())->method('getBody')->willReturn(json_encode($responseData));
 
         $dummyRenditionData = new RenditionData();
         $jsonConverterMock = $this->getMockBuilder(JsonConverter::class)->setMethods(
-            array('convertRendition')
+            ['convertRendition']
         )->getMock();
         $jsonConverterMock->expects($this->any())->method('convertRendition')->with($responseData)->willReturn(
             $dummyRenditionData
         );
 
         $cmisBindingsHelperMock = $this->getMockBuilder(CmisBindingsHelper::class)->setMethods(
-            array('getJsonConverter')
+            ['getJsonConverter']
         )->getMock();
         $cmisBindingsHelperMock->expects($this->once())->method('getJsonConverter')->willReturn($jsonConverterMock);
 
         /** @var ObjectService|PHPUnit_Framework_MockObject_MockObject $objectService */
         $objectService = $this->getMockBuilder(self::CLASS_TO_TEST)->setConstructorArgs(
-            array($this->getSessionMock(), $cmisBindingsHelperMock)
+            [$this->getSessionMock(), $cmisBindingsHelperMock]
         )->setMethods(
-            array('getObjectUrl', 'read')
+            ['getObjectUrl', 'read']
         )->getMock();
 
         $objectService->expects($this->once())->method('getObjectUrl')->with(
@@ -2005,16 +2005,16 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
      */
     public function getRenditionsDataProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST . '?renditionFilter=cmis:thumbnail&skipCount=0'
                 ),
                 'repositoryId',
                 'objectId',
                 'cmis:thumbnail'
-            ),
-            array(
+            ],
+            [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST . '?renditionFilter=cmis:thumbnail&maxItems=99&skipCount=10'
                 ),
@@ -2023,7 +2023,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
                 'cmis:thumbnail',
                 99,
                 10
-            )
-        );
+            ]
+        ];
     }
 }

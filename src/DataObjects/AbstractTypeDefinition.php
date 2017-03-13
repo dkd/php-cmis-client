@@ -99,7 +99,7 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
     /**
      * @var PropertyDefinitionInterface[]
      */
-    protected $propertyDefinitions = array();
+    protected $propertyDefinitions = [];
 
     /**
      * @var TypeMutabilityInterface

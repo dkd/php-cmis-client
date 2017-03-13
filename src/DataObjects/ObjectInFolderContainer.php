@@ -26,7 +26,7 @@ class ObjectInFolderContainer extends AbstractExtensionData implements ObjectInF
     /**
      * @var ObjectInFolderContainerInterface[]
      */
-    protected $children = array();
+    protected $children = [];
 
     /**
      * Creates new ObjectInFolderContainer

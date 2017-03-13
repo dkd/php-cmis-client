@@ -64,12 +64,12 @@ abstract class AbstractPropertyDefinition extends AbstractExtensionData implemen
     /**
      * @var ChoiceInterface[]
      */
-    protected $choices = array();
+    protected $choices = [];
 
     /**
      * @var array
      */
-    protected $defaultValue = array();
+    protected $defaultValue = [];
 
     /**
      * @var Updatability

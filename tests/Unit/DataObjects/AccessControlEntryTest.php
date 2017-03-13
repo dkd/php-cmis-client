@@ -25,7 +25,7 @@ class AccessControlEntryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string[]
      */
-    protected $dummyPermissions = array('foo', 'bar');
+    protected $dummyPermissions = ['foo', 'bar'];
 
     /**
      * @var PrincipalInterface|PHPUnit_Framework_MockObject_MockObject
@@ -43,7 +43,7 @@ class AccessControlEntryTest extends \PHPUnit_Framework_TestCase
 
     public function testSetPermissionsSetsPermissions()
     {
-        $permissions = array('baz', 'bazz');
+        $permissions = ['baz', 'bazz'];
         $this->ace->setPermissions($permissions);
         $this->assertAttributeSame($permissions, 'permissions', $this->ace);
     }
@@ -51,7 +51,7 @@ class AccessControlEntryTest extends \PHPUnit_Framework_TestCase
     public function testSetPermissionsThrowsExceptionIfPermissionItemIsNotOfTypeString()
     {
         $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException');
-        $this->ace->setPermissions(array(new \stdClass()));
+        $this->ace->setPermissions([new \stdClass()]);
     }
 
     public function testSetPrincipalSetsPrincipal()

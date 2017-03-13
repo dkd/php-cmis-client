@@ -129,7 +129,7 @@ $datetime->setDateTimeResolution(
     \Dkd\PhpCmis\Enum\DateTimeResolution::cast(\Dkd\PhpCmis\Enum\DateTimeResolution::TIME)
 );
 
-return array(
+return [
     'cmis:id' => $id,
     'cmis:string' => $string,
     'cmis:boolean' => $boolean,
@@ -138,4 +138,4 @@ return array(
     'cmis:html' => $html,
     'cmis:integer' => $integer,
     'cmis:datetime' => $datetime
-);
+];

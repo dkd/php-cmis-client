@@ -22,12 +22,12 @@ class RepositoryUrlCache
     /**
      * @var array
      */
-    protected $repositoryUrls = array();
+    protected $repositoryUrls = [];
 
     /**
      * @var array
      */
-    protected $rootUrls = array();
+    protected $rootUrls = [];
 
     /**
      * Adds the URLs of a repository to the cache.
@@ -85,7 +85,7 @@ class RepositoryUrlCache
         }
 
         if ($selector !== null && $selector !== '') {
-            $repositoryUrl->getQuery()->modify(array(Constants::PARAM_SELECTOR => $selector));
+            $repositoryUrl->getQuery()->modify([Constants::PARAM_SELECTOR => $selector]);
         }
 
         return $repositoryUrl;
@@ -118,10 +118,10 @@ class RepositoryUrlCache
 
         $url = $this->buildUrl($this->getRootUrl($repositoryId));
         $urlQuery = $url->getQuery();
-        $urlQuery->modify(array(Constants::PARAM_OBJECT_ID => (string) $objectId));
+        $urlQuery->modify([Constants::PARAM_OBJECT_ID => (string) $objectId]);
 
         if (!empty($selector)) {
-            $urlQuery->modify(array(Constants::PARAM_SELECTOR => (string) $selector));
+            $urlQuery->modify([Constants::PARAM_SELECTOR => (string) $selector]);
         }
 
         return $url;
@@ -145,7 +145,7 @@ class RepositoryUrlCache
         $url->getPath()->append($path);
 
         if (!empty($selector)) {
-            $url->getQuery()->modify(array(Constants::PARAM_SELECTOR => $selector));
+            $url->getQuery()->modify([Constants::PARAM_SELECTOR => $selector]);
         }
 
         return $url;

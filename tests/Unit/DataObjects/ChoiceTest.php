@@ -30,8 +30,8 @@ class ChoiceTest extends \PHPUnit_Framework_TestCase
     {
         /** @var ChoiceInterface $choice */
         $choice = $this->getMockForAbstractClass(self::CLASS_TO_TEST);
-        $this->choice->setChoices(array($choice));
-        $this->assertAttributeEquals(array($choice), 'choices', $this->choice);
+        $this->choice->setChoices([$choice]);
+        $this->assertAttributeEquals([$choice], 'choices', $this->choice);
     }
 
     public function testSetChoiceThrowsExceptionIfChoiceListContainsInvalidValue()
@@ -39,7 +39,7 @@ class ChoiceTest extends \PHPUnit_Framework_TestCase
         /** @var ChoiceInterface $choice */
         $choice = $this->getMockForAbstractClass(self::CLASS_TO_TEST);
         $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', '', 1413440336);
-        $this->choice->setChoices(array($choice, new \stdClass()));
+        $this->choice->setChoices([$choice, new \stdClass()]);
     }
 
     /**
@@ -48,9 +48,9 @@ class ChoiceTest extends \PHPUnit_Framework_TestCase
     public function testGetChoicesGetsPropertyValue()
     {
         $choice = $this->getMockForAbstractClass(self::CLASS_TO_TEST);
-        $this->choice->setChoices(array($choice));
+        $this->choice->setChoices([$choice]);
 
-        $this->assertEquals(array($choice), $this->choice->getChoices());
+        $this->assertEquals([$choice], $this->choice->getChoices());
     }
 
     public function testSetDisplayNameSetsPropertyValue()
@@ -72,7 +72,7 @@ class ChoiceTest extends \PHPUnit_Framework_TestCase
 
     public function testSetValueSetsPropertyValue()
     {
-        $value = array('value', 1, true, new Choice());
+        $value = ['value', 1, true, new Choice()];
         $this->choice->setValue($value);
         $this->assertAttributeSame($value, 'value', $this->choice);
     }
@@ -82,7 +82,7 @@ class ChoiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetValueGetsPropertyValue()
     {
-        $value = array('value', 1, true, new Choice());
+        $value = ['value', 1, true, new Choice()];
         $this->choice->setValue($value);
         $this->assertSame($value, $this->choice->getValue());
     }

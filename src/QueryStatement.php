@@ -61,7 +61,7 @@ class QueryStatement implements QueryStatementInterface
     /**
      * @var array
      */
-    protected $parametersMap = array();
+    protected $parametersMap = [];
 
     /**
      * Creates a prepared statement for querying the CMIS repository. Requires
@@ -94,10 +94,10 @@ class QueryStatement implements QueryStatementInterface
     public function __construct(
         SessionInterface $session,
         $statement = null,
-        array $selectPropertyIds = array(),
-        array $fromTypes = array(),
+        array $selectPropertyIds = [],
+        array $fromTypes = [],
         $whereClause = null,
-        array $orderByPropertyIds = array()
+        array $orderByPropertyIds = []
     ) {
         $this->session = $session;
         $statementString = trim((string) $statement);
@@ -237,7 +237,7 @@ class QueryStatement implements QueryStatementInterface
         } catch (CmisObjectNotFoundException $error) {
             $queryName = $typeDefinitionMixed;
         }
-        return array($queryName, ($alias ? $alias : $autoAlias));
+        return [$queryName, ($alias ? $alias : $autoAlias)];
     }
 
     /**
@@ -253,7 +253,7 @@ class QueryStatement implements QueryStatementInterface
      */
     protected function generateStatementPropertyList(array $properties, $withOrdering)
     {
-        $statement = array();
+        $statement = [];
         foreach ($properties as $property) {
             $ordering = ($withOrdering ? 'ASC' : '');
             if ($withOrdering) {
@@ -512,10 +512,10 @@ class QueryStatement implements QueryStatementInterface
     protected function escapeLike($string)
     {
         $escapedString = addcslashes($string, '\'\\');
-        $replace = array(
+        $replace = [
             '\\\\%' => '\\%',
             '\\\\_' => '\\_',
-        );
+        ];
         $escapedString = str_replace(array_keys($replace), array_values($replace), $escapedString);
         return "'" . $escapedString . "'";
     }
@@ -529,10 +529,10 @@ class QueryStatement implements QueryStatementInterface
     protected function escapeContains($string)
     {
         $escapedString = addcslashes($string, '"\'\\');
-        $replace = array(
+        $replace = [
             '\\\\*' => '\*',
             '\\\\?' => '\?',
-        );
+        ];
         $escapedString = str_replace(array_keys($replace), array_values($replace), $escapedString);
         return "'" . $escapedString . "'";
     }

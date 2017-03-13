@@ -20,7 +20,7 @@ class PolicyIdList extends AbstractExtensionData implements PolicyIdListInterfac
     /**
      * @var string[]
      */
-    protected $policyIds = array();
+    protected $policyIds = [];
 
     /**
      * Returns the list of policy IDs.

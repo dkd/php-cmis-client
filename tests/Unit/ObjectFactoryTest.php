@@ -46,7 +46,7 @@ class ObjectFactoryTest extends \PHPUnit_Framework_TestCase
     public function testGetBindingsObjectFactoryReturnsBindingsObjectFactoryFromSession()
     {
         $bindingMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingInterface')->setMethods(
-            array('getObjectFactory')
+            ['getObjectFactory']
         )->getMockForAbstractClass();
         $bindingObjectFactoryMock = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\Data\\BindingsObjectFactoryInterface'
@@ -55,7 +55,7 @@ class ObjectFactoryTest extends \PHPUnit_Framework_TestCase
         $bindingMock->expects($this->once())->method('getObjectFactory')->willReturn($bindingObjectFactoryMock);
         /** @var SessionInterface|PHPUnit_Framework_MockObject_MockObject $sessionMock */
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->setMethods(
-            array('getBinding')
+            ['getBinding']
         )->getMockForAbstractClass();
         $sessionMock->expects($this->once())->method('getBinding')->willReturn($bindingMock);
         $objectFactory = $this->getObjectFactory($sessionMock);
@@ -70,24 +70,24 @@ class ObjectFactoryTest extends \PHPUnit_Framework_TestCase
     public function testConvertAcesConvertsAcesToAcl()
     {
         $expectedAcl = $this->getMockForAbstractClass('\\Dkd\\PhpCmis\\Data\\AclInterface');
-        $aces = array(
+        $aces = [
             $this->getMockForAbstractClass('\\Dkd\\PhpCmis\\Data\\AceInterface'),
             $this->getMockForAbstractClass('\\Dkd\\PhpCmis\\Data\\AceInterface')
-        );
+        ];
 
         $bindingMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingInterface')->setMethods(
-            array('getObjectFactory')
+            ['getObjectFactory']
         )->getMockForAbstractClass();
         $bindingObjectFactoryMock = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\Data\\BindingsObjectFactoryInterface'
-        )->setMethods(array('createAccessControlList'))->getMockForAbstractClass();
+        )->setMethods(['createAccessControlList'])->getMockForAbstractClass();
         $bindingObjectFactoryMock->expects($this->once())->method('createAccessControlList')->with($aces)->willReturn(
             $expectedAcl
         );
         $bindingMock->expects($this->any())->method('getObjectFactory')->willReturn($bindingObjectFactoryMock);
         /** @var SessionInterface|PHPUnit_Framework_MockObject_MockObject $sessionMock */
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->setMethods(
-            array('getBinding')
+            ['getBinding']
         )->getMockForAbstractClass();
         $sessionMock->expects($this->any())->method('getBinding')->willReturn($bindingMock);
         $objectFactory = $this->getObjectFactory($sessionMock);
@@ -121,47 +121,47 @@ class ObjectFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function convertTypeDefinitionDataProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 '\\Dkd\\PhpCmis\\DataObjects\\DocumentType',
                 new \Dkd\PhpCmis\DataObjects\DocumentTypeDefinition('typeId')
-            ),
-            array(
+            ],
+            [
                 '\\Dkd\\PhpCmis\\DataObjects\\FolderType',
                 new \Dkd\PhpCmis\DataObjects\FolderTypeDefinition('typeId')
-            ),
-            array(
+            ],
+            [
                 '\\Dkd\\PhpCmis\\DataObjects\\RelationshipType',
                 new \Dkd\PhpCmis\DataObjects\RelationshipTypeDefinition('typeId')
-            ),
-            array(
+            ],
+            [
                 '\\Dkd\\PhpCmis\\DataObjects\\PolicyType',
                 new \Dkd\PhpCmis\DataObjects\PolicyTypeDefinition('typeId')
-            ),
-            array(
+            ],
+            [
                 '\\Dkd\\PhpCmis\\DataObjects\\ItemType',
                 new \Dkd\PhpCmis\DataObjects\ItemTypeDefinition('typeId')
-            ),
-            array(
+            ],
+            [
                 '\\Dkd\\PhpCmis\\DataObjects\\SecondaryType',
                 new \Dkd\PhpCmis\DataObjects\SecondaryTypeDefinition('typeId')
-            )
-        );
+            ]
+        ];
     }
 
     public function testConvertPropertiesReturnsNullIfNoPropertiesGiven()
     {
-        $this->assertNull($this->getObjectFactory()->convertProperties(array()));
+        $this->assertNull($this->getObjectFactory()->convertProperties([]));
     }
 
     public function testConvertPropertiesThrowsExceptionIfSecondaryTypesPropertyIsSetButNotAnArray()
     {
         $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', '', 1425473414);
         $this->getObjectFactory()->convertProperties(
-            array(
+            [
                 PropertyIds::OBJECT_TYPE_ID => 'type-id',
                 PropertyIds::SECONDARY_OBJECT_TYPE_IDS => 'invalidValue'
-            )
+            ]
         );
     }
 

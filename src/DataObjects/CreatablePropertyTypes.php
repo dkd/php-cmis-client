@@ -21,7 +21,7 @@ class CreatablePropertyTypes extends AbstractExtensionData implements CreatableP
     /**
      * @var PropertyType[]
      */
-    protected $propertyTypeSet = array();
+    protected $propertyTypeSet = [];
 
     /**
      * Returns the set of property data types that can used to create or update a type definition.

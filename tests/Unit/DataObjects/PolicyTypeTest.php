@@ -45,7 +45,7 @@ class PolicyTypeTest extends \PHPUnit_Framework_TestCase
          * @var PolicyType|PHPUnit_Framework_MockObject_MockObject $policyType
          */
         $policyType = $this->getMockBuilder('\\Dkd\\PhpCmis\\DataObjects\\PolicyType')->setMethods(
-            array('populate')
+            ['populate']
         )->disableOriginalConstructor()->getMock();
         $policyType->expects($this->once())->method('populate')->with(
             $policyTypeDefinition

@@ -68,7 +68,7 @@ class RelationshipService extends AbstractBrowserBindingService implements Relat
         }
 
         $query->modify(
-            array(
+            [
                 Constants::PARAM_TYPE_ID => $typeId,
                 Constants::PARAM_RELATIONSHIP_DIRECTION => (string) $relationshipDirection,
                 Constants::PARAM_SUB_RELATIONSHIP_TYPES => $includeSubRelationshipTypes ? 'true' : 'false',
@@ -76,15 +76,15 @@ class RelationshipService extends AbstractBrowserBindingService implements Relat
                 Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
                 Constants::PARAM_SKIP_COUNT => $skipCount,
                 Constants::PARAM_DATETIME_FORMAT => (string) $this->getDateTimeFormat()
-            )
+            ]
         );
 
         if ($filter !== null) {
-            $query->modify(array(Constants::PARAM_FILTER => $filter));
+            $query->modify([Constants::PARAM_FILTER => $filter]);
         }
 
         if ($maxItems !== null) {
-            $query->modify(array(Constants::PARAM_MAX_ITEMS =>  $maxItems));
+            $query->modify([Constants::PARAM_MAX_ITEMS =>  $maxItems]);
         }
 
         $responseData = (array) \json_decode($this->read($url)->getBody(), true);

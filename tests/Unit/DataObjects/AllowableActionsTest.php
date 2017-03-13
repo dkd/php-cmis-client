@@ -28,12 +28,12 @@ class AllowableActionsTest extends \PHPUnit_Framework_TestCase
     public function testSetAllowableActionsThrowsExceptionIfGivenListContainsInvalidValue()
     {
         $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException');
-        $this->allowableActions->setAllowableActions(array('foo'));
+        $this->allowableActions->setAllowableActions(['foo']);
     }
 
     public function testSetAllowableActionsAssignsActionsToAttribute()
     {
-        $actions = array(Action::cast(Action::CAN_ADD_OBJECT_TO_FOLDER), Action::cast(Action::CAN_APPLY_ACL));
+        $actions = [Action::cast(Action::CAN_ADD_OBJECT_TO_FOLDER), Action::cast(Action::CAN_APPLY_ACL)];
         $this->allowableActions->setAllowableActions($actions);
 
         $this->assertAttributeSame($actions, 'allowableActions', $this->allowableActions);
@@ -44,7 +44,7 @@ class AllowableActionsTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAllowableActionsReturnsArrayWithActions()
     {
-        $actions = array(Action::cast(Action::CAN_ADD_OBJECT_TO_FOLDER), Action::cast(Action::CAN_APPLY_ACL));
+        $actions = [Action::cast(Action::CAN_ADD_OBJECT_TO_FOLDER), Action::cast(Action::CAN_APPLY_ACL)];
         $this->allowableActions->setAllowableActions($actions);
 
         $this->assertSame($actions, $this->allowableActions->getAllowableActions());

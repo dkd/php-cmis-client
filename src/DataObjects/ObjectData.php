@@ -39,12 +39,12 @@ class ObjectData extends AbstractExtensionData implements ObjectDataInterface
     /**
      * @var ObjectDataInterface[]
      */
-    protected $relationships = array();
+    protected $relationships = [];
 
     /**
      * @var RenditionDataInterface[]
      */
-    protected $renditions = array();
+    protected $renditions = [];
 
     /**
      * @var PolicyIdListInterface

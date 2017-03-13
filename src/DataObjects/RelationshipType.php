@@ -77,7 +77,7 @@ class RelationshipType extends RelationshipTypeDefinition implements Relationshi
     public function getAllowedSourceTypes()
     {
         if ($this->allowedSourceTypes === null) {
-            $this->allowedSourceTypes = array();
+            $this->allowedSourceTypes = [];
             foreach ($this->getAllowedSourceTypeIds() as $id) {
                 $this->allowedSourceTypes[] = $this->getSession()->getTypeDefinition($id);
             }
@@ -104,7 +104,7 @@ class RelationshipType extends RelationshipTypeDefinition implements Relationshi
     public function getAllowedTargetTypes()
     {
         if ($this->allowedTargetTypes === null) {
-            $this->allowedTargetTypes = array();
+            $this->allowedTargetTypes = [];
             foreach ($this->getAllowedTargetTypeIds() as $id) {
                 $this->allowedTargetTypes[] = $this->getSession()->getTypeDefinition($id);
             }

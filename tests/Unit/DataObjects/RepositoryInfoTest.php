@@ -35,104 +35,104 @@ class RepositoryInfoTest extends \PHPUnit_Framework_TestCase
      */
     public function propertiesOfSutDataProvider()
     {
-        return array(
+        return [
             // string properties
-            array(
+            [
                 'propertyName' => 'id',
                 'validValue' => 'exampleString',
                 'invalidValue' => 123
-            ),
-            array(
+            ],
+            [
                 'propertyName' => 'name',
                 'validValue' => 'exampleString',
                 'invalidValue' => 123
-            ),
-            array(
+            ],
+            [
                 'propertyName' => 'description',
                 'validValue' => 'exampleString',
                 'invalidValue' => 123
-            ),
-            array(
+            ],
+            [
                 'propertyName' => 'rootFolderId',
                 'validValue' => 'exampleString',
                 'invalidValue' => 123
-            ),
-            array(
+            ],
+            [
                 'propertyName' => 'principalIdAnonymous',
                 'validValue' => 'exampleString',
                 'invalidValue' => 123
-            ),
-            array(
+            ],
+            [
                 'propertyName' => 'principalIdAnyone',
                 'validValue' => 'exampleString',
                 'invalidValue' => 123
-            ),
-            array(
+            ],
+            [
                 'propertyName' => 'thinClientUri',
                 'validValue' => 'exampleString',
                 'invalidValue' => 123
-            ),
-            array(
+            ],
+            [
                 'propertyName' => 'latestChangeLogToken',
                 'validValue' => 'exampleString',
                 'invalidValue' => 123
-            ),
-            array(
+            ],
+            [
                 'propertyName' => 'vendorName',
                 'validValue' => 'exampleString',
                 'invalidValue' => 123
-            ),
-            array(
+            ],
+            [
                 'propertyName' => 'productName',
                 'validValue' => 'exampleString',
                 'invalidValue' => 123
-            ),
-            array(
+            ],
+            [
                 'propertyName' => 'productVersion',
                 'validValue' => 'exampleString',
                 'invalidValue' => 123
-            ),
+            ],
             // boolean properties
-            array(
+            [
                 'propertyName' => 'changesIncomplete',
                 'validValue' => true,
                 'invalidValue' => 1
-            ),
+            ],
             // RepositoryCapabilitiesInterface properties
-            array(
+            [
                 'propertyName' => 'capabilities',
                 'validValue' => $this->getMockForAbstractClass('\\Dkd\\PhpCmis\\Data\\RepositoryCapabilitiesInterface'),
                 'invalidValue' => self::DO_NOT_TEST_INVALID_TYPE_VALUE
-            ),
+            ],
             // AclCapabilitiesInterface properties
-            array(
+            [
                 'propertyName' => 'aclCapabilities',
                 'validValue' => $this->getMockForAbstractClass('\\Dkd\\PhpCmis\\Data\\AclCapabilitiesInterface'),
                 'invalidValue' => self::DO_NOT_TEST_INVALID_TYPE_VALUE
-            ),
+            ],
             // CmisVersion properties
-            array(
+            [
                 'propertyName' => 'cmisVersion',
                 'validValue' => CmisVersion::cast(CmisVersion::CMIS_1_1),
                 'invalidValue' => self::DO_NOT_TEST_INVALID_TYPE_VALUE
-            ),
+            ],
             // BaseTypeId[] properties
-            array(
+            [
                 'propertyName' => 'changesOnType',
-                'validValue' => array(BaseTypeId::cast(BaseTypeId::CMIS_DOCUMENT)),
-                'invalidValue' => array('foo')
-            ),
+                'validValue' => [BaseTypeId::cast(BaseTypeId::CMIS_DOCUMENT)],
+                'invalidValue' => ['foo']
+            ],
             // ExtensionFeatureInterface[] properties
-            array(
+            [
                 'propertyName' => 'extensionFeatures',
-                'validValue' => array(
+                'validValue' => [
                     $this->getMockForAbstractClass(
                         '\\Dkd\\PhpCmis\\Data\\ExtensionFeatureInterface'
                     )
-                ),
-                'invalidValue' => array(new \stdClass())
-            )
-        );
+                ],
+                'invalidValue' => [new \stdClass()]
+            ]
+        ];
     }
 
     /**
@@ -187,7 +187,7 @@ class RepositoryInfoTest extends \PHPUnit_Framework_TestCase
     {
         $setterName = 'set' . ucfirst($propertyName);
         $getterName = 'get' . ucfirst($propertyName);
-        $this->setDependencies(array('testSetPropertySetsProperty'));
+        $this->setDependencies(['testSetPropertySetsProperty']);
         $this->repositoryInfo->$setterName($validValue);
         $this->assertSame($validValue, $this->repositoryInfo->$getterName());
     }

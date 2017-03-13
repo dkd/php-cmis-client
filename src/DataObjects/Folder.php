@@ -68,9 +68,9 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
         array $properties,
         StreamInterface $contentStream,
         VersioningState $versioningState,
-        array $policies = array(),
-        array $addAces = array(),
-        array $removeAces = array(),
+        array $policies = [],
+        array $addAces = [],
+        array $removeAces = [],
         OperationContextInterface $context = null
     ) {
         $newObjectId = $this->getSession()->createDocument(
@@ -127,9 +127,9 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
         ObjectIdInterface $source,
         array $properties,
         VersioningState $versioningState,
-        array $policies = array(),
-        array $addAces = array(),
-        array $removeAces = array(),
+        array $policies = [],
+        array $addAces = [],
+        array $removeAces = [],
         OperationContextInterface $context = null
     ) {
         $newObjectId = $this->getSession()->createDocumentFromSource(
@@ -169,9 +169,9 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
      */
     public function createFolder(
         array $properties,
-        array $policies = array(),
-        array $addAces = array(),
-        array $removeAces = array(),
+        array $policies = [],
+        array $addAces = [],
+        array $removeAces = [],
         OperationContextInterface $context = null
     ) {
         $newObjectId = $this->getSession()->createFolder($properties, $this, $policies, $addAces, $removeAces);
@@ -202,9 +202,9 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
      */
     public function createItem(
         array $properties,
-        array $policies = array(),
-        array $addAces = array(),
-        array $removeAces = array(),
+        array $policies = [],
+        array $addAces = [],
+        array $removeAces = [],
         OperationContextInterface $context = null
     ) {
         $newObjectId = $this->getSession()->createItem($properties, $this, $policies, $addAces, $removeAces);
@@ -235,9 +235,9 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
      */
     public function createPolicy(
         array $properties,
-        array $policies = array(),
-        array $addAces = array(),
-        array $removeAces = array(),
+        array $policies = [],
+        array $addAces = [],
+        array $removeAces = [],
         OperationContextInterface $context = null
     ) {
         $newObjectId = $this->getSession()->createPolicy($properties, $this, $policies, $addAces, $removeAces);
@@ -304,7 +304,7 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
             $context->getRenditionFilterString()
         );
 
-        $result = array();
+        $result = [];
         $objectFactory = $this->getObjectFactory();
         foreach ($checkedOutDocs->getObjects() as $objectData) {
             $document = $objectFactory->convertObject($objectData, $context);
@@ -339,7 +339,7 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
             $context->isIncludePathSegments()
         );
 
-        $result = array();
+        $result = [];
         $objectFactory = $this->getObjectFactory();
         foreach ($children->getObjects() as $objectData) {
             if ($objectData->getObject() !== null) {
@@ -493,7 +493,7 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
      */
     public function getAllowedChildObjectTypes()
     {
-        $result = array();
+        $result = [];
 
         $objectTypeIds = $this->getPropertyValue(PropertyIds::ALLOWED_CHILD_OBJECT_TYPE_IDS);
         if ($objectTypeIds === null) {

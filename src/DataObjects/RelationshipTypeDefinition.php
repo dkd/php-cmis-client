@@ -20,12 +20,12 @@ class RelationshipTypeDefinition extends AbstractTypeDefinition implements Mutab
     /**
      * @var array
      */
-    protected $allowedSourceTypeIds = array();
+    protected $allowedSourceTypeIds = [];
 
     /**
      * @var array
      */
-    protected $allowedTargetTypeIds = array();
+    protected $allowedTargetTypeIds = [];
 
     /**
      * Sets the list of type IDs that are allowed as source objects.

@@ -44,7 +44,7 @@ class SecondaryTypeTest extends \PHPUnit_Framework_TestCase
          * @var SecondaryType|PHPUnit_Framework_MockObject_MockObject $secondaryType
          */
         $secondaryType = $this->getMockBuilder('\\Dkd\\PhpCmis\\DataObjects\\SecondaryType')->setMethods(
-            array('populate')
+            ['populate']
         )->disableOriginalConstructor()->getMock();
         $secondaryType->expects($this->once())->method('populate')->with(
             $secondaryTypeDefinition

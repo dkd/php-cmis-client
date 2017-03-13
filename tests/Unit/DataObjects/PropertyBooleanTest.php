@@ -40,9 +40,9 @@ class PropertyBooleanTest extends \PHPUnit_Framework_TestCase
         if (!is_bool($value) && $value !== null) {
             $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', '', 1413440336);
         }
-        $values = array(true, $value);
+        $values = [true, $value];
         $this->propertyBoolean->setValues($values);
-        $this->assertAttributeSame(array(true, $expected), 'values', $this->propertyBoolean);
+        $this->assertAttributeSame([true, $expected], 'values', $this->propertyBoolean);
     }
 
     /**
@@ -59,6 +59,6 @@ class PropertyBooleanTest extends \PHPUnit_Framework_TestCase
             $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', '', 1413440336);
         }
         $this->propertyBoolean->setValue($value);
-        $this->assertAttributeSame(array($expected), 'values', $this->propertyBoolean);
+        $this->assertAttributeSame([$expected], 'values', $this->propertyBoolean);
     }
 }

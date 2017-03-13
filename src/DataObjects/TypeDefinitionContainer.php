@@ -22,7 +22,7 @@ class TypeDefinitionContainer extends AbstractExtensionData implements TypeDefin
     /**
      * @var TypeDefinitionContainerInterface[]
      */
-    protected $children = array();
+    protected $children = [];
 
     /**
      * @var TypeDefinitionInterface

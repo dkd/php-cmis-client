@@ -109,17 +109,17 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
         array $properties,
         StreamInterface $contentStream,
         $checkinComment,
-        array $policies = array(),
-        array $addAces = array(),
-        array $removeAces = array()
+        array $policies = [],
+        array $addAces = [],
+        array $removeAces = []
     ) {
         $newObjectId = $this->getId();
 
         $objectFactory = $this->getObjectFactory();
-        $updatability = array(
+        $updatability = [
             Updatability::cast(Updatability::READWRITE),
             Updatability::cast(Updatability::WHENCHECKEDOUT)
-        );
+        ];
 
         $this->getBinding()->getVersioningService()->checkIn(
             $this->getRepositoryId(),
@@ -199,11 +199,11 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
      */
     public function copy(
         ObjectIdInterface $targetFolderId = null,
-        array $properties = array(),
+        array $properties = [],
         VersioningState $versioningState = null,
-        array $policies = array(),
-        array $addAces = array(),
-        array $removeAces = array(),
+        array $policies = [],
+        array $addAces = [],
+        array $removeAces = [],
         OperationContextInterface $context = null
     ) {
         try {
@@ -269,13 +269,13 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
      */
     protected function copyViaClient(
         ObjectIdInterface $targetFolderId = null,
-        array $properties = array(),
+        array $properties = [],
         VersioningState $versioningState = null,
-        array $policies = array(),
-        array $addAces = array(),
-        array $removeAces = array()
+        array $policies = [],
+        array $addAces = [],
+        array $removeAces = []
     ) {
-        $newProperties = array();
+        $newProperties = [];
 
         $allPropertiesContext = $this->getSession()->createOperationContext();
         $allPropertiesContext->setFilterString('*');
@@ -375,7 +375,7 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
         );
 
         $objectFactory = $this->getSession()->getObjectFactory();
-        $result = array();
+        $result = [];
         if (count($versions)) {
             foreach ($versions as $objectData) {
                 $document = $objectFactory->convertObject($objectData, $context);

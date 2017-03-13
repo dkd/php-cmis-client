@@ -21,7 +21,7 @@ class ObjectList extends AbstractExtensionData implements ObjectListInterface
     /**
      * @var ObjectDataInterface[]
      */
-    protected $objects = array();
+    protected $objects = [];
 
     /**
      * @var boolean

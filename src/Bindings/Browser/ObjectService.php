@@ -44,7 +44,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      *
      * @var array
      */
-    protected $objectCache = array();
+    protected $objectCache = [];
 
     /**
      * Appends the content stream to the content of the document.
@@ -104,16 +104,16 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
     protected function createQueryArray(
         $action,
         PropertiesInterface $properties,
-        array $policies = array(),
+        array $policies = [],
         AclInterface $addAces = null,
         AclInterface $removeAces = null,
         ExtensionDataInterface $extension = null
     ) {
         $queryArray = array_replace(
-            array(
+            [
                 Constants::CONTROL_CMISACTION => $action,
                 Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
-            ),
+            ],
             $this->convertPropertiesToQueryArray($properties),
             $this->convertPolicyIdArrayToQueryArray($policies)
         );
@@ -162,7 +162,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         $folderId = null,
         StreamInterface $contentStream = null,
         VersioningState $versioningState = null,
-        array $policies = array(),
+        array $policies = [],
         AclInterface $addAces = null,
         AclInterface $removeAces = null,
         ExtensionDataInterface $extension = null
@@ -190,7 +190,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
                 $url,
                 array_merge(
                     $queryArray,
-                    array('body' => $contentStream)
+                    ['body' => $contentStream]
                 )
             )->getBody(),
             true
@@ -234,7 +234,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         PropertiesInterface $properties,
         $folderId = null,
         VersioningState $versioningState = null,
-        array $policies = array(),
+        array $policies = [],
         AclInterface $addAces = null,
         AclInterface $removeAces = null,
         ExtensionDataInterface $extension = null
@@ -286,7 +286,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         $repositoryId,
         PropertiesInterface $properties,
         $folderId,
-        array $policies = array(),
+        array $policies = [],
         AclInterface $addAces = null,
         AclInterface $removeAces = null,
         ExtensionDataInterface $extension = null
@@ -329,7 +329,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         $repositoryId,
         PropertiesInterface $properties,
         $folderId = null,
-        array $policies = array(),
+        array $policies = [],
         AclInterface $addAces = null,
         AclInterface $removeAces = null,
         ExtensionDataInterface $extension = null
@@ -376,7 +376,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         $repositoryId,
         PropertiesInterface $properties,
         $folderId = null,
-        array $policies = array(),
+        array $policies = [],
         AclInterface $addAces = null,
         AclInterface $removeAces = null,
         ExtensionDataInterface $extension = null
@@ -402,7 +402,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
     public function createRelationship(
         $repositoryId,
         PropertiesInterface $properties,
-        array $policies = array(),
+        array $policies = [],
         AclInterface $addAces = null,
         AclInterface $removeAces = null,
         ExtensionDataInterface $extension = null
@@ -450,14 +450,14 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         $url = $this->getObjectUrl($repositoryId, $objectId);
 
         $url->getQuery()->modify(
-            array(
+            [
                 Constants::CONTROL_CMISACTION => Constants::CMISACTION_DELETE_CONTENT,
                 Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false'
-            )
+            ]
         );
 
         if ($changeToken !== null && !$this->getSession()->get(SessionParameter::OMIT_CHANGE_TOKENS, false)) {
-            $url->getQuery()->modify(array(Constants::PARAM_CHANGE_TOKEN => $changeToken));
+            $url->getQuery()->modify([Constants::PARAM_CHANGE_TOKEN => $changeToken]);
         }
 
         $responseData = (array) \json_decode($this->post($url)->getBody(), true);
@@ -493,10 +493,10 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
     ) {
         $url = $this->getObjectUrl($repositoryId, $objectId);
         $url->getQuery()->modify(
-            array(
+            [
                 Constants::CONTROL_CMISACTION => Constants::CMISACTION_DELETE,
                 Constants::PARAM_ALL_VERSIONS => $allVersions ? 'true' : 'false',
-            )
+            ]
         );
 
         $this->post($url);
@@ -528,16 +528,16 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
     ) {
         $url = $this->getObjectUrl($repositoryId, $folderId);
         $url->getQuery()->modify(
-            array(
+            [
                 Constants::CONTROL_CMISACTION => Constants::CMISACTION_DELETE_TREE,
                 Constants::PARAM_FOLDER_ID => $folderId,
                 Constants::PARAM_ALL_VERSIONS => $allVersions ? 'true' : 'false',
                 Constants::PARAM_CONTINUE_ON_FAILURE => $continueOnFailure ? 'true' : 'false'
-            )
+            ]
         );
 
         if ($unfileObjects !== null) {
-            $url->getQuery()->modify(array(Constants::PARAM_UNFILE_OBJECTS => (string) $unfileObjects));
+            $url->getQuery()->modify([Constants::PARAM_UNFILE_OBJECTS => (string) $unfileObjects]);
         }
 
         $response = $this->post($url);
@@ -593,7 +593,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         $url = $this->getObjectUrl($repositoryId, $objectId, Constants::SELECTOR_CONTENT);
 
         if ($streamId !== null) {
-            $url->getQuery()->modify(array(Constants::PARAM_STREAM_ID => $streamId));
+            $url->getQuery()->modify([Constants::PARAM_STREAM_ID => $streamId]);
         }
 
         /** @var Response $response */
@@ -645,7 +645,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
     ) {
         $cacheKey = $this->createCacheKey(
             $objectId,
-            array(
+            [
                 $repositoryId,
                 $filter,
                 $includeAllowableActions,
@@ -655,29 +655,29 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
                 $includeAcl,
                 $extension,
                 $this->getSuccinct()
-            )
+            ]
         );
         if ($this->isCached($cacheKey)) {
             return $this->getCached($cacheKey);
         }
         $url = $this->getObjectUrl($repositoryId, $objectId, Constants::SELECTOR_OBJECT);
         $url->getQuery()->modify(
-            array(
+            [
                 Constants::PARAM_ALLOWABLE_ACTIONS => $includeAllowableActions ? 'true' : 'false',
                 Constants::PARAM_RENDITION_FILTER => $renditionFilter,
                 Constants::PARAM_POLICY_IDS => $includePolicyIds ? 'true' : 'false',
                 Constants::PARAM_ACL => $includeAcl ? 'true' : 'false',
                 Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
                 Constants::PARAM_DATETIME_FORMAT => (string) $this->getDateTimeFormat()
-            )
+            ]
         );
 
         if (!empty($filter)) {
-            $url->getQuery()->modify(array(Constants::PARAM_FILTER => (string) $filter));
+            $url->getQuery()->modify([Constants::PARAM_FILTER => (string) $filter]);
         }
 
         if ($includeRelationships !== null) {
-            $url->getQuery()->modify(array(Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships));
+            $url->getQuery()->modify([Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships]);
         }
 
         $responseData = (array) \json_decode($this->read($url)->getBody(), true);
@@ -722,7 +722,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
     ) {
         $cacheKey = $this->createCacheKey(
             $path,
-            array(
+            [
                 $repositoryId,
                 $filter,
                 $includeAllowableActions,
@@ -732,7 +732,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
                 $includeAcl,
                 $extension,
                 $this->getSuccinct()
-            )
+            ]
         );
         if ($this->isCached($cacheKey)) {
             return $this->getCached($cacheKey);
@@ -740,22 +740,22 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
 
         $url = $this->getPathUrl($repositoryId, $path, Constants::SELECTOR_OBJECT);
         $url->getQuery()->modify(
-            array(
+            [
                 Constants::PARAM_ALLOWABLE_ACTIONS => $includeAllowableActions ? 'true' : 'false',
                 Constants::PARAM_RENDITION_FILTER => $renditionFilter,
                 Constants::PARAM_POLICY_IDS => $includePolicyIds ? 'true' : 'false',
                 Constants::PARAM_ACL => $includeAcl ? 'true' : 'false',
                 Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
                 Constants::PARAM_DATETIME_FORMAT => (string) $this->getDateTimeFormat()
-            )
+            ]
         );
 
         if (!empty($filter)) {
-            $url->getQuery()->modify(array(Constants::PARAM_FILTER => (string) $filter));
+            $url->getQuery()->modify([Constants::PARAM_FILTER => (string) $filter]);
         }
 
         if ($includeRelationships !== null) {
-            $url->getQuery()->modify(array(Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships));
+            $url->getQuery()->modify([Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships]);
         }
 
         $responseData = (array) \json_decode($this->read($url)->getBody(), true);
@@ -784,12 +784,12 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
     ) {
         $cacheKey = $this->createCacheKey(
             $objectId,
-            array(
+            [
                 $repositoryId,
                 $filter,
                 $extension,
                 $this->getSuccinct()
-            )
+            ]
         );
 
         if ($this->isCached($cacheKey)) {
@@ -798,14 +798,14 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
 
         $url = $this->getObjectUrl($repositoryId, $objectId, Constants::SELECTOR_PROPERTIES);
         $url->getQuery()->modify(
-            array(
+            [
                 Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
                 Constants::PARAM_DATETIME_FORMAT => (string) $this->getDateTimeFormat()
-            )
+            ]
         );
 
         if (!empty($filter)) {
-            $url->getQuery()->modify(array(Constants::PARAM_FILTER => (string) $filter));
+            $url->getQuery()->modify([Constants::PARAM_FILTER => (string) $filter]);
         }
 
         $responseData = (array) \json_decode($this->read($url)->getBody(), true);
@@ -856,14 +856,14 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
 
         $url = $this->getObjectUrl($repositoryId, $objectId, Constants::SELECTOR_RENDITIONS);
         $url->getQuery()->modify(
-            array(
+            [
                 Constants::PARAM_RENDITION_FILTER => $renditionFilter,
                 Constants::PARAM_SKIP_COUNT => (string) $skipCount,
-            )
+            ]
         );
 
         if ($maxItems !== null) {
-            $url->getQuery()->modify(array(Constants::PARAM_MAX_ITEMS => (string) $maxItems));
+            $url->getQuery()->modify([Constants::PARAM_MAX_ITEMS => (string) $maxItems]);
         }
 
         $responseData = (array) \json_decode($this->read($url)->getBody(), true);
@@ -893,12 +893,12 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
 
         $url = $this->getObjectUrl($repositoryId, $objectId);
         $url->getQuery()->modify(
-            array(
+            [
                 Constants::CONTROL_CMISACTION => Constants::CMISACTION_MOVE,
                 Constants::PARAM_TARGET_FOLDER_ID => $targetFolderId,
                 Constants::PARAM_SOURCE_FOLDER_ID => $sourceFolderId,
                 Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false'
-            )
+            ]
         );
 
         $responseData = (array) \json_decode($this->post($url)->getBody(), true);
@@ -942,19 +942,19 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         $url = $this->getObjectUrl($repositoryId, $objectId);
 
         $url->getQuery()->modify(
-            array(
+            [
                 Constants::CONTROL_CMISACTION => Constants::CMISACTION_SET_CONTENT,
                 Constants::PARAM_OVERWRITE_FLAG => $overwriteFlag ? 'true' : 'false',
                 Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false'
-            )
+            ]
         );
 
         if ($changeToken !== null && !$this->getSession()->get(SessionParameter::OMIT_CHANGE_TOKENS, false)) {
-            $url->getQuery()->modify(array(Constants::PARAM_CHANGE_TOKEN => $changeToken));
+            $url->getQuery()->modify([Constants::PARAM_CHANGE_TOKEN => $changeToken]);
         }
 
         $responseData = (array) \json_decode(
-            $this->post($url, array('content' => $contentStream))->getBody(),
+            $this->post($url, ['content' => $contentStream])->getBody(),
             true
         );
 
@@ -1000,7 +1000,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         $url = $this->getObjectUrl($repositoryId, $objectId);
 
         if ($changeToken !== null && !$this->getSession()->get(SessionParameter::OMIT_CHANGE_TOKENS, false)) {
-            $url->getQuery()->modify(array(Constants::PARAM_CHANGE_TOKEN => $changeToken));
+            $url->getQuery()->modify([Constants::PARAM_CHANGE_TOKEN => $changeToken]);
         }
 
         $queryArray = $this->convertPropertiesToQueryArray($properties);
@@ -1029,10 +1029,10 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      */
     protected function createCacheKey($identifier, $additionalHashValues)
     {
-        return array(
+        return [
             $identifier,
             sha1(is_array($additionalHashValues) ? serialize($additionalHashValues) : $additionalHashValues)
-        );
+        ];
     }
 
     /**
@@ -1093,6 +1093,6 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
 	 */
 	protected function flushCached()
 	{
-		$this->objectCache = array();
+		$this->objectCache = [];
 	}
 }

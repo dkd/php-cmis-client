@@ -42,7 +42,7 @@ class JSONConstants
     /**
      * @var array
      */
-    protected static $REPOSITORY_INFO_KEYS = array(
+    protected static $REPOSITORY_INFO_KEYS = [
         self::JSON_REPINFO_ID,
         self::JSON_REPINFO_NAME,
         self::JSON_REPINFO_DESCRIPTION,
@@ -62,7 +62,7 @@ class JSONConstants
         self::JSON_REPINFO_PRINCIPAL_ID_ANONYMOUS,
         self::JSON_REPINFO_PRINCIPAL_ID_ANYONE,
         self::JSON_REPINFO_EXTENDED_FEATURES
-    );
+    ];
 
     /**
      * Returns an array of all repository info keys
@@ -95,7 +95,7 @@ class JSONConstants
     /**
      * @var array
      */
-    protected static $CAPABILITY_KEYS = array(
+    protected static $CAPABILITY_KEYS = [
         self::JSON_CAP_CONTENT_STREAM_UPDATABILITY,
         self::JSON_CAP_CHANGES,
         self::JSON_CAP_RENDITIONS,
@@ -113,7 +113,7 @@ class JSONConstants
         self::JSON_CAP_ACL,
         self::JSON_CAP_CREATABLE_PROPERTY_TYPES,
         self::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES
-    );
+    ];
 
     /**
      * Returns an array of all capability keys
@@ -130,9 +130,9 @@ class JSONConstants
     /**
      * @var array
      */
-    protected static $CAPABILITY_CREATABLE_PROPERTY_KEYS = array(
+    protected static $CAPABILITY_CREATABLE_PROPERTY_KEYS = [
         self::JSON_CAP_CREATABLE_PROPERTY_TYPES_CANCREATE
-    );
+    ];
 
     /**
      * Returns an array of all creatable capability property keys
@@ -161,7 +161,7 @@ class JSONConstants
     /**
      * @var array
      */
-    protected static $CAP_NEW_TYPE_SETTABLE_ATTRIBUTES_KEYS = array(
+    protected static $CAP_NEW_TYPE_SETTABLE_ATTRIBUTES_KEYS = [
         self::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES_ID,
         self::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES_LOCALNAME,
         self::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES_LOCALNAMESPACE,
@@ -175,7 +175,7 @@ class JSONConstants
         self::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES_INCLUDEDINSUPERTYTPEQUERY,
         self::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES_CONTROLABLEPOLICY,
         self::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES_CONTROLABLEACL
-    );
+    ];
 
     /**
      * Returns an array of all new type settable attribute keys
@@ -195,12 +195,12 @@ class JSONConstants
     /**
      * @var array
      */
-    protected static $ACL_CAPABILITY_KEYS = array(
+    protected static $ACL_CAPABILITY_KEYS = [
         self::JSON_ACLCAP_SUPPORTED_PERMISSIONS,
         self::JSON_ACLCAP_ACL_PROPAGATION,
         self::JSON_ACLCAP_PERMISSIONS,
         self::JSON_ACLCAP_PERMISSION_MAPPING
-    );
+    ];
 
     /**
      * Returns an array of all acl capability keys
@@ -218,10 +218,10 @@ class JSONConstants
     /**
      * @var array
      */
-    protected static $ACL_CAPABILITY_PERMISSION_KEYS = array(
+    protected static $ACL_CAPABILITY_PERMISSION_KEYS = [
         self::JSON_ACLCAP_PERMISSION_PERMISSION,
         self::JSON_ACLCAP_PERMISSION_DESCRIPTION
-    );
+    ];
 
     /**
      * Returns an array of all acl capability permission keys
@@ -239,10 +239,10 @@ class JSONConstants
     /**
      * @var array
      */
-    protected static $ACL_CAPABILITY_MAPPING_KEYS = array(
+    protected static $ACL_CAPABILITY_MAPPING_KEYS = [
         self::JSON_ACLCAP_MAPPING_KEY,
         self::JSON_ACLCAP_MAPPING_PERMISSION
-    );
+    ];
 
     /**
      * Returns an array of all acl capability mapping keys
@@ -264,14 +264,14 @@ class JSONConstants
     /**
      * @var array
      */
-    protected static $FEATURE_KEYS = array(
+    protected static $FEATURE_KEYS = [
         self::JSON_FEATURE_ID,
         self::JSON_FEATURE_URL,
         self::JSON_FEATURE_COMMON_NAME,
         self::JSON_FEATURE_VERSION_LABEL,
         self::JSON_FEATURE_DESCRIPTION,
         self::JSON_FEATURE_DATA
-    );
+    ];
 
     public static function getFeatureKeys()
     {
@@ -293,7 +293,7 @@ class JSONConstants
     /**
      * @var array
      */
-    protected static $OBJECT_KEYS = array(
+    protected static $OBJECT_KEYS = [
         self::JSON_OBJECT_PROPERTIES,
         self::JSON_OBJECT_SUCCINCT_PROPERTIES,
         self::JSON_OBJECT_PROPERTIES_EXTENSION,
@@ -304,7 +304,7 @@ class JSONConstants
         self::JSON_OBJECT_EXACT_ACL,
         self::JSON_OBJECT_POLICY_IDS,
         self::JSON_OBJECT_RENDITIONS
-    );
+    ];
 
     /**
      * Returns an array of all JSON object keys
@@ -319,9 +319,9 @@ class JSONConstants
     /**
      * @var array
      */
-    protected static $POLICY_IDS_KEYS = array(
+    protected static $POLICY_IDS_KEYS = [
         self::JSON_OBJECT_POLICY_IDS_IDS
-    );
+    ];
 
     public static function getPolicyIdsKeys()
     {
@@ -334,10 +334,10 @@ class JSONConstants
     /**
      * @var array
      */
-    protected static $OBJECTINFOLDER_KEYS = array(
+    protected static $OBJECTINFOLDER_KEYS = [
         self::JSON_OBJECTINFOLDER_OBJECT,
         self::JSON_OBJECTINFOLDER_PATH_SEGMENT
-    );
+    ];
 
     /**
      * @return array Array of all object in folder keys
@@ -354,11 +354,11 @@ class JSONConstants
     /**
      * @var array
      */
-    protected static $OBJECTINFOLDERLIST_KEYS = array(
+    protected static $OBJECTINFOLDERLIST_KEYS = [
         self::JSON_OBJECTINFOLDERLIST_OBJECTS,
         self::JSON_OBJECTINFOLDERLIST_HAS_MORE_ITEMS,
         self::JSON_OBJECTINFOLDERLIST_NUM_ITEMS
-    );
+    ];
 
     /**
      * @return array Array of all object in folder list keys
@@ -374,10 +374,10 @@ class JSONConstants
     /**
      * @var array
      */
-    protected static $OBJECTINFOLDERCONTAINER_KEYS = array(
+    protected static $OBJECTINFOLDERCONTAINER_KEYS = [
         self::JSON_OBJECTINFOLDERCONTAINER_OBJECT,
         self::JSON_OBJECTINFOLDERCONTAINER_CHILDREN
-    );
+    ];
 
     /**
      * @return array Array of all object in folder container keys
@@ -393,10 +393,10 @@ class JSONConstants
     /**
      * @var array
      */
-    protected static $OBJECTPARENTS_KEYS = array(
+    protected static $OBJECTPARENTS_KEYS = [
         self::JSON_OBJECTPARENTS_OBJECT,
         self::JSON_OBJECTPARENTS_RELATIVE_PATH_SEGMENT
-    );
+    ];
 
     /**
      * @return array Array of all object parents keys
@@ -417,7 +417,7 @@ class JSONConstants
     /**
      * @var array
      */
-    protected static $PROPERTY_KEYS = array(
+    protected static $PROPERTY_KEYS = [
         self::JSON_PROPERTY_ID,
         self::JSON_PROPERTY_LOCALNAME,
         self::JSON_PROPERTY_DISPLAYNAME,
@@ -425,7 +425,7 @@ class JSONConstants
         self::JSON_PROPERTY_VALUE,
         self::JSON_PROPERTY_DATATYPE,
         self::JSON_PROPERTY_CARDINALITY
-    );
+    ];
 
     /**
      * Returns an array of all JSON Property keys
@@ -443,10 +443,10 @@ class JSONConstants
     /**
      * @var array
      */
-    protected static $CHANGE_EVENT_KEYS = array(
+    protected static $CHANGE_EVENT_KEYS = [
         self::JSON_CHANGE_EVENT_TYPE,
         self::JSON_CHANGE_EVENT_TIME
-    );
+    ];
 
     /**
      * Returns an array of all change event type keys
@@ -464,10 +464,10 @@ class JSONConstants
     /**
      * @var array
      */
-    protected static $ACL_KEYS = array(
+    protected static $ACL_KEYS = [
         self::JSON_ACL_ACES,
         self::JSON_ACL_IS_EXACT
-    );
+    ];
 
     /**
      * Returns an array of all acl keys
@@ -482,9 +482,9 @@ class JSONConstants
     const JSON_ACE_PRINCIPAL = 'principal';
     const JSON_ACE_PRINCIPAL_ID = 'principalId';
 
-    protected static $ACE_PRINCIPAL_KEYS = array(
+    protected static $ACE_PRINCIPAL_KEYS = [
         self::JSON_ACE_PRINCIPAL_ID
-    );
+    ];
 
     /**
      * Returns an array of all ace principal keys
@@ -502,11 +502,11 @@ class JSONConstants
     /**
      * @var array
      */
-    protected static $ACE_KEYS = array(
+    protected static $ACE_KEYS = [
         self::JSON_ACE_PRINCIPAL,
         self::JSON_ACE_PERMISSIONS,
         self::JSON_ACE_IS_DIRECT
-    );
+    ];
 
     /**
      * Returns an array of all ace keys
@@ -530,7 +530,7 @@ class JSONConstants
     /**
      * @var array
      */
-    protected static $RENDITION_KEYS = array(
+    protected static $RENDITION_KEYS = [
         self::JSON_RENDITION_STREAM_ID,
         self::JSON_RENDITION_MIMETYPE,
         self::JSON_RENDITION_LENGTH,
@@ -539,7 +539,7 @@ class JSONConstants
         self::JSON_RENDITION_HEIGHT,
         self::JSON_RENDITION_WIDTH,
         self::JSON_RENDITION_DOCUMENT_ID
-    );
+    ];
 
     /**
      * Returns an array of all rendition keys
@@ -559,12 +559,12 @@ class JSONConstants
     /**
      * @var array
      */
-    protected static $OBJECTLIST_KEYS = array(
+    protected static $OBJECTLIST_KEYS = [
         self::JSON_OBJECTLIST_OBJECTS,
         self::JSON_OBJECTLIST_HAS_MORE_ITEMS,
         self::JSON_OBJECTLIST_NUM_ITEMS,
         self::JSON_OBJECTLIST_CHANGE_LOG_TOKEN
-    );
+    ];
 
     /**
      * @return array Array of all object list keys
@@ -581,11 +581,11 @@ class JSONConstants
     /**
      * @var array
      */
-    protected static $QUERYRESULTLIST_KEYS = array(
+    protected static $QUERYRESULTLIST_KEYS = [
         self::JSON_QUERYRESULTLIST_RESULTS,
         self::JSON_QUERYRESULTLIST_HAS_MORE_ITEMS,
         self::JSON_QUERYRESULTLIST_NUM_ITEMS
-    );
+    ];
 
     /**
      * @return array Array of all query result list keys
@@ -620,7 +620,7 @@ class JSONConstants
     /**
      * @var array
      */
-    protected static $TYPE_KEYS = array(
+    protected static $TYPE_KEYS = [
         self::JSON_TYPE_ID,
         self::JSON_TYPE_LOCALNAME,
         self::JSON_TYPE_LOCALNAMESPACE,
@@ -642,7 +642,7 @@ class JSONConstants
         self::JSON_TYPE_CONTENTSTREAM_ALLOWED,
         self::JSON_TYPE_ALLOWED_SOURCE_TYPES,
         self::JSON_TYPE_ALLOWED_TARGET_TYPES
-    );
+    ];
 
     /**
      * Returns an array of all type keys
@@ -683,7 +683,7 @@ class JSONConstants
     /**
      * @var array
      */
-    protected static $PROPERTY_TYPE_KEYS = array(
+    protected static $PROPERTY_TYPE_KEYS = [
         self::JSON_PROPERTY_TYPE_ID,
         self::JSON_PROPERTY_TYPE_LOCALNAME,
         self::JSON_PROPERTY_TYPE_LOCALNAMESPACE,
@@ -705,7 +705,7 @@ class JSONConstants
         self::JSON_PROPERTY_TYPE_PRECISION,
         self::JSON_PROPERTY_TYPE_RESOLUTION,
         self::JSON_PROPERTY_TYPE_CHOICE
-    );
+    ];
 
     /**
      * @return array Array of all property type keys
@@ -722,11 +722,11 @@ class JSONConstants
     /**
      * @var array
      */
-    protected static $TYPE_TYPE_MUTABILITY_KEYS = array(
+    protected static $TYPE_TYPE_MUTABILITY_KEYS = [
         self::JSON_TYPE_TYPE_MUTABILITY_CREATE,
         self::JSON_TYPE_TYPE_MUTABILITY_DELETE,
         self::JSON_TYPE_TYPE_MUTABILITY_UPDATE
-    );
+    ];
 
     /**
      * @return array Array of all type mutability keys
@@ -741,9 +741,9 @@ class JSONConstants
     /**
      * @var array
      */
-    protected static $FAILEDTODELETE_KEYS = array(
+    protected static $FAILEDTODELETE_KEYS = [
         self::JSON_FAILEDTODELETE_ID
-    );
+    ];
 
     /**
      * @return array Array of all type mutability keys
@@ -760,11 +760,11 @@ class JSONConstants
     /**
      * @var array
      */
-    protected static $TYPESLIST_KEYS = array(
+    protected static $TYPESLIST_KEYS = [
         self::JSON_TYPESLIST_TYPES,
         self::JSON_TYPESLIST_HAS_MORE_ITEMS,
         self::JSON_TYPESLIST_NUM_ITEMS
-    );
+    ];
 
     /**
      * @return array Array of all "Types list" keys
@@ -780,10 +780,10 @@ class JSONConstants
     /**
      * @var array
      */
-    protected static $TYPESCONTAINER_KEYS = array(
+    protected static $TYPESCONTAINER_KEYS = [
         self::JSON_TYPESCONTAINER_TYPE,
         self::JSON_TYPESCONTAINER_CHILDREN
-    );
+    ];
 
     /**
      * @return array Array of all "Types container" keys

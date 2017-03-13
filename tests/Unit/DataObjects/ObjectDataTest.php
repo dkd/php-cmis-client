@@ -133,7 +133,7 @@ class ObjectDataTest extends \PHPUnit_Framework_TestCase
 
     public function testSetRelationshipsSetsProperty()
     {
-        $relationships = array($this->getMockForAbstractClass('\\Dkd\\PhpCmis\\Data\\ObjectDataInterface'));
+        $relationships = [$this->getMockForAbstractClass('\\Dkd\\PhpCmis\\Data\\ObjectDataInterface')];
         $this->objectData->setRelationships($relationships);
         $this->assertAttributeSame($relationships, 'relationships', $this->objectData);
     }
@@ -143,14 +143,14 @@ class ObjectDataTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetRelationshipsReturnsPropertyValue()
     {
-        $relationships = array($this->getMockForAbstractClass('\\Dkd\\PhpCmis\\Data\\ObjectDataInterface'));
+        $relationships = [$this->getMockForAbstractClass('\\Dkd\\PhpCmis\\Data\\ObjectDataInterface')];
         $this->objectData->setRelationships($relationships);
         $this->assertSame($relationships, $this->objectData->getRelationships());
     }
 
     public function testSetRenditionsSetsProperty()
     {
-        $renditions = array($this->getMockForAbstractClass('\\Dkd\\PhpCmis\\Data\\ObjectDataInterface'));
+        $renditions = [$this->getMockForAbstractClass('\\Dkd\\PhpCmis\\Data\\ObjectDataInterface')];
         $this->objectData->setRenditions($renditions);
         $this->assertAttributeSame($renditions, 'renditions', $this->objectData);
     }
@@ -160,7 +160,7 @@ class ObjectDataTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetRenditionsReturnsPropertyValue()
     {
-        $renditions = array($this->getMockForAbstractClass('\\Dkd\\PhpCmis\\Data\\ObjectDataInterface'));
+        $renditions = [$this->getMockForAbstractClass('\\Dkd\\PhpCmis\\Data\\ObjectDataInterface')];
         $this->objectData->setRenditions($renditions);
         $this->assertSame($renditions, $this->objectData->getRenditions());
     }
@@ -182,7 +182,7 @@ class ObjectDataTest extends \PHPUnit_Framework_TestCase
 
     public function testGetIdReturnsFirstValueOfIdMultiValuePropertyValue()
     {
-        $idProperty = new PropertyId(PropertyIds::OBJECT_ID, array('fooPropertyId', 'secondValue'));
+        $idProperty = new PropertyId(PropertyIds::OBJECT_ID, ['fooPropertyId', 'secondValue']);
         $properties = new Properties();
         $properties->addProperty($idProperty);
         $this->objectData->setProperties($properties);
@@ -197,7 +197,7 @@ class ObjectDataTest extends \PHPUnit_Framework_TestCase
 
     public function testGetBaseTypeIdReturnsNullIfRequestedPropertyDoesNotExist()
     {
-        $idProperty = new PropertyId(PropertyIds::OBJECT_ID, array('fooPropertyId', 'secondValue'));
+        $idProperty = new PropertyId(PropertyIds::OBJECT_ID, ['fooPropertyId', 'secondValue']);
         $properties = new Properties();
         $properties->addProperty($idProperty);
         $this->objectData->setProperties($properties);
@@ -227,7 +227,7 @@ class ObjectDataTest extends \PHPUnit_Framework_TestCase
 
     public function testGetBaseTypeIdReturnsFirstValueOfIdMultiValuePropertyValue()
     {
-        $idProperty = new PropertyId(PropertyIds::BASE_TYPE_ID, array('cmis:item', 'cmis:document'));
+        $idProperty = new PropertyId(PropertyIds::BASE_TYPE_ID, ['cmis:item', 'cmis:document']);
         $properties = new Properties();
         $properties->addProperty($idProperty);
         $this->objectData->setProperties($properties);

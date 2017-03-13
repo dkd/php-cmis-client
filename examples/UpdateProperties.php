@@ -5,7 +5,7 @@ echo "Now trying to update the created document...\n";
 
 if ($document !== null) {
     $document = $session->getObject($document);
-    $properties = array(\Dkd\PhpCmis\PropertyIds::DESCRIPTION => 'Updated on ' . time());
+    $properties = [\Dkd\PhpCmis\PropertyIds::DESCRIPTION => 'Updated on ' . time()];
     $document->updateProperties($properties, true);
 
     echo "The generated document has now been updated and the property " . \Dkd\PhpCmis\PropertyIds::DESCRIPTION

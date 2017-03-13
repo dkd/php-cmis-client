@@ -25,7 +25,7 @@ class CmisBindingTest extends \PHPUnit_Framework_TestCase
             '\\Dkd\\PhpCmis\\Exception\\CmisRuntimeException',
             'Session parameters must be set!'
         );
-        new CmisBinding(new Session(), array());
+        new CmisBinding(new Session(), []);
     }
 
     public function testConstructorThrowsExceptionIfNoSessionParameterBindingClassIsGiven()
@@ -34,7 +34,7 @@ class CmisBindingTest extends \PHPUnit_Framework_TestCase
             '\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException',
             'Session parameters do not contain a binding class name!'
         );
-        new CmisBinding(new Session(), array('foo' => 'bar'));
+        new CmisBinding(new Session(), ['foo' => 'bar']);
     }
 
 
@@ -42,21 +42,21 @@ class CmisBindingTest extends \PHPUnit_Framework_TestCase
     {
         /** @var BindingSessionInterface|\PHPUnit_Framework_MockObject_MockObject $session */
         $session = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\BindingSessionInterface')->setMethods(
-            array('put')
+            ['put']
         )->getMockForAbstractClass();
         $session->expects($this->once())->method('put');
-        new CmisBinding($session, array(SessionParameter::BINDING_CLASS => 'foo'));
+        new CmisBinding($session, [SessionParameter::BINDING_CLASS => 'foo']);
 
         $session = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\BindingSessionInterface')->setMethods(
-            array('put')
+            ['put']
         )->getMockForAbstractClass();
         $session->expects($this->exactly(3))->method('put');
-        new CmisBinding($session, array(SessionParameter::BINDING_CLASS => 'foo', 1, 2));
+        new CmisBinding($session, [SessionParameter::BINDING_CLASS => 'foo', 1, 2]);
     }
 
     public function testConstructorCreatesRepositoryServiceInstance()
     {
-        $binding = new CmisBinding(new Session(), array(SessionParameter::BINDING_CLASS => 'foo'));
+        $binding = new CmisBinding(new Session(), [SessionParameter::BINDING_CLASS => 'foo']);
         $this->assertAttributeInstanceOf(
             '\\Dkd\\PhpCmis\\Bindings\\Browser\\RepositoryService',
             'repositoryService',
@@ -66,7 +66,7 @@ class CmisBindingTest extends \PHPUnit_Framework_TestCase
 
     public function testConstructorCreatesObjectFactoryInstanceIfNoneGiven()
     {
-        $binding = new CmisBinding(new Session(), array(SessionParameter::BINDING_CLASS => 'foo'));
+        $binding = new CmisBinding(new Session(), [SessionParameter::BINDING_CLASS => 'foo']);
         $this->assertAttributeInstanceOf(
             '\\Dkd\\PhpCmis\\DataObjects\\BindingsObjectFactory',
             'objectFactory',
@@ -82,7 +82,7 @@ class CmisBindingTest extends \PHPUnit_Framework_TestCase
         )->getMock();
         $binding = new CmisBinding(
             new Session(),
-            array(SessionParameter::BINDING_CLASS => 'foo'),
+            [SessionParameter::BINDING_CLASS => 'foo'],
             null,
             $objectFactory
         );
@@ -95,7 +95,7 @@ class CmisBindingTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCmisBindingsHelperReturnsCmisBindingsHelper()
     {
-        $binding = new CmisBinding(new Session(), array(SessionParameter::BINDING_CLASS => 'foo'));
+        $binding = new CmisBinding(new Session(), [SessionParameter::BINDING_CLASS => 'foo']);
         $this->assertInstanceOf('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper', $binding->getCmisBindingsHelper());
     }
 
@@ -104,11 +104,11 @@ class CmisBindingTest extends \PHPUnit_Framework_TestCase
         // the subject will be mocked because we have to mock getCmisBindingsHelper
         /** @var CmisBinding|\PHPUnit_Framework_MockObject_MockObject $binding */
         $binding = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBinding')->setConstructorArgs(
-            array(
+            [
                 new Session(),
-                array(SessionParameter::BINDING_CLASS => 'foo')
-            )
-        )->setMethods(array('getCmisBindingsHelper'))->getMock();
+                [SessionParameter::BINDING_CLASS => 'foo']
+            ]
+        )->setMethods(['getCmisBindingsHelper'])->getMock();
 
         $cmisBindingsHelperMock = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper'
@@ -116,7 +116,7 @@ class CmisBindingTest extends \PHPUnit_Framework_TestCase
 
         $cmisBindingSessionInterfaceMock = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\Bindings\\BindingSessionInterface'
-        )->setMethods(array('getObjectService'))->getMockForAbstractClass();
+        )->setMethods(['getObjectService'])->getMockForAbstractClass();
         $cmisBindingSessionInterfaceMock->expects($this->any())->method('getObjectService')->willReturn(
             $this->getMockForAbstractClass('\\Dkd\\PhpCmis\\ObjectServiceInterface')
         );
@@ -132,7 +132,7 @@ class CmisBindingTest extends \PHPUnit_Framework_TestCase
 
     public function testGetRepositoryServiceReturnsInstanceOfRepositoryService()
     {
-        $binding = new CmisBinding(new Session(), array(SessionParameter::BINDING_CLASS => 'foo'));
+        $binding = new CmisBinding(new Session(), [SessionParameter::BINDING_CLASS => 'foo']);
         $this->assertInstanceOf('\\Dkd\\PhpCmis\\RepositoryServiceInterface', $binding->getRepositoryService());
     }
 
@@ -141,11 +141,11 @@ class CmisBindingTest extends \PHPUnit_Framework_TestCase
         // the subject will be mocked because we have to mock getCmisBindingsHelper
         /** @var CmisBinding|\PHPUnit_Framework_MockObject_MockObject $binding */
         $binding = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBinding')->setConstructorArgs(
-            array(
+            [
                 new Session(),
-                array(SessionParameter::BINDING_CLASS => 'foo')
-            )
-        )->setMethods(array('getCmisBindingsHelper'))->getMock();
+                [SessionParameter::BINDING_CLASS => 'foo']
+            ]
+        )->setMethods(['getCmisBindingsHelper'])->getMock();
 
         $cmisBindingsHelperMock = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper'
@@ -153,7 +153,7 @@ class CmisBindingTest extends \PHPUnit_Framework_TestCase
 
         $cmisBindingSessionInterfaceMock = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\Bindings\\BindingSessionInterface'
-        )->setMethods(array('getNavigationService'))->getMockForAbstractClass();
+        )->setMethods(['getNavigationService'])->getMockForAbstractClass();
         $cmisBindingSessionInterfaceMock->expects($this->any())->method('getNavigationService')->willReturn(
             $this->getMockForAbstractClass('\\Dkd\\PhpCmis\\NavigationServiceInterface')
         );
@@ -178,7 +178,7 @@ class CmisBindingTest extends \PHPUnit_Framework_TestCase
         )->getMock();
         $binding = new CmisBinding(
             new Session(),
-            array(SessionParameter::BINDING_CLASS => 'foo'),
+            [SessionParameter::BINDING_CLASS => 'foo'],
             null,
             $objectFactory
         );
@@ -193,11 +193,11 @@ class CmisBindingTest extends \PHPUnit_Framework_TestCase
         // the subject will be mocked because we have to mock getCmisBindingsHelper
         /** @var CmisBinding|\PHPUnit_Framework_MockObject_MockObject $binding */
         $binding = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBinding')->setConstructorArgs(
-            array(
+            [
                 new Session(),
-                array(SessionParameter::BINDING_CLASS => 'foo')
-            )
-        )->setMethods(array('getCmisBindingsHelper'))->getMock();
+                [SessionParameter::BINDING_CLASS => 'foo']
+            ]
+        )->setMethods(['getCmisBindingsHelper'])->getMock();
 
         $cmisBindingsHelperMock = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper'
@@ -205,7 +205,7 @@ class CmisBindingTest extends \PHPUnit_Framework_TestCase
 
         $cmisBindingSessionInterfaceMock = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\Bindings\\BindingSessionInterface'
-        )->setMethods(array('getDiscoveryService'))->getMockForAbstractClass();
+        )->setMethods(['getDiscoveryService'])->getMockForAbstractClass();
         $cmisBindingSessionInterfaceMock->expects($this->any())->method('getDiscoveryService')->willReturn(
             $this->getMockForAbstractClass('\\Dkd\\PhpCmis\\DiscoveryServiceInterface')
         );

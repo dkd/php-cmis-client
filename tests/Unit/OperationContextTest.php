@@ -29,7 +29,7 @@ class OperationContextTest extends \PHPUnit_Framework_TestCase
     {
         $operationContextMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\OperationContext')->disableOriginalConstructor(
         )->getMock();
-        $operationContextMock->expects($this->once())->method('setRenditionFilter')->with(array());
+        $operationContextMock->expects($this->once())->method('setRenditionFilter')->with([]);
 
         // now call the constructor
         $reflectedClass = new \ReflectionClass(get_class($operationContextMock));
@@ -80,48 +80,48 @@ class OperationContextTest extends \PHPUnit_Framework_TestCase
 
     public function testSetFilterSetsProperty()
     {
-        $this->operationContext->setFilter(array('foo'));
-        $this->assertAttributeSame(array('foo'), 'filter', $this->operationContext);
-        $this->operationContext->setFilter(array('baz', 'bar'));
-        $this->assertAttributeSame(array('baz', 'bar'), 'filter', $this->operationContext);
+        $this->operationContext->setFilter(['foo']);
+        $this->assertAttributeSame(['foo'], 'filter', $this->operationContext);
+        $this->operationContext->setFilter(['baz', 'bar']);
+        $this->assertAttributeSame(['baz', 'bar'], 'filter', $this->operationContext);
     }
 
     public function testSetFilterSetsPropertyAndIgnoresEmptyFilterValues()
     {
-        $this->operationContext->setFilter(array('foo', '', 0, 'bar'));
-        $this->assertAttributeSame(array('foo', '0', 'bar'), 'filter', $this->operationContext);
+        $this->operationContext->setFilter(['foo', '', 0, 'bar']);
+        $this->assertAttributeSame(['foo', '0', 'bar'], 'filter', $this->operationContext);
     }
 
     public function testSetFilterThrowsExceptionIfFilterContainsComma()
     {
         $this->setExpectedException('\\InvalidArgumentException', 'Filter must not contain a comma!');
-        $this->operationContext->setFilter(array('foo', 'bar,baz'));
+        $this->operationContext->setFilter(['foo', 'bar,baz']);
     }
 
     public function testSetRenditionFilterSetsProperty()
     {
-        $this->operationContext->setRenditionFilter(array('foo'));
-        $this->assertAttributeSame(array('foo'), 'renditionFilter', $this->operationContext);
-        $this->operationContext->setRenditionFilter(array('baz', 'bar'));
-        $this->assertAttributeSame(array('baz', 'bar'), 'renditionFilter', $this->operationContext);
+        $this->operationContext->setRenditionFilter(['foo']);
+        $this->assertAttributeSame(['foo'], 'renditionFilter', $this->operationContext);
+        $this->operationContext->setRenditionFilter(['baz', 'bar']);
+        $this->assertAttributeSame(['baz', 'bar'], 'renditionFilter', $this->operationContext);
     }
 
     public function testSetRenditionFilterThrowsExceptionIfFilterContainsComma()
     {
         $this->setExpectedException('\\InvalidArgumentException', 'Rendition must not contain a comma!');
-        $this->operationContext->setRenditionFilter(array('foo', 'bar,baz'));
+        $this->operationContext->setRenditionFilter(['foo', 'bar,baz']);
     }
 
     public function testSetRenditionFilterIgnoresEmptyFilters()
     {
-        $this->operationContext->setRenditionFilter(array('', 0, 'foo'));
-        $this->assertAttributeSame(array('0' ,'foo'), 'renditionFilter', $this->operationContext);
+        $this->operationContext->setRenditionFilter(['', 0, 'foo']);
+        $this->assertAttributeSame(['0' ,'foo'], 'renditionFilter', $this->operationContext);
     }
 
     public function testSetRenditionFilterSetsRenditionNoneIfEmptyListOfRenditionsGiven()
     {
-        $this->operationContext->setRenditionFilter(array());
-        $this->assertAttributeSame(array(Constants::RENDITION_NONE), 'renditionFilter', $this->operationContext);
+        $this->operationContext->setRenditionFilter([]);
+        $this->assertAttributeSame([Constants::RENDITION_NONE], 'renditionFilter', $this->operationContext);
     }
 
     public function testSetLoadSecondaryTypePropertiesSetsProperty()
@@ -171,21 +171,21 @@ class OperationContextTest extends \PHPUnit_Framework_TestCase
     public function testSetFilterStringExplodesStringByCommaAndSetsResultAsFilterProperty()
     {
         $this->operationContext->setFilterString('');
-        $this->assertAttributeSame(array(), 'filter', $this->operationContext);
+        $this->assertAttributeSame([], 'filter', $this->operationContext);
         $this->operationContext->setFilterString('foo,bar');
-        $this->assertAttributeSame(array('foo', 'bar'), 'filter', $this->operationContext);
+        $this->assertAttributeSame(['foo', 'bar'], 'filter', $this->operationContext);
         $this->operationContext->setFilterString('foo,bar,baz');
-        $this->assertAttributeSame(array('foo', 'bar', 'baz'), 'filter', $this->operationContext);
+        $this->assertAttributeSame(['foo', 'bar', 'baz'], 'filter', $this->operationContext);
     }
 
     public function testSetRenditionFilterStringExplodesStringByCommaAndSetsResultAsFilterProperty()
     {
         $this->operationContext->setRenditionFilterString('');
-        $this->assertAttributeSame(array('cmis:none'), 'renditionFilter', $this->operationContext);
+        $this->assertAttributeSame(['cmis:none'], 'renditionFilter', $this->operationContext);
         $this->operationContext->setRenditionFilterString('foo,bar');
-        $this->assertAttributeSame(array('foo', 'bar'), 'renditionFilter', $this->operationContext);
+        $this->assertAttributeSame(['foo', 'bar'], 'renditionFilter', $this->operationContext);
         $this->operationContext->setRenditionFilterString('foo,bar,baz');
-        $this->assertAttributeSame(array('foo', 'bar', 'baz'), 'renditionFilter', $this->operationContext);
+        $this->assertAttributeSame(['foo', 'bar', 'baz'], 'renditionFilter', $this->operationContext);
     }
 
     public function testGetCacheKeyReturnsStringBasedOnPropertyValues()
@@ -196,9 +196,9 @@ class OperationContextTest extends \PHPUnit_Framework_TestCase
                                ->setIncludeAllowableActions(false)
                                ->setIncludePolicies(true)
                                ->setIncludePathSegments(false)
-                               ->setFilter(array('foo', 'bar'))
+                               ->setFilter(['foo', 'bar'])
                                ->setIncludeRelationships(IncludeRelationships::cast(IncludeRelationships::BOTH))
-                               ->setRenditionFilter(array('baz', 'foo'));
+                               ->setRenditionFilter(['baz', 'foo']);
 
         $this->assertSame(
             '1010|foo,bar,cmis:objectId,cmis:baseTypeId,cmis:objectTypeId|both|baz,foo',
@@ -224,7 +224,7 @@ class OperationContextTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetFilterReturnsValueOfProperty()
     {
-        $this->operationContext->setFilter(array('foo', 'bar'));
+        $this->operationContext->setFilter(['foo', 'bar']);
         $this->assertAttributeSame($this->operationContext->getFilter(), 'filter', $this->operationContext);
     }
 
@@ -298,7 +298,7 @@ class OperationContextTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFilterStringReturnsNullIfNoFilterIsSet()
     {
-        $this->assertAttributeSame(array(), 'filter', $this->operationContext);
+        $this->assertAttributeSame([], 'filter', $this->operationContext);
         $this->assertNull($this->operationContext->getQueryFilterString());
     }
 
@@ -307,7 +307,7 @@ class OperationContextTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetFilterStringReturnsStarIfFilterContainsAStar()
     {
-        $this->operationContext->setFilter(array('foo', OperationContext::PROPERTIES_WILDCARD));
+        $this->operationContext->setFilter(['foo', OperationContext::PROPERTIES_WILDCARD]);
         $this->assertSame(OperationContext::PROPERTIES_WILDCARD, $this->operationContext->getQueryFilterString());
     }
 
@@ -317,7 +317,7 @@ class OperationContextTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetFilterStringAddsRequiredPropertiesAndReturnsValueOfPropertyAsString()
     {
-        $this->operationContext->setFilter(array('foo', 'bar'));
+        $this->operationContext->setFilter(['foo', 'bar']);
         $this->assertSame(
             'foo,bar,cmis:objectId,cmis:baseTypeId,cmis:objectTypeId',
             $this->operationContext->getQueryFilterString()
@@ -335,7 +335,7 @@ class OperationContextTest extends \PHPUnit_Framework_TestCase
         $operationContext = new \ReflectionClass('\\Dkd\\PhpCmis\\OperationContext');
         $renditionFilterProperty = $operationContext->getProperty('renditionFilter');
         $renditionFilterProperty->setAccessible(true);
-        $renditionFilterProperty->setValue($this->operationContext, array());
+        $renditionFilterProperty->setValue($this->operationContext, []);
 
         $this->assertNull($this->operationContext->getRenditionFilterString());
     }
@@ -345,7 +345,7 @@ class OperationContextTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetRenditionFilterStringReturnsCommaSeparatedStringOfRenditionFilters()
     {
-        $this->operationContext->setRenditionFilter(array('foo', 'bar'));
+        $this->operationContext->setRenditionFilter(['foo', 'bar']);
         $this->assertSame('foo,bar', $this->operationContext->getRenditionFilterString());
     }
 

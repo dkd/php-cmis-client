@@ -38,7 +38,7 @@ class ObjectTypeHelperTraitTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->setMethods(
-            array('getTypeDefinition')
+            ['getTypeDefinition']
         )->getMockForAbstractClass();
         $this->objectTypeDefinitionMock = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\Data\\ObjectTypeInterface'
@@ -66,7 +66,7 @@ class ObjectTypeHelperTraitTest extends \PHPUnit_Framework_TestCase
         $objectTypeHelperTrait = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\DataObjects\\ObjectTypeHelperTrait'
         )->setMethods(
-            array('getParentTypeId')
+            ['getParentTypeId']
         )->getMockForTrait();
         $objectTypeHelperTrait->expects($this->any())->method('getParentTypeId')->willReturn(null);
 
@@ -81,7 +81,7 @@ class ObjectTypeHelperTraitTest extends \PHPUnit_Framework_TestCase
         $objectTypeHelperTrait = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\DataObjects\\ObjectTypeHelperTrait'
         )->setMethods(
-            array('getParentTypeId')
+            ['getParentTypeId']
         )->getMockForTrait();
         $objectTypeHelperTrait->expects($this->any())->method('getParentTypeId')->willReturn('foo');
 
@@ -99,7 +99,7 @@ class ObjectTypeHelperTraitTest extends \PHPUnit_Framework_TestCase
         $objectTypeHelperTrait = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\DataObjects\\ObjectTypeHelperTrait'
         )->setMethods(
-            array('isBaseType')
+            ['isBaseType']
         )->getMockForTrait();
         $objectTypeHelperTrait->expects($this->any())->method('isBaseType')->willReturn(true);
         $this->assertNull($objectTypeHelperTrait->getBaseType());
@@ -113,7 +113,7 @@ class ObjectTypeHelperTraitTest extends \PHPUnit_Framework_TestCase
         $objectTypeHelperTrait = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\DataObjects\\ObjectTypeHelperTrait'
         )->setMethods(
-            array('isBaseType')
+            ['isBaseType']
         )->getMockForTrait();
         $objectTypeHelperTrait->expects($this->any())->method('isBaseType')->willReturn(false);
         $this->setProtectedProperty($objectTypeHelperTrait, 'baseType', $this->objectTypeDefinitionMock);
@@ -128,7 +128,7 @@ class ObjectTypeHelperTraitTest extends \PHPUnit_Framework_TestCase
         $objectTypeHelperTrait = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\DataObjects\\ObjectTypeHelperTrait'
         )->setMethods(
-            array('isBaseType', 'getBaseTypeId')
+            ['isBaseType', 'getBaseTypeId']
         )->getMockForTrait();
         $objectTypeHelperTrait->expects($this->any())->method('isBaseType')->willReturn(false);
         $objectTypeHelperTrait->expects($this->any())->method('getBaseTypeId')->willReturn(null);
@@ -143,7 +143,7 @@ class ObjectTypeHelperTraitTest extends \PHPUnit_Framework_TestCase
         $objectTypeHelperTrait = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\DataObjects\\ObjectTypeHelperTrait'
         )->setMethods(
-            array('isBaseType', 'getBaseTypeId', 'getSession')
+            ['isBaseType', 'getBaseTypeId', 'getSession']
         )->getMockForTrait();
         $objectTypeHelperTrait->expects($this->any())->method('isBaseType')->willReturn(false);
         $objectTypeHelperTrait->expects($this->any())->method('getBaseTypeId')->willReturn('foo');
@@ -160,7 +160,7 @@ class ObjectTypeHelperTraitTest extends \PHPUnit_Framework_TestCase
         $objectTypeHelperTrait = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\DataObjects\\ObjectTypeHelperTrait'
         )->setMethods(
-            array('functionThatDoesNotExist')
+            ['functionThatDoesNotExist']
         )->getMockForTrait();
         $this->setProtectedProperty($objectTypeHelperTrait, 'parentType', $this->objectTypeDefinitionMock);
         $this->assertSame($this->objectTypeDefinitionMock, $objectTypeHelperTrait->getParentType());
@@ -174,7 +174,7 @@ class ObjectTypeHelperTraitTest extends \PHPUnit_Framework_TestCase
         $objectTypeHelperTrait = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\DataObjects\\ObjectTypeHelperTrait'
         )->setMethods(
-            array('getParentTypeId')
+            ['getParentTypeId']
         )->getMockForTrait();
         $objectTypeHelperTrait->expects($this->any())->method('getParentTypeId')->willReturn(null);
         $this->assertNull($objectTypeHelperTrait->getParentType());
@@ -188,7 +188,7 @@ class ObjectTypeHelperTraitTest extends \PHPUnit_Framework_TestCase
         $objectTypeHelperTrait = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\DataObjects\\ObjectTypeHelperTrait'
         )->setMethods(
-            array('getParentTypeId', 'getSession')
+            ['getParentTypeId', 'getSession']
         )->getMockForTrait();
         $objectTypeHelperTrait->expects($this->any())->method('getParentTypeId')->willReturn('foo');
         $objectTypeHelperTrait->expects($this->any())->method('getSession')->willReturn($this->sessionMock);
@@ -200,7 +200,7 @@ class ObjectTypeHelperTraitTest extends \PHPUnit_Framework_TestCase
     public function testGetChildrenGetsChildrenFromSession()
     {
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->setMethods(
-            array('getTypeChildren')
+            ['getTypeChildren']
         )->getMockForAbstractClass();
         $sessionMock->expects($this->once())->method('getTypeChildren')->with('foo', true);
         /**
@@ -208,7 +208,7 @@ class ObjectTypeHelperTraitTest extends \PHPUnit_Framework_TestCase
          */
         $objectTypeHelperTrait = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\DataObjects\\ObjectTypeHelperTrait'
-        )->setMethods(array('getId', 'getSession'))->getMockForTrait();
+        )->setMethods(['getId', 'getSession'])->getMockForTrait();
         $objectTypeHelperTrait->expects($this->once())->method('getId')->willReturn('foo');
         $objectTypeHelperTrait->expects($this->once())->method('getSession')->willReturn($sessionMock);
 
@@ -218,7 +218,7 @@ class ObjectTypeHelperTraitTest extends \PHPUnit_Framework_TestCase
     public function testGetDescendantsGetsDescendantsFromSession()
     {
         $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->setMethods(
-            array('getTypeDescendants')
+            ['getTypeDescendants']
         )->getMockForAbstractClass();
         $sessionMock->expects($this->once())->method('getTypeDescendants')->with('foo', 1, true);
         /**
@@ -226,7 +226,7 @@ class ObjectTypeHelperTraitTest extends \PHPUnit_Framework_TestCase
          */
         $objectTypeHelperTrait = $this->getMockBuilder(
             '\\Dkd\\PhpCmis\\DataObjects\\ObjectTypeHelperTrait'
-        )->setMethods(array('getId', 'getSession'))->getMockForTrait();
+        )->setMethods(['getId', 'getSession'])->getMockForTrait();
         $objectTypeHelperTrait->expects($this->once())->method('getId')->willReturn('foo');
         $objectTypeHelperTrait->expects($this->once())->method('getSession')->willReturn($sessionMock);
         $objectTypeHelperTrait->getDescendants(1);
