@@ -490,7 +490,7 @@ class ObjectFactory implements ObjectFactoryInterface
             return new SecondaryType($this->session, $typeDefinition);
         } else {
             throw new CmisRuntimeException(
-                sprintf('Unknown base type! Received "%s"', + get_class($typeDefinition)),
+                sprintf('Unknown base type! Received "%s"', get_class($typeDefinition)),
                 1422028427
             );
         }

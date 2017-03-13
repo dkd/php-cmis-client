@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "70628e380240c03175c7155dfabfc218",
+    "content-hash": "832361ec8fbc64737014e056d0c5f284",
     "packages": [
         {
             "name": "dkd/enumeration",
@@ -2081,7 +2081,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.5.0"
+        "php": ">=7.0.0"
     },
     "platform-dev": []
 }
