@@ -34,19 +34,16 @@ class VersioningService extends AbstractBrowserBindingService implements Version
      */
     public function cancelCheckOut($repositoryId, & $objectId, ExtensionDataInterface $extension = null)
     {
-		$objectId = $this->getJsonConverter()->convertObject(
-            (array) \json_decode(
-                $this->post(
-                    $this->getObjectUrl($repositoryId, $objectId),
-                    $this->createQueryArray(
-                        Constants::CMISACTION_CANCEL_CHECK_OUT,
-                        [],
-                        $extension
-                    )
-                )->getBody(),
-                true
+        $objectId = $this->getJsonConverter()->convertObject(
+            (array) $this->postJson(
+                $this->getObjectUrl($repositoryId, $objectId),
+                $this->createQueryArray(
+                    Constants::CMISACTION_CANCEL_CHECK_OUT,
+                    [],
+                    $extension
+                )
             )
-		);
+        );
     }
 
     /**
@@ -79,52 +76,49 @@ class VersioningService extends AbstractBrowserBindingService implements Version
         AclInterface $removeAces = null,
         ExtensionDataInterface $extension = null
     ) {
-		$queryArray = $this->createQueryArray(
-			Constants::CMISACTION_CHECK_IN,
-			[
-				Constants::PARAM_MAJOR => $major ? 'true' : 'false',
-			],
-			$extension
-		);
-		if ($properties) {
-			$queryArray = array_replace(
-				$queryArray,
-				$this->convertPropertiesToQueryArray($properties)
-			);
-		}
-		if ($checkinComment) {
-			$queryArray[Constants::PARAM_CHECKIN_COMMENT] = $checkinComment;
-		}
-		if (!empty($policies)) {
-			$queryArray = array_replace(
-				$queryArray,
-				$this->convertPolicyIdArrayToQueryArray($policies)
-			);
-		}
-		if (!empty($removeAces)) {
-			$queryArray = array_replace($queryArray, $this->convertAclToQueryArray(
-				$removeAces,
-				Constants::CONTROL_REMOVE_ACE_PRINCIPAL,
-				Constants::CONTROL_REMOVE_ACE_PERMISSION
-			));
-		}
-		if (!empty($addAces)) {
-			$queryArray = array_replace($queryArray, $this->convertAclToQueryArray(
-				$addAces,
-				Constants::CONTROL_ADD_ACE_PRINCIPAL,
-				Constants::CONTROL_ADD_ACE_PERMISSION
-			));
-		}
-		if ($contentStream) {
-			$queryArray['content'] = $contentStream;
-		}
-		$objectId = $this->getJsonConverter()->convertObject(
-            (array) \json_decode(
-                $this->post(
-                    $this->getObjectUrl($repositoryId, $objectId),
-                    $queryArray
-                )->getBody(),
-                true
+        $queryArray = $this->createQueryArray(
+            Constants::CMISACTION_CHECK_IN,
+            [
+                Constants::PARAM_MAJOR => $major ? 'true' : 'false',
+            ],
+            $extension
+        );
+        if ($properties) {
+            $queryArray = array_replace(
+                $queryArray,
+                $this->convertPropertiesToQueryArray($properties)
+            );
+        }
+        if ($checkinComment) {
+            $queryArray[Constants::PARAM_CHECKIN_COMMENT] = $checkinComment;
+        }
+        if (!empty($policies)) {
+            $queryArray = array_replace(
+                $queryArray,
+                $this->convertPolicyIdArrayToQueryArray($policies)
+            );
+        }
+        if (!empty($removeAces)) {
+            $queryArray = array_replace($queryArray, $this->convertAclToQueryArray(
+                $removeAces,
+                Constants::CONTROL_REMOVE_ACE_PRINCIPAL,
+                Constants::CONTROL_REMOVE_ACE_PERMISSION
+            ));
+        }
+        if (!empty($addAces)) {
+            $queryArray = array_replace($queryArray, $this->convertAclToQueryArray(
+                $addAces,
+                Constants::CONTROL_ADD_ACE_PRINCIPAL,
+                Constants::CONTROL_ADD_ACE_PERMISSION
+            ));
+        }
+        if ($contentStream) {
+            $queryArray['content'] = $contentStream;
+        }
+        $objectId = $this->getJsonConverter()->convertObject(
+            (array) $this->postJson(
+                $this->getObjectUrl($repositoryId, $objectId),
+                $queryArray
             )
         )->getId();
     }
@@ -145,20 +139,17 @@ class VersioningService extends AbstractBrowserBindingService implements Version
         ExtensionDataInterface $extension = null,
         $contentCopied = null
     ) {
-		$objectData = $this->getJsonConverter()->convertObject(
-            (array) \json_decode(
-                $this->post(
-                    $this->getObjectUrl($repositoryId, $objectId),
-                    $this->createQueryArray(
-                        Constants::CMISACTION_CHECK_OUT,
-                        [],
-                        $extension
-                    )
-                )->getBody(),
-                true
+        $objectData = $this->getJsonConverter()->convertObject(
+            (array) $this->postJson(
+                $this->getObjectUrl($repositoryId, $objectId),
+                $this->createQueryArray(
+                    Constants::CMISACTION_CHECK_OUT,
+                    [],
+                    $extension
+                )
             )
-		);
-		$objectId = $objectData->getId();
+        );
+        $objectId = $objectData->getId();
     }
 
     /**
@@ -184,15 +175,12 @@ class VersioningService extends AbstractBrowserBindingService implements Version
         ExtensionDataInterface $extension = null
     ) {
         return $this->getJsonConverter()->convertObjectList(
-			[
-				'objects' => (array) \json_decode(
-                    $this->read(
-                        $this->getObjectUrl($repositoryId, $objectId, Constants::SELECTOR_VERSIONS)
-                    )->getBody(),
-                    true
+            [
+                'objects' => (array) $this->readJson(
+                    $this->getObjectUrl($repositoryId, $objectId, Constants::SELECTOR_VERSIONS)
                 )
-			]
-		)->getObjects();
+            ]
+        )->getObjects();
     }
 
     /**
@@ -229,13 +217,10 @@ class VersioningService extends AbstractBrowserBindingService implements Version
         $includeAcl = false,
         ExtensionDataInterface $extension = null
     ) {
-        $object = (array) \json_decode(
-            $this->read(
-                $this->getObjectUrl($repositoryId, $objectId, Constants::SELECTOR_VERSIONS)
-            )->getBody(),
-            true
+        $object = (array) $this->readJson(
+            $this->getObjectUrl($repositoryId, $objectId, Constants::SELECTOR_VERSIONS)
         );
-		return $this->getJsonConverter()->convertObject(reset($object));
+        return $this->getJsonConverter()->convertObject(reset($object));
     }
 
     /**
@@ -262,34 +247,34 @@ class VersioningService extends AbstractBrowserBindingService implements Version
         ExtensionDataInterface $extension = null
     ) {
         return $this->getObjectOfLatestVersion(
-			$repositoryId,
-			$objectId,
-			$versionSeriesId,
-			$major,
-			$filter,
-			$extension
-		)->getProperties();
+            $repositoryId,
+            $objectId,
+            $versionSeriesId,
+            $major,
+            $filter,
+            $extension
+        )->getProperties();
     }
 
-	/**
-	 * @param string $action
-	 * @param array $parameters
-	 * @param ExtensionDataInterface $extension
-	 * @return array
-	 */
-	protected function createQueryArray(
-		$action,
-		array $parameters = [],
-		ExtensionDataInterface $extension = null
-	) {
-		$queryArray = array_replace(
-			$parameters,
-			[
-				Constants::CONTROL_CMISACTION => $action,
-				Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
-			]
-		);
-		return $queryArray;
-	}
+    /**
+     * @param string $action
+     * @param array $parameters
+     * @param ExtensionDataInterface $extension
+     * @return array
+     */
+    protected function createQueryArray(
+        $action,
+        array $parameters = [],
+        ExtensionDataInterface $extension = null
+    ) {
+        $queryArray = array_replace(
+            $parameters,
+            [
+                Constants::CONTROL_CMISACTION => $action,
+                Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
+            ]
+        );
+        return $queryArray;
+    }
 
 }

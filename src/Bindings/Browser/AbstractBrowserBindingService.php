@@ -35,6 +35,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Stream\StreamInterface;
 use GuzzleHttp\Exception\RequestException;
+use function json_decode;
 use League\Url\Url;
 use Psr\Http\Message\ResponseInterface;
 
@@ -179,10 +180,7 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
         }
 
         $repositoryInfos = [];
-        $result = \json_decode(
-            $this->read($url)->getBody(),
-            true
-        );
+        $result = $this->readJson($url);
         if (!is_array($result)) {
             throw new CmisConnectionException(
                 'Could not fetch repository info! Response is not a valid JSON.',
@@ -232,6 +230,17 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
     protected function getServiceUrl()
     {
         return $this->getSession()->get(SessionParameter::BROWSER_URL);
+    }
+
+    /**
+     * Wrapper to read URL response as JSON as is the general use case.
+     *
+     * @param Url $url
+     * @return mixed
+     */
+    protected function readJson(Url $url)
+    {
+        return json_decode($this->read($url)->getBody(), true);
     }
 
     /**
@@ -396,6 +405,19 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
     }
 
     /**
+     * Wrapper for calling post() and reading response as JSON, as is the general use case.
+     *
+     * @param Url $url
+     * @param array $content
+     * @param array $headers
+     * @return mixed
+     */
+    protected function postJson(Url $url, $content = [], array $headers = [])
+    {
+        return \json_decode($this->post($url, $content, $headers)->getBody(), true);
+    }
+
+    /**
      * Performs a POST on an URL, checks the response code and returns the
      * result.
      *
@@ -444,10 +466,7 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
         $url->getQuery()->modify([Constants::PARAM_TYPE_ID => $typeId]);
 
         return $this->getJsonConverter()->convertTypeDefinition(
-            (array) \json_decode(
-                $this->read($url)->getBody(),
-                true
-            )
+            (array) $this->readJson($url)
         );
     }
 

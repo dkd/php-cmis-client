@@ -87,7 +87,7 @@ class RelationshipService extends AbstractBrowserBindingService implements Relat
             $query->modify([Constants::PARAM_MAX_ITEMS =>  $maxItems]);
         }
 
-        $responseData = (array) \json_decode($this->read($url)->getBody(), true);
+        $responseData = (array) $this->readJson($url);
 
         return $this->getJsonConverter()->convertObjectList($responseData);
     }

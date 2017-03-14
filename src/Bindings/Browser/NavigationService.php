@@ -87,7 +87,7 @@ class NavigationService extends AbstractBrowserBindingService implements Navigat
             $url->getQuery()->modify([Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships]);
         }
 
-        $responseData = (array) \json_decode($this->read($url)->getBody(), true);
+        $responseData = (array) $this->readJson($url);
 
         // TODO Implement Cache
         return $this->getJsonConverter()->convertObjectList($responseData);
@@ -159,7 +159,7 @@ class NavigationService extends AbstractBrowserBindingService implements Navigat
             $url->getQuery()->modify([Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships]);
         }
 
-        $responseData = (array) \json_decode($this->read($url)->getBody(), true);
+        $responseData = (array) $this->readJson($url);
 
         // TODO Implement Cache
         return $this->getJsonConverter()->convertObjectInFolderList($responseData);
@@ -215,7 +215,7 @@ class NavigationService extends AbstractBrowserBindingService implements Navigat
             $url->getQuery()->modify([Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships]);
         }
 
-        $responseData = (array) \json_decode($this->read($url)->getBody(), true);
+        $responseData = (array) $this->readJson($url);
 
         // TODO Implement Cache
         return $this->getJsonConverter()->convertDescendants($responseData);
@@ -249,7 +249,7 @@ class NavigationService extends AbstractBrowserBindingService implements Navigat
             $url->getQuery()->modify([Constants::PARAM_FILTER => (string) $filter]);
         }
 
-        $responseData = (array) \json_decode($this->read($url)->getBody(), true);
+        $responseData = (array) $this->readJson($url);
 
         // TODO Implement Cache
         return $this->getJsonConverter()->convertObject($responseData);
@@ -305,7 +305,7 @@ class NavigationService extends AbstractBrowserBindingService implements Navigat
             $url->getQuery()->modify([Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships]);
         }
 
-        $responseData = (array) \json_decode($this->read($url)->getBody(), true);
+        $responseData = (array) $this->readJson($url);
 
         // TODO Implement Cache
         return $this->getJsonConverter()->convertDescendants($responseData);
@@ -358,7 +358,7 @@ class NavigationService extends AbstractBrowserBindingService implements Navigat
             $url->getQuery()->modify([Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships]);
         }
 
-        $responseData = (array) \json_decode($this->read($url)->getBody(), true);
+        $responseData = (array) $this->readJson($url);
 
         // TODO Implement Cache
         return $this->getJsonConverter()->convertObjectParents($responseData);
