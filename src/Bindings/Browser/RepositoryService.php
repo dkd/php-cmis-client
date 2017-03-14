@@ -43,9 +43,7 @@ class RepositoryService extends AbstractBrowserBindingService implements Reposit
             ]
         );
 
-        $responseData = (array) \json_decode($this->post($url)->getBody(), true);
-
-        return $this->getJsonConverter()->convertTypeDefinition($responseData);
+        return $this->getJsonConverter()->convertTypeDefinition($this->postJson($url));
     }
 
     /**
@@ -141,7 +139,7 @@ class RepositoryService extends AbstractBrowserBindingService implements Reposit
             $url->getQuery()->modify([Constants::PARAM_MAX_ITEMS => $maxItems]);
         }
 
-        $responseData = (array) \json_decode($this->read($url)->getBody(), true);
+        $responseData = (array) $this->readJson($url);
 
         return $this->getJsonConverter()->convertTypeChildren($responseData);
     }
@@ -217,7 +215,7 @@ class RepositoryService extends AbstractBrowserBindingService implements Reposit
             $url->getQuery()->modify([Constants::PARAM_DEPTH => $depth]);
         }
 
-        $responseData = (array) \json_decode($this->read($url)->getBody(), true);
+        $responseData = (array) $this->readJson($url);
 
         return $this->getJsonConverter()->convertTypeDescendants($responseData);
     }
@@ -241,8 +239,6 @@ class RepositoryService extends AbstractBrowserBindingService implements Reposit
             ]
         );
 
-        $responseData = (array) \json_decode($this->post($url)->getBody(), true);
-
-        return $this->getJsonConverter()->convertTypeDefinition($responseData);
+        return $this->getJsonConverter()->convertTypeDefinition($this->postJson($url));
     }
 }
