@@ -1,6 +1,15 @@
 <?php
 namespace Dkd\PhpCmis\Bindings;
 
+/*
+ * This file is part of php-cmis-client.
+ *
+ * (c) Sascha Egerer <sascha.egerer@dkd.de>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 use Dkd\Enumeration\Exception\InvalidEnumerationValueException;
 use Dkd\PhpCmis\AclServiceInterface;
 use Dkd\PhpCmis\Bindings\Browser\RepositoryService;
@@ -21,12 +30,7 @@ use Dkd\PhpCmis\SessionParameter;
 use Doctrine\Common\Cache\Cache;
 
 /**
- * This file is part of php-cmis-lib.
- *
- * (c) Sascha Egerer <sascha.egerer@dkd.de>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * Class CmisBinding
  */
 class CmisBinding implements CmisBindingInterface
 {

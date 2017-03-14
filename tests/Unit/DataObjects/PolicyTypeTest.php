@@ -1,7 +1,7 @@
 <?php
 namespace Dkd\PhpCmis\Test\Unit\DataObjects;
 
-/**
+/*
  * This file is part of php-cmis-lib.
  *
  * (c) Sascha Egerer <sascha.egerer@dkd.de>
@@ -15,6 +15,9 @@ use Dkd\PhpCmis\DataObjects\PolicyTypeDefinition;
 use Dkd\PhpCmis\Definitions\PolicyTypeDefinitionInterface;
 use PHPUnit_Framework_MockObject_MockObject;
 
+/**
+ * Class PolicyTypeTest
+ */
 class PolicyTypeTest extends \PHPUnit_Framework_TestCase
 {
     public function testConstructorSetsSession()

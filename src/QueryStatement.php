@@ -1,8 +1,8 @@
 <?php
 namespace Dkd\PhpCmis;
 
-/**
- * This file is part of php-cmis-lib.
+/*
+ * This file is part of php-cmis-client.
  *
  * (c) Dimitri Ebert <dimitri.ebert@dkd.de>
  *

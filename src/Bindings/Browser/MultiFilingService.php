@@ -2,7 +2,7 @@
 namespace Dkd\PhpCmis\Bindings\Browser;
 
 /**
- * This file is part of php-cmis-lib.
+ * This file is part of php-cmis-client.
  *
  * (c) Sascha Egerer <sascha.egerer@dkd.de>
  *
@@ -14,7 +14,7 @@ use Dkd\PhpCmis\Constants;
 use Dkd\PhpCmis\Data\ExtensionDataInterface;
 use Dkd\PhpCmis\MultiFilingServiceInterface;
 
-/**
+/*
  * MultiFiling Service Browser Binding client.
  */
 class MultiFilingService extends AbstractBrowserBindingService implements MultiFilingServiceInterface

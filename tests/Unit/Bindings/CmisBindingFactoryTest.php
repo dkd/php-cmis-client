@@ -1,7 +1,7 @@
 <?php
 namespace Dkd\PhpCmis\Test\Unit\Bindings;
 
-/**
+/*
  * This file is part of php-cmis-client
  *
  * (c) Sascha Egerer <sascha.egerer@dkd.de>
@@ -14,6 +14,9 @@ use Dkd\PhpCmis\Bindings\CmisBindingFactory;
 use Dkd\PhpCmis\SessionParameter;
 use Dkd\PhpCmis\Test\Unit\ReflectionHelperTrait;
 
+/**
+ * Class CmisBindingFactoryTest
+ */
 class CmisBindingFactoryTest extends \PHPUnit_Framework_TestCase
 {
     use ReflectionHelperTrait;

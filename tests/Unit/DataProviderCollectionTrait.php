@@ -1,7 +1,7 @@
 <?php
 namespace Dkd\PhpCmis\Test\Unit;
 
-/**
+/*
  * This file is part of php-cmis-lib.
  *
  * (c) Sascha Egerer <sascha.egerer@dkd.de>
@@ -10,6 +10,9 @@ namespace Dkd\PhpCmis\Test\Unit;
  * file that was distributed with this source code.
  */
 
+/**
+ * Class DataProviderCollectionTrait
+ */
 trait DataProviderCollectionTrait
 {
     /**

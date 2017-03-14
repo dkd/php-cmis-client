@@ -1,7 +1,7 @@
 <?php
 namespace Dkd\PhpCmis\Test\Unit\DataObjects;
 
-/**
+/*
  * This file is part of php-cmis-client
  *
  * (c) Sascha Egerer <sascha.egerer@dkd.de>

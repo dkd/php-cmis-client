@@ -1,7 +1,7 @@
 <?php
 namespace Dkd\PhpCmis\Test\Unit\DataObjects;
 
-/**
+/*
  * This file is part of php-cmis-lib.
  *
  * (c) Dimitri Ebert <dimitri.ebert@dkd.de>
@@ -13,6 +13,9 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
 use Dkd\PhpCmis\DataObjects\ObjectInFolderData;
 use Dkd\PhpCmis\DataObjects\ObjectInFolderList;
 
+/**
+ * Class ObjectInFolderListTest
+ */
 class ObjectInFolderListTest extends \PHPUnit_Framework_TestCase
 {
     /**

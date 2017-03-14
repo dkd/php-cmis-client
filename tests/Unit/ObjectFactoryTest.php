@@ -1,7 +1,7 @@
 <?php
 namespace Dkd\PhpCmis\Test\Unit;
 
-/**
+/*
  * This file is part of php-cmis-lib.
  *
  * (c) Sascha Egerer <sascha.egerer@dkd.de>
@@ -16,6 +16,9 @@ use Dkd\PhpCmis\PropertyIds;
 use Dkd\PhpCmis\SessionInterface;
 use PHPUnit_Framework_MockObject_MockObject;
 
+/**
+ * Class ObjectFactoryTest
+ */
 class ObjectFactoryTest extends \PHPUnit_Framework_TestCase
 {
     use ReflectionHelperTrait;

@@ -1,16 +1,19 @@
 <?php
-
 namespace Dkd\PhpCmis\Test\Unit\Bindings\Browser;
 
-use Dkd\PhpCmis\Bindings\Browser\JSONConstants;
-
-/**
+/*
  * This file is part of php-cmis-client
  *
  * (c) Sascha Egerer <sascha.egerer@dkd.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ */
+
+use Dkd\PhpCmis\Bindings\Browser\JSONConstants;
+
+/**
+ * Class JSONConstantsTest
  */
 class JSONConstantsTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,7 +1,7 @@
 <?php
 namespace Dkd\PhpCmis\Test\Unit\Bindings\Browser;
 
-/**
+/*
  * This file is part of php-cmis-lib.
  *
  * (c) Sascha Egerer <sascha.egerer@dkd.de>
@@ -14,6 +14,9 @@ use Dkd\PhpCmis\Bindings\Browser\RepositoryUrlCache;
 use Dkd\PhpCmis\Constants;
 use League\Url\Url;
 
+/**
+ * Class RepositoryUrlCacheTest
+ */
 class RepositoryUrlCacheTest extends \PHPUnit_Framework_TestCase
 {
     /**

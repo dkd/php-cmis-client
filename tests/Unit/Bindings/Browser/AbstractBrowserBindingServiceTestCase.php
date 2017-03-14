@@ -1,7 +1,7 @@
 <?php
 namespace Dkd\PhpCmis\Test\Unit\Bindings\Browser;
 
-/**
+/*
  * This file is part of php-cmis-client
  *
  * (c) Sascha Egerer <sascha.egerer@dkd.de>
@@ -16,6 +16,9 @@ use Dkd\PhpCmis\Test\Unit\FixtureHelperTrait;
 use Dkd\PhpCmis\Test\Unit\ReflectionHelperTrait;
 use PHPUnit_Framework_MockObject_MockObject;
 
+/**
+ * Class AbstractBrowserBindingServiceTestCase
+ */
 abstract class AbstractBrowserBindingServiceTestCase extends \PHPUnit_Framework_TestCase
 {
     use ReflectionHelperTrait;

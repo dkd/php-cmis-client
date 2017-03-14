@@ -1,7 +1,7 @@
 <?php
 namespace Dkd\PhpCmis\Test\Unit\DataObjects;
 
-/**
+/*
  * This file is part of php-cmis-lib.
  *
  * (c) Dimitri Ebert <dimitri.ebert@dkd.de>
@@ -13,6 +13,9 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
 use Dkd\PhpCmis\Data\ObjectDataInterface;
 use Dkd\PhpCmis\DataObjects\ObjectList;
 
+/**
+ * Class ObjectListTest
+ */
 class ObjectListTest extends \PHPUnit_Framework_TestCase
 {
     /**

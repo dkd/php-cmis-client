@@ -1,14 +1,15 @@
 <?php
 namespace Dkd\PhpCmis\Bindings;
 
-/**
- * This file is part of php-cmis-lib.
+/*
+ * This file is part of php-cmis-client.
  *
  * (c) Sascha Egerer <sascha.egerer@dkd.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 use Dkd\PhpCmis\AclServiceInterface;
 use Dkd\PhpCmis\DiscoveryServiceInterface;
 use Dkd\PhpCmis\MultiFilingServiceInterface;

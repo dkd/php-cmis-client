@@ -1,7 +1,7 @@
 <?php
 namespace Dkd\PhpCmis\Test\Unit\Bindings\Browser;
 
-/**
+/*
  * This file is part of php-cmis-client
  *
  * (c) Dimitri Ebert <dimitri.ebert@dkd.de>
@@ -18,6 +18,9 @@ use Dkd\PhpCmis\Enum\IncludeRelationships;
 use League\Url\Url;
 use PHPUnit_Framework_MockObject_MockObject;
 
+/**
+ * Class NavigationServiceTest
+ */
 class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
 {
     const CLASS_TO_TEST = NavigationService::class;

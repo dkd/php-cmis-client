@@ -1,8 +1,8 @@
 <?php
 namespace Dkd\PhpCmis\Data;
 
-/**
- * This file is part of php-cmis-lib.
+/*
+ * This file is part of php-cmis-client.
  *
  * (c) Sascha Egerer <sascha.egerer@dkd.de>
  *
@@ -10,6 +10,9 @@ namespace Dkd\PhpCmis\Data;
  * file that was distributed with this source code.
  */
 
+/**
+ * Interface ObjectIdInterface
+ */
 interface ObjectIdInterface
 {
     /**

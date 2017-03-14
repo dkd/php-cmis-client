@@ -1,8 +1,8 @@
 <?php
 namespace Dkd\PhpCmis\Bindings\Browser;
 
-/**
- * This file is part of php-cmis-lib.
+/*
+ * This file is part of php-cmis-client.
  *
  * (c) Sascha Egerer <sascha.egerer@dkd.de>
  *
@@ -36,6 +36,7 @@ use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Stream\StreamInterface;
 use GuzzleHttp\Exception\RequestException;
 use League\Url\Url;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Base class for all Browser Binding client services.
@@ -401,7 +402,7 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
      * @param Url $url Request url
      * @param resource|string|StreamInterface|array $content Entity body data or an array for POST fields and files
      * @param array $headers Additional header options
-     * @return Response
+     * @return ResponseInterface
      * @throws CmisBaseException an more specific exception of this type could be thrown. For more details see
      * @see AbstractBrowserBindingService::convertStatusCode()
      */

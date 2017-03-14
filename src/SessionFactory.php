@@ -1,8 +1,8 @@
 <?php
 namespace Dkd\PhpCmis;
 
-/**
- * This file is part of php-cmis-lib.
+/*
+ * This file is part of php-cmis-client.
  *
  * (c) Sascha Egerer <sascha.egerer@dkd.de>
  *
@@ -15,8 +15,6 @@ use Doctrine\Common\Cache\Cache;
 
 /**
  * Class SessionFactory
- *
- * @author Sascha Egerer <sascha.egerer@dkd.de>
  */
 class SessionFactory implements SessionFactoryInterface
 {

@@ -1,7 +1,7 @@
 <?php
 namespace Dkd\PhpCmis\Test\Unit\DataObjects;
 
-/**
+/*
  * This file is part of php-cmis-lib.
  *
  * (c) Sascha Egerer <sascha.egerer@dkd.de>
@@ -12,6 +12,9 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
 
 use Dkd\PhpCmis\DataObjects\NewTypeSettableAttributes;
 
+/**
+ * Class NewTypeSettableAttributesTest
+ */
 class NewTypeSettableAttributesTest extends \PHPUnit_Framework_TestCase
 {
     /**

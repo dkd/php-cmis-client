@@ -1,6 +1,15 @@
 <?php
 namespace Dkd\PhpCmis\Test\Unit;
 
+/*
+ * This file is part of php-cmis-lib.
+ *
+ * (c) Dimitri Ebert <dimitri.ebert@dkd.de>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 use Dkd\PhpCmis\DataObjects\AllowableActions;
 use Dkd\PhpCmis\DataObjects\ObjectData;
 use Dkd\PhpCmis\DataObjects\Properties;
@@ -12,14 +21,8 @@ use Dkd\PhpCmis\QueryResult;
 use PHPUnit_Framework_MockObject_MockObject;
 
 /**
- * This file is part of php-cmis-lib.
- *
- * (c) Dimitri Ebert <dimitri.ebert@dkd.de>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * Class QueryResultTest
  */
-
 class QueryResultTest extends \PHPUnit_Framework_TestCase
 {
     use ReflectionHelperTrait;
