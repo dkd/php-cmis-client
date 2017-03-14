@@ -799,7 +799,7 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
 
         $expectedDateTimeObject = new \DateTime('2014-11-18 09:37:47');
 
-        $this->assertEquals([$expectedDateTimeObject, $expectedDateTimeObject], $result);
+        $this->assertEquals([0 => $expectedDateTimeObject, 2 => $expectedDateTimeObject], $result);
     }
 
     public function testConvertDateTimeValueThrowsExceptionIfInvalidStringGiven()

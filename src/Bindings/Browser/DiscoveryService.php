@@ -78,9 +78,7 @@ class DiscoveryService extends AbstractBrowserBindingService implements Discover
         $responseData = (array) \json_decode($this->read($url)->getBody(), true);
 
         // $changeLogToken was passed by reference. The value is changed here
-        if ($changeLogToken!==null && isset($responseData[JSONConstants::JSON_OBJECTLIST_CHANGE_LOG_TOKEN])) {
-            $changeLogToken = (string) $responseData[JSONConstants::JSON_OBJECTLIST_CHANGE_LOG_TOKEN];
-        }
+        $changeLogToken = $responseData[JSONConstants::JSON_OBJECTLIST_CHANGE_LOG_TOKEN] ?? null;
 
         // TODO Implement Cache
         return $this->getJsonConverter()->convertObjectList($responseData);

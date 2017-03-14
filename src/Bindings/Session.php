@@ -62,11 +62,7 @@ class Session implements BindingSessionInterface
      */
     public function get($key, $defaultValue = null)
     {
-        if (isset($this->data[$key])) {
-            return $this->data[$key];
-        }
-
-        return $defaultValue;
+        return $this->data[$key] ?? $defaultValue;
     }
 
     /**

@@ -10,6 +10,8 @@ namespace Dkd\PhpCmis\Converter;
  * file that was distributed with this source code.
  */
 
+use function array_filter;
+use function array_map;
 use Dkd\PhpCmis\Exception\CmisRuntimeException;
 
 /**
@@ -36,12 +38,7 @@ abstract class AbstractDataConverter implements DataConverterInterface
      */
     protected function convertBooleanValues(array $source)
     {
-        $result = [];
-        // we can't use array_map with boolval here because boolval is only available in php >= 5.5
-        foreach ($source as $item) {
-            $result[] = (boolean) $item;
-        }
-        return $result;
+        return array_map('boolval', $source);
     }
 
     /**
@@ -72,17 +69,13 @@ abstract class AbstractDataConverter implements DataConverterInterface
      */
     protected function convertDateTimeValues($source)
     {
-        $result = [];
-
-        if (is_array($source) && count($source) > 0) {
-            foreach ($source as $item) {
-                if (!empty($item)) {
-                    $result[] = $this->convertDateTimeValue($item);
-                }
-            }
-        }
-
-        return $result;
+        return array_map(
+            [$this, 'convertDateTimeValue'],
+            array_filter(
+                (array) $source,
+                function ($item) { return !empty($item); }
+            )
+        );
     }
 
     /**

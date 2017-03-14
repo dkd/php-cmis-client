@@ -30,10 +30,8 @@ class CmisBindingFactory
      * @param Cache|null $typeDefinitionCache
      * @return CmisBinding
      */
-    public function createCmisBrowserBinding(
-        array $sessionParameters,
-        Cache $typeDefinitionCache = null
-    ) {
+    public function createCmisBrowserBinding(array $sessionParameters, Cache $typeDefinitionCache = null)
+    {
         $this->validateCmisBrowserBindingParameters($sessionParameters);
 
         return new CmisBinding(new Session(), $sessionParameters, $typeDefinitionCache);
@@ -41,12 +39,8 @@ class CmisBindingFactory
 
     protected function validateCmisBrowserBindingParameters(array &$sessionParameters)
     {
-        if (!isset($sessionParameters[SessionParameter::BINDING_CLASS])) {
-            $sessionParameters[SessionParameter::BINDING_CLASS] = CmisBrowserBinding::class;
-        }
-        if (!isset($sessionParameters[SessionParameter::BROWSER_SUCCINCT])) {
-            $sessionParameters[SessionParameter::BROWSER_SUCCINCT] = true;
-        }
+        $sessionParameters[SessionParameter::BINDING_CLASS] = $sessionParameters[SessionParameter::BINDING_CLASS] ?? CmisBrowserBinding::class;
+        $sessionParameters[SessionParameter::BROWSER_SUCCINCT] = $sessionParameters[SessionParameter::BROWSER_SUCCINCT] ?? true;
         $this->addDefaultSessionParameters($sessionParameters);
         $this->check($sessionParameters, SessionParameter::BROWSER_URL);
     }
@@ -58,24 +52,12 @@ class CmisBindingFactory
      */
     protected function addDefaultSessionParameters(array &$sessionParameters)
     {
-        if (!isset($sessionParameters[SessionParameter::CACHE_SIZE_REPOSITORIES])) {
-            $sessionParameters[SessionParameter::CACHE_SIZE_REPOSITORIES] = 10;
-        }
-        if (!isset($sessionParameters[SessionParameter::CACHE_SIZE_TYPES])) {
-            $sessionParameters[SessionParameter::CACHE_SIZE_TYPES] = 100;
-        }
-        if (!isset($sessionParameters[SessionParameter::CACHE_SIZE_LINKS])) {
-            $sessionParameters[SessionParameter::CACHE_SIZE_LINKS] = 400;
-        }
-        if (!isset($sessionParameters[SessionParameter::HTTP_INVOKER_CLASS])) {
-            $sessionParameters[SessionParameter::HTTP_INVOKER_CLASS] = Client::class;
-        }
-        if (!isset($sessionParameters[SessionParameter::JSON_CONVERTER_CLASS])) {
-            $sessionParameters[SessionParameter::JSON_CONVERTER_CLASS] = JsonConverter::class;
-        }
-        if (!isset($sessionParameters[SessionParameter::TYPE_DEFINITION_CACHE_CLASS])) {
-            $sessionParameters[SessionParameter::TYPE_DEFINITION_CACHE_CLASS] = ArrayCache::class;
-        }
+        $sessionParameters[SessionParameter::CACHE_SIZE_REPOSITORIES] = $sessionParameters[SessionParameter::CACHE_SIZE_REPOSITORIES] ?? 10;
+        $sessionParameters[SessionParameter::CACHE_SIZE_TYPES] = $sessionParameters[SessionParameter::CACHE_SIZE_TYPES] ?? 100;
+        $sessionParameters[SessionParameter::CACHE_SIZE_LINKS] = $sessionParameters[SessionParameter::CACHE_SIZE_LINKS] ?? 400;
+        $sessionParameters[SessionParameter::HTTP_INVOKER_CLASS] = $sessionParameters[SessionParameter::HTTP_INVOKER_CLASS] ?? Client::class;
+        $sessionParameters[SessionParameter::JSON_CONVERTER_CLASS] = $sessionParameters[SessionParameter::JSON_CONVERTER_CLASS] ?? JsonConverter::class;
+        $sessionParameters[SessionParameter::TYPE_DEFINITION_CACHE_CLASS] = $sessionParameters[SessionParameter::TYPE_DEFINITION_CACHE_CLASS] ?? ArrayCache::class;
     }
 
     /**

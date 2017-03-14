@@ -66,7 +66,7 @@ class RepositoryUrlCache
      */
     public function getRepositoryBaseUrl($repositoryId)
     {
-        return isset($this->repositoryUrls[$repositoryId]) ? $this->repositoryUrls[$repositoryId] : null;
+        return $this->repositoryUrls[$repositoryId] ?? null;
     }
 
     /**
@@ -78,11 +78,11 @@ class RepositoryUrlCache
      */
     public function getRepositoryUrl($repositoryId, $selector = null)
     {
-        if ($this->getRepositoryBaseUrl($repositoryId) === null) {
+        $baseUrl = $this->getRepositoryBaseUrl($repositoryId);
+        if ($baseUrl === null) {
             return null;
-        } else {
-            $repositoryUrl = $this->buildUrl($this->getRepositoryBaseUrl($repositoryId));
         }
+        $repositoryUrl = $this->buildUrl($baseUrl);
 
         if ($selector !== null && $selector !== '') {
             $repositoryUrl->getQuery()->modify([Constants::PARAM_SELECTOR => $selector]);
@@ -99,7 +99,7 @@ class RepositoryUrlCache
      */
     public function getRootUrl($repositoryId)
     {
-        return isset($this->rootUrls[$repositoryId]) ? $this->rootUrls[$repositoryId] : null;
+        return $this->rootUrls[$repositoryId] ?? null;
     }
 
     /**

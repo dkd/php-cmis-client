@@ -10,6 +10,11 @@ namespace Dkd\PhpCmis\Converter;
  * file that was distributed with this source code.
  */
 
+use function array_diff_key;
+use function array_filter;
+use function array_flip;
+use function array_map;
+use function array_walk;
 use Dkd\Enumeration\Exception\InvalidEnumerationValueException;
 use Dkd\PhpCmis\Bindings\Browser\JSONConstants;
 use Dkd\PhpCmis\Converter\Types\TypeConverterInterface;
@@ -102,6 +107,7 @@ use Dkd\PhpCmis\Enum\SupportedPermissions;
 use Dkd\PhpCmis\Enum\Updatability;
 use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
 use Dkd\PhpCmis\Exception\CmisRuntimeException;
+use function is_array;
 
 /**
  * Convert PHP CMIS Objects to JSON and JSON Responses TO PHP CMIS Objects
@@ -146,11 +152,7 @@ class JsonConverter extends AbstractDataConverter
      */
     public function convertRepositoryInfo(array $data = null)
     {
-        if (empty($data)) {
-            return null;
-        }
-
-        return $this->setRepositoryInfoValues(new RepositoryInfoBrowserBinding(), $data);
+        return empty($data) ? null : $this->setRepositoryInfoValues(new RepositoryInfoBrowserBinding(), $data);
     }
 
     /**
@@ -160,56 +162,33 @@ class JsonConverter extends AbstractDataConverter
      */
     protected function setRepositoryInfoValues(RepositoryInfoBrowserBinding $object, $data)
     {
-        if (isset($data[JSONConstants::JSON_REPINFO_CAPABILITIES])
-            && is_array($data[JSONConstants::JSON_REPINFO_CAPABILITIES])
-        ) {
-            $repositoryCapabilities = $this->convertRepositoryCapabilities(
-                $data[JSONConstants::JSON_REPINFO_CAPABILITIES]
-            );
-            if ($repositoryCapabilities !== null) {
-                $data[JSONConstants::JSON_REPINFO_CAPABILITIES] = $repositoryCapabilities;
-            } else {
-                unset($data[JSONConstants::JSON_REPINFO_CAPABILITIES]);
-            }
-        }
+        $data[JSONConstants::JSON_REPINFO_CAPABILITIES] = $this->convertRepositoryCapabilities(
+            $data[JSONConstants::JSON_REPINFO_CAPABILITIES] ?? null
+        );
 
-        if (isset($data[JSONConstants::JSON_REPINFO_ACL_CAPABILITIES])
-            && is_array($data[JSONConstants::JSON_REPINFO_ACL_CAPABILITIES])
-        ) {
-            $aclCapabilities = $this->convertAclCapabilities($data[JSONConstants::JSON_REPINFO_ACL_CAPABILITIES]);
-            if ($aclCapabilities !== null) {
-                $data[JSONConstants::JSON_REPINFO_ACL_CAPABILITIES] = $aclCapabilities;
-            } else {
-                unset($data[JSONConstants::JSON_REPINFO_ACL_CAPABILITIES]);
-            }
-        }
+        $data[JSONConstants::JSON_REPINFO_ACL_CAPABILITIES] = $this->convertAclCapabilities(
+            $data[JSONConstants::JSON_REPINFO_ACL_CAPABILITIES] ?? null
+        );
 
-        if (isset($data[JSONConstants::JSON_REPINFO_CHANGES_ON_TYPE])
-            && is_array($data[JSONConstants::JSON_REPINFO_CHANGES_ON_TYPE])
-        ) {
-            $types = [];
-            foreach ($data[JSONConstants::JSON_REPINFO_CHANGES_ON_TYPE] as $type) {
-                if (!empty($type)) {
-                    $types[] = BaseTypeId::cast($type);
-                }
-            }
+        $data[JSONConstants::JSON_REPINFO_CHANGES_ON_TYPE] = array_map(
+            function ($item) { return BaseTypeId::cast($item); },
+            array_filter(
+                $data[JSONConstants::JSON_REPINFO_CHANGES_ON_TYPE] ?? [],
+                function ($item) { return !empty($item); }
+            )
+        );
 
-            $data[JSONConstants::JSON_REPINFO_CHANGES_ON_TYPE] = $types;
-        }
-
-        if (isset($data[JSONConstants::JSON_REPINFO_EXTENDED_FEATURES])
-            && is_array($data[JSONConstants::JSON_REPINFO_EXTENDED_FEATURES])
-        ) {
-            $data[JSONConstants::JSON_REPINFO_EXTENDED_FEATURES] = $this->convertExtensionFeatures(
-                $data[JSONConstants::JSON_REPINFO_EXTENDED_FEATURES]
-            );
-        }
+        $data[JSONConstants::JSON_REPINFO_EXTENDED_FEATURES] = $this->convertExtensionFeatures(
+            $data[JSONConstants::JSON_REPINFO_EXTENDED_FEATURES] ?? []
+        );
 
         if (isset($data[JSONConstants::JSON_REPINFO_CMIS_VERSION_SUPPORTED])) {
             $data[JSONConstants::JSON_REPINFO_CMIS_VERSION_SUPPORTED] = CmisVersion::cast(
                 $data[JSONConstants::JSON_REPINFO_CMIS_VERSION_SUPPORTED]
             );
         }
+
+        $data = array_filter($data, function ($item) { return $item !== null; });
 
         $object->setExtensions($this->convertExtension($data, JSONConstants::getRepositoryInfoKeys()));
 
@@ -274,19 +253,15 @@ class JsonConverter extends AbstractDataConverter
             $data[JSONConstants::JSON_CAP_CREATABLE_PROPERTY_TYPES] = $this->convertCreatablePropertyTypes(
                 $data[JSONConstants::JSON_CAP_CREATABLE_PROPERTY_TYPES]
             );
-            if ($data[JSONConstants::JSON_CAP_CREATABLE_PROPERTY_TYPES] === null) {
-                unset($data[JSONConstants::JSON_CAP_CREATABLE_PROPERTY_TYPES]);
-            }
         }
 
         if (isset($data[JSONConstants::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES])) {
             $data[JSONConstants::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES] = $this->convertNewTypeSettableAttributes(
                 $data[JSONConstants::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES]
             );
-            if ($data[JSONConstants::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES] === null) {
-                unset($data[JSONConstants::JSON_CAP_NEW_TYPE_SETTABLE_ATTRIBUTES]);
-            }
         }
+
+        $data = array_filter($data, function ($item) { return $item !== null; });
 
         $repositoryCapabilities = new RepositoryCapabilities();
         $repositoryCapabilities->setExtensions($this->convertExtension($data, JSONConstants::getCapabilityKeys()));
@@ -374,21 +349,15 @@ class JsonConverter extends AbstractDataConverter
 
         $object = new CreatablePropertyTypes();
 
-        if (isset($data[JSONConstants::JSON_CAP_CREATABLE_PROPERTY_TYPES_CANCREATE])
-            && is_array($data[JSONConstants::JSON_CAP_CREATABLE_PROPERTY_TYPES_CANCREATE])
-        ) {
-            $canCreate = [];
-
-            foreach ($data[JSONConstants::JSON_CAP_CREATABLE_PROPERTY_TYPES_CANCREATE] as $canCreateItem) {
-                try {
-                    $canCreate[] = PropertyType::cast($canCreateItem);
-                } catch (InvalidEnumerationValueException $exception) {
-                    // ignore invalid types
-                }
+        foreach ($data[JSONConstants::JSON_CAP_CREATABLE_PROPERTY_TYPES_CANCREATE] ?? [] as $canCreateItem) {
+            try {
+                $canCreate[] = PropertyType::cast($canCreateItem);
+            } catch (InvalidEnumerationValueException $exception) {
+                // ignore invalid types
             }
-
-            $object->setCanCreate($canCreate);
         }
+
+        $object->setCanCreate($canCreate);
 
         $object->setExtensions(
             $this->convertExtension(
@@ -418,16 +387,10 @@ class JsonConverter extends AbstractDataConverter
                     continue;
                 }
 
-                $permissions = [];
-                if (isset($aceData[JSONConstants::JSON_ACE_PERMISSIONS])
-                    && is_array($aceData[JSONConstants::JSON_ACE_PERMISSIONS])
-                ) {
-                    foreach ($aceData[JSONConstants::JSON_ACE_PERMISSIONS] as $permissionItem) {
-                        if (!empty($permissionItem)) {
-                            $permissions[] = $permissionItem;
-                        }
-                    }
-                }
+                $permissions = array_filter(
+                    $aceData[JSONConstants::JSON_ACE_PERMISSIONS] ?? [],
+                    function($item) { return !empty($item); }
+                );
 
                 $principal = new Principal(
                     (string) $aceData[JSONConstants::JSON_ACE_PRINCIPAL][JSONConstants::JSON_ACE_PRINCIPAL_ID]
@@ -443,7 +406,7 @@ class JsonConverter extends AbstractDataConverter
                 $ace = new AccessControlEntry($principal, $permissions);
 
                 if (isset($aceData[JSONConstants::JSON_ACE_IS_DIRECT])) {
-                    $ace->setIsDirect((boolean) $aceData[JSONConstants::JSON_ACE_IS_DIRECT]);
+                    $ace->setIsDirect((boolean) $aceData[JSONConstants::JSON_ACE_IS_DIRECT] ?? false);
                 }
 
                 $ace->setExtensions($this->convertExtension($aceData, JSONConstants::getAceKeys()));
@@ -477,72 +440,58 @@ class JsonConverter extends AbstractDataConverter
             AclPropagation::cast($data[JSONConstants::JSON_ACLCAP_ACL_PROPAGATION])
         );
 
-        if (isset($data[JSONConstants::JSON_ACLCAP_PERMISSIONS])
-            && is_array($data[JSONConstants::JSON_ACLCAP_PERMISSIONS])
-        ) {
-            $permissionsData = $data[JSONConstants::JSON_ACLCAP_PERMISSIONS];
-            $permissionDefinitionList = [];
+        $permissionDefinitionList = [];
 
-            if (is_array($permissionsData)) {
-                foreach ($permissionsData as $permissionData) {
-                    $permissionDefinition = new PermissionDefinition();
+        foreach ($data[JSONConstants::JSON_ACLCAP_PERMISSIONS] ?? [] as $permissionData) {
+            $permissionDefinition = new PermissionDefinition();
 
-                    $permissionDefinition->setId(
-                        (string) $permissionData[JSONConstants::JSON_ACLCAP_PERMISSION_PERMISSION]
-                    );
-                    $permissionDefinition->setDescription(
-                        (string) $permissionData[JSONConstants::JSON_ACLCAP_PERMISSION_DESCRIPTION]
-                    );
+            $permissionDefinition->setId(
+                (string) $permissionData[JSONConstants::JSON_ACLCAP_PERMISSION_PERMISSION]
+            );
+            $permissionDefinition->setDescription(
+                (string) $permissionData[JSONConstants::JSON_ACLCAP_PERMISSION_DESCRIPTION]
+            );
 
-                    // handle extensions
+            // handle extensions
 
-                    $permissionDefinition->setExtensions(
-                        $this->convertExtension(
-                            $permissionData,
-                            JSONConstants::getAclCapabilityPermissionKeys()
-                        )
-                    );
+            $permissionDefinition->setExtensions(
+                $this->convertExtension(
+                    $permissionData,
+                    JSONConstants::getAclCapabilityPermissionKeys()
+                )
+            );
 
-                    $permissionDefinitionList[] = $permissionDefinition;
-                }
-            }
-
-            $aclCapabilities->setPermissions($permissionDefinitionList);
+            $permissionDefinitionList[] = $permissionDefinition;
         }
 
-        if (isset($data[JSONConstants::JSON_ACLCAP_PERMISSION_MAPPING])
-            && is_array($data[JSONConstants::JSON_ACLCAP_PERMISSION_MAPPING])
-        ) {
-            $permissionMappingData = $data[JSONConstants::JSON_ACLCAP_PERMISSION_MAPPING];
-            $permissionMappingList = [];
+        $aclCapabilities->setPermissions($permissionDefinitionList);
 
-            foreach ($permissionMappingData as $permissionMapping) {
-                $mapping = new PermissionMapping();
-                $key = (string) $permissionMapping[JSONConstants::JSON_ACLCAP_MAPPING_KEY];
+        $permissionMappingList = [];
 
-                $mapping->setKey($key);
+        foreach ($data[JSONConstants::JSON_ACLCAP_PERMISSION_MAPPING] ?? [] as $permissionMapping) {
+            $mapping = new PermissionMapping();
+            $key = (string) $permissionMapping[JSONConstants::JSON_ACLCAP_MAPPING_KEY];
 
-                $permissionList = [];
-                if (isset($permissionMapping[JSONConstants::JSON_ACLCAP_MAPPING_PERMISSION])
-                    && is_array($permissionMapping[JSONConstants::JSON_ACLCAP_MAPPING_PERMISSION])
-                ) {
-                    foreach ($permissionMapping[JSONConstants::JSON_ACLCAP_MAPPING_PERMISSION] as $permission) {
-                        if (!empty($permission)) {
-                            $permissionList[] = (string) $permission;
-                        }
-                    }
-                }
-                $mapping->setPermissions($permissionList);
+            $mapping->setKey($key);
 
-                $mapping->setExtensions(
-                    $this->convertExtension($permissionMapping, JSONConstants::getAclCapabilityMappingKeys())
-                );
+            $mapping->setPermissions(
+                array_map(
+                    'strval',
+                    array_filter(
+                    $permissionMapping[JSONConstants::JSON_ACLCAP_MAPPING_PERMISSION] ?? [],
+                        function ($item) { return !empty($item); }
+                    )
+                )
+            );
 
-                $permissionMappingList[$key] = $mapping;
-            }
+            $mapping->setExtensions(
+                $this->convertExtension($permissionMapping, JSONConstants::getAclCapabilityMappingKeys())
+            );
 
-            $aclCapabilities->setPermissionMapping($permissionMappingList);
+            $permissionMappingList[$key] = $mapping;
         }
+
+        $aclCapabilities->setPermissionMapping($permissionMappingList);
 
         // handle extensions
         $aclCapabilities->setExtensions($this->convertExtension($data, JSONConstants::getAclCapabilityKeys()));
@@ -566,44 +515,34 @@ class JsonConverter extends AbstractDataConverter
         if (empty($data[JSONConstants::JSON_TYPE_ID])) {
             throw new CmisInvalidArgumentException('Id of type definition is empty but must not be empty!');
         }
-        $baseTypeId = '';
-        if (isset($data[JSONConstants::JSON_TYPE_BASE_ID])) {
-            $baseTypeId = $data[JSONConstants::JSON_TYPE_BASE_ID];
-            unset($data[JSONConstants::JSON_TYPE_BASE_ID]);
-        }
-
         $typeDefinition = $this->getBindingsObjectFactory()->getTypeDefinitionByBaseTypeId(
-            $baseTypeId,
-            $data[JSONConstants::JSON_TYPE_ID]
+            $data[JSONConstants::JSON_TYPE_BASE_ID] ?? '',
+            $data[JSONConstants::JSON_TYPE_ID] ?? ''
         );
 
         $data = $this->convertTypeDefinitionSpecificData($data, $typeDefinition);
 
-        if (isset($data[JSONConstants::JSON_TYPE_TYPE_MUTABILITY])) {
-            $data[JSONConstants::JSON_TYPE_TYPE_MUTABILITY] = $this->convertTypeMutability(
-                $data[JSONConstants::JSON_TYPE_TYPE_MUTABILITY]
-            );
-            if ($data[JSONConstants::JSON_TYPE_TYPE_MUTABILITY] === null) {
-                unset($data[JSONConstants::JSON_TYPE_TYPE_MUTABILITY]);
-            }
-        }
+        $data[JSONConstants::JSON_TYPE_TYPE_MUTABILITY] = $this->convertTypeMutability(
+            $data[JSONConstants::JSON_TYPE_TYPE_MUTABILITY] ?? null
+        );
 
-        if (isset($data[JSONConstants::JSON_TYPE_PROPERTY_DEFINITIONS])
-            && is_array($data[JSONConstants::JSON_TYPE_PROPERTY_DEFINITIONS])
-        ) {
-            foreach ($data[JSONConstants::JSON_TYPE_PROPERTY_DEFINITIONS] as $propertyDefinitionData) {
-                if (is_array($propertyDefinitionData)) {
-                    $propertyDefinition = $this->convertPropertyDefinition($propertyDefinitionData);
-                    if ($propertyDefinition !== null) {
-                        $typeDefinition->addPropertyDefinition($propertyDefinition);
-                    }
+        foreach ($data[JSONConstants::JSON_TYPE_PROPERTY_DEFINITIONS] ?? [] as $propertyDefinitionData) {
+            if (is_array($propertyDefinitionData)) {
+                $propertyDefinition = $this->convertPropertyDefinition($propertyDefinitionData);
+                if ($propertyDefinition !== null) {
+                    $typeDefinition->addPropertyDefinition($propertyDefinition);
                 }
             }
         }
-        unset($data[JSONConstants::JSON_TYPE_PROPERTY_DEFINITIONS]);
+
+        unset(
+            $data[JSONConstants::JSON_TYPE_BASE_ID],
+            $data[JSONConstants::JSON_TYPE_ID],
+            $data[JSONConstants::JSON_TYPE_PROPERTY_DEFINITIONS]
+        );
 
         $typeDefinition->populate(
-            $data,
+            array_filter($data, function ($item) { return !empty($item); }),
             array_merge(
                 array_combine(JSONConstants::getTypeKeys(), JSONConstants::getTypeKeys()),
                 [
@@ -636,30 +575,29 @@ class JsonConverter extends AbstractDataConverter
                 );
             }
         } elseif ($typeDefinition instanceof MutableRelationshipTypeDefinitionInterface) {
-            if (isset($data[JSONConstants::JSON_TYPE_ALLOWED_SOURCE_TYPES])
-                && is_array($data[JSONConstants::JSON_TYPE_ALLOWED_SOURCE_TYPES])
-            ) {
-                $allowedSourceTypeIds = [];
-                foreach ($data[JSONConstants::JSON_TYPE_ALLOWED_SOURCE_TYPES] as $allowedSourceTypeId) {
-                    $allowedSourceTypeId = (string) $allowedSourceTypeId;
-                    if (!empty($allowedSourceTypeId)) {
-                        $allowedSourceTypeIds[] = $allowedSourceTypeId;
-                    }
-                }
-                $data[JSONConstants::JSON_TYPE_ALLOWED_SOURCE_TYPES] = $allowedSourceTypeIds;
-            }
-            if (isset($data[JSONConstants::JSON_TYPE_ALLOWED_TARGET_TYPES])
-                && is_array($data[JSONConstants::JSON_TYPE_ALLOWED_TARGET_TYPES])
-            ) {
-                $allowedTargetTypeIds = [];
-                foreach ($data[JSONConstants::JSON_TYPE_ALLOWED_TARGET_TYPES] as $allowedTargetTypeId) {
-                    $allowedTargetTypeId = (string) $allowedTargetTypeId;
-                    if (!empty($allowedTargetTypeId)) {
-                        $allowedTargetTypeIds[] = $allowedTargetTypeId;
-                    }
-                }
-                $data[JSONConstants::JSON_TYPE_ALLOWED_TARGET_TYPES] = $allowedTargetTypeIds;
-            }
+
+            $data[JSONConstants::JSON_TYPE_ALLOWED_SOURCE_TYPES] = array_map(
+                'strval',
+                array_filter(
+                    $data[JSONConstants::JSON_TYPE_ALLOWED_SOURCE_TYPES] ?? [],
+                    function ($item) { return !empty($item); }
+                )
+            );
+            $data[JSONConstants::JSON_TYPE_ALLOWED_SOURCE_TYPES] = array_map(
+                'strval',
+                array_filter(
+                    $data[JSONConstants::JSON_TYPE_ALLOWED_SOURCE_TYPES] ?? [],
+                    function ($item) { return !empty($item); }
+                )
+            );
+            $data[JSONConstants::JSON_TYPE_ALLOWED_TARGET_TYPES] = array_map(
+                'strval',
+                array_filter(
+                    $data[JSONConstants::JSON_TYPE_ALLOWED_TARGET_TYPES] ?? [],
+                    function ($item) { return !empty($item); }
+                )
+            );
+
         }
 
         return $data;
@@ -846,23 +784,17 @@ class JsonConverter extends AbstractDataConverter
         }
 
         $object = new ObjectData();
-        if (isset($data[JSONConstants::JSON_OBJECT_ACL]) && is_array($data[JSONConstants::JSON_OBJECT_ACL])
-            && isset($data[JSONConstants::JSON_OBJECT_EXACT_ACL])
-        ) {
-            $acl = $this->convertAcl(
-                $data[JSONConstants::JSON_OBJECT_ACL],
-                (boolean) $data[JSONConstants::JSON_OBJECT_EXACT_ACL]
-            );
-            if ($acl !== null) {
-                $object->setAcl($acl);
-            }
+        $acl = $this->convertAcl(
+            $data[JSONConstants::JSON_OBJECT_ACL] ?? [],
+            (boolean) $data[JSONConstants::JSON_OBJECT_EXACT_ACL] ?? false
+        );
+        if ($acl !== null) {
+            $object->setAcl($acl);
         }
 
-        if (isset($data[JSONConstants::JSON_OBJECT_ALLOWABLE_ACTIONS])) {
-            $allowableActions = $this->convertAllowableActions($data[JSONConstants::JSON_OBJECT_ALLOWABLE_ACTIONS]);
-            if ($allowableActions !== null) {
-                $object->setAllowableActions($allowableActions);
-            }
+        $allowableActions = $this->convertAllowableActions($data[JSONConstants::JSON_OBJECT_ALLOWABLE_ACTIONS] ?? []);
+        if ($allowableActions !== null) {
+            $object->setAllowableActions($allowableActions);
         }
 
         if (isset($data[JSONConstants::JSON_OBJECT_CHANGE_EVENT_INFO])
@@ -884,12 +816,8 @@ class JsonConverter extends AbstractDataConverter
             $object->setChangeEventInfo($changeEventInfo);
         }
 
-        if (isset($data[JSONConstants::JSON_OBJECT_EXACT_ACL])) {
-            $object->setIsExactAcl((boolean) $data[JSONConstants::JSON_OBJECT_EXACT_ACL]);
-        }
-        if (isset($data[JSONConstants::JSON_OBJECT_POLICY_IDS])) {
-            $object->setPolicyIds($this->convertPolicyIdList($data[JSONConstants::JSON_OBJECT_POLICY_IDS]));
-        }
+        $object->setIsExactAcl((boolean) $data[JSONConstants::JSON_OBJECT_EXACT_ACL] ?? false);
+        $object->setPolicyIds($this->convertPolicyIdList($data[JSONConstants::JSON_OBJECT_POLICY_IDS] ?? null));
 
         /**
          * A client MAY add the query parameter succinct (HTTP GET) or the control succinct (HTTP POST) with the
@@ -899,43 +827,20 @@ class JsonConverter extends AbstractDataConverter
          *
          * @see http://docs.oasis-open.org/cmis/CMIS/v1.1/os/CMIS-v1.1-os.html#x1-552027r554
          */
-        if (isset($data[JSONConstants::JSON_OBJECT_SUCCINCT_PROPERTIES])
-            && is_array($data[JSONConstants::JSON_OBJECT_SUCCINCT_PROPERTIES])
-        ) {
-            $properties = $data[JSONConstants::JSON_OBJECT_SUCCINCT_PROPERTIES];
-            $propertiesExtension = null;
-            if (isset($data[JSONConstants::JSON_OBJECT_PROPERTIES_EXTENSION])) {
-                $propertiesExtension = $data[JSONConstants::JSON_OBJECT_PROPERTIES_EXTENSION];
-            }
-            $object->setProperties($this->convertSuccinctProperties($properties, $propertiesExtension));
-        } elseif (isset($data[JSONConstants::JSON_OBJECT_PROPERTIES])
-            && is_array($data[JSONConstants::JSON_OBJECT_PROPERTIES])
-        ) {
-            $propertiesExtension = [];
-            if (isset($data[JSONConstants::JSON_OBJECT_PROPERTIES_EXTENSION])) {
-                $propertiesExtension = (array) $data[JSONConstants::JSON_OBJECT_PROPERTIES_EXTENSION];
-            }
-            $properties = $this->convertProperties($data[JSONConstants::JSON_OBJECT_PROPERTIES], $propertiesExtension);
-            if ($properties !== null) {
-                $object->setProperties($properties);
-            }
+        if (isset($data[JSONConstants::JSON_OBJECT_SUCCINCT_PROPERTIES])) {
+            $properties = $this->convertSuccinctProperties(
+                $data[JSONConstants::JSON_OBJECT_SUCCINCT_PROPERTIES] ?? [],
+                $data[JSONConstants::JSON_OBJECT_PROPERTIES_EXTENSION] ?? []);
+        } else {
+            $properties = $this->convertProperties(
+                $data[JSONConstants::JSON_OBJECT_PROPERTIES] ?? [],
+                (array) $data[JSONConstants::JSON_OBJECT_PROPERTIES_EXTENSION] ?? []
+            );
         }
 
-        if (isset($data[JSONConstants::JSON_OBJECT_RELATIONSHIPS])
-            && is_array($data[JSONConstants::JSON_OBJECT_RELATIONSHIPS])
-        ) {
-            $relationships = $this->convertObjects($data[JSONConstants::JSON_OBJECT_RELATIONSHIPS]);
-            if ($relationships !== null) {
-                $object->setRelationships($relationships);
-            }
-        }
-
-        if (isset($data[JSONConstants::JSON_OBJECT_RENDITIONS])
-            && is_array($data[JSONConstants::JSON_OBJECT_RENDITIONS])
-        ) {
-            $object->setRenditions($this->convertRenditions($data[JSONConstants::JSON_OBJECT_RENDITIONS]));
-        }
-
+        $object->setProperties($properties ?? []);
+        $object->setRelationships($this->convertObjects($data[JSONConstants::JSON_OBJECT_RELATIONSHIPS] ?? null));
+        $object->setRenditions($this->convertRenditions($data[JSONConstants::JSON_OBJECT_RENDITIONS] ?? []));
         $object->setExtensions($this->convertExtension($data, JSONConstants::getObjectKeys()));
 
         return $object;
@@ -947,25 +852,19 @@ class JsonConverter extends AbstractDataConverter
      */
     public function convertObjects(array $data = null)
     {
-        $objects = [];
-
-        if (empty($data)) {
-            return $objects;
-        }
-
-        foreach ($data as $itemData) {
-            if (!is_array($itemData)) {
-                continue;
+        return array_filter(
+            array_map(
+                [$this, 'convertObject'],
+                array_filter(
+                    (array) $data,
+                    'is_array'
+                )
+            ),
+            function ($item) {
+                // @TODO once a logger is available we should log an INFO message if the object could not be converted
+                return !empty($item);
             }
-            $object = $this->convertObject($itemData);
-
-            // @TODO once a logger is available we should log an INFO message if the object could not be converted
-            if ($object !== null) {
-                $objects[] = $object;
-            }
-        }
-
-        return $objects;
+        );
     }
 
     /**
@@ -982,10 +881,8 @@ class JsonConverter extends AbstractDataConverter
         $properties = new Properties();
 
         foreach ($data as $propertyData) {
-            $id = (!empty($propertyData[JSONConstants::JSON_PROPERTY_ID])) ?
-                $propertyData[JSONConstants::JSON_PROPERTY_ID] : null;
-            $queryName = (!empty($propertyData[JSONConstants::JSON_PROPERTY_QUERYNAME])) ?
-                $propertyData[JSONConstants::JSON_PROPERTY_QUERYNAME] : null;
+            $id = $propertyData[JSONConstants::JSON_PROPERTY_ID] ?? null;
+            $queryName = $propertyData[JSONConstants::JSON_PROPERTY_QUERYNAME] ?? null;
 
             // A Property must always have an ID except if it used in a query result.
             // In a query result a Property should have an ID and must have a query name.
@@ -999,14 +896,6 @@ class JsonConverter extends AbstractDataConverter
                 throw new CmisRuntimeException(
                     sprintf('Unknown property type "%s"!', $propertyData[JSONConstants::JSON_PROPERTY_DATATYPE])
                 );
-            }
-
-            if (empty($propertyData[JSONConstants::JSON_PROPERTY_VALUE])) {
-                $propertyValues = [];
-            } elseif (!is_array($propertyData[JSONConstants::JSON_PROPERTY_VALUE])) {
-                $propertyValues = [$propertyData[JSONConstants::JSON_PROPERTY_VALUE]];
-            } else {
-                $propertyValues = $propertyData[JSONConstants::JSON_PROPERTY_VALUE];
             }
 
             // get property keys without JSON-response-specific cardinality properties
@@ -1026,7 +915,11 @@ class JsonConverter extends AbstractDataConverter
                 )
             );
 
-            $property = $this->getPropertyByPropertyType($propertyType, $id, $propertyValues);
+            $property = $this->getPropertyByPropertyType(
+                $propertyType,
+                $id,
+                (array) $propertyData[JSONConstants::JSON_PROPERTY_VALUE] ?? []
+            );
             $property->populate(
                 $propertyData,
                 $propertyKeys,
@@ -1165,24 +1058,19 @@ class JsonConverter extends AbstractDataConverter
      */
     public function convertRenditions(array $data = null)
     {
-        if (empty($data)) {
-            return [];
-        }
-        $renditions = [];
-
-        foreach ($data as $renditionData) {
-            $rendition = null;
-            if (is_array($renditionData)) {
-                $rendition = $this->convertRendition($renditionData);
+        return array_filter(
+            array_map(
+                [$this, 'convertRendition'],
+                array_filter(
+                    $data,
+                    'is_array'
+                )
+            ),
+            function ($item) {
+                // @TODO once a logger is available we should log an INFO message if the rendition could not be converted
+                return !empty($item);
             }
-
-            // @TODO once a logger is available we should log an INFO message if the rendition could not be converted
-            if ($rendition !== null) {
-                $renditions[] = $rendition;
-            }
-        }
-
-        return $renditions;
+        );
     }
 
     /**
@@ -1194,18 +1082,14 @@ class JsonConverter extends AbstractDataConverter
      */
     public function convertExtension(array $data = null, array $cmisKeys = [])
     {
-        if (empty($data)) {
-            return [];
-        }
-
         $extensions = [];
 
-        foreach ($data as $key => $value) {
-            if (in_array($key, $cmisKeys)) {
-                continue;
-            }
+        foreach (array_diff_key((array) $data, array_flip($cmisKeys)) as $key => $value) {
 
-            if (is_array($value)) {
+            if (!is_array($value)) {
+                $value = (empty($value)) ? null : (string) $value;
+                $extensions[] = new CmisExtensionElement(null, $key, [], $value);
+            } else {
                 $extension = $this->convertExtension($value, $cmisKeys);
 
                 if (!empty($extension)) {
@@ -1217,9 +1101,6 @@ class JsonConverter extends AbstractDataConverter
                         $extension
                     );
                 }
-            } else {
-                $value = (empty($value)) ? null : (string) $value;
-                $extensions[] = new CmisExtensionElement(null, $key, [], $value);
             }
         }
 
@@ -1235,15 +1116,9 @@ class JsonConverter extends AbstractDataConverter
     public function convertExtensionFeatures(array $data = null)
     {
         $features = [];
+        $extendedFeatures = array_filter(array_filter((array) $data, 'is_array'), function ($item) { return !empty($item); });
 
-        if (empty($data)) {
-            return $features;
-        }
-
-        foreach ($data as $extendedFeature) {
-            if (!is_array($extendedFeature) || empty($extendedFeature)) {
-                continue;
-            }
+        foreach ($extendedFeatures as $extendedFeature) {
 
             $feature = new ExtensionFeature();
             $feature->setId((string) $extendedFeature[JSONConstants::JSON_FEATURE_ID]);
@@ -1252,16 +1127,12 @@ class JsonConverter extends AbstractDataConverter
             $feature->setVersionLabel((string) $extendedFeature[JSONConstants::JSON_FEATURE_VERSION_LABEL]);
             $feature->setDescription((string) $extendedFeature[JSONConstants::JSON_FEATURE_DESCRIPTION]);
 
-            if (isset($extendedFeature[JSONConstants::JSON_FEATURE_DATA])
-                && is_array($extendedFeature[JSONConstants::JSON_FEATURE_DATA])
-            ) {
-                $data = [];
-                foreach ($extendedFeature[JSONConstants::JSON_FEATURE_DATA] as $key => $value) {
-                    $data[$key] = $value;
-                }
-
-                $feature->setFeatureData($data);
+            $featureData = [];
+            foreach ($extendedFeature[JSONConstants::JSON_FEATURE_DATA] ?? [] as $key => $value) {
+                $featureData[$key] = $value;
             }
+
+            $feature->setFeatureData($featureData);
 
             $feature->setExtensions($this->convertExtension($extendedFeature, JSONConstants::getFeatureKeys()));
 
@@ -1280,17 +1151,15 @@ class JsonConverter extends AbstractDataConverter
     public function convertPolicyIdList(array $data = null)
     {
         $policyIdsList = new PolicyIdList();
-        $list = [];
-
-        if (isset($data[JSONConstants::JSON_OBJECT_POLICY_IDS_IDS])) {
-            foreach ((array) $data[JSONConstants::JSON_OBJECT_POLICY_IDS_IDS] as $id) {
-                if (!empty($id) && is_string($id)) {
-                    $list[] = $id;
-                }
-            }
-        }
-
-        $policyIdsList->setPolicyIds($list);
+        $policyIdsList->setPolicyIds(
+            array_filter(
+                array_filter(
+                    $data[JSONConstants::JSON_OBJECT_POLICY_IDS_IDS] ?? [],
+                    'is_string'
+                ),
+                function ($item) { return !empty($item); }
+            )
+        );
         $policyIdsList->setExtensions($this->convertExtension($data, JSONConstants::getPolicyIdsKeys()));
 
         return $policyIdsList;
@@ -1613,28 +1482,18 @@ class JsonConverter extends AbstractDataConverter
         $result = new TypeDefinitionList();
         $types = [];
 
-        $typesList = [];
-        if (isset($data[JSONConstants::JSON_TYPESLIST_TYPES])) {
-            $typesList = (array) $data[JSONConstants::JSON_TYPESLIST_TYPES];
-        }
+        $typesList = $data[JSONConstants::JSON_TYPESLIST_TYPES] ?? [];
 
-        foreach ($typesList as $typeData) {
-            if (is_array($typeData)) {
-                $type = $this->convertTypeDefinition($typeData);
-                if ($type !== null) {
-                    $types[] = $type;
-                }
+        foreach (array_filter($typesList, 'is_array') as $typeData) {
+            $type = $this->convertTypeDefinition($typeData);
+            if ($type !== null) {
+                $types[] = $type;
             }
         }
 
         $result->setList($types);
-        if (isset($data[JSONConstants::JSON_TYPESLIST_HAS_MORE_ITEMS])) {
-            $result->setHasMoreItems($data[JSONConstants::JSON_TYPESLIST_HAS_MORE_ITEMS]);
-        }
-        if (isset($data[JSONConstants::JSON_TYPESLIST_NUM_ITEMS])) {
-            $result->setNumItems($data[JSONConstants::JSON_TYPESLIST_NUM_ITEMS]);
-        }
-
+        $result->setHasMoreItems($data[JSONConstants::JSON_TYPESLIST_HAS_MORE_ITEMS] ?? false);
+        $result->setNumItems($data[JSONConstants::JSON_TYPESLIST_NUM_ITEMS] ?? 0);
         $result->setExtensions($this->convertExtension($data, JSONConstants::getTypesListKeys()));
 
         return $result;
@@ -1654,27 +1513,18 @@ class JsonConverter extends AbstractDataConverter
             return $result;
         }
 
-        foreach ($data as $itemData) {
-            if (!is_array($itemData)) {
-                continue;
-            }
+        foreach (array_filter($data, 'is_array') as $itemData) {
 
             $container = new TypeDefinitionContainer();
 
-            if (isset($itemData[JSONConstants::JSON_TYPESCONTAINER_TYPE])) {
-                $typeDefinition = $this->convertTypeDefinition($itemData[JSONConstants::JSON_TYPESCONTAINER_TYPE]);
-                if ($typeDefinition !== null) {
-                    $container->setTypeDefinition($typeDefinition);
-                }
+            $typeDefinition = $this->convertTypeDefinition($itemData[JSONConstants::JSON_TYPESCONTAINER_TYPE] ?? []);
+            if ($typeDefinition !== null) {
+                $container->setTypeDefinition($typeDefinition);
             }
 
-            if (isset($itemData[JSONConstants::JSON_TYPESCONTAINER_CHILDREN])
-                && is_array($itemData[JSONConstants::JSON_TYPESCONTAINER_CHILDREN])
-            ) {
-                $container->setChildren(
-                    $this->convertTypeDescendants($itemData[JSONConstants::JSON_TYPESCONTAINER_CHILDREN])
-                );
-            }
+            $container->setChildren(
+                $this->convertTypeDescendants($itemData[JSONConstants::JSON_TYPESCONTAINER_CHILDREN] ?? [])
+            );
 
             $container->setExtensions($this->convertExtension($data, JSONConstants::getTypesContainerKeys()));
 
@@ -1697,32 +1547,17 @@ class JsonConverter extends AbstractDataConverter
         }
 
         $objectInFolderList = new ObjectInFolderList();
-        $objects = [];
-
-        if (isset($data[JSONConstants::JSON_OBJECTINFOLDERLIST_OBJECTS])) {
-            foreach ((array) $data[JSONConstants::JSON_OBJECTINFOLDERLIST_OBJECTS] as $objectInFolderData) {
-                if (!empty($objectInFolderData)) {
-                    $object = $this->convertObjectInFolder($objectInFolderData);
-
-                    if ($object !== null) {
-                        $objects[] = $object;
-                    }
-                }
-            }
-        }
-
-        $objectInFolderList->setObjects($objects);
-
-        if (isset($data[JSONConstants::JSON_OBJECTINFOLDERLIST_HAS_MORE_ITEMS])) {
-            $objectInFolderList->setHasMoreItems(
-                (boolean) $data[JSONConstants::JSON_OBJECTINFOLDERLIST_HAS_MORE_ITEMS]
-            );
-        }
-
-        if (isset($data[JSONConstants::JSON_OBJECTINFOLDERLIST_NUM_ITEMS])) {
-            $objectInFolderList->setNumItems((integer) $data[JSONConstants::JSON_OBJECTINFOLDERLIST_NUM_ITEMS]);
-        }
-
+        $objectInFolderList->setObjects(
+            array_filter(
+                array_map(
+                    [$this, 'convertObjectInFolder'],
+                    $data[JSONConstants::JSON_OBJECTINFOLDERLIST_OBJECTS] ?? []
+                ),
+                function ($item) { return !empty($item); }
+            )
+        );
+        $objectInFolderList->setHasMoreItems((boolean) $data[JSONConstants::JSON_OBJECTINFOLDERLIST_HAS_MORE_ITEMS] ?? false);
+        $objectInFolderList->setNumItems((integer) $data[JSONConstants::JSON_OBJECTINFOLDERLIST_NUM_ITEMS] ?? count($objects));
         $objectInFolderList->setExtensions($this->convertExtension($data, JSONConstants::getObjectInFolderListKeys()));
 
         return $objectInFolderList;
@@ -1741,19 +1576,13 @@ class JsonConverter extends AbstractDataConverter
         }
 
         $objectInFolderData = new ObjectInFolderData();
+        $object = $this->convertObject($data[JSONConstants::JSON_OBJECTINFOLDER_OBJECT] ?? []);
 
-        if (isset($data[JSONConstants::JSON_OBJECTINFOLDER_OBJECT])) {
-            $object = $this->convertObject($data[JSONConstants::JSON_OBJECTINFOLDER_OBJECT]);
-
-            if ($object !== null) {
-                $objectInFolderData->setObject($object);
-            }
+        if ($object !== null) {
+            $objectInFolderData->setObject($object);
         }
 
-        if (isset($data[JSONConstants::JSON_OBJECTINFOLDER_PATH_SEGMENT])) {
-            $objectInFolderData->setPathSegment((string) $data[JSONConstants::JSON_OBJECTINFOLDER_PATH_SEGMENT]);
-        }
-
+        $objectInFolderData->setPathSegment((string) $data[JSONConstants::JSON_OBJECTINFOLDER_PATH_SEGMENT] ?? null);
         $objectInFolderData->setExtensions($this->convertExtension($data, JSONConstants::getObjectInFolderKeys()));
 
         return $objectInFolderData;
@@ -1767,21 +1596,16 @@ class JsonConverter extends AbstractDataConverter
      */
     public function convertObjectParents(array $data = null)
     {
-        if (empty($data)) {
-            return [];
-        }
-        $parents = [];
-
-        foreach ($data as $parentData) {
-            $parent = $this->convertObjectParentData($parentData);
-
-            // @TODO once a logger is available we should log an INFO message if the parent data could not be converted
-            if ($parent !== null) {
-                $parents[] = $parent;
+        return array_filter(
+            array_map(
+                [$this, 'convertObjectParentData'],
+                (array) ($data ?? [])
+            ),
+            function ($item) {
+                return !empty($item);
+                // @TODO once a logger is available we should log an INFO message if the parent data could not be converted
             }
-        }
-
-        return $parents;
+        );
     }
 
     /**
@@ -1797,17 +1621,12 @@ class JsonConverter extends AbstractDataConverter
         }
         $parent = new ObjectParentData();
 
-        if (isset($data[JSONConstants::JSON_OBJECTPARENTS_OBJECT])) {
-            $object = $this->convertObject($data[JSONConstants::JSON_OBJECTPARENTS_OBJECT]);
-            if ($object !== null) {
-                $parent->setObject($object);
-            }
+        $object = $this->convertObject($data[JSONConstants::JSON_OBJECTPARENTS_OBJECT] ?? null);
+        if ($object !== null) {
+            $parent->setObject($object);
         }
 
-        if (isset($data[JSONConstants::JSON_OBJECTPARENTS_RELATIVE_PATH_SEGMENT])) {
-            $parent->setRelativePathSegment((string) $data[JSONConstants::JSON_OBJECTPARENTS_RELATIVE_PATH_SEGMENT]);
-        }
-
+        $parent->setRelativePathSegment((string) ($data[JSONConstants::JSON_OBJECTPARENTS_RELATIVE_PATH_SEGMENT] ?? ''));
         $parent->setExtensions($this->convertExtension($data, JSONConstants::getObjectParentsKeys()));
 
         return $parent;
@@ -1828,23 +1647,19 @@ class JsonConverter extends AbstractDataConverter
         $objectList = new ObjectList();
         $objects = [];
 
-        if (isset($data[JSONConstants::JSON_OBJECTLIST_OBJECTS])) {
-            foreach ((array) $data[JSONConstants::JSON_OBJECTLIST_OBJECTS] as $objectData) {
-                $object = $this->convertObject($objectData);
+        foreach ((array) $data[JSONConstants::JSON_OBJECTLIST_OBJECTS] ?? [] as $objectData) {
+            $object = $this->convertObject($objectData);
 
-                if ($object !== null) {
-                    $objects[] = $object;
-                }
+            if ($object !== null) {
+                $objects[] = $object;
             }
         }
 
         $objectList->setObjects($objects);
 
-        if (isset($data[JSONConstants::JSON_OBJECTLIST_HAS_MORE_ITEMS])) {
-            $objectList->setHasMoreItems(
-                (boolean) $data[JSONConstants::JSON_OBJECTLIST_HAS_MORE_ITEMS]
-            );
-        }
+        $objectList->setHasMoreItems(
+            (boolean) ($data[JSONConstants::JSON_OBJECTLIST_HAS_MORE_ITEMS] ?? false)
+        );
 
         if (isset($data[JSONConstants::JSON_OBJECTLIST_NUM_ITEMS])) {
             $objectList->setNumItems((integer) $data[JSONConstants::JSON_OBJECTLIST_NUM_ITEMS]);
@@ -1870,23 +1685,16 @@ class JsonConverter extends AbstractDataConverter
         $objectList = new ObjectList();
         $objects = [];
 
-        if (isset($data[JSONConstants::JSON_QUERYRESULTLIST_RESULTS])) {
-            foreach ((array) $data[JSONConstants::JSON_QUERYRESULTLIST_RESULTS] as $objectData) {
-                $object = $this->convertObject($objectData);
+        foreach ((array) ($data[JSONConstants::JSON_QUERYRESULTLIST_RESULTS]) ?? [] as $objectData) {
+            $object = $this->convertObject($objectData);
 
-                if ($object !== null) {
-                    $objects[] = $object;
-                }
+            if ($object !== null) {
+                $objects[] = $object;
             }
         }
 
         $objectList->setObjects($objects);
-
-        if (isset($data[JSONConstants::JSON_QUERYRESULTLIST_HAS_MORE_ITEMS])) {
-            $objectList->setHasMoreItems(
-                (boolean) $data[JSONConstants::JSON_QUERYRESULTLIST_HAS_MORE_ITEMS]
-            );
-        }
+        $objectList->setHasMoreItems((boolean) ($data[JSONConstants::JSON_QUERYRESULTLIST_HAS_MORE_ITEMS] ?? false));
 
         if (isset($data[JSONConstants::JSON_QUERYRESULTLIST_NUM_ITEMS])) {
             $objectList->setNumItems((integer) $data[JSONConstants::JSON_QUERYRESULTLIST_NUM_ITEMS]);
@@ -1905,20 +1713,13 @@ class JsonConverter extends AbstractDataConverter
      */
     public function convertDescendants(array $data = null)
     {
-        if (empty($data)) {
-            return [];
-        }
-
-        $descendants = [];
-
-        foreach ($data as $descendantData) {
-            $descendant = $this->convertDescendant($descendantData);
-            if ($descendant !== null) {
-                $descendants[] = $descendant;
-            }
-        }
-
-        return $descendants;
+        return array_filter(
+            array_map(
+                [$this, 'convertDescendant'],
+                $data ?? []
+            ),
+            function ($item) { return !empty($item); }
+        );
     }
 
     /**
@@ -1934,29 +1735,23 @@ class JsonConverter extends AbstractDataConverter
             return null;
         }
 
-        $object = null;
-        if (isset($data[JSONConstants::JSON_OBJECTINFOLDERCONTAINER_OBJECT])) {
-            $object = $this->convertObjectInFolder($data[JSONConstants::JSON_OBJECTINFOLDERCONTAINER_OBJECT]);
-        }
+        $object = $this->convertObjectInFolder($data[JSONConstants::JSON_OBJECTINFOLDERCONTAINER_OBJECT] ?? null);
 
         if ($object === null) {
             throw new CmisRuntimeException('Given data could not be converted to ObjectInFolder!');
         }
 
         $objectInFolderContainer = new ObjectInFolderContainer($object);
-        $children = [];
 
-        if (isset($data[JSONConstants::JSON_OBJECTINFOLDERCONTAINER_CHILDREN])) {
-            foreach ((array) $data[JSONConstants::JSON_OBJECTINFOLDERCONTAINER_CHILDREN] as $childData) {
-                $child = $this->convertDescendant($childData);
-
-                if ($child !== null) {
-                    $children[] = $child;
-                }
-            }
-        }
-
-        $objectInFolderContainer->setChildren($children);
+        $objectInFolderContainer->setChildren(
+            array_filter(
+                array_map(
+                    [$this, 'convertDescendant'],
+                    (array) ($data[JSONConstants::JSON_OBJECTINFOLDERCONTAINER_CHILDREN] ?? [])
+                ),
+                function ($item) { return !empty($item); }
+            )
+        );
 
         $objectInFolderContainer->setExtensions(
             $this->convertExtension($data, JSONConstants::getObjectInFolderContainerKeys())
@@ -1979,17 +1774,7 @@ class JsonConverter extends AbstractDataConverter
             return $result;
         }
 
-        $jsonIds = [];
-        if (isset($data[JSONConstants::JSON_FAILEDTODELETE_ID])) {
-            $jsonIds = (array) $data[JSONConstants::JSON_FAILEDTODELETE_ID];
-        }
-
-        $ids = [];
-        foreach ($jsonIds as $id) {
-            $ids[] = (string) $id;
-        }
-
-        $result->setIds($ids);
+        $result->setIds(array_map('strval', $data[JSONConstants::JSON_FAILEDTODELETE_ID] ?? []));
         $result->setExtensions($this->convertExtension($data, JSONConstants::getFailedToDeleteKeys()));
 
         return $result;
