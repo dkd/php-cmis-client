@@ -1054,10 +1054,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      */
     protected function getCached(array $identifier)
     {
-        if ($this->isCached($identifier)) {
-            return $this->objectCache[$identifier[0]][$identifier[1]];
-        }
-        return null;
+        return $this->objectCache[$identifier[0]][$identifier[1]] ?? null;
     }
 
 	/**

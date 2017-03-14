@@ -152,7 +152,7 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
     {
         $this->session = $session;
         $succinct = $session->get(SessionParameter::BROWSER_SUCCINCT);
-        $this->succinct = ($succinct === null ? true : (boolean) $succinct);
+        $this->succinct = $succinct ?? true;
 
         $this->dateTimeFormat = DateTimeFormat::cast($session->get(SessionParameter::BROWSER_DATETIME_FORMAT));
     }
@@ -173,11 +173,8 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
             $url = $repositoryUrlCache->buildUrl($this->getServiceUrl());
         } else {
             // use URL of the specified repository
-            $url = $repositoryUrlCache->getRepositoryUrl($repositoryId, Constants::SELECTOR_REPOSITORY_INFO);
-            if ($url === null) {
-                // repository infos haven't been fetched yet -> get them all
-                $url = $repositoryUrlCache->buildUrl($this->getServiceUrl());
-            }
+            $url = $repositoryUrlCache->getRepositoryUrl($repositoryId, Constants::SELECTOR_REPOSITORY_INFO) ??
+                $repositoryUrlCache->buildUrl($this->getServiceUrl());
         }
 
         $repositoryInfos = [];
@@ -233,12 +230,7 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
      */
     protected function getServiceUrl()
     {
-        $browserUrl = $this->getSession()->get(SessionParameter::BROWSER_URL);
-        if (is_string($browserUrl)) {
-            return $browserUrl;
-        }
-
-        return null;
+        return $this->getSession()->get(SessionParameter::BROWSER_URL);
     }
 
     /**
@@ -278,10 +270,7 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
      */
     protected function getHttpInvoker()
     {
-        /** @var Client $invoker */
-        $invoker = $this->cmisBindingsHelper->getHttpInvoker($this->getSession());
-
-        return $invoker;
+        return $this->cmisBindingsHelper->getHttpInvoker($this->getSession());
     }
 
     /**
@@ -421,8 +410,7 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
         $headers['form_params'] = $content;
 
         try {
-            /** @var Response $response */
-            $response = $this->getHttpInvoker()->post((string) $url, $headers);
+            return $this->getHttpInvoker()->post((string) $url, $headers);
         } catch (RequestException $exception) {
             throw $this->convertStatusCode(
                 $exception->getResponse()->getStatusCode(),
@@ -430,8 +418,6 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
                 $exception
             );
         }
-
-        return $response;
     }
 
     /**

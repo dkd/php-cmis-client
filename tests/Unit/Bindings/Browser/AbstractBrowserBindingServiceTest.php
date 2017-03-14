@@ -326,7 +326,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
     {
         $map = [
             [SessionParameter::BROWSER_SUCCINCT, null, false],
-            [SessionParameter::BROWSER_URL, null, 0]
+            [SessionParameter::BROWSER_URL, null, null]
         ];
 
         $sessionMock = $this->getSessionMock($map);

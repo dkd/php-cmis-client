@@ -75,11 +75,7 @@ class CmisBinding implements CmisBindingInterface
         //     @TODO add cache
         // }
 
-        if ($objectFactory !== null) {
-            $this->objectFactory = $objectFactory;
-        } else {
-            $this->objectFactory = new BindingsObjectFactory();
-        }
+        $this->objectFactory = $objectFactory ?? new BindingsObjectFactory();
         $this->repositoryService = new RepositoryService($this->session);
     }
 
