@@ -1,7 +1,7 @@
 <?php
 namespace Dkd\PhpCmis\Test\Unit\Bindings\Browser;
 
-/**
+/*
  * This file is part of php-cmis-lib.
  *
  * (c) Dimitri Ebert <dimitri.ebert@dkd.de>
@@ -19,6 +19,9 @@ use GuzzleHttp\Psr7\Response;
 use League\Url\Url;
 use PHPUnit_Framework_MockObject_MockObject;
 
+/**
+ * Class DiscoveryServiceTest
+ */
 class DiscoveryServiceTest extends AbstractBrowserBindingServiceTestCase
 {
     const CLASS_TO_TEST = DiscoveryService::class;

@@ -1,8 +1,8 @@
 <?php
 namespace Dkd\PhpCmis;
 
-/**
- * This file is part of php-cmis-lib.
+/*
+ * This file is part of php-cmis-client.
  *
  * (c) Sascha Egerer <sascha.egerer@dkd.de>
  *
@@ -14,8 +14,6 @@ namespace Dkd\PhpCmis;
  * Session parameter constants.
  *
  * @TODO Add description for all session parameters
- *
- * @author Sascha Egerer <sascha.egerer@dkd.de>
  */
 class SessionParameter
 {

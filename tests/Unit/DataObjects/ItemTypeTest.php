@@ -1,7 +1,7 @@
 <?php
 namespace Dkd\PhpCmis\Test\Unit\DataObjects;
 
-/**
+/*
  * This file is part of php-cmis-lib.
  *
  * (c) Sascha Egerer <sascha.egerer@dkd.de>
@@ -14,6 +14,9 @@ use Dkd\PhpCmis\DataObjects\ItemType;
 use Dkd\PhpCmis\DataObjects\ItemTypeDefinition;
 use PHPUnit_Framework_MockObject_MockObject;
 
+/**
+ * Class ItemTypeTest
+ */
 class ItemTypeTest extends \PHPUnit_Framework_TestCase
 {
     public function testConstructorSetsSession()

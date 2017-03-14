@@ -1,7 +1,7 @@
 <?php
 namespace Dkd\PhpCmis\Test\Fixtures\Php\Bindings;
 
-/**
+/*
  * This file is part of php-cmis-lib.
  *
  * (c) Sascha Egerer <sascha.egerer@dkd.de>

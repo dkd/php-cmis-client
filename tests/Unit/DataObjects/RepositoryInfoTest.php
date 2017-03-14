@@ -1,7 +1,7 @@
 <?php
 namespace Dkd\PhpCmis\Test\Unit\DataObjects;
 
-/**
+/*
  * This file is part of php-cmis-lib.
  *
  * (c) Sascha Egerer <sascha.egerer@dkd.de>
@@ -14,6 +14,9 @@ use Dkd\PhpCmis\DataObjects\RepositoryInfo;
 use Dkd\PhpCmis\Enum\BaseTypeId;
 use Dkd\PhpCmis\Enum\CmisVersion;
 
+/**
+ * Class RepositoryInfoTest
+ */
 class RepositoryInfoTest extends \PHPUnit_Framework_TestCase
 {
     const DO_NOT_TEST_INVALID_TYPE_VALUE = 'doNotTestInvalidType';

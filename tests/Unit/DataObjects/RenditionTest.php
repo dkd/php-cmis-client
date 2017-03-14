@@ -1,13 +1,7 @@
 <?php
 namespace Dkd\PhpCmis\Test\Unit;
 
-use Dkd\PhpCmis\Data\RepositoryInfoInterface;
-use Dkd\PhpCmis\DataObjects\ObjectId;
-use Dkd\PhpCmis\DataObjects\Rendition;
-use Dkd\PhpCmis\SessionInterface;
-use PHPUnit_Framework_MockObject_MockObject;
-
-/**
+/*
  * This file is part of php-cmis-lib.
  *
  * (c) Dimitri Ebert <dimitri.ebert@dkd.de>
@@ -16,6 +10,15 @@ use PHPUnit_Framework_MockObject_MockObject;
  * file that was distributed with this source code.
  */
 
+use Dkd\PhpCmis\Data\RepositoryInfoInterface;
+use Dkd\PhpCmis\DataObjects\ObjectId;
+use Dkd\PhpCmis\DataObjects\Rendition;
+use Dkd\PhpCmis\SessionInterface;
+use PHPUnit_Framework_MockObject_MockObject;
+
+/**
+ * Class RenditionTest
+ */
 class RenditionTest extends \PHPUnit_Framework_TestCase
 {
     use ReflectionHelperTrait;

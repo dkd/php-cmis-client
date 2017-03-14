@@ -1,7 +1,7 @@
 <?php
 namespace Dkd\PhpCmis\Test\Unit;
 
-/**
+/*
  * This file is part of php-cmis-client
  *
  * (c) Sascha Egerer <sascha.egerer@dkd.de>
@@ -17,6 +17,9 @@ use Dkd\PhpCmis\Session;
 use Dkd\PhpCmis\SessionParameter;
 use PHPUnit_Framework_MockObject_MockObject;
 
+/**
+ * Class SessionTest
+ */
 class SessionTest extends \PHPUnit_Framework_TestCase
 {
     public function testConstructorThrowsExceptionIfNoParametersGiven()

@@ -1,7 +1,7 @@
 <?php
 namespace Dkd\PhpCmis\Test\Unit\Converter;
 
-/**
+/*
  * This file is part of php-cmis-lib.
  *
  * (c) Sascha Egerer <sascha.egerer@dkd.de>
@@ -74,6 +74,9 @@ use Dkd\PhpCmis\Test\Unit\FixtureHelperTrait;
 use Dkd\PhpCmis\Test\Unit\ReflectionHelperTrait;
 use PHPUnit_Framework_MockObject_MockObject;
 
+/**
+ * Class JsonConverterTest
+ */
 class JsonConverterTest extends \PHPUnit_Framework_TestCase
 {
     use ReflectionHelperTrait;
@@ -799,7 +802,7 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
 
         $expectedDateTimeObject = new \DateTime('2014-11-18 09:37:47');
 
-        $this->assertEquals([$expectedDateTimeObject, $expectedDateTimeObject], $result);
+        $this->assertEquals([0 => $expectedDateTimeObject, 2 => $expectedDateTimeObject], $result);
     }
 
     public function testConvertDateTimeValueThrowsExceptionIfInvalidStringGiven()

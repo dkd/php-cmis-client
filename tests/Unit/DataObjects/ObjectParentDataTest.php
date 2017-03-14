@@ -1,7 +1,7 @@
 <?php
 namespace Dkd\PhpCmis\Test\Unit\DataObjects;
 
-/**
+/*
  * This file is part of php-cmis-lib.
  *
  * (c) Dimitri Ebert <dimitri.ebert@dkd.de>
@@ -12,6 +12,9 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
 
 use Dkd\PhpCmis\DataObjects\ObjectParentData;
 
+/**
+ * Class ObjectParentDataTest
+ */
 class ObjectParentDataTest extends \PHPUnit_Framework_TestCase
 {
     /**

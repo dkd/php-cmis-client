@@ -1,8 +1,8 @@
 <?php
 namespace Dkd\PhpCmis\Enum;
 
-/**
- * This file is part of php-cmis-lib.
+/*
+ * This file is part of php-cmis-client.
  *
  * (c) Sascha Egerer <sascha.egerer@dkd.de>
  *

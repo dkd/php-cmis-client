@@ -1,7 +1,7 @@
 <?php
 namespace Dkd\PhpCmis\Test\Unit\Bindings\Browser;
 
-/**
+/*
  * This file is part of php-cmis-lib.
  *
  * (c) Sascha Egerer <sascha.egerer@dkd.de>
@@ -35,6 +35,9 @@ use GuzzleHttp\Stream\StreamInterface;
 use League\Url\Url;
 use PHPUnit_Framework_MockObject_MockObject;
 
+/**
+ * Class ObjectServiceTest
+ */
 class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
 {
     const CLASS_TO_TEST = ObjectService::class;

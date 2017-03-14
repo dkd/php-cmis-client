@@ -1,7 +1,7 @@
 <?php
 namespace Dkd\PhpCmis\Test\Unit;
 
-/**
+/*
  * This file is part of php-cmis-lib.
  *
  * (c) Dimitri Ebert <dimitri.ebert@dkd.de>

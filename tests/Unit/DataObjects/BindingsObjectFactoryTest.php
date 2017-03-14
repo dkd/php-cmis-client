@@ -1,7 +1,7 @@
 <?php
 namespace Dkd\PhpCmis\Test\Unit\DataObjects;
 
-/**
+/*
  * This file is part of php-cmis-lib.
  *
  * (c) Sascha Egerer <sascha.egerer@dkd.de>
@@ -23,6 +23,9 @@ use Dkd\PhpCmis\DataObjects\PropertyStringDefinition;
 use Dkd\PhpCmis\DataObjects\PropertyUriDefinition;
 use Dkd\PhpCmis\Definitions\PropertyDefinitionInterface;
 
+/**
+ * Class BindingsObjectFactoryTest
+ */
 class BindingsObjectFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**

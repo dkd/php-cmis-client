@@ -1,6 +1,15 @@
 <?php
 namespace Dkd\PhpCmis\Converter;
 
+/*
+ * This file is part of php-cmis-client.
+ *
+ * (c) Sascha Egerer \sascha.egerer@dkd.de\
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 use Dkd\PhpCmis\Data\AclCapabilitiesInterface;
 use Dkd\PhpCmis\Data\AclInterface;
 use Dkd\PhpCmis\Data\AllowableActionsInterface;
@@ -25,12 +34,7 @@ use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
 use Dkd\PhpCmis\Definitions\TypeDefinitionListInterface;
 
 /**
- * This file is part of php-cmis-lib.
- *
- * (c) Sascha Egerer \sascha.egerer@dkd.de\
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * Interface DataConverterInterface
  */
 interface DataConverterInterface
 {
@@ -209,7 +213,7 @@ interface DataConverterInterface
      * @return AclCapabilitiesInterface
      */
     public function convertAclCapabilities(array $data = null);
-    
+
     /**
      * Convert given input data to a TypeDefinition object
      *
@@ -217,7 +221,7 @@ interface DataConverterInterface
      * @return TypeDefinitionInterface
      */
     public function convertTypeDefinition(array $data = null);
-    
+
     /**
      * Convert given input data to a PropertyDefinition object
      *
@@ -225,7 +229,7 @@ interface DataConverterInterface
      * @return PropertyDefinitionInterface
      */
     public function convertPropertyDefinition(array $data = null);
-    
+
     /**
      * Convert given input data to a TypeChildren object
      *
@@ -233,7 +237,7 @@ interface DataConverterInterface
      * @return TypeDefinitionListInterface
      */
     public function convertTypeChildren(array $data = null);
-    
+
     /**
      * Convert given input data to a TypeDescendants object
      *
@@ -241,7 +245,7 @@ interface DataConverterInterface
      * @return TypeDefinitionContainerInterface[]
      */
     public function convertTypeDescendants(array $data = null);
-    
+
     /**
      * Convert given input data to a ObjectData object
      *

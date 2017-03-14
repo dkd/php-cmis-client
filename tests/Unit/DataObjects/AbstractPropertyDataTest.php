@@ -1,7 +1,7 @@
 <?php
 namespace Dkd\PhpCmis\Test\Unit\DataObjects;
 
-/**
+/*
  * This file is part of php-cmis-client
  *
  * (c) Sascha Egerer <sascha.egerer@dkd.de>
@@ -14,6 +14,9 @@ use Dkd\PhpCmis\DataObjects\AbstractPropertyData;
 use Dkd\PhpCmis\Test\Unit\DataProviderCollectionTrait;
 use PHPUnit_Framework_MockObject_MockObject;
 
+/**
+ * Class AbstractPropertyDataTest
+ */
 class AbstractPropertyDataTest extends \PHPUnit_Framework_TestCase
 {
     use DataProviderCollectionTrait;

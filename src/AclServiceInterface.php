@@ -1,8 +1,8 @@
 <?php
 namespace Dkd\PhpCmis;
 
-/**
- * This file is part of php-cmis-lib.
+/*
+ * This file is part of php-cmis-client.
  *
  * (c) Sascha Egerer <sascha.egerer@dkd.de>
  *
@@ -14,6 +14,9 @@ use Dkd\PhpCmis\Data\AclInterface;
 use Dkd\PhpCmis\Data\ExtensionDataInterface;
 use Dkd\PhpCmis\Enum\AclPropagation;
 
+/**
+ * Interface AclServiceInterface
+ */
 interface AclServiceInterface
 {
     /**

@@ -1,8 +1,8 @@
 <?php
 namespace Dkd\PhpCmis\DataObjects;
 
-/**
- * This file is part of php-cmis-lib.
+/*
+ * This file is part of php-cmis-client.
  *
  * (c) Sascha Egerer <sascha.egerer@dkd.de>
  *
@@ -40,6 +40,9 @@ use Dkd\PhpCmis\OperationContextInterface;
 use Dkd\PhpCmis\PropertyIds;
 use Dkd\PhpCmis\SessionInterface;
 
+/**
+ * Class AbstractCmisObject
+ */
 abstract class AbstractCmisObject implements CmisObjectInterface
 {
     /**

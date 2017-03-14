@@ -1,7 +1,7 @@
 <?php
 namespace Dkd\PhpCmis\Test\Unit\Bindings\Browser;
 
-/**
+/*
  * This file is part of php-cmis-client
  *
  * (c) Sascha Egerer <sascha.egerer@dkd.de>
@@ -52,6 +52,9 @@ use GuzzleHttp\Client;
 use League\Url\Url;
 use PHPUnit_Framework_MockObject_MockObject;
 
+/**
+ * Class AbstractBrowserBindingServiceTest
+ */
 class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTestCase
 {
     const CLASS_TO_TEST = AbstractBrowserBindingService::class;

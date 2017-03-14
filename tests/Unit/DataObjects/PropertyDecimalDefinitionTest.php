@@ -1,7 +1,7 @@
 <?php
 namespace Dkd\PhpCmis\Test\Unit\DataObjects;
 
-/**
+/*
  * This file is part of php-cmis-lib.
  *
  * (c) Sascha Egerer <sascha.egerer@dkd.de>
@@ -14,6 +14,9 @@ use Dkd\PhpCmis\DataObjects\PropertyDecimalDefinition;
 use Dkd\PhpCmis\Enum\DecimalPrecision;
 use Dkd\PhpCmis\Test\Unit\DataProviderCollectionTrait;
 
+/**
+ * Class PropertyDecimalDefinitionTest
+ */
 class PropertyDecimalDefinitionTest extends \PHPUnit_Framework_TestCase
 {
     use DataProviderCollectionTrait;
