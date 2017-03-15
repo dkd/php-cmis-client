@@ -347,7 +347,7 @@ class JsonConverter extends AbstractDataConverter
         }
 
         $object = new CreatablePropertyTypes();
-
+        $canCreate = [];
         foreach ($data[JSONConstants::JSON_CAP_CREATABLE_PROPERTY_TYPES_CANCREATE] ?? [] as $canCreateItem) {
             try {
                 $canCreate[] = PropertyType::cast($canCreateItem);
