@@ -406,7 +406,7 @@ class JsonConverter extends AbstractDataConverter
                 $ace = new AccessControlEntry($principal, $permissions);
 
                 if (isset($aceData[JSONConstants::JSON_ACE_IS_DIRECT])) {
-                    $ace->setIsDirect((boolean) $aceData[JSONConstants::JSON_ACE_IS_DIRECT] ?? false);
+                    $ace->setIsDirect((boolean) ($aceData[JSONConstants::JSON_ACE_IS_DIRECT] ?? false));
                 }
 
                 $ace->setExtensions($this->convertExtension($aceData, JSONConstants::getAceKeys()));
@@ -786,7 +786,7 @@ class JsonConverter extends AbstractDataConverter
         $object = new ObjectData();
         $acl = $this->convertAcl(
             $data[JSONConstants::JSON_OBJECT_ACL] ?? [],
-            (boolean) $data[JSONConstants::JSON_OBJECT_EXACT_ACL] ?? false
+            (boolean) ($data[JSONConstants::JSON_OBJECT_EXACT_ACL] ?? false)
         );
         if ($acl !== null) {
             $object->setAcl($acl);
@@ -816,7 +816,7 @@ class JsonConverter extends AbstractDataConverter
             $object->setChangeEventInfo($changeEventInfo);
         }
 
-        $object->setIsExactAcl((boolean) $data[JSONConstants::JSON_OBJECT_EXACT_ACL] ?? false);
+        $object->setIsExactAcl((boolean) ($data[JSONConstants::JSON_OBJECT_EXACT_ACL] ?? false));
         $object->setPolicyIds($this->convertPolicyIdList($data[JSONConstants::JSON_OBJECT_POLICY_IDS] ?? null));
 
         /**
@@ -1492,7 +1492,7 @@ class JsonConverter extends AbstractDataConverter
         }
 
         $result->setList($types);
-        $result->setHasMoreItems($data[JSONConstants::JSON_TYPESLIST_HAS_MORE_ITEMS] ?? false);
+        $result->setHasMoreItems((boolean) ($data[JSONConstants::JSON_TYPESLIST_HAS_MORE_ITEMS] ?? false));
         $result->setNumItems($data[JSONConstants::JSON_TYPESLIST_NUM_ITEMS] ?? 0);
         $result->setExtensions($this->convertExtension($data, JSONConstants::getTypesListKeys()));
 
