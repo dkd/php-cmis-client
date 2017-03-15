@@ -32,12 +32,16 @@ use Dkd\PhpCmis\Exception\CmisRuntimeException;
 use Dkd\PhpCmis\Exception\CmisUnauthorizedException;
 use Dkd\PhpCmis\SessionParameter;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Stream\StreamInterface;
-use GuzzleHttp\Exception\RequestException;
-use function json_decode;
 use League\Url\Url;
 use Psr\Http\Message\ResponseInterface;
+use function basename;
+use function is_array;
+use function is_object;
+use function is_resource;
+use function json_decode;
 
 /**
  * Base class for all Browser Binding client services.
@@ -430,7 +434,11 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
      */
     protected function post(Url $url, $content = [], array $headers = [])
     {
-        $headers['form_params'] = $content;
+        if (is_resource($content) || is_object($content)) {
+            $headers['body'] = $content;
+        } elseif (is_array($content)) {
+            $headers['multipart'] = $this->convertQueryArrayToMultiPart($content);
+        }
 
         try {
             return $this->getHttpInvoker()->post((string) $url, $headers);
@@ -441,6 +449,39 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
                 $exception
             );
         }
+    }
+
+    /**
+     * @param array $queryArray
+     * @param null $prefix
+     * @return array
+     */
+    protected function convertQueryArrayToMultiPart(array $queryArray, $prefix = null)
+    {
+        $multipart = [];
+        foreach ($queryArray as $name => $value) {
+            $prefixedName = $prefix ? $prefix . '[' . $name . ']' : $name;
+            if (is_array($value)) {
+                $multipart = array_merge($multipart, $this->convertQueryArrayToMultiPart($value, $prefixedName));
+            } elseif ($value instanceof StreamInterface) {
+                $streamPart = [
+                    'name' => '',
+                    'contents' => $value,
+                    'filename' => basename( $value->getMetadata('uri'))
+                ];
+                $mimetype = $value->getMetadata('mimetype');
+                if ($mimetype) {
+                    $streamPart['headers'] = ['Content-type' => $mimetype];
+                }
+                $multipart[] = $streamPart;
+            } else {
+                $multipart[] = [
+                    'name' => $prefix ? $prefixedName : $name,
+                    'contents' => $value
+                ];
+            }
+        }
+        return $multipart;
     }
 
     /**

@@ -233,7 +233,9 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
             )->willReturn(Url::createFromUrl(self::BROWSER_URL_TEST));
         }
 
-        $expectedPostData['body'] = $expectedContentStream;
+        if ($expectedContentStream) {
+            $expectedPostData['content'] = $expectedContentStream;
+        }
 
         $objectService->expects($this->atLeastOnce())->method('post')->with(
             $expectedUrl,
