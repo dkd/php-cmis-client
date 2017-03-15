@@ -10,9 +10,9 @@ namespace Dkd\PhpCmis\Data;
  * file that was distributed with this source code.
  */
 
+use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
 use Dkd\PhpCmis\SessionInterface;
 use Dkd\PhpCmis\TreeInterface;
-use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
 
 /**
  * Object Type.

@@ -11,9 +11,9 @@ namespace Dkd\PhpCmis\CmisObject;
  */
 
 use Dkd\PhpCmis\Data\ObjectTypeInterface;
+use Dkd\PhpCmis\Data\PropertyInterface;
 use Dkd\PhpCmis\Data\SecondaryTypeInterface;
 use Dkd\PhpCmis\Enum\BaseTypeId;
-use Dkd\PhpCmis\Data\PropertyInterface;
 
 /**
  * Accessors to CMIS object properties.

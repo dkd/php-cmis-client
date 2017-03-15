@@ -10,17 +10,7 @@ namespace Dkd\PhpCmis\DataObjects;
  * file that was distributed with this source code.
  */
 
-use Dkd\PhpCmis\Data\CreatablePropertyTypesInterface;
-use Dkd\PhpCmis\Data\NewTypeSettableAttributesInterface;
-use Dkd\PhpCmis\Data\RepositoryCapabilitiesInterface;
 use Dkd\PhpCmis\Definitions\TypeMutabilityInterface;
-use Dkd\PhpCmis\Enum\CapabilityAcl;
-use Dkd\PhpCmis\Enum\CapabilityChanges;
-use Dkd\PhpCmis\Enum\CapabilityContentStreamUpdates;
-use Dkd\PhpCmis\Enum\CapabilityJoin;
-use Dkd\PhpCmis\Enum\CapabilityOrderBy;
-use Dkd\PhpCmis\Enum\CapabilityQuery;
-use Dkd\PhpCmis\Enum\CapabilityRenditions;
 
 /**
  * Type mutability flags.

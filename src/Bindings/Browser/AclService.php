@@ -10,8 +10,8 @@ namespace Dkd\PhpCmis\Bindings\Browser;
  * file that was distributed with this source code.
  */
 
-use Dkd\PhpCmis\Data\AclInterface;
 use Dkd\PhpCmis\AclServiceInterface;
+use Dkd\PhpCmis\Data\AclInterface;
 use Dkd\PhpCmis\Data\ExtensionDataInterface;
 use Dkd\PhpCmis\Enum\AclPropagation;
 

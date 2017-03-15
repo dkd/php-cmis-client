@@ -11,10 +11,6 @@ namespace Dkd\PhpCmis\DataObjects;
  */
 
 use Dkd\PhpCmis\Data\ItemInterface;
-use Dkd\PhpCmis\Data\ObjectDataInterface;
-use Dkd\PhpCmis\Data\ObjectTypeInterface;
-use Dkd\PhpCmis\OperationContextInterface;
-use Dkd\PhpCmis\SessionInterface;
 
 /**
  * Cmis Item implementation

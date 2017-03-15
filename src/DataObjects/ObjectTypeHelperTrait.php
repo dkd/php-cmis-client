@@ -11,7 +11,6 @@ namespace Dkd\PhpCmis\DataObjects;
  */
 
 use Dkd\PhpCmis\Data\ObjectTypeInterface;
-use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
 use Dkd\PhpCmis\Enum\BaseTypeId;
 use Dkd\PhpCmis\SessionInterface;
 use Dkd\PhpCmis\TreeInterface;

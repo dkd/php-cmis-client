@@ -11,11 +11,11 @@ namespace Dkd\PhpCmis\Data;
  */
 
 use Dkd\PhpCmis\CmisObject\CmisObjectInterface;
+use Dkd\PhpCmis\Enum\UnfileObject;
+use Dkd\PhpCmis\Enum\VersioningState;
 use Dkd\PhpCmis\OperationContextInterface;
 use Dkd\PhpCmis\TreeInterface;
 use GuzzleHttp\Stream\StreamInterface;
-use Dkd\PhpCmis\Enum\UnfileObject;
-use Dkd\PhpCmis\Enum\VersioningState;
 
 /**
  * CMIS folder interface.

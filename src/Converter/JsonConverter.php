@@ -10,11 +10,6 @@ namespace Dkd\PhpCmis\Converter;
  * file that was distributed with this source code.
  */
 
-use function array_diff_key;
-use function array_filter;
-use function array_flip;
-use function array_map;
-use function array_walk;
 use Dkd\Enumeration\Exception\InvalidEnumerationValueException;
 use Dkd\PhpCmis\Bindings\Browser\JSONConstants;
 use Dkd\PhpCmis\Converter\Types\TypeConverterInterface;
@@ -107,6 +102,10 @@ use Dkd\PhpCmis\Enum\SupportedPermissions;
 use Dkd\PhpCmis\Enum\Updatability;
 use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
 use Dkd\PhpCmis\Exception\CmisRuntimeException;
+use function array_diff_key;
+use function array_filter;
+use function array_flip;
+use function array_map;
 use function is_array;
 
 /**

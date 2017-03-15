@@ -11,8 +11,6 @@ namespace Dkd\PhpCmis\Definitions;
  */
 
 use Dkd\PhpCmis\Data\ExtensionDataInterface;
-use Dkd\PhpCmis\Definitions\PropertyDefinitionInterface;
-use Dkd\PhpCmis\Definitions\TypeMutabilityInterface;
 use Dkd\PhpCmis\Enum\BaseTypeId;
 
 /**

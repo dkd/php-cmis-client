@@ -12,13 +12,12 @@ namespace Dkd\PhpCmis\Bindings\Browser;
 
 use Dkd\PhpCmis\Constants;
 use Dkd\PhpCmis\Data\AclInterface;
-use Dkd\PhpCmis\PropertyIds;
-use GuzzleHttp\Stream\StreamInterface;
 use Dkd\PhpCmis\Data\ExtensionDataInterface;
 use Dkd\PhpCmis\Data\ObjectDataInterface;
 use Dkd\PhpCmis\Data\PropertiesInterface;
-use Dkd\PhpCmis\VersioningServiceInterface;
 use Dkd\PhpCmis\Enum\IncludeRelationships;
+use Dkd\PhpCmis\VersioningServiceInterface;
+use GuzzleHttp\Stream\StreamInterface;
 
 /**
  * Versioning Service Browser Binding client.
