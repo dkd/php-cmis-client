@@ -26,9 +26,8 @@ use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
 use Dkd\PhpCmis\ObjectServiceInterface;
 use Dkd\PhpCmis\PropertyIds;
 use Dkd\PhpCmis\SessionParameter;
+use Guzzle\Http\Message\Response;
 use GuzzleHttp\Stream\LimitStream;
-use GuzzleHttp\Message\Response;
-use GuzzleHttp\Stream\Stream;
 use GuzzleHttp\Stream\StreamInterface;
 
 /**
@@ -185,21 +184,19 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
             $queryArray[Constants::PARAM_VERSIONING_STATE] = (string) $versioningState;
         }
 
+        if ($contentStream) {
+            $queryArray['content'] = $contentStream;
+        }
+
         $newObject = $this->getJsonConverter()->convertObject(
             (array) $this->postJson(
                 $url,
-                array_merge(
-                    $queryArray,
-                    ['body' => $contentStream]
-                )
+                $queryArray
             )
         );
 
         if ($newObject) {
             $newObjectId = $newObject->getId();
-            if ($contentStream) {
-                $this->setContentStream($repositoryId, $newObjectId, $contentStream);
-            }
             return $newObjectId;
         }
         return null;
@@ -579,10 +576,10 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         }
 
         /** @var Response $response */
-        $response = $this->getHttpInvoker()->get($url);
+        $response = $this->getHttpInvoker()->get((string) $url);
 
         $contentStream = $response->getBody();
-        if (!$contentStream instanceof StreamInterface) {
+        if (!$contentStream) {
             return null;
         }
 

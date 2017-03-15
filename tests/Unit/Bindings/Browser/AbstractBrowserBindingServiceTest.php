@@ -614,7 +614,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         )->getMock();
         $httpInvokerMock->expects($this->once())->method('post')->with(
             $testUrl,
-            ['form_params' => $content]
+            []
         )->willReturn($responseMock);
 
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
@@ -647,7 +647,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         $exceptionMock->expects($this->any())->method('getResponse')->willReturn($responseMock);
         $httpInvokerMock->expects($this->once())->method('post')->with(
             (string) $testUrl,
-            ['form_params' => $content]
+            []
         )->willThrowException(
             $exceptionMock
         );
