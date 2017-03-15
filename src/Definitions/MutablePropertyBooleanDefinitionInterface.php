@@ -10,8 +10,6 @@ namespace Dkd\PhpCmis\Definitions;
  * file that was distributed with this source code.
  */
 
-use Dkd\PhpCmis\DataObjects\PropertyBooleanDefinition;
-
 /**
  * Mutable Property definition of a boolean property.
  */

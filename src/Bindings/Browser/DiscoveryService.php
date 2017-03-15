@@ -11,11 +11,9 @@ namespace Dkd\PhpCmis\Bindings\Browser;
  */
 
 use Dkd\PhpCmis\Constants;
-use Dkd\PhpCmis\Data;
 use Dkd\PhpCmis\Data\ExtensionDataInterface;
 use Dkd\PhpCmis\Data\ObjectListInterface;
 use Dkd\PhpCmis\DiscoveryServiceInterface;
-use Dkd\PhpCmis\Enum;
 use Dkd\PhpCmis\Enum\IncludeRelationships;
 
 /**

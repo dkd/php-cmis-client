@@ -11,11 +11,11 @@ namespace Dkd\PhpCmis;
  */
 
 use Dkd\PhpCmis\Data\AclInterface;
-use GuzzleHttp\Stream\StreamInterface;
 use Dkd\PhpCmis\Data\ExtensionDataInterface;
 use Dkd\PhpCmis\Data\ObjectDataInterface;
 use Dkd\PhpCmis\Data\PropertiesInterface;
 use Dkd\PhpCmis\Enum\IncludeRelationships;
+use GuzzleHttp\Stream\StreamInterface;
 
 /**
  * Versioning Service interface.

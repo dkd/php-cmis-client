@@ -15,7 +15,6 @@ use Dkd\PhpCmis\AclServiceInterface;
 use Dkd\PhpCmis\Bindings\Browser\RepositoryService;
 use Dkd\PhpCmis\Data\BindingsObjectFactoryInterface;
 use Dkd\PhpCmis\DataObjects\BindingsObjectFactory;
-use Dkd\PhpCmis\VersioningServiceInterface;
 use Dkd\PhpCmis\DiscoveryServiceInterface;
 use Dkd\PhpCmis\Enum\BindingType;
 use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
@@ -27,6 +26,7 @@ use Dkd\PhpCmis\PolicyServiceInterface;
 use Dkd\PhpCmis\RelationshipServiceInterface;
 use Dkd\PhpCmis\RepositoryServiceInterface;
 use Dkd\PhpCmis\SessionParameter;
+use Dkd\PhpCmis\VersioningServiceInterface;
 use Doctrine\Common\Cache\Cache;
 
 /**

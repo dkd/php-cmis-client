@@ -16,6 +16,7 @@ use Dkd\PhpCmis\Data\AceInterface;
 use Dkd\PhpCmis\Data\ContentStreamHashInterface;
 use Dkd\PhpCmis\Data\DocumentInterface;
 use Dkd\PhpCmis\Data\ObjectIdInterface;
+use Dkd\PhpCmis\Data\PolicyInterface;
 use Dkd\PhpCmis\Enum\CmisVersion;
 use Dkd\PhpCmis\Enum\IncludeRelationships;
 use Dkd\PhpCmis\Enum\Updatability;
@@ -24,7 +25,6 @@ use Dkd\PhpCmis\Exception\CmisNotSupportedException;
 use Dkd\PhpCmis\Exception\CmisRuntimeException;
 use Dkd\PhpCmis\Exception\CmisVersioningException;
 use Dkd\PhpCmis\OperationContextInterface;
-use Dkd\PhpCmis\Data\PolicyInterface;
 use Dkd\PhpCmis\PropertyIds;
 use GuzzleHttp\Stream\StreamInterface;
 

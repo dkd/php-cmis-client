@@ -10,9 +10,9 @@ namespace Dkd\PhpCmis\Converter;
  * file that was distributed with this source code.
  */
 
+use Dkd\PhpCmis\Exception\CmisRuntimeException;
 use function array_filter;
 use function array_map;
-use Dkd\PhpCmis\Exception\CmisRuntimeException;
 
 /**
  * An Abstract data converter that contains some basic converter methods
