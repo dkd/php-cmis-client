@@ -16,7 +16,16 @@ be also usable for this PHP CMIS Library.
 Some basic examples can be found in the example folder
 (code is not nice but shows how it works).
 
-The functionality is not complete yet but still under development.
+The functionality is largely complete, we are happy about PRs if you require something not implemented yet.
+
+Server Requirements
+------------------------------
+Currently only the **Browser binding** is implemented. This means you need **Alfresco 4.2** or higher or some other CMIS server supporting the Browser binding.
+We are open about merging additional bindings but are not developing them at the moment.
+
+External Usage
+------------------------------
+As far as we know the major dependants of this library are the CMIS extensions for [TYPO3 CMS](https://github.com/dkd/typo3-ext-cmis-service) and [Drupal 8](https://www.drupal.org/project/cmis).
 
 Currently implemented Services
 ------------------------------
