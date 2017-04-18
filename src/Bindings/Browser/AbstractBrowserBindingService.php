@@ -601,6 +601,9 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
 			$value = $value ? 'true' : 'false';
 		}
 
+        if (is_bool($value))
+            return $value ? 'true' : 'false';
+
         return $value;
     }
 
