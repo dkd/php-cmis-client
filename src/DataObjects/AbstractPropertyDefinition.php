@@ -262,7 +262,7 @@ abstract class AbstractPropertyDefinition extends AbstractExtensionData implemen
     /**
      * @return ChoiceInterface[]
      */
-    public function getChoices()
+    public function getChoice()
     {
         return $this->choices;
     }
@@ -270,7 +270,7 @@ abstract class AbstractPropertyDefinition extends AbstractExtensionData implemen
     /**
      * @param ChoiceInterface[] $choices
      */
-    public function setChoices(array $choices)
+    public function setChoice(array $choices)
     {
         $this->choices = $choices;
     }
