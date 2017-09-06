@@ -833,7 +833,7 @@ class JsonConverter extends AbstractDataConverter
         } else {
             $properties = $this->convertProperties(
                 $data[JSONConstants::JSON_OBJECT_PROPERTIES] ?? [],
-                (array) $data[JSONConstants::JSON_OBJECT_PROPERTIES_EXTENSION] ?? []
+                $data[JSONConstants::JSON_OBJECT_PROPERTIES_EXTENSION] ?? []
             );
         }
 
