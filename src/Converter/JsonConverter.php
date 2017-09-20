@@ -829,11 +829,12 @@ class JsonConverter extends AbstractDataConverter
         if (isset($data[JSONConstants::JSON_OBJECT_SUCCINCT_PROPERTIES])) {
             $properties = $this->convertSuccinctProperties(
                 $data[JSONConstants::JSON_OBJECT_SUCCINCT_PROPERTIES] ?? [],
-                $data[JSONConstants::JSON_OBJECT_PROPERTIES_EXTENSION] ?? []);
+                (array) ($data[JSONConstants::JSON_OBJECT_PROPERTIES_EXTENSION] ?? [])
+            );
         } else {
             $properties = $this->convertProperties(
                 $data[JSONConstants::JSON_OBJECT_PROPERTIES] ?? [],
-                (array) $data[JSONConstants::JSON_OBJECT_PROPERTIES_EXTENSION] ?? []
+                (array) ($data[JSONConstants::JSON_OBJECT_PROPERTIES_EXTENSION] ?? [])
             );
         }
 
