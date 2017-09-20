@@ -918,7 +918,7 @@ class JsonConverter extends AbstractDataConverter
             $property = $this->getPropertyByPropertyType(
                 $propertyType,
                 $id,
-                (array) $propertyData[JSONConstants::JSON_PROPERTY_VALUE] ?? []
+                (array) ($propertyData[JSONConstants::JSON_PROPERTY_VALUE] ?? [])
             );
             $property->populate(
                 $propertyData,
@@ -1645,7 +1645,7 @@ class JsonConverter extends AbstractDataConverter
         $objectList = new ObjectList();
         $objects = [];
 
-        foreach ((array) $data[JSONConstants::JSON_OBJECTLIST_OBJECTS] ?? [] as $objectData) {
+        foreach ((array) ($data[JSONConstants::JSON_OBJECTLIST_OBJECTS] ?? []) as $objectData) {
             $object = $this->convertObject($objectData);
 
             if ($object !== null) {
@@ -1683,7 +1683,7 @@ class JsonConverter extends AbstractDataConverter
         $objectList = new ObjectList();
         $objects = [];
 
-        foreach ((array) ($data[JSONConstants::JSON_QUERYRESULTLIST_RESULTS]) ?? [] as $objectData) {
+        foreach ((array) ($data[JSONConstants::JSON_QUERYRESULTLIST_RESULTS] ?? []) as $objectData) {
             $object = $this->convertObject($objectData);
 
             if ($object !== null) {
