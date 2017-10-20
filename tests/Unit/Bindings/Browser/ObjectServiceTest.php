@@ -608,7 +608,11 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
             $objectId
         )->willReturn(Url::createFromUrl(self::BROWSER_URL_TEST));
         $objectService->expects($this->atLeastOnce())->method('post')->with(
-            $expectedUrl
+              $expectedUrl,
+              [
+                  'cmisaction' => 'delete',
+                  'allVersions' => $allVersions ? 'true' : 'false'
+              ]
         )->willReturn($responseMock);
 
         $objectService->deleteObject(
@@ -629,7 +633,6 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
             [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
-                    . '?cmisaction=delete&allVersions=true'
                 ),
                 'repositoryId',
                 'objectId',
@@ -638,7 +641,6 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
             [
                 Url::createFromUrl(
                     self::BROWSER_URL_TEST
-                    . '?cmisaction=delete&allVersions=false'
                 ),
                 'repositoryId',
                 'objectId',
