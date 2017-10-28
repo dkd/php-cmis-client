@@ -478,14 +478,12 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         ExtensionDataInterface $extension = null
     ) {
         $url = $this->getObjectUrl($repositoryId, $objectId);
-        $url->getQuery()->modify(
-            [
-                Constants::CONTROL_CMISACTION => Constants::CMISACTION_DELETE,
-                Constants::PARAM_ALL_VERSIONS => $allVersions ? 'true' : 'false',
-            ]
-        );
+        $content = [
+           Constants::CONTROL_CMISACTION => Constants::CMISACTION_DELETE,
+           Constants::PARAM_ALL_VERSIONS => $allVersions ? 'true' : 'false',
+           ];
 
-        $this->post($url);
+        $this->post($url, $content);
         $this->flushCached();
     }
 
