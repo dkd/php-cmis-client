@@ -429,8 +429,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
         }
 
         $properties = [
-            PropertyIds::NAME,
-            $newName
+            PropertyIds::NAME => $newName,
         ];
 
         $object = $this->updateProperties($properties, $refresh);
