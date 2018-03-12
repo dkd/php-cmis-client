@@ -65,8 +65,8 @@ class AbstractTypeDefinitionTest extends \PHPUnit_Framework_TestCase
         foreach ($this->stringProperties as $propertyName) {
             foreach ($this->stringCastDataProvider() as $stringPropertyTestValues) {
                 $testDataSet = $stringPropertyTestValues;
-                // allow/expect null value for property parentTypeId
-                if ($testDataSet[1] === null && $propertyName === 'parentTypeId') {
+                // allow/expect null value for some properties
+                if ($testDataSet[1] === null && ($propertyName === 'parentTypeId' || $propertyName === 'localNamespace')) {
                     $testDataSet[0] = null;
                 }
                 array_unshift($testDataSet, $propertyName);
