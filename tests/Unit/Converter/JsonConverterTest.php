@@ -1190,4 +1190,27 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
 
         return $data;
     }
+
+    public function testConvertPropertyDefinitionIgnoresUnrecognizedProperty()
+    {
+      $propertyDefinitions = $this->getResponseFixtureContentAsArray(
+          'Cmis/v1.1/BrowserBinding/getTypeDefinitionHidden-response.log'
+      )['propertyDefinitions'];
+      $expectedObjects = require(__DIR__ . '/../../Fixtures/Php/PropertyDefinitionsFixture.php');
+
+      $extensions = [new CmisExtensionElement(
+          null,
+          'isHidden',
+          [],
+          true
+      )];
+      $expectedObjects['cmis:id']->setExtensions($extensions);
+
+      $this->assertEquals(
+        $expectedObjects['cmis:id'],
+        $this->jsonConverter->convertPropertyDefinition(
+          $propertyDefinitions['cmis:id']
+        )
+      );
+    }
 }

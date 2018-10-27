@@ -1,0 +1,35 @@
+{
+    "fulltextIndexed":false,
+    "localName":"cmis:folder",
+    "fileable":true,
+    "includedInSupertypeQuery":true,
+    "queryName":"cmis:folder",
+    "controllablePolicy":false,
+    "creatable":true,
+    "id":"cmis:folder",
+    "propertyDefinitions":{
+        "cmis:id":{
+            "localName":"cmis:idValue",
+            "queryName":"cmis:idValue",
+            "inherited":false,
+            "openChoice":false,
+            "id":"cmis:id",
+            "orderable":true,
+            "propertyType":"id",
+            "description":"This is a id property.",
+            "updatability":"readonly",
+            "localNamespace":"local",
+            "displayName":"Id property",
+            "required":true,
+            "cardinality":"single",
+            "queryable":true,
+            "isHidden": true
+        }
+    },
+    "controllableACL":true,
+    "description":"Description of CMIS Folder Type",
+    "localNamespace":"local",
+    "displayName":"CMIS Folder",
+    "baseId":"cmis:folder",
+    "queryable":false
+}
