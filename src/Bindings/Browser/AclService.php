@@ -64,7 +64,7 @@ class AclService extends AbstractBrowserBindingService implements AclServiceInte
         ExtensionDataInterface $extension = null
     ) {
         $url = $this->getObjectUrl($repositoryId, $objectId, Constants::SELECTOR_ACL);
-        $responseData = $this->read($url)->json();
+        $responseData = $this->readJson($url);
         return $this->getJsonConverter()->convertAcl($responseData);
     }
 }
