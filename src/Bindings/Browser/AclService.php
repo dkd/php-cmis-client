@@ -11,6 +11,7 @@ namespace Dkd\PhpCmis\Bindings\Browser;
  */
 
 use Dkd\PhpCmis\AclServiceInterface;
+use Dkd\PhpCmis\Constants;
 use Dkd\PhpCmis\Data\AclInterface;
 use Dkd\PhpCmis\Data\ExtensionDataInterface;
 use Dkd\PhpCmis\Enum\AclPropagation;
@@ -62,6 +63,8 @@ class AclService extends AbstractBrowserBindingService implements AclServiceInte
         $onlyBasicPermissions = true,
         ExtensionDataInterface $extension = null
     ) {
-        // TODO: Implement getAcl() method.
+        $url = $this->getObjectUrl($repositoryId, $objectId, Constants::SELECTOR_ACL);
+        $responseData = $this->read($url)->json();
+        return $this->getJsonConverter()->convertAcl($responseData);
     }
 }

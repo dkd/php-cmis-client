@@ -752,7 +752,7 @@ class Session implements SessionInterface
      */
     public function getAcl(ObjectIdInterface $objectId, $onlyBasicPermissions)
     {
-        // TODO: Implement getAcl() method.
+        return $this->getBinding()->getAclService()->getAcl($this->getRepositoryId(), $objectId->getId(), $onlyBasicPermissions);
     }
 
     /**
