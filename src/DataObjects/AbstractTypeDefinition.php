@@ -169,7 +169,7 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
      */
     public function setLocalNamespace($localNamespace)
     {
-        $this->localNamespace = $this->castValueToSimpleType('string', $localNamespace);
+        $this->localNamespace = $this->castValueToSimpleType('string', $localNamespace, true);
     }
 
     /**
