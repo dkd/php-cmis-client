@@ -1555,7 +1555,7 @@ class JsonConverter extends AbstractDataConverter
         $objectInFolderList = new ObjectInFolderList();
         $objectInFolderList->setObjects($objects);
         $objectInFolderList->setHasMoreItems((boolean) ($data[JSONConstants::JSON_OBJECTINFOLDERLIST_HAS_MORE_ITEMS] ?? false));
-        $objectInFolderList->setNumItems((integer) $data[JSONConstants::JSON_OBJECTINFOLDERLIST_NUM_ITEMS] ?? count($objects));
+        $objectInFolderList->setNumItems((integer)($data[JSONConstants::JSON_OBJECTINFOLDERLIST_NUM_ITEMS] ?? count($objects)));
         $objectInFolderList->setExtensions($this->convertExtension($data, JSONConstants::getObjectInFolderListKeys()));
 
         return $objectInFolderList;
