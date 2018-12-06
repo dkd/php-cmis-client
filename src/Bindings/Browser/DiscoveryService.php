@@ -120,8 +120,7 @@ class DiscoveryService extends AbstractBrowserBindingService implements Discover
     ) {
         $url = $this->getRepositoryUrl($repositoryId);
 
-        $url->getQuery()->modify(
-            [
+        $content =  [
                 Constants::CONTROL_CMISACTION => Constants::CMISACTION_QUERY,
                 Constants::PARAM_STATEMENT => (string) $statement,
                 Constants::PARAM_SEARCH_ALL_VERSIONS => $searchAllVersions ? 'true' : 'false',
@@ -129,17 +128,16 @@ class DiscoveryService extends AbstractBrowserBindingService implements Discover
                 Constants::PARAM_RENDITION_FILTER => $renditionFilter,
                 Constants::PARAM_SKIP_COUNT => (string) $skipCount,
                 Constants::PARAM_DATETIME_FORMAT => (string) $this->getDateTimeFormat()
-            ]
-        );
+            ];
 
         if ($includeRelationships !== null) {
-            $url->getQuery()->modify([Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships]);
+            $content[Constants::PARAM_RELATIONSHIPS] = (string) $includeRelationships;
         }
 
         if ($maxItems > 0) {
-            $url->getQuery()->modify([Constants::PARAM_MAX_ITEMS => (string) $maxItems]);
+            $content[Constants::PARAM_MAX_ITEMS] = (string) $maxItems;
         }
 
-        return $this->getJsonConverter()->convertQueryResultList((array) $this->postJson($url));
+        return $this->getJsonConverter()->convertQueryResultList((array) $this->postJson($url, $content));
     }
 }

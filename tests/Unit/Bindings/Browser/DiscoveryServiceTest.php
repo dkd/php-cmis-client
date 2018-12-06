@@ -29,6 +29,7 @@ class DiscoveryServiceTest extends AbstractBrowserBindingServiceTestCase
     /**
      * @dataProvider queryDataProvider
      * @param $expectedUrl
+     * @param $expectedBody
      * @param string $repositoryId
      * @param string $statement
      * @param boolean $searchAllVersions
@@ -40,6 +41,7 @@ class DiscoveryServiceTest extends AbstractBrowserBindingServiceTestCase
      */
     public function testQueryReturnsNullIfRepositoryReturnsEmptyResponse(
         $expectedUrl,
+        $expectedBody,
         $repositoryId,
         $statement,
         $searchAllVersions = false,
@@ -70,7 +72,7 @@ class DiscoveryServiceTest extends AbstractBrowserBindingServiceTestCase
         $discoveryService->expects($this->once())->method('getRepositoryUrl')->with(
             $repositoryId
         )->willReturn(Url::createFromUrl(self::BROWSER_URL_TEST));
-        $discoveryService->expects($this->once())->method('post')->with($expectedUrl)->willReturn($responseMock);
+        $discoveryService->expects($this->once())->method('post')->with($expectedUrl, $expectedBody)->willReturn($responseMock);
 
         $this->assertSame(
             null,
@@ -90,6 +92,7 @@ class DiscoveryServiceTest extends AbstractBrowserBindingServiceTestCase
     /**
      * @dataProvider queryDataProvider
      * @param $expectedUrl
+     * @param $expectedBody
      * @param string $repositoryId
      * @param string $statement
      * @param boolean $searchAllVersions
@@ -101,6 +104,7 @@ class DiscoveryServiceTest extends AbstractBrowserBindingServiceTestCase
      */
     public function testQueryCallsPostFunctionWithParameterizedQuery(
         $expectedUrl,
+        $expectedBody,
         $repositoryId,
         $statement,
         $searchAllVersions = false,
@@ -138,7 +142,7 @@ class DiscoveryServiceTest extends AbstractBrowserBindingServiceTestCase
         $discoveryService->expects($this->once())->method('getRepositoryUrl')->with(
             $repositoryId
         )->willReturn(Url::createFromUrl(self::BROWSER_URL_TEST));
-        $discoveryService->expects($this->any())->method('post')->with($expectedUrl)->willReturn($responseMock);
+        $discoveryService->expects($this->any())->method('post')->with($expectedUrl, $expectedBody)->willReturn($responseMock);
 
         $discoveryService->query(
             $repositoryId,
@@ -155,6 +159,7 @@ class DiscoveryServiceTest extends AbstractBrowserBindingServiceTestCase
     /**
      * @dataProvider queryDataProvider
      * @param $expectedUrl
+     * @param $expectedBody
      * @param string $repositoryId
      * @param string $statement
      * @param boolean $searchAllVersions
@@ -166,6 +171,7 @@ class DiscoveryServiceTest extends AbstractBrowserBindingServiceTestCase
      */
     public function testQueryReturnObjectList(
         $expectedUrl,
+        $expectedBody,
         $repositoryId,
         $statement,
         $searchAllVersions = false,
@@ -206,7 +212,7 @@ class DiscoveryServiceTest extends AbstractBrowserBindingServiceTestCase
         $discoveryService->expects($this->once())->method('getRepositoryUrl')->with(
             $repositoryId
         )->willReturn(Url::createFromUrl(self::BROWSER_URL_TEST));
-        $discoveryService->expects($this->once())->method('post')->with($expectedUrl)->willReturn($responseMock);
+        $discoveryService->expects($this->once())->method('post')->with($expectedUrl, $expectedBody)->willReturn($responseMock);
 
         $expectedObjectList = new ObjectList();
         $expectedObjectList->setObjects(array_fill(0, $expectedNumberOfItems, new ObjectData()));
@@ -237,11 +243,18 @@ class DiscoveryServiceTest extends AbstractBrowserBindingServiceTestCase
     {
         return [
             [
-                Url::createFromUrl(
-                    self::BROWSER_URL_TEST . '?cmisaction=query&statement=SELECT%20*%20FROM%20cmis:document'
-                    . '&searchAllVersions=true&includeRelationships=none&renditionFilter=foo:bar'
-                    . '&includeAllowableActions=true&maxItems=99&skipCount=0&dateTimeFormat=simple'
-                ),
+                Url::createFromUrl(self::BROWSER_URL_TEST),
+                [
+                   'cmisaction' => 'query',
+                   'statement' => 'SELECT * FROM cmis:document',
+                   'searchAllVersions' => 'true',
+                   'includeRelationships' => 'none',
+                   'renditionFilter' => 'foo:bar',
+                   'includeAllowableActions' => 'true',
+                   'maxItems' => '99',
+                   'skipCount' => '0',
+                   'dateTimeFormat' => 'simple'
+                ],
                 'repositoryId',
                 'SELECT * FROM cmis:document',
                 true,
@@ -252,11 +265,17 @@ class DiscoveryServiceTest extends AbstractBrowserBindingServiceTestCase
                 0
             ],
             [
-                Url::createFromUrl(
-                    self::BROWSER_URL_TEST . '?cmisaction=query&statement=SELECT%20*%20FROM%20cmis:document'
-                    . '&searchAllVersions=false&includeRelationships=both&renditionFilter=foo:bar'
-                    . '&includeAllowableActions=false&skipCount=99&dateTimeFormat=simple'
-                ),
+                Url::createFromUrl(self::BROWSER_URL_TEST),
+                [
+                   'cmisaction' => 'query',
+                   'statement' => 'SELECT * FROM cmis:document',
+                   'searchAllVersions' => 'false',
+                   'includeRelationships' => 'both',
+                   'renditionFilter' => 'foo:bar',
+                   'includeAllowableActions' => 'false',
+                   'skipCount' => '99',
+                   'dateTimeFormat' => 'simple'
+                ],
                 'repositoryId',
                 'SELECT * FROM cmis:document',
                 false,
@@ -267,11 +286,16 @@ class DiscoveryServiceTest extends AbstractBrowserBindingServiceTestCase
                 99
             ],
             [
-                Url::createFromUrl(
-                    self::BROWSER_URL_TEST . '?cmisaction=query&statement=SELECT%20*%20FROM%20cmis:document'
-                    . '&searchAllVersions=false&renditionFilter=foo:bar'
-                    . '&includeAllowableActions=false&skipCount=99&dateTimeFormat=simple'
-                ),
+                Url::createFromUrl(self::BROWSER_URL_TEST ),
+                [
+                  'cmisaction' => 'query',
+                  'statement' => 'SELECT * FROM cmis:document',
+                  'searchAllVersions' => 'false',
+                  'renditionFilter' => 'foo:bar',
+                  'includeAllowableActions' => 'false',
+                  'skipCount' => '99',
+                  'dateTimeFormat' => 'simple'
+                ],
                 'repositoryId',
                 'SELECT * FROM cmis:document',
                 false,
