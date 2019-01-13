@@ -23,7 +23,7 @@
             "required":true,
             "cardinality":"single",
             "queryable":true,
-            "isHidden": true
+            "aCustomPropertyFromTheServer": true
         }
     },
     "controllableACL":true,
