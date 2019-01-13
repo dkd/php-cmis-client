@@ -43,6 +43,7 @@ $session = $sessionFactory->createSession($parameters);
 $rootFolder = $session->getRootFolder();
 
 echo '+ [ROOT FOLDER]: ' . $rootFolder->getName() . "\n";
+printAcl($rootFolder);
 
 printFolderContent($rootFolder);
 
@@ -70,17 +71,19 @@ function printFolderContent(\Dkd\PhpCmis\Data\FolderInterface $folder, $levelInd
     }
 }
 
-function printAcl(\Dkd\PhpCmis\CmisObject\CmisObjectInterface $item, $levelIndention)
+function printAcl(\Dkd\PhpCmis\CmisObject\CmisObjectInterface $item, $levelIndention = '')
 {
     $acl = $item->getAcl();
     if ($acl !== null) {
         foreach ($acl->getAces() as $ace) {
             printf(
-                "%s  - [ACE]: Principal ID = %s, Permissions = %s\n",
+                "%s    > [ACE]: Principal ID = %s, Permissions = %s\n",
                 $levelIndention,
                 $ace->getPrincipalId(),
                 implode(',', $ace->getPermissions())
             );
         }
+    } else {
+        echo $levelIndention . "    > [ACE]: Nothing found. Maybe ACE could not be loaded or does not exist\n";
     }
 }
