@@ -1200,7 +1200,7 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
 
       $extensions = [new CmisExtensionElement(
           null,
-          'isHidden',
+          'aCustomPropertyFromTheServer',
           [],
           true
       )];
