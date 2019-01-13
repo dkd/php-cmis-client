@@ -676,7 +676,7 @@ class JsonConverter extends AbstractDataConverter
 //        }
 
         $propertyDefinition->populate(
-            $data,
+            array_intersect_key($data, array_fill_keys(JSONConstants::getPropertyTypeKeys(), 1)),
             [JSONConstants::JSON_PROPERTY_TYPE_RESOLUTION => 'dateTimeResolution']
         );
         $propertyDefinition->setExtensions($this->convertExtension($data, JSONConstants::getPropertyTypeKeys()));
