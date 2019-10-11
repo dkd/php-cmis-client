@@ -1,5 +1,5 @@
 {
-    "name": "dkd/php-cmis",
+    "name": "samaym/php-cmis",
     "type": "library",
     "description": "PHP CMIS client library based on CMIS 1.1",
     "keywords": ["cmis"],
@@ -29,7 +29,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Dkd\\PhpCmis\\": "src/"
+            "Samaym\\PhpCmis\\": "src/"
         }
     },
     "extra": {
