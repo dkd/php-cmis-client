@@ -325,7 +325,40 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
      * @param OperationContextInterface|null $context
      * @return CmisObjectInterface[] A list of the child objects for the specified folder.
      */
-    public function getChildren(OperationContextInterface $context = null)
+    public function getChildren(OperationContextInterface $context = null, $skipCount = 0)
+    {
+        $context = $this->ensureContext($context);
+        $children = $this->getBinding()->getNavigationService()->getChildren(
+            $this->getRepositoryId(),
+            $this->getId(),
+            $context->getQueryFilterString(),
+            $context->getOrderBy(),
+            $context->isIncludeAllowableActions(),
+            $context->getIncludeRelationships(),
+            $context->getRenditionFilterString(),
+            $context->isIncludePathSegments(),
+            $context->getMaxItemsPerPage(),
+            $skipCount
+        );
+
+        $result = [];
+        $objectFactory = $this->getObjectFactory();
+        foreach ($children->getObjects() as $objectData) {
+            if ($objectData->getObject() !== null) {
+                $result[] = $objectFactory->convertObject($objectData->getObject(), $context);
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Returns the number of children of this folder using the given OperationContext.
+     *
+     * @param OperationContextInterface|null $context
+     * @return int Total number of children.
+     */
+    public function getNumChildren(OperationContextInterface $context = null)
     {
         $context = $this->ensureContext($context);
         $children = $this->getBinding()->getNavigationService()->getChildren(
@@ -339,15 +372,7 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
             $context->isIncludePathSegments()
         );
 
-        $result = [];
-        $objectFactory = $this->getObjectFactory();
-        foreach ($children->getObjects() as $objectData) {
-            if ($objectData->getObject() !== null) {
-                $result[] = $objectFactory->convertObject($objectData->getObject(), $context);
-            }
-        }
-
-        return $result;
+        return $children->getNumItems();
     }
 
     /**
