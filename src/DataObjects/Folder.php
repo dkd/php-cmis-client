@@ -369,7 +369,8 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
             $context->isIncludeAllowableActions(),
             $context->getIncludeRelationships(),
             $context->getRenditionFilterString(),
-            $context->isIncludePathSegments()
+            $context->isIncludePathSegments(),
+            1
         );
 
         return $children->getNumItems();
