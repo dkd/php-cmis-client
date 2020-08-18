@@ -87,7 +87,7 @@ Currently implemented Services
   - [ ] removePolicy
   - [ ] getAppliedPolicies
 - AclSservice
-  - [ ] getACL
+  - [x] getACL
   - [ ] applyACL
 
 

@@ -747,11 +747,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
      */
     public function getAcl()
     {
-        $result = $this->getSession()->getAcl($this, false);
-
-        $this->refresh();
-
-        return $result;
+        return $this->acl;
     }
 
     /**
