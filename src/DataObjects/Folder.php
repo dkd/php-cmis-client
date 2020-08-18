@@ -355,7 +355,7 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
      *
      * @param integer $depth
      * @param OperationContextInterface|null $context
-     * @return TreeInterface A tree that contains FileableCmisObject objects
+     * @return TreeInterface[] A tree that contains FileableCmisObject objects
      * @see FileableCmisObject FileableCmisObject contained in returned TreeInterface
      */
     public function getDescendants($depth, OperationContextInterface $context = null)
