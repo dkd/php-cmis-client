@@ -473,9 +473,9 @@ class QueryStatement implements QueryStatementInterface
         $length = strlen($this->statement);
 
         for ($i=0; $i < $length; $i++) {
-            $char = $this->statement{$i};
+            $char = $this->statement[$i];
             if ($char === '\'') {
-                if ($inString && $this->statement{max(0, $i-1)} === '\\') {
+                if ($inString && $this->statement[max(0, $i-1)] === '\\') {
                     $inString = true;
                 } else {
                     $inString = !$inString;
