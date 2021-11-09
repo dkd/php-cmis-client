@@ -574,7 +574,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         }
 
         /** @var Response $response */
-        $response = $this->getHttpInvoker()->get((string) $url);
+        $response = $this->getHttpInvoker()->get(str_replace("&", "&amp;", (string) $url));
 
         $contentStream = $response->getBody();
         if (!$contentStream) {
