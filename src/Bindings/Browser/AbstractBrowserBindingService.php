@@ -313,7 +313,7 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
             $exceptionName = '\\Dkd\\PhpCmis\\Exception\\Cmis' . ucfirst($jsonError) . 'Exception';
 
             if (class_exists($exceptionName)) {
-                return new $exceptionName($message, null, $exception);
+                return new $exceptionName($message, 0, $exception);
             }
         }
 
